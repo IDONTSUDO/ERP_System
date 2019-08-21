@@ -21,16 +21,17 @@ mongoose.connection.on('error', err =>{
 mongoose.set('debug', true)
 
 const DirectAuthRoutes = require("./routers/direct/auth")
-
+const DirectCompanyhRoutes = require("./routers/direct/Company")
 app.use(cookieParser())
 app.use(morgan ("dev"))
 app.use(bodyParser.json())
 app.use(expressValidator())
 app.use(cors())
 
-// ROUTERS
+// ROUTERS DIRECT
 app.use("/", DirectAuthRoutes)
-
+app.use("/", DirectCompanyhRoutes)
+//ROUTES MANAGE
 app.get('/docs',(req,res) =>{
     fs.readFile('documentation/ApiDocs.json', (err,data) =>{
         if(err){

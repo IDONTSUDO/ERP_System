@@ -2,15 +2,25 @@ const mongoose = require("mongoose")
 const uuidv1 = require("uuid/v1")
 const crypto = require("crypto")
 
-const directSchema = new mongoose.Schema({
-    name: {
+const workerSchema = new mongoose.Schema({
+    name:{
         type: String,
-        trim: true,
+        required: true
+    },
+    surname:{
+        type: String,
+        required: true
+    },
+    patronymic:{
+        type: String,
+        required: true
+    },
+    Date_of_Birth:{
+        type: Date,
         required: true
     },
     email: {
         type: String,
-        trim: true,
         required: true
     },
     hashed_password: {
@@ -27,17 +37,49 @@ const directSchema = new mongoose.Schema({
         data: Buffer,
         contentType: String
     },
-    about: {
-        type: String,
-        trim: true
-    },
     role: {
         type: String,
-        default: "direct"
+        required: true
+    },
+    January:{
+        type:Number
+    },
+    February:{
+        type:Number
+    },
+    March:{
+        type:Number
+    },
+    April:{
+        type:Number
+    },
+    May:{
+        type:Number
+    },
+    June:{
+        type:Number
+    },
+    July:{
+        type:Number
+    },
+    August:{
+        type:Number
+    },
+    September:{
+        type:Number
+    },
+    October:{
+        type:Number
+    },
+    November:{
+        type:Number
+    },
+    December:{
+        type:Number
     }
 });
 
-directSchema
+workerSchema
     .virtual("password")
     .set(function(password) {
 
@@ -52,7 +94,7 @@ directSchema
     });
 
 
-directSchema.methods = {
+workerSchema.methods = {
     authenticate: function(plainText) {
         return this.encryptPassword(plainText) === this.hashed_password
     },
@@ -70,4 +112,4 @@ directSchema.methods = {
     }
 };
 
-module.exports = mongoose.model("Direct", directSchema)
+module.exports = mongoose.model("Worker", workerSchema)

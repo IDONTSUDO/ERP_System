@@ -1,5 +1,5 @@
 
-const Direct = require('../../database/direct/direct')
+const Direct = require('../../database/direct/Company')
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 const expressJwt = require("express-jwt")
