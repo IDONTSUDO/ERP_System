@@ -1,0 +1,49 @@
+{
+  "name": "direct-crm",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@atlaskit/button": "^13.1.5",
+    "@atlaskit/checkbox": "^9.0.8",
+    "@atlaskit/css-reset": "^5.0.7",
+    "@atlaskit/datetime-picker": "^8.0.15",
+    "@atlaskit/field-radio-group": "^6.0.11",
+    "@atlaskit/flag": "^12.0.19",
+    "@atlaskit/form": "^6.1.11",
+    "@atlaskit/global-navigation": "^7.6.2",
+    "@atlaskit/icon": "^19.0.5",
+    "@atlaskit/logo": "^12.1.7",
+    "@atlaskit/modal-dialog": "^10.1.6",
+    "@atlaskit/navigation": "^35.1.20",
+    "@atlaskit/page": "^11.0.7",
+    "@atlaskit/textfield": "^3.0.4",
+    "@atlaskit/theme": "^9.1.5",
+    "@atlaskit/toggle": "^8.0.4",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.1.1",
+    "styled-components": "^4.3.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
