@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const uuidv1 = require("uuid/v1")
 const crypto = require("crypto")
+const { ObjectId } = mongoose.Schema;
 
 const workerSchema = new mongoose.Schema({
     name:{
@@ -16,8 +17,7 @@ const workerSchema = new mongoose.Schema({
         required: true
     },
     Date_of_Birth:{
-        type: Date,
-        required: true
+        type: String,
     },
     email: {
         type: String,
@@ -41,6 +41,7 @@ const workerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    by_appointment_TODO:[{ type: ObjectId, ref: "Задача со стороны" }],
     January:{
         type:Number
     },

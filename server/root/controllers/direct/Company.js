@@ -76,16 +76,14 @@ exports.workerGet = (req,res) =>{
     req.profile.salt = undefined
     return res.json(req.profile)
 }
-exports.workerManageAll = (req,res) =>{
-    //changee
-    Worker.find({ role: req.body})
-    .exec((err, worker) =>{
+exports.workerAll = (req,res) =>{
+    Worker.find((err, users) =>{
         if(err){
             return res.status(400).json({
                 error: err
             })
         }
-        res.json(worker)
+        res.json(users)
     })
 }
 exports.workerFinancyAll =(req, res) =>{

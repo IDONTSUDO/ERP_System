@@ -22,6 +22,10 @@ mongoose.set('debug', true)
 
 const DirectAuthRoutes = require("./routers/direct/auth")
 const DirectCompanyhRoutes = require("./routers/direct/Company")
+//COMMON
+const CommonTodoRoutes = require("./routers/common/todo")
+
+
 app.use(cookieParser())
 app.use(morgan ("dev"))
 app.use(bodyParser.json())
@@ -32,6 +36,8 @@ app.use(cors())
 app.use("/", DirectAuthRoutes)
 app.use("/", DirectCompanyhRoutes)
 //ROUTES MANAGE
+//ROUTES COMMON 
+app.use("/", CommonTodoRoutes)
 app.get('/docs',(req,res) =>{
     fs.readFile('documentation/ApiDocs.json', (err,data) =>{
         if(err){
