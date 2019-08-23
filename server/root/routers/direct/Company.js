@@ -6,12 +6,14 @@ const {
     workerEdit,
     workerGet,
     workerAll,
-    workerFinancyAll } = require("../../controllers/direct/Company")
+    workerFinancyAll,
+    workerDelete } = require("../../controllers/direct/Company")
 
 const router = express.Router({mergeParams: true});
 
 router.post('/new/worker/', Newworker)
 router.post('/block/worker/:workerById',  workerBlock)
+router.delete('/delete/worker/:workerById',  workerDelete)
 router.get('/edit/worker/:workerById',  workerEdit)
 router.get('/worker/get/:workerById',  workerGet)
 router.get('/all/worker',workerAll)

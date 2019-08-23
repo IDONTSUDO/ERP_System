@@ -11,7 +11,7 @@ exports.workerById = (req, res , next , id) =>{
                 error: "Worker not found"
             })
         }
-        req.profile  = worker 
+        req.worker  = worker 
         next()
     })
 }
@@ -28,7 +28,7 @@ exports.workerBlock = (req,res) =>{
     res.status(200)
 }
 exports.workerDelete = (req,res) =>{
-    let worker = req.profile
+    let worker = req.worker
     worker.remove((err, worker) =>{
         if(err){
             return res.status(400).json({
@@ -49,7 +49,7 @@ exports.workerEdit =(req,res,next) =>{
             });
         }
 
-        let worker = req.profile
+        let worker = req.worker
 
         worker = _.extend(worker, fields)
 
@@ -72,9 +72,7 @@ exports.workerEdit =(req,res,next) =>{
     })
 }
 exports.workerGet = (req,res) =>{
-    req.profile.hashed_password = undefined,
-    req.profile.salt = undefined
-    return res.json(req.profile)
+    return res.json(req.worker)
 }
 exports.workerAll = (req,res) =>{
     Worker.find((err, users) =>{
@@ -89,7 +87,19 @@ exports.workerAll = (req,res) =>{
 exports.workerFinancyAll =(req, res) =>{
 
 }
-
+exports.workerDelete = (req,res) => {
+    let worker = req.worker;
+    worker.remove((err,worker) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            });
+        }
+        res.json({
+            message: "Order deleted successfully"
+        });
+    });
+}
 exports.workerPhoto = (req,res, next) =>{
     if(req.profile.photo.data){
         res.set(("Content-Type", req.profile.photo.contentType))

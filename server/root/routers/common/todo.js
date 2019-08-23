@@ -1,12 +1,25 @@
 const express = require("express")
-const { SOSotodo, myTODOsoso,MyTodoAwesome,NewTodoUserAwesome} = require("../../controllers/common/todo")
+const { 
+    SOSotodo, 
+    myTODO,
+    NewTodoUserAwesome,
+    TodoById,
+    TodoChange,
+    NewUserNews} = require("../../controllers/common/todo")
 const {workerById} = require("../../controllers/direct/Company")
 const router = express.Router({mergeParams: true});
 
-router.get('/my/todo/list/greate/:workerById', MyTodoAwesome)
-router.get('/my/todo/soso/:workerById', myTODOsoso)
+router.get('/my/todo/soso/:workerById', myTODO)
 router.post('/new/todo/so-so/:workerById', SOSotodo )
 router.post('/new/todo/awesome/:workerById',NewTodoUserAwesome)
-router.param('workerById',workerById)
 
+
+router.put('/user/news/', NewUserNews)
+
+
+
+
+router.patch('/todo/change/:todoid', TodoChange)
+router.param('workerById',workerById)
+router.param('todoid',TodoById)
 module.exports = router

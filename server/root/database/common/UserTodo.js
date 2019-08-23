@@ -1,17 +1,23 @@
-const mongoose = require("mongoose")
-const moment = require("moment")
-
+const mongoose = require('mongoose')
 const { ObjectId } = mongoose.Schema
-const UserTodoSchema = new mongoose.Schema({
-    name:{
+const todoSchema =  new mongoose.Schema({
+    titel:{
         type: String,
-        required: true
     },
-    dateCreate:{
-        type: moment().format('YYYY [escaped] YYYY')
+    body:{
+        type: String,
     },
-    dateLast:{
+    photo:{
+        data:Buffer,
+        contenType: String
+    },
+    status:{
+        type: String,
+        default: "в работе"
+    },
+    created:{
         type: Date,
+        default: Date.now
     },
     user_accountability:[{
         type: ObjectId,
@@ -20,7 +26,6 @@ const UserTodoSchema = new mongoose.Schema({
     postedBy:{
         type: ObjectId,
         ref:  "User"
-    },
-    message:[{ObjectId,ref: Message}]
-});
-module.exports = mongoose.model("UserTODO", UserTodoSchema)
+    }
+})
+module.exports = mongoose.model("TODO", todoSchema)
