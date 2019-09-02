@@ -11,20 +11,16 @@ const fs = require('fs')
 const cors = require('cors')
 dotenv.config()
 
-
-
-
 mongoose.connect(`mongodb://localhost/svarog-crm-system`, {useNewUrlParser: true}).then(() =>console.log("DB Conected"))
 mongoose.connection.on('error', err =>{
     console.log(`DB connection error: ${err.message}`)
 })
 mongoose.set('debug', true)
-
-const DirectAuthRoutes = require("./routers/direct/auth")
-const DirectCompanyhRoutes = require("./routers/direct/Company")
+const DirectAuthRoutes = require("./routers/Auth")
+const DirectCompanyhRoutes = require("./routers/Company")
 //COMMON
-const CommonTodoRoutes = require("./routers/common/todo")
-
+const CommonTodoRoutes = require("./routers/todo")
+const StatisticRouter = require("./routers/Statistic")
 
 app.use(cookieParser())
 app.use(morgan ("dev"))
@@ -33,6 +29,7 @@ app.use(expressValidator())
 app.use(cors())
 
 // ROUTERS DIRECT
+app.use("/", StatisticRouter)
 app.use("/", DirectAuthRoutes)
 app.use("/", DirectCompanyhRoutes)
 //ROUTES MANAGE
