@@ -17,8 +17,8 @@ const todoSchema =  new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    startDate:{
-        type: Date,
+    time:{
+        type: String,
     },
     tags:[{
         type:Object

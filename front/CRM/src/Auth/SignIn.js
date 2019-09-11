@@ -6,6 +6,7 @@ class Signin extends Component{
     constructor(){
         super()
         this.state = {
+            email:"",
             password: "",
             error: "",
             redirectToRefer: false,
@@ -40,12 +41,12 @@ class Signin extends Component{
     render(){
         const { email,password,error,redirectToRefer,loading } = this.state
         if(redirectToRefer){
-            return <Redirect to="/"/>
+            return <Redirect to="/news"/>
         } 
         return(
             <div className="container">
 
-                <h2 className="mt-5 mb-5">SignIn</h2>
+                <h2 className="mt-5 mb-5">Авторизация</h2>
                 <div className="alert alert-danger" style={{ display: error ? "" : "none"}} > 
                     {error}
                 </div>

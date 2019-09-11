@@ -3,9 +3,7 @@ import {isAuthenticated} from '../Api/Auth'
 import {Redirect, Link } from 'react-router-dom'
 import {read} from '../Api/Http'
 import DefaultProfile from '../Assets/default.png'
-// import DeleteUser from './DeleteUser'
-// import FollowButton from './FlowProfile'
-// import ProfileTabs from './ProfileTabs'
+
 
 class Profile extends Component {
     constructor(){
@@ -50,9 +48,6 @@ class Profile extends Component {
             <div className="container">
             <div class="row">
                 <div class="col-sm-8"></div>
-                    <div class="col-sm-4"><h1>Новости</h1></div>
-                    <div class="col-sm-8"></div>
-                    <div class="col-sm-4">{user.news}</div>
                 </div>
                 <div className="d-inline-block mt-5">
                         <Link className="btn btn-raised btn-success mr-6" to={`/user/edit/${user._id}`}>

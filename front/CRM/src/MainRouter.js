@@ -5,6 +5,7 @@ import Signin from './Auth/SignIn'
 import PrivateRoute from './Auth/PrivateRouter'
 import Profile from './User/Profile'
 import Company from './User/Company'
+import News from './User/News'
 
 import Work from './Work/NewWork'
 import NewWorker from './User/NewWorker' 
@@ -16,6 +17,8 @@ const MainRouter = ()  =>(
         <Menu />
     <Switch>
         <Route exact path="/signin" component={Signin}/>
+        <PrivateRoute exact path="/news" component={News}/>
+        <PrivateRoute exact path="/user/:userId" component={Profile}/>
         <PrivateRoute exact path="/user/:userId" component={Profile}/>
         <PrivateRoute exact path="/company" component={Company}/>
         <PrivateRoute exact path="/create/work" component={Work}/>

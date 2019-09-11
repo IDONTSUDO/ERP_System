@@ -48,7 +48,6 @@ const workerSchema = new mongoose.Schema({
     phone:{
         type: String,
     },
-    news:[{ type: Array, ref: "Новости" }],
     by_appointment_TODO:[{ type: ObjectId, ref: "Задача со стороны" }],
     agent_list:[{ type: ObjectId, ref: "my agent" }],
     January:{

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {isAuthenticated} from '../Api/Auth'
 import {readMyTodo} from '../Api/Http'
 import {Link} from 'react-router-dom'
+import TodayWork from './TodayWork.js'
 export default class MyWork extends Component {
     constructor(){
         super()
@@ -32,6 +33,10 @@ export default class MyWork extends Component {
     render() {
         const {todos} = this.state
         return (
+            <>
+            <>
+            <TodayWork/>
+            </>
             <ul>
             <div className="container">
             <div className="row">
@@ -40,9 +45,9 @@ export default class MyWork extends Component {
             <>
             <div className="card col-md-4" style={{ width: "18rem"}}key={i}>
             
-            <h3>{tod.titel}</h3>
+            <h3>{tod.title}</h3>
             <div>{tod.status}</div>
-
+            <div>{tod.time}</div>
             <Link to={`/job/${tod._id}`} className="btn btn-primary">Посмотреть дело</Link>
             </div>
             </>
@@ -51,6 +56,7 @@ export default class MyWork extends Component {
             </div>
             </div>
             </ul>
+            </>
         )
     }
 }

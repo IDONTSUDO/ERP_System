@@ -163,3 +163,98 @@ export const readComentList = (todoId,token) =>{
     console.log(error)
 })
 }
+
+export const NewComent = (comment,token) =>{
+
+    return fetch(`http://localhost:8080/comment/todo/`,{
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body:comment
+    })
+.then(response =>{
+
+    return response.json()
+})
+.catch(error =>{
+    console.log(error)
+})
+}
+
+export const DeleteComment = (comment) =>{
+    return fetch(`http://localhost:8080/delete/comment/${comment}`,{
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        
+    })
+.then(response =>{
+
+    return response.json()
+})
+.catch(error =>{
+    console.log(error)
+})
+}
+
+export const NewNews = (payload) =>{
+    return fetch(`http://localhost:8080/new/news`,{
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body:JSON.stringify(payload)
+        
+    })
+.then(response =>{
+
+    return response.json()
+})
+.catch(error =>{
+    console.log(error)
+})
+}
+
+export const listNews = (id) =>{
+    console.log(JSON.stringify({id}))
+    return fetch(`http://localhost:8080/worker/news`,{
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body:JSON.stringify({id})
+        
+    })
+.then(response =>{
+
+    return response.json()
+})
+.catch(error =>{
+    console.log(error)
+})
+}
+export const SetStatusJob = (status,todoId) =>{
+    console.log(status)
+    return fetch(`http://localhost:8080/todo/change/${todoId}`,{
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            
+        },
+        body:status
+        
+    })
+.then(response =>{
+
+    return response.json()
+})
+.catch(error =>{
+    console.log(error)
+})
+}

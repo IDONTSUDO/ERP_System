@@ -19,7 +19,7 @@ export default class Company extends Component {
             if(data.error){
                 console.log(data.error)
             }else{
-                console.log("200 ok")
+                this.forceUpdate()
             }
         })
     }
@@ -35,6 +35,15 @@ export default class Company extends Component {
     handleChange = name => event => {
       this.setState({ error: "" })
       this.setState({ [name]: event.target.value })
+    }
+    forceUpdate(){
+        list().then(data =>{
+            if(data.error){
+                console.log(data.error)
+            }else{
+                this.setState({worker:data})
+            }
+        })
     }
     render() {
         const {worker} = this.state

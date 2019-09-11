@@ -50,15 +50,27 @@ class Work extends React.Component {
   clickSubmit =  event =>{
     event.preventDefault()
     const { tags,title,description,user,startDate }  = this.state
+
+    let yyyy = startDate.getFullYear()
+    let mm = startDate.getMonth()
+    let dd = startDate.getDate()
+    // 
+    let FuckingDataPicker =  + mm + 1
+    // 
+    let ItsRealyFucking = "0" + FuckingDataPicker
+    // 
+    let time  = dd + '/' + ItsRealyFucking + '/' + yyyy
+    // 
     const todo ={
         tags,
         title,
         description,
-        startDate
+        time
     }
+    // 
     NewTodo(todo,user)
   }
-
+  
   render () {
     const { worker } = this.state 
     return (
@@ -72,6 +84,8 @@ class Work extends React.Component {
       <label for="exampleFormControlTextarea1">Описание</label>
       <textarea onChange={this.handleAction("description")} class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
     </div>
+    
+    
     </form>
     <DatePicker
         selected={this.state.startDate}

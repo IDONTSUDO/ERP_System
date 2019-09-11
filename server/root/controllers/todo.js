@@ -5,10 +5,74 @@ const formidable = require('formidable')
 const fs = require('fs')
 const _  = require('lodash')
 
+exports.TodoById = (req, res, next, id) =>{
+    
+    TODO.findById(id)
+        .exec((err, todo) => {
+            if (err || !todo) {
+                return res.status(400).json({
+                    error: "дело не найдено"
+                });
+            }
+            
+            req.todo = todo;
+            next();
+        });
+}
+
+exports.ComentById = (req, res, next, id) =>{
+    
+    COMMENTS.findById(id)
+        .exec((err, coment) => {
+            if (err || !coment) {
+                return res.status(400).json({
+                    error: "коментарий не найден"
+                });
+            }
+            
+            req.coment = coment;
+            next();
+        });
+}
+
 exports.SOSotodo =(req,res) =>{
     
 }
+exports.myTodoItsDay = (req,res,next) =>{
+
+
+    // TODO:! перепиши 
+    var date = new Date()
+    var year = date.getFullYear()
+    // определение времени
+    var month = date.getMonth() + 1
+    // @month так как дата пикер говно, то приходится делать вот так
+    month = (month < 10 ? "0" : "") + month
+    "0"+ month  // @month больно
+    var day  = date.getDate()
+    day = (day < 10 ? "0" : "") + day
+    
+    
+    
+    let time = day + "/" + month + "/"  + year
+    
+    TODO.find({ $and: [{"time" :{  $eq: `${time}`}},{ tags: { $elemMatch :{"_id":`${req.worker._id}`}} }]}) 
+  
+    .exec((err, todos) =>{
+        if(err){
+            return res.status(400).json({
+                error: err
+            })
+        }
+
+        res.json({todos})
+    })
+
+    
+
+}
 exports.myTODO = (req,res) =>{
+
 
     TODO.find({ tags: { $elemMatch :{"_id":`${req.worker._id}`}} })  
   
@@ -44,39 +108,12 @@ exports.NewTodoUserAwesome = (req,res) =>{
     })
     
 }
-exports.TodoById = (req, res, next, id) =>{
-    
-    TODO.findById(id)
-        .exec((err, todo) => {
-            if (err || !todo) {
-                return res.status(400).json({
-                    error: "дело не найдено"
-                });
-            }
-            
-            req.todo = todo;
-            next();
-        });
-}
+
 exports.TodoChange = (req,res) =>{
 
-    let form = new formidable.IncomingForm();
-    form.keepExtensions = true;
-    form.parse(req, (err, fields, files) => {
-        if (err) {
-            return res.status(400).json({
-                error: 'Photo could not be uploaded'
-            });
-        }
-        // save post
         let todo = req.todo;
-        todo = _.extend(todo, fields);
+        todo = _.extend(todo, req.body);
         todo.updated = Date.now();
-
-        if (files.photo) {
-            todo.photo.data = fs.readFileSync(files.photo.path);
-            todo.photo.contentType = files.photo.type;
-        }
 
         todo.save((err, result) => {
             if (err) {
@@ -86,7 +123,7 @@ exports.TodoChange = (req,res) =>{
             }
             res.json(todo);
         });
-    });
+
 }
 exports.NewUserNews = (req,res) =>{
 
@@ -125,5 +162,20 @@ exports.FindComments = (req,res) =>{
             })
         }
         res.json(posts)
+    })
+}
+
+exports.DeleteComent = (req,res) =>{
+  
+    let coment = req.coment
+    coment.remove((err, coment) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            });
+        }
+        res.json({
+            message: 'Coment deleted successfully'
+        })
     })
 }

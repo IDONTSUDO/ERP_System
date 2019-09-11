@@ -21,7 +21,7 @@ const DirectCompanyhRoutes = require("./routers/Company")
 //COMMON
 const CommonTodoRoutes = require("./routers/todo")
 const StatisticRouter = require("./routers/Statistic")
-
+const NewsRouter = require("./routers/News")
 app.use(cookieParser())
 app.use(morgan ("dev"))
 app.use(bodyParser.json())
@@ -32,6 +32,7 @@ app.use(cors())
 app.use("/", StatisticRouter)
 app.use("/", DirectAuthRoutes)
 app.use("/", DirectCompanyhRoutes)
+app.use("/", NewsRouter)
 //ROUTES MANAGE
 //ROUTES COMMON 
 app.use("/", CommonTodoRoutes)
