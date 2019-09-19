@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import {isAuthenticated} from '../Api/Auth'
 import {listNews} from '../Api/Http'
-
+import {Link} from 'react-router-dom'
 export default class News extends Component {
     constructor(){
         super()
         this.state = {
             userId:"",
-            newsList:""
+            newsList:[]
         }
     }
     componentDidMount(){
@@ -23,9 +23,20 @@ export default class News extends Component {
         })
     }
     render() {
+        const {newsList} = this.state
         return (
-            <div>
-                <h1>wqewqe</h1>
+            <div className="container">
+            <div className="row">
+
+            {newsList.map((news, i) => (
+                <>
+                <div className="card col-md-4" style={{ width: "18rem"}}key={i}>
+                <Link to={`/job/${news.link}`} className="btn btn-primary">Посмотреть</Link>
+                <small>{news.event}</small>
+                </div>
+                </>
+                ))}
+            </div>
             </div>
         )
     }

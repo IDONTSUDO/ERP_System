@@ -1,5 +1,13 @@
 import React, { Component } from 'react'
-import {soloJob,readComentList,NewComent,DeleteComment,NewNews,SetStatusJob} from '../Api/Http'
+import {
+    soloJob,
+    readComentList,
+    NewComent,
+    DeleteComment,
+    NewNews,
+    SetStatusJob,
+    TodoChangeExperienseAtHTTP
+} from '../Api/Http'
 import {isAuthenticated} from '../Api/Auth'
 import {Redirect} from  'react-router-dom'
 import DefaultProfile from '../Assets/default.png' 
@@ -24,13 +32,16 @@ export default class Job extends Component {
         event.preventDefault()
         const  {ID} = this.state
         const todoId = ID
+        let expireAt = new Date()
         let status =  "Выполнено"
+        
         SetStatusJob(status,todoId).then(data => {
             if(data.error){
                 console.log(data.error)
             }else{
-                this.forceUpdate()
                 
+                this.forceUpdate()
+                TodoChangeExperienseAtHTTP(expireAt,todoId)
                 
                 
             }
@@ -38,17 +49,34 @@ export default class Job extends Component {
     }
     clickSetStatusMoreInfoJob = event =>{
         event.preventDefault()
-        const  {ID} = this.state
+        const  {ID,worker,todo} = this.state
         const todoId = ID
+
+       
         let status =  "Требуется уточнение"
+        
         SetStatusJob(status,todoId).then(data => {
             if(data.error){
                 console.log(data.error)
             }else{
+// TODO: 
+                let tags = [todo.postedBy]
+
+
                 this.forceUpdate()
-                
-                
-                
+                 
+                let worker_by = worker
+                let link = ID
+                let event = "новый статус"
+                let payload = {
+                    link,
+                    worker_by,
+                    event,
+                    tags
+                }
+                console.log(payload)
+                NewNews(payload)
+
             }
         })
     }
@@ -60,7 +88,9 @@ export default class Job extends Component {
                 this.setState({redirectToSignin: true})
             }else{
                 Object.keys(data)
+             
                 this.setState({ todo: data })
+                
             }
         })
         readComentList(todoId).then(data =>{
@@ -183,6 +213,7 @@ export default class Job extends Component {
                         
                     </div>
                 <div>
+                
                 <div class="btn-group dropup">
                             <button onChange={this.handleAction("weq")} value={status} style={{width:200, height:50}}  type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Статус
@@ -192,9 +223,11 @@ export default class Job extends Component {
                             <button onClick={this.clickSetStatusMoreInfoJob} value={status} class="dropdown-item" type="button">Требуется уточнение</button>
                             <button onClick={this.clickSetStatusMoreInfoJob } value={status} class="dropdown-item" type="button">Что то еще</button>
                         </div>
+                        
                 {todo.tags.map((tod, i) => (
                     <>
                     <div className="card" key={i}>
+                    
                     <Link  to={`/user/${tod._id}`}>
                     <img className="card-img-top" src={`http://localhost:8080/user/photo/${tod._id}?`}
                          onError={i => (i.target.src = `${DefaultProfile}`)}
@@ -205,6 +238,7 @@ export default class Job extends Component {
                          <small class="text-muted">{tod.email}</small>
                          <small class="text-muted">{tod.name}</small>
                          <small class="text-muted">{tod.role}</small>
+                         
                     </div>
                     </>
                     ))}    

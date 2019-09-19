@@ -20,12 +20,8 @@ const Menu = ({history}) =>(
     {isAuthenticated() && ( 
     <> 
         <li className="nav-item">
-            <a className="nav-link" style={(isActive(history, "/"), 
-                { cursor: "pointer", color: "#fff"})} onClick={() => history.push('/')}>Новости</a> 
-        </li> 
-        <li className="nav-item"> 
-            <a className="nav-link" style={(isActive(history, "/signin"), 
-                { cursor: "pointer", color: "#fff"})} onClick={() => signout(() => history.push('/signin'))}>Sign Out</a> 
+            <a className="nav-link" style={(isActive(history, "/news"), 
+                { cursor: "pointer", color: "#fff"})} onClick={() => history.push('/news')}>Новости</a> 
         </li> 
         <li className="nav-item"> 
         <Link 
@@ -84,7 +80,11 @@ const Menu = ({history}) =>(
             className="nav-link" 
         > Мои дела
         </Link> 
-        </li> 
+        </li>
+        <li className="nav-item"> 
+        <a className="nav-link" style={(isActive(history, "/signin"), 
+            { cursor: "pointer", color: "#fff"})} onClick={() => signout(() => history.push('/signin'))}>Выйти</a> 
+    </li>  
     </> 
     )} 
 </ul> 

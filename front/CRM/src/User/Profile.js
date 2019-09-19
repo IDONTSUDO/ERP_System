@@ -50,9 +50,17 @@ class Profile extends Component {
                 <div class="col-sm-8"></div>
                 </div>
                 <div className="d-inline-block mt-5">
+                {isAuthenticated().direct._id === user._id ? (
+                   
+                    <div className="d-inline-block mt-5">
                         <Link className="btn btn-raised btn-success mr-6" to={`/user/edit/${user._id}`}>
                             Edit Profile
                         </Link>
+                       
+                    </div>
+                ):(
+                    <></>
+                )}      
                 </div>
                 <h2 className="mt-5 mb-5">Profile</h2>
                 <div className="row">

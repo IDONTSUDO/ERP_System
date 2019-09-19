@@ -24,14 +24,14 @@ router.get('/today/todo/:workerSelectId', myTodoItsDay)
 
 router.post('/get/todo/coments/', FindComments)
 router.post('/new/todo/so-so/:workerById', SOSotodo )
-router.post('/new/todo/awesome/:workerById',NewTodoUserAwesome)
+router.post('/new/todo/awesome/:workerSelectId',NewTodoUserAwesome)
 router.post('/comment/todo/',NewComents)
 router.post('/delete/comment/:comentById',DeleteComent)
 
  
 router.put('/user/news/', NewUserNews)
  
-router.put('/todo/change/:todoid', TodoChange)
+router.post('/todo/change/:todoid', TodoChange)
 
 
 router.param('comentById',ComentById) 

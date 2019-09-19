@@ -12,6 +12,7 @@ import NewWorker from './User/NewWorker'
 import EditProfile from './User/EditProfile'
 import MyWork from './Work/MyWork'
 import Job from './Work/Job'
+import TodayWork from './Work/TodayWork.js'
 const MainRouter = ()  =>(
     <div>
         <Menu />
@@ -26,6 +27,7 @@ const MainRouter = ()  =>(
         <PrivateRoute exact path="/user/edit/:userId" component={EditProfile}/>
         <PrivateRoute exact path="/user/work/:userId" component={MyWork}/>
         <PrivateRoute exact path="/job/:todoId" component={Job}/>
+        <PrivateRoute exact path="/today/:userId" component={TodayWork}/> 
     </Switch>
     </div>
 )

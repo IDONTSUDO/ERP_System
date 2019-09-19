@@ -3,8 +3,8 @@ const fs = require('fs')
 const formidable = require("formidable")
 const Worker = require('../database/Company')
 
-exports.workerSelectId = (req, res , next , id) =>{
-    Worker.findById(id).select(" _id ")
+exports.workerSelectId = async (req, res , next , id) =>{
+    await Worker.findById(id).select(" _id ")
     .exec((err, worker)=>{
         if(err || !worker){
             return res.status(400).json({
@@ -16,8 +16,8 @@ exports.workerSelectId = (req, res , next , id) =>{
     })
 }
 
-exports.workerById = (req, res , next , id) =>{
-    Worker.findById(id)
+exports.workerById = async (req, res , next , id) =>{
+    await Worker.findById(id)
     .exec((err, worker)=>{
         if(err || !worker){
             return res.status(400).json({
@@ -25,6 +25,7 @@ exports.workerById = (req, res , next , id) =>{
             })
         }
         req.worker  = worker 
+        
         next()
     })
 }
@@ -37,12 +38,12 @@ exports.Newworker = async(req,res)=>{
     await worker.save()
     res.status(200).json({ message: "Worker create!" })
 }
-exports.workerBlock = (req,res) =>{
+exports.workerBlock = async (req,res) =>{
     res.status(200)
 }
-exports.workerDelete = (req,res) =>{
-    let worker = req.worker
-    worker.remove((err, worker) =>{
+exports.workerDelete = async (req,res) =>{
+     let worker =  req.worker
+     await worker.remove((err, worker) =>{
         if(err){
             return res.status(400).json({
                 error: err
@@ -51,20 +52,20 @@ exports.workerDelete = (req,res) =>{
         res.json({ message: "Worker delete!"})
     })
 }
-exports.workerEdit =(req,res,next) =>{
+exports.workerEdit = async(req,res,next) =>{
     let form = new formidable.IncomingForm()
 
     form.keepExtensions = true;
-    form.parse(req, (err, fields, files) => {
+    await form.parse(req, (err, fields, files) => {
         if (err) {
             return res.status(400).json({
                 error: "Photo could not be uploaded"
             });
         }
 
-        let worker = req.worker
-        console.log(worker)
-        worker = _.extend(worker, fields)
+        let worker =  req.worker
+        
+        worker =  _.extend(worker, fields)
 
         worker.updated = Date.now()
 
@@ -84,20 +85,20 @@ exports.workerEdit =(req,res,next) =>{
         })
     })
 }
-exports.workerGet = (req,res) =>{
-    return res.json(req.worker)
+exports.workerGet = async (req,res) =>{
+     return res.json(req.worker)
 }
-exports.workerAll = (req,res) =>{
+exports.workerAll = async (req,res) =>{
     const worker = Worker.find().select(" _id name")
     .then((worker) =>{
         res.status(200).json(worker)
     })
     .catch(err => console.log(err))
 }
-exports.workerFinancyAll =(req, res) =>{
+exports.workerFinancyAll = (req, res) =>{
 
 }
-exports.workerDelete = (req,res) => {
+exports.workerDelete = async (req,res) => {
     let worker = req.worker;
     worker.remove((err,worker) => {
         if (err) {
@@ -110,7 +111,7 @@ exports.workerDelete = (req,res) => {
         });
     });
 }
-exports.workerPhoto = (req,res, next) =>{
+exports.workerPhoto = async (req,res, next) =>{
     if(req.worker.photo.data){
         res.set(("Content-Type", req.worker.photo.contentType))
         return res.send(req.worker.photo.data)
@@ -118,8 +119,8 @@ exports.workerPhoto = (req,res, next) =>{
     next()
 }
 
-exports.ListworkerAll = (req,res) =>{
-    const worker = Worker.find().select(" _id email name phone role ")
+exports.ListworkerAll = async (req,res) =>{
+     const worker =  Worker.find().select(" _id email name phone role ")
     .then((worker) =>{
         res.status(200).json(worker)
     })

@@ -2,17 +2,19 @@ import React, { Component } from 'react'
 import {isAuthenticated} from '../Api/Auth'
 import {readMyTodo} from '../Api/Http'
 import {Link} from 'react-router-dom'
-import TodayWork from './TodayWork.js'
+import DefaultProfile from '../Assets/default.png' 
 export default class MyWork extends Component {
     constructor(){
         super()
         this.state = {
             todos:[],
-            redirectToSignin:""
+            redirectToSignin:"",
+            user:""
         }
     }
     componentDidMount(){
         const userId = this.props.match.params.userId
+        this.setState({user:userId})
         this.init(userId)
     }
     
@@ -29,17 +31,22 @@ export default class MyWork extends Component {
                     this.setState({todos: data.todos})
                 }
             })
-        }
+    }
     render() {
-        const {todos} = this.state
+        const {todos,user} = this.state
         return (
             <>
             <>
-            <TodayWork/>
+            
+            <Link to={`/today/${user}`} className="btn btn-primary">
+            <button className="btn btn-primary">Посмотреть дела на сегодня</button>
+            </Link>
             </>
+            
             <ul>
             <div className="container">
             <div className="row">
+            
             {
                 todos.map((tod, i) => (
             <>
@@ -47,7 +54,15 @@ export default class MyWork extends Component {
             
             <h3>{tod.title}</h3>
             <div>{tod.status}</div>
-            <div>{tod.time}</div>
+            <div><b>{tod.time}</b></div>
+
+            <Link  to={`/user/${tod.postedBy}`}>
+                        <img className="card-img-top" src={`http://localhost:8080/user/photo/${tod.postedBy}?`}
+                             onError={i => (i.target.src = `${DefaultProfile}`)}
+                             alt={tod.postedBy}
+                             style={{height: "50px", width:"50px"}}
+                             />      
+                        </Link>
             <Link to={`/job/${tod._id}`} className="btn btn-primary">Посмотреть дело</Link>
             </div>
             </>
@@ -55,7 +70,11 @@ export default class MyWork extends Component {
            
             </div>
             </div>
+            
             </ul>
+            
+        
+            
             </>
         )
     }

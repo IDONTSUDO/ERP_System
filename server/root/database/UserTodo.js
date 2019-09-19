@@ -26,6 +26,10 @@ const todoSchema =  new mongoose.Schema({
     postedBy:{
         type: ObjectId,
         ref:  "User"
-    }
+    },
+    expireAt: {
+        type: Date,
+        index: { expires: '5m' },
+    },
 })
 module.exports = mongoose.model("TODO", todoSchema)

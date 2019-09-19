@@ -146,7 +146,7 @@ export const soloJob = (todoId,token) =>{
 })
 }
 export const readComentList = (todoId,token) =>{
-    console.log(JSON.stringify({todoId}))
+    
     return fetch(`http://localhost:8080/get/todo/coments/`,{
         method: "POST",
         headers: {
@@ -240,15 +240,16 @@ export const listNews = (id) =>{
 })
 }
 export const SetStatusJob = (status,todoId) =>{
-    console.log(status)
+    
+    console.log(JSON.stringify({status:status}))
+    console.log(todoId)
     return fetch(`http://localhost:8080/todo/change/${todoId}`,{
-        method: "PUT",
+        method: "POST",
         headers: {
             Accept: "application/json",
-            
+            "Content-Type": "application/json",
         },
-        body:status
-        
+        body:JSON.stringify({status:status})
     })
 .then(response =>{
 
@@ -258,3 +259,38 @@ export const SetStatusJob = (status,todoId) =>{
     console.log(error)
 })
 }
+export const TodayWorkHTTP = (userId) =>{
+    console.log(userId)
+    return fetch(`http://localhost:8080/today/todo/${userId}`,{
+        method: "GET",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+        })
+.then(response =>{
+    return response.json()
+})
+.catch(err =>{
+    console.log(err)
+})
+}
+
+export const TodoChangeExperienseAtHTTP = (expireAt,todoId) =>{
+    console.log(JSON.stringify({expireAt:expireAt}))
+    return fetch(`http://localhost:8080/todo/change/${todoId}`,{
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({expireAt:expireAt})
+        })
+.then(response =>{
+    return response.json()
+})
+.catch(err =>{
+    console.log(err)
+})
+}
+

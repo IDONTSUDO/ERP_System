@@ -100,7 +100,10 @@ exports.MyTodoAwesome = (req,res) =>{
 }
 exports.NewTodoUserAwesome = (req,res) =>{
 
-    const todo = new TODO(req.body) 
+    console.log(req.worker )
+    const todo = new TODO(req.body)
+    todo.postedBy = req.worker 
+
     todo.save().then(result =>{
         res.status(200).json({
             todo: result
@@ -110,7 +113,7 @@ exports.NewTodoUserAwesome = (req,res) =>{
 }
 
 exports.TodoChange = (req,res) =>{
-
+    console.log(200)
         let todo = req.todo;
         todo = _.extend(todo, req.body);
         todo.updated = Date.now();
@@ -143,7 +146,6 @@ exports.GetTodo = (req,res) =>{
     return res.json(req.todo)
 }
 exports.NewComents = (req,res) =>{
-
     const comments = new COMMENTS(req.body) 
     comments.save().then(result =>{
         res.status(200).json({
