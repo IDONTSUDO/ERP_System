@@ -32,6 +32,8 @@ class Signin extends Component{
             }else{
                 authencate(data, () =>{
                     this.setState({redirectToRefer: true})
+                    //TODO:ITS VERY FAST HACK 
+                    window.location.reload();
                 })
             }
                 
@@ -41,7 +43,9 @@ class Signin extends Component{
     render(){
         const { email,password,error,redirectToRefer,loading } = this.state
         if(redirectToRefer){
-            return <Redirect to="/news"/>
+            return <Redirect  to="/news" refresh="true"/>
+            
+
         } 
         return(
             <div className="container">

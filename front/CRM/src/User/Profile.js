@@ -24,6 +24,7 @@ class Profile extends Component {
             }else{
                 
                 this.setState({ user: data})
+                
             }
         })
     }

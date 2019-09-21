@@ -1,6 +1,6 @@
 import React from 'react'
 import  {Route, Switch} from 'react-router-dom'
-import Menu from './Core/Menu'
+import SiderDemo from './Core/Menu'
 import Signin from './Auth/SignIn'
 import PrivateRoute from './Auth/PrivateRouter'
 import Profile from './User/Profile'
@@ -15,7 +15,7 @@ import Job from './Work/Job'
 import TodayWork from './Work/TodayWork.js'
 const MainRouter = ()  =>(
     <div>
-        <Menu />
+        <SiderDemo />
     <Switch>
         <Route exact path="/signin" component={Signin}/>
         <PrivateRoute exact path="/news" component={News}/>

@@ -10,8 +10,14 @@ import {
 } from '../Api/Http'
 import {isAuthenticated} from '../Api/Auth'
 import {Redirect} from  'react-router-dom'
+import { Select } from 'antd';
+
 import DefaultProfile from '../Assets/default.png' 
 import {Link} from 'react-router-dom'
+
+
+const { Option } = Select;
+
 export default class Job extends Component {
     constructor(){
         super()
@@ -222,7 +228,16 @@ export default class Job extends Component {
                             <button onClick={this.clickSetStatusCompleteJob}  class="dropdown-item" type="button">Выполнено</button>
                             <button onClick={this.clickSetStatusMoreInfoJob} value={status} class="dropdown-item" type="button">Требуется уточнение</button>
                             <button onClick={this.clickSetStatusMoreInfoJob } value={status} class="dropdown-item" type="button">Что то еще</button>
-                        </div>
+                            </div>
+                            <Select defaultValue="lucy" style={{ width: 120 }} >
+<Option value="jack">Jack</Option>
+<Option value="lucy">Lucy</Option>
+<Option value="disabled" disabled>
+  Disabled
+</Option>
+<Option value="Yiminghe">yiminghe</Option>
+</Select>
+                
                         
                 {todo.tags.map((tod, i) => (
                     <>
@@ -289,3 +304,11 @@ export default class Job extends Component {
         )
     }
 }
+// <Select defaultValue="lucy" style={{ width: 120 }} onChange={handleChange}>
+// <Option value="jack">Jack</Option>
+// <Option value="lucy">Lucy</Option>
+// <Option value="disabled" disabled>
+//   Disabled
+// </Option>
+// <Option value="Yiminghe">yiminghe</Option>
+// </Select>
