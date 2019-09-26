@@ -31,8 +31,8 @@ class SiderDemo extends React.Component {
         </>
       )}
       {isAuthenticated() && ( 
-        <div style={{display: 'flex', minHeight: '100vh' }}>
-        <Layout style={{ minHeight: '100vh' }}>
+        <div style={{  display: 'flex', minHeight: '1000px' }}>
+        <Layout style={{ minHeight: '1000px' }}>
         <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
           <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
@@ -57,8 +57,9 @@ class SiderDemo extends React.Component {
                 </span>
               }
             >
-              <Menu.Item key="2"><Link to={`/user/${isAuthenticated().direct._id}`} ><span>Предприятие</span></Link></Menu.Item>
+              <Menu.Item key="2"><Link to={`/company`} ><span>Предприятие</span></Link></Menu.Item>
               <Menu.Item key="3"><Link to={`/user/${isAuthenticated().direct._id}`} ><span>Статистика</span></Link></Menu.Item>
+              <Menu.Item key="11"><Link to={`/new/worker`} ><span>Новый работник</span></Link></Menu.Item>
             </SubMenu>
             <SubMenu
               key="sub3"
@@ -74,6 +75,19 @@ class SiderDemo extends React.Component {
               <Menu.Item key="6"><Link to="/signin"><span>Выход</span></Link></Menu.Item>
             </SubMenu>
             <SubMenu
+              key="sub5"
+              title={
+                <span>
+                <Icon type="rocket" />
+                  <span>Контр Агенты</span>
+                </span>
+              }
+            >
+              <Menu.Item key="7"><Link to={`/all/agent`} ><span>Все контр агенты</span></Link></Menu.Item>
+              <Menu.Item key="8"><Link to={`/my/agent/${isAuthenticated().direct._id}`} ><span>Мои контр агенты</span></Link></Menu.Item>
+              <Menu.Item key="12"><Link to="/new/agent"><span>Создать нового </span></Link></Menu.Item>
+              </SubMenu>
+              <SubMenu
               key="sub4"
               title={
                 <span>
@@ -82,10 +96,24 @@ class SiderDemo extends React.Component {
                 </span>
               }
             >
-              <Menu.Item key="7"><Link to={`/user/${isAuthenticated().direct._id}`} ><span>Дела на сегодня</span></Link></Menu.Item>
-              <Menu.Item key="8"><Link to="/company"><span>Все дела</span></Link></Menu.Item>
-            </SubMenu>
-            
+              <Menu.Item key="7"><Link to={`/today/${isAuthenticated().direct._id}`} ><span>Дела на сегодня</span></Link></Menu.Item>
+              <Menu.Item key="8"><Link to={`/user/work/${isAuthenticated().direct._id}`} ><span>Мои дела</span></Link></Menu.Item>
+              <Menu.Item key="12"><Link to="/create/work"><span>Новое дело</span></Link></Menu.Item>
+              </SubMenu>
+              <SubMenu
+              key="sub6"
+              title={
+                <span>
+                <Icon type="dollar" />
+                  <span>Сделка</span>
+                </span>
+              }
+            >
+              <Menu.Item key="13"><Link to={`/new/deal/${isAuthenticated().direct._id}`} ><span>Новая сделка</span></Link></Menu.Item>
+              <Menu.Item key="14"><Link to={`/deal/history/${isAuthenticated().direct._id}`} ><span>История сделок</span></Link></Menu.Item>
+              <Menu.Item key="15"><Link to="/create/work"><span>Активные сделки</span></Link></Menu.Item>
+              </SubMenu>
+              
           </Menu>
         </Sider>
         
@@ -98,23 +126,5 @@ class SiderDemo extends React.Component {
 }
 
 export default  SiderDemo
-// <Route exact path="/signin" component={Signin}/>
-// <PrivateRoute exact path="/news" component={News}/>
-// <PrivateRoute exact path="/user/:userId" component={Profile}/>
-// <PrivateRoute exact path="/user/:userId" component={Profile}/>
-// <PrivateRoute exact path="/company" component={Company}/>
-// <PrivateRoute exact path="/create/work" component={Work}/>
-// <PrivateRoute exact path="/new/worker" component={NewWorker}/>
-// <PrivateRoute exact path="/user/edit/:userId" component={EditProfile}/>
-// <PrivateRoute exact path="/user/work/:userId" component={MyWork}/>
-// <PrivateRoute exact path="/job/:todoId" component={Job}/>
-// <PrivateRoute exact path="/today/:userId" component={TodayWork}/> 
-// <Menu.Item key="9">
-//               <Icon type="file" />
-//               <span>File</span>
-//             </Menu.Item>
-// <Menu.Item key="1">
-//             <Icon type="fire" />
-//             <Link to="/news"><span styles={{color:'#fff'}}><p>Новости</p></span></Link>
-            
-//             </Menu.Item>
+// <PrivateRoute exact path="/new/deal/:agentId" component={NewDeal}/> 
+// <PrivateRoute exact path="/deal/history/:userId" component={DealHistory}/> 

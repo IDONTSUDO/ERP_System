@@ -40,6 +40,7 @@ export const NewPeopel = user =>{
    })
    .catch(err =>console.log(err))
 }
+
 export const NewTodo = (todo,user) =>{
     return fetch(`http://localhost:8080/new/todo/awesome/${user._id}`, {
         method: "POST",
@@ -293,4 +294,95 @@ export const TodoChangeExperienseAtHTTP = (expireAt,todoId) =>{
     console.log(err)
 })
 }
+export const NewContrAgent = (NewAgent,user) =>{
+   
+    return fetch(`http://localhost:8080/new/agent/${user}`,{
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(NewAgent)
+        })
+.then(response =>{
+    return response.json()
+})
+.catch(err =>{
+    console.log(err)
+})
+}
+export const ContrAgentList = () =>{
+   
+    return fetch(`http://localhost:8080/agent/list`,{
+        method: "GET",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        },
+        })
+.then(response =>{
+    return response.json()
+})
+.catch(err =>{
+    console.log(err)
+})
+}
+export const GetAgentProfile = (agentId) =>{
+   
+    return fetch(`http://localhost:8080/agent/${agentId}`,{
+        method: "GET",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        },
+        })
+.then(response =>{
+    return response.json()
+})
+.catch(err =>{
+    console.log(err)
+})
+}
 
+
+export const AddManageForAgent = (tags,agentId) =>{
+    return fetch(`http://localhost:8080/new/manage/agent/${agentId}`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        },
+        body: JSON.stringify({tags})
+        
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}
+
+export const MyAgentList = (workerId) =>{
+    return fetch(`http://localhost:8080/agent/manage/`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        },
+        body: JSON.stringify({workerId})
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}
+export const MyHistoryActive = (userId) =>{
+    return fetch(`http://localhost:8080/my/history/active/${userId}`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        },
+        body: JSON.stringify({userId})
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}

@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 const RealetivPositionComponent = styled.div`
 .postisitonRelative{
-    left:1em;
+    left:15em;
     top: 2em;
     bottom: 20em;
     position: absolute;
@@ -17,12 +17,12 @@ const RealetivPositionComponent = styled.div`
 .message{
     border-radius: 5px 20px 5px;
     background: #BADA55;
-    padding:10px;
+    padding:1px;    
 }
 .news{
     border-color:#2196F3!important;
-    width: "500px";
-    height:"20px";
+    width:100vh;
+    height:60px;
     border-left: 6px solid red;
     background-color: lightgrey;
     margin:15px;
@@ -59,9 +59,12 @@ export default class News extends Component {
             <div style={{padding: '20px'}}>
             {newsList.map((news, i) => (
                 <>
-                <div style={{padding: '40px'}}>
-                <div  className="news"key={i}>
-                <Link to={`/job/${news.link}`}><h1>{news.event}</h1></Link>
+                <div style={{padding: '5px'}}>
+                <div  className="alert-warning-yellow fade.show-yellow alert-dismissible-yellow alert-yellow"key={i}>
+                <Link className="link" to={`/job/${news.link}`}><strong>{news.event}</strong></Link>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
                 </div>
                 </div>
                 </>

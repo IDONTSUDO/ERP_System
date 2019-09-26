@@ -10,12 +10,35 @@ import {
 } from '../Api/Http'
 import {isAuthenticated} from '../Api/Auth'
 import {Redirect} from  'react-router-dom'
-import { Select } from 'antd';
+import { Select,Button } from 'antd';
 
 import DefaultProfile from '../Assets/default.png' 
 import {Link} from 'react-router-dom'
 
+import styled from 'styled-components'
 
+const RealetivPositionComponent = styled.div`
+.postisitonRelative{
+    left:15em;
+    top: 2em;
+    bottom: 20em;
+    position: absolute;
+    display: flex; 
+}
+.message{
+    border-radius: 5px 20px 5px;
+    background: #BADA55;
+    padding:10px;
+}
+.news{
+    border-color:#2196F3!important;
+    width: "500px";
+    height:"20px";
+    border-left: 6px solid red;
+    background-color: lightgrey;
+    margin:15px;
+}  
+`;
 const { Option } = Select;
 
 export default class Job extends Component {
@@ -203,6 +226,8 @@ export default class Job extends Component {
        
 
         return(
+            <RealetivPositionComponent>
+            <div className="postisitonRelative">
             <div className="container">
             
             <div class="row">
@@ -300,7 +325,8 @@ export default class Job extends Component {
                 </>
                 </div>
             </div>
-        
+            </div>
+            </RealetivPositionComponent>
         )
     }
 }

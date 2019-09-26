@@ -1,0 +1,58 @@
+.alert {
+    position: absolute;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    top: 39em;
+    border-radius: .25rem;
+    width: 2000px;
+    color: #0c5460;
+    background-color: #d1ecf1;
+}
+.postisitonRelativeSmeni{
+    left:15em;
+    top: 2em;
+    bottom: 20em;
+    position: absolute;
+    display: flex; 
+}
+.alert-warning-yellow {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+.fade.show-yellow {
+    opacity: 1;
+}
+.alert-dismissible-yellow {
+    padding-right: 4rem;
+}
+.alert-yellow {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    width:100vh;
+}
+.Link{
+    color:#000000
+
+}
+.tabel{
+    padding:1000px
+}
+.css-o2cm99{
+    background-color: rgb(235, 236, 240);
+    display: flex;
+    flex-direction: column;
+    opacity: inherit;
+    user-select: none;
+    width: 250px;
+    padding: 8px 8px 0px;
+    border-width: 8px;
+    border-style: initial;
+    border-color: initial;
+    border-image: initial;
+    transition: background-color 0.2s ease 0s, opacity 0.1s ease 0s;
+}

@@ -16,6 +16,10 @@ const NewsSchema = new mongoose.Schema({
   },    
   description: {
     type: String,
+  },
+  dateCreated:{
+    type:Date,
+    default:Date.now()
   }
 })
 module.exports = mongoose.model("News", NewsSchema)

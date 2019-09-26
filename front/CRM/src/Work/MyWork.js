@@ -3,6 +3,30 @@ import {isAuthenticated} from '../Api/Auth'
 import {readMyTodo} from '../Api/Http'
 import {Link} from 'react-router-dom'
 import DefaultProfile from '../Assets/default.png' 
+import styled from 'styled-components'
+
+const RealetivPositionComponent = styled.div`
+.postisitonRelative{
+    left:15em;
+    top: 2em;
+    bottom: 20em;
+    position: absolute;
+    display: flex; 
+}
+.message{
+    border-radius: 5px 20px 5px;
+    background: #BADA55;
+    padding:10px;
+}
+.news{
+    border-color:#2196F3!important;
+    width: "500px";
+    height:"20px";
+    border-left: 6px solid red;
+    background-color: lightgrey;
+    margin:15px;
+}  
+`;
 export default class MyWork extends Component {
     constructor(){
         super()
@@ -35,12 +59,12 @@ export default class MyWork extends Component {
     render() {
         const {todos,user} = this.state
         return (
+            <RealetivPositionComponent>
             <>
+        
+            <div className="postisitonRelative">
             <>
-            
-            <Link to={`/today/${user}`} className="btn btn-primary">
-            <button className="btn btn-primary">Посмотреть дела на сегодня</button>
-            </Link>
+
             </>
             
             <ul>
@@ -74,8 +98,10 @@ export default class MyWork extends Component {
             </ul>
             
         
+            </div>
             
             </>
+            </RealetivPositionComponent>
         )
     }
 }

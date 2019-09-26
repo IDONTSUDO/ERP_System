@@ -8,18 +8,6 @@ const workerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    nam:{
-        type:String,
-        require:true
-    },
-    surname:{
-        type: String,
-        required: true
-    },
-    patronymic:{
-        type: String,
-        required: true
-    },
     Date_of_Birth:{
         type: String,
     },
@@ -49,7 +37,6 @@ const workerSchema = new mongoose.Schema({
         type: String,
     },
     by_appointment_TODO:[{ type: ObjectId, ref: "Задача со стороны" }],
-    agent_list:[{ type: ObjectId, ref: "my agent" }],
     January:{
         type:Number
     },

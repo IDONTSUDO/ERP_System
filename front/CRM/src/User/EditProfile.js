@@ -3,7 +3,30 @@ import {isAuthenticated} from '../Api/Auth'
 import {read,update,updateUser} from '../Api/Http'
 import {Redirect} from  'react-router-dom'
 import DefaultProfile from '../Assets/default.png'
+import styled from 'styled-components'
 
+const RealetivPositionComponent = styled.div`
+.postisitonRelative{
+    left:15em;
+    top: 2em;
+    bottom: 20em;
+    position: absolute;
+    display: flex; 
+}
+.message{
+    border-radius: 5px 20px 5px;
+    background: #BADA55;
+    padding:10px;
+}
+.news{
+    border-color:#2196F3!important;
+    width: "500px";
+    height:"20px";
+    border-left: 6px solid red;
+    background-color: lightgrey;
+    margin:15px;
+}  
+`;
 
 class EditProfile extends Component {
 
@@ -99,40 +122,35 @@ class EditProfile extends Component {
         }
         SignUpForm = (name,email,password, about) =>(  
             <form>
-                <div className="form-group">
-                    <label className="text-muted">Profile photo</label>
+                <div>
+                    <label className="text-muted">Ваше фото</label>
                     <input
+                    className="form-control"
                     onChange={this.handleChange("photo")}
                     type="file"
                     accept="image/*"
-                    className="form-control"
+                   
                     />
                 </div>
-                <div className="form-group">
-                    <label className="text-muted">About</label>
-                    <textarea
-                    onChange={this.handleChange("about")}
-                    type="text"
-                    className="form-control"
-                    value={about}/>
+                <div >
+                    <label  >Email</label>
+                    <input className="form-control" onChange={this.handleChange("email")} type="email"  value={email} />
                 </div>
-                <div className="form-group">
-                    <label  className="text-muted">Email</label>
-                    <input  onChange={this.handleChange("email")} type="email" className="form-control" value={email} />
+                <div >
+                    <label >Пароль</label>
+                    <input className="form-control" onChange={this.handleChange("password")} type="password"  value={password} />
                 </div>
-                <div className="form-group">
-                    <label className="text-muted">Password</label>
-                    <input onChange={this.handleChange("password")} type="password" className="form-control" value={password} />
-                </div>
-                <div className="form-group">
-                    <label className="text-muted">Name</label>
+                <div >
+                    <label className="text-muted">Имя</label>
                     <input
+                    className="form-control"
                     onChange={this.handleChange("name")}
                     type="text"
-                    className="form-control"
+                  
                     value={name}/>
                 </div>
-                <button onClick={this.clickSubmit } className="btn btn-raised btn-primary">Updated</button>
+                <div style={{padding:"10px"}}></div>
+                <button  className="btn btn-raised btn-primary" onClick={this.clickSubmit } >Обновить</button>
             </form>
     )
     render() {
@@ -145,27 +163,34 @@ class EditProfile extends Component {
         : DefaultProfile
 
         return (
+            <RealetivPositionComponent
+            
+            >
+            <div  className="postisitonRelative">
             <div className="container">
-                <h2 className="mt-5 mb-5">Profile</h2>
+                <h2> Редактирование профиля</h2>
                 <div className="alert alert-danger" style={{ display: error ? "" : "none"}} > 
                     {error}
                 </div>
                 {loading ?(
                     <div className="jumbotron text-center">
-                    <h2>loading...</h2>
+                    <h2>Загрузка...</h2>
                     </div>
                 ):(
                     ""
                 )}
                 {this.SignUpForm(name,email,password, about)}
+                <div style={{padding:"10px"}}></div>    
                 <img 
                 style={{height: "200px", width:"auto"}}
-                className="img-thumbnail"
+               
                 src={photoUrl} alt={name}
                 onError={i => (i.target.src = `${DefaultProfile}`)}
                 />
 
             </div>
+            </div>
+            </RealetivPositionComponent>
         )
     }
 }

@@ -3,15 +3,25 @@ import {isAuthenticated} from '../Api/Auth'
 import {Redirect, Link } from 'react-router-dom'
 import {read} from '../Api/Http'
 import DefaultProfile from '../Assets/default.png'
+import styled from 'styled-components'
 
+const RealetivPositionComponent = styled.div`
+.postisitonRelative{
+    left:15em;
+    top: 2em;
+    bottom: 20em;
+    position: absolute;
+    display: flex; 
+}
+
+`;
 
 class Profile extends Component {
     constructor(){
         super()
         this.state = {
-            user: { following: [], followers: [] },
+            user: {},
             redirectToSignin: false,
-            following: false,
             error: ""
         }
     }
@@ -46,15 +56,18 @@ class Profile extends Component {
         ? `http://localhost:8080/user/photo/${user._id}?${new Date().getTime()}` 
         : DefaultProfile
         return(
-            <div className="container">
-            <div class="row">
-                <div class="col-sm-8"></div>
+            <RealetivPositionComponent>
+            <div className="postisitonRelative">
+            <div className="">
+            <div class="">
+
+                <div class=""></div>
                 </div>
-                <div className="d-inline-block mt-5">
+                <div className="">
                 {isAuthenticated().direct._id === user._id ? (
                    
-                    <div className="d-inline-block mt-5">
-                        <Link className="btn btn-raised btn-success mr-6" to={`/user/edit/${user._id}`}>
+                    <div className="">
+                        <Link className="" to={`/user/edit/${user._id}`}>
                             Edit Profile
                         </Link>
                        
@@ -63,33 +76,30 @@ class Profile extends Component {
                     <></>
                 )}      
                 </div>
-                <h2 className="mt-5 mb-5">Profile</h2>
-                <div className="row">
-                <div className="col-md-6">
+                <h2 className="">Профиль сотрудника </h2>
+                <div className="">
+                <div className="">
                 <img 
                 style={{height: "200px", width:"auto"}}
                 className="img-thumbnail"
                 onError={i => (i.target.src = `${DefaultProfile}`)}
                 src={photoUrl} />
 
+                <div className="">
 
-                {/* Вывводит аватар пользователя */}
-                <div className="lead mt-5 ml-5">
-                {/* Выводит имя пользователя и email */}
                 <p>Имя: {user.name}</p>
-                <p>Фамилия: {user.surname}</p>
-                <p>Отчество: {user.patronymic}</p>
                 <p>Должность: {user.role}</p>
                 <p>Дата рождения: {user.Date_of_Birth}</p>
                 <p>Телефон: {user.phone}</p>
                 <p>Email: {user.email}</p>
-                {/* Выводит статус пользователя */}
+              
                 <p>Последний визит: {`${new Date(user.created).toDateString()}`}</p>
                 </div>  
                 </div>
                 </div>
             </div>
-        
+            </div>     
+            </RealetivPositionComponent>
         )
     }
   

@@ -1,20 +1,33 @@
 import React, { Component } from 'react'
 import {NewPeopel} from '../Api/Http'
+import DatePicker from "react-datepicker"
+import { Form, Icon, Input, Button } from 'antd';
+import styled from 'styled-components'
+
+
+
+const RealetivPositionComponent = styled.div`
+.postisitonRelative{
+    left:15em;
+    top: -3em;
+    bottom: 20em;
+    position: absolute;
+    display: flex; 
+} 
+`;
 class NewWorker extends Component{
     constructor(){
         super()//состояние компонента
         this.state = {
+            startDate: new Date(),
             name: "",
-            nam:"",
             email: "",
-            surname:"",
-            patronymic:"",
             role:"",
             password: "",
             error: "",
             open: false,
-            Date_of_Birth:""
-            
+            Date_of_Birth:"",
+            phone:""
         }
     }
     //handleChange изменяняет состояние 
@@ -22,24 +35,37 @@ class NewWorker extends Component{
         this.setState({ error: "" })
         this.setState({ [name]: event.target.value })
     }
-    //clickSubmit меняет состояние вызывает функцию signup принимает обьект user
+    handleChangeDate = date => {
+        this.setState({
+          startDate: date
+        })
+    }
     clickSubmit =  event =>{
         event.preventDefault()
-        const { name, email, password, phone,surname,patronymic,role,Date_of_Birth,nam }  = this.state
+        const { name, email, password, phone,role,startDate }  = this.state
+        let yyyy = startDate.getFullYear()
+        let mm = startDate.getMonth()
+        let dd = startDate.getDate()
+        // 
+        let FuckingDataPicker =  + mm + 1
+        // 
+        let ItsRealyFucking = "0" + FuckingDataPicker
+        // 
+        let Date_of_Birth  = dd + '/' + ItsRealyFucking + '/' + yyyy
+
         const user ={
             name,
-            nam,
             email,
             password,
             phone,
-            surname,
-            patronymic,
             role,
             Date_of_Birth
         }
+        
         NewPeopel(user).then(data => {
             if (data.error) this.setState({ error: data.error })
-                else this.setState({
+                else 
+                this.setState({
                     error:"",
                     name: "",
                     email:"",
@@ -50,7 +76,7 @@ class NewWorker extends Component{
         })
     }
     //SignUpForm форма 
-    SignUpForm = (name,email,password, phone,patronymic,surname,role,Date_of_Birth,nam) =>(  
+    SignUpForm = (name,email,password,phone,startDate,role) =>(  
         <form>
             <div className="form-group">
                 <label className="text-muted">Полное имя</label>
@@ -60,30 +86,6 @@ class NewWorker extends Component{
                 className="form-control"
                 value={name}/>
             </div>
-            <div className="form-group">
-                <label className="text-muted">Имя</label>
-                <input
-                onChange={this.handleChange("nam")}
-                type="text"
-                className="form-control"
-                value={nam}/>
-            </div>
-            <div className="form-group">
-                <label className="text-muted">Фамилия</label>
-                <input
-                onChange={this.handleChange("surname")}
-                type="text"
-                className="form-control"
-                />
-            </div>
-            <div className="form-group">
-            <label className="text-muted">Отчество</label>
-            <input
-            onChange={this.handleChange("patronymic")}
-            type="text"
-            className="form-control"
-            />
-        </div>
             <div className="form-group">
                 <label  className="text-muted">Email</label>
                 <input  onChange={this.handleChange("email")} type="email" className="form-control" value={email} />
@@ -97,11 +99,17 @@ class NewWorker extends Component{
                 <input onChange={this.handleChange("phone")} type="number" className="form-control" value={phone} />
             </div>
             <div className="form-group">
-                // date 
+            <label className="text-muted">Дата рождения</label>
+            <div style={{padding:"10px"}}></div>
+            <DatePicker
+                className="form-group"
+                selected={this.state.startDate}
+                onChange={this.handleChangeDate}
+            />
             </div>
             <div className="form-group">
             <label for="exampleFormControlSelect1">Роль</label>
-            <select className="form-control" id="exampleFormControlSelect1" onChange={this.handleChange("role")}>
+            <select className="form-control" id="exampleFormControlSelect1" onChange={this.handleChange("role")} >
               <option>Директор</option>
               <option>Менеджер</option>
               <option>Бугалтер</option>
@@ -112,8 +120,11 @@ class NewWorker extends Component{
         </form>
 )
     render(){
-        const { name,email,password,error, open,phone,patronymic,surname,nam } = this.state 
+        const { name,email,password,error, open,phone,startDate,role} = this.state 
         return(
+            <RealetivPositionComponent>
+            <div className="postisitonRelative">
+            
             <div className="container">
 
                 <h2 className="mt-5 mb-5">Новый пользователь</h2>
@@ -123,9 +134,11 @@ class NewWorker extends Component{
                 <div className="alert alert-info" style={{ display: open ? "" : "none"}}>
                     Новый пользователь успешно создан.
                 </div>
-                {this.SignUpForm(name,email,password,phone,surname,patronymic,nam)}
-                {/*SignUpForm функции для формы авторизации вставляет*/}
+                {this.SignUpForm(name,email,password,phone,startDate,role)}
+
             </div>
+            </div>
+            </RealetivPositionComponent>
         )
     }
 }

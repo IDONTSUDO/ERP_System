@@ -3,20 +3,19 @@ const { ObjectId } = mongoose.Schema
 const contrAgentSchema =  new mongoose.Schema({
     company:{
         type: String,
-        required:true
+        // required:true
     },
     full_name:{
         type: String,
-        required:true
+        // required:true
     },
-    //сокращенное название
     name:{
         type: String,
-        required:true
+        // required:true
     },
     phone:{
         type: String,
-        required:true
+        // required:true
     },
     status:{
         type: String,
@@ -28,14 +27,15 @@ const contrAgentSchema =  new mongoose.Schema({
     },
     general_director:{
         type: String,
-        required:true
+        // required:true
     },
     OGRN:{
         type: String,
-        required:true
+        // required:true
     },
     email:{
-
+        type: String,
+        // required:true
     },
 
     Date:{
@@ -45,13 +45,22 @@ const contrAgentSchema =  new mongoose.Schema({
     tags:[{
         type:Object
     }],
-    AgentHistoryJob:{
-        type:ObjectId,
-        ref: "История работ"
-    },
     postedBy:{
         type: ObjectId,
         ref:  "User"
-    }
+    },
+    any:{
+        type:String
+    },
+    legal_address:{
+        type: String
+    },
+    actual_address:{
+        type: String
+    },
+    payment_account:{
+        type: String
+    },
+    redirectTo:false
 })
 module.exports = mongoose.model("Agent", contrAgentSchema)

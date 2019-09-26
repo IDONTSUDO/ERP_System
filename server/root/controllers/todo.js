@@ -106,7 +106,7 @@ exports.NewTodoUserAwesome = (req,res) =>{
 
     todo.save().then(result =>{
         res.status(200).json({
-            todo: result
+            "дело":"создано!"
         })
     })
     

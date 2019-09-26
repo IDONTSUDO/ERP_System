@@ -129,8 +129,7 @@ exports.ListworkerAll = async (req,res) =>{
 
 
 exports.searchWorker = (req,res) =>{
-    let searchItemCollection 
-    searchItemCollection = req.body.search
+    let searchItemCollection  = req.body.search
     Worker.find({searchItemCollection: new RegExp(req.body.item, 'i')}) 
     .then(worker => res.json(worker))
     .catch(e => console.error(e))
