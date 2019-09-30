@@ -9,7 +9,8 @@ export default class NewDeal extends Component {
         this.state = {
             user:"",
             agentList:[],
-            tags:[]
+            tags:[],
+            id:""
         }
     }
     componentDidMount(){
@@ -41,10 +42,11 @@ export default class NewDeal extends Component {
     }
 
     render() {
-        let {agentList,price} = this.state
+        let {agentList,price,id} = this.state
         return (
             <div>
                 <div className="postisitonRelativeSmeni">
+                    
                 <div className="container">
                 <div className="row">
                 <ReactTags
@@ -56,6 +58,10 @@ export default class NewDeal extends Component {
                 <div >
                     <label  >Прайс</label>
                     <input className="form-control" onChange={this.handleAction("price")} type="text"  value={price} />
+                </div>
+                <div >
+                    <label  >Название</label>
+                    <input className="form-control" onChange={this.handleAction("id")} type="text"  value={price} />
                 </div>
                 </form>
                 <button  className="btn btn-raised btn-primary" onClick={this.clickSubmit } >Новая сделка</button>    

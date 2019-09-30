@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {Redirect} from 'react-router-dom'
 import {signin, authencate} from '../Api/Auth'
+import { Spin } from 'antd';
 
 class Signin extends Component{
     constructor(){
@@ -56,7 +57,7 @@ class Signin extends Component{
                 </div>
                 {loading ?(
                     <div className="jumbotron text-center">
-                    <h2>loading...</h2>
+                    <Spin size="large" />
                     </div>
                 ):(
                     ""
@@ -71,7 +72,7 @@ class Signin extends Component{
                 <label className="text-muted">Password</label>
                 <input onChange={this.handleChange("password")} type="password" className="form-control" value={password} />
             </div>
-            <button onClick={this.clickSubmit } className="btn btn-raised btn-primary">Submit</button>
+            <button onClick={this.clickSubmit } className="btn btn-raised btn-primary">Отправить</button>
         </form>
             </div>
         )

@@ -374,12 +374,65 @@ export const MyAgentList = (workerId) =>{
     .catch(err =>console.log(err))
 }
 export const MyHistoryActive = (userId) =>{
-    return fetch(`http://localhost:8080/my/history/active/${userId}`, {
+    return fetch(`http://localhost:8080/my/history/active/`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json"
         },
         body: JSON.stringify({userId})
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}
+export const MyHistoryBeginer = (userId) =>{
+    return fetch(`http://localhost:8080/my/history/beginer/`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        },
+        body: JSON.stringify({userId})
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}
+
+export const MyHistoryComplete = (userId) =>{
+    return fetch(`http://localhost:8080/my/history/complete/`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        },
+        body: JSON.stringify({userId})
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}
+export const OneHistoryGet = (HistoryById) =>{
+    return fetch(`http://localhost:8080/history/${HistoryById}`, {
+        method: "GET",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        }
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}
+
+export const ChangeHistory = (historyId,changeHisitoryPayload) =>{
+    return fetch(`http://localhost:8080/change/history/${historyId}`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        },
+        body: JSON.stringify(changeHisitoryPayload)
     })
     .then(responce =>{
         return responce.json()
