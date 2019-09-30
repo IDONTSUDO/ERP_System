@@ -27,7 +27,7 @@ class SiderDemo extends React.Component {
 
       {!isAuthenticated() && (
         <>
-          <h1>You a dont </h1>
+        
         </>
       )}
       {isAuthenticated() && ( 
