@@ -1,5 +1,5 @@
 export const list = () =>{
-    return fetch(`http://localhost:8080/all/worker/list`,{
+    return fetch(`http://45.132.18.71/all/worker/list`,{
         method: "GET",
         headers: {
             Accept: "application/json"
@@ -13,7 +13,7 @@ export const list = () =>{
 })
 }
 export const DeleteUser = (userId,token) =>{
-    return fetch(`http://localhost:8080/delete/worker/${userId}`,{
+    return fetch(`http://45.132.18.71/delete/worker/${userId}`,{
         method: "DELETE",
         headers: {
             Accept: "application/json",
@@ -28,7 +28,7 @@ export const DeleteUser = (userId,token) =>{
 })
 }
 export const NewPeopel = user =>{
-    return fetch(`http://localhost:8080/new/worker/`, {
+    return fetch(`http://45.132.18.71/new/worker/`, {
        method: "POST",
        headers: {
            Accept: "application/json", "Content-Type": "application/json"
@@ -42,7 +42,7 @@ export const NewPeopel = user =>{
 }
 
 export const NewTodo = (todo,user) =>{
-    return fetch(`http://localhost:8080/new/todo/awesome/${user._id}`, {
+    return fetch(`http://45.132.18.71/new/todo/awesome/${user._id}`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json"
@@ -69,7 +69,7 @@ export const NewTodo = (todo,user) =>{
 }
 export const read = (userId,token) =>{
     console.log(userId, token)
-    return fetch(`http://localhost:8080/worker/get/${userId}`,{
+    return fetch(`http://45.132.18.71/worker/get/${userId}`,{
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -86,7 +86,7 @@ export const read = (userId,token) =>{
 }
 export const update = (userId,token,user ) =>{
     console.log(userId, token, user)
-    return fetch(`http://localhost:8080/edit/worker/${userId}`,{
+    return fetch(`http://45.132.18.71/edit/worker/${userId}`,{
         method: "PUT",
         headers: {
             Accept: "application/json",
@@ -115,7 +115,7 @@ export const updateUser = (user, next) =>{
     }
 }
 export const readMyTodo = (userId,token) =>{
-        return fetch(`http://localhost:8080/my/todo/soso/${userId}`,{
+        return fetch(`http://45.132.18.71/my/todo/soso/${userId}`,{
             method: "GET",
             headers: {
                 Accept: "application/json"
@@ -131,7 +131,7 @@ export const readMyTodo = (userId,token) =>{
 
 export const soloJob = (todoId,token) =>{
     console.log(todoId, token)
-    return fetch(`http://localhost:8080/todo/${todoId}`,{
+    return fetch(`http://45.132.18.71/todo/${todoId}`,{
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -148,7 +148,7 @@ export const soloJob = (todoId,token) =>{
 }
 export const readComentList = (todoId,token) =>{
     
-    return fetch(`http://localhost:8080/get/todo/coments/`,{
+    return fetch(`http://45.132.18.71/get/todo/coments/`,{
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -167,7 +167,7 @@ export const readComentList = (todoId,token) =>{
 
 export const NewComent = (comment,token) =>{
 
-    return fetch(`http://localhost:8080/comment/todo/`,{
+    return fetch(`http://45.132.18.71/comment/todo/`,{
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -185,7 +185,7 @@ export const NewComent = (comment,token) =>{
 }
 
 export const DeleteComment = (comment) =>{
-    return fetch(`http://localhost:8080/delete/comment/${comment}`,{
+    return fetch(`http://45.132.18.71/delete/comment/${comment}`,{
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -203,7 +203,7 @@ export const DeleteComment = (comment) =>{
 }
 
 export const NewNews = (payload) =>{
-    return fetch(`http://localhost:8080/new/news`,{
+    return fetch(`http://45.132.18.71/new/news`,{
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -223,7 +223,7 @@ export const NewNews = (payload) =>{
 
 export const listNews = (id) =>{
     console.log(JSON.stringify({id}))
-    return fetch(`http://localhost:8080/worker/news`,{
+    return fetch(`http://45.132.18.71/worker/news`,{
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -244,7 +244,7 @@ export const SetStatusJob = (status,todoId) =>{
     
     console.log(JSON.stringify({status:status}))
     console.log(todoId)
-    return fetch(`http://localhost:8080/todo/change/${todoId}`,{
+    return fetch(`http://45.132.18.71/todo/change/${todoId}`,{
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -262,7 +262,7 @@ export const SetStatusJob = (status,todoId) =>{
 }
 export const TodayWorkHTTP = (userId) =>{
     console.log(userId)
-    return fetch(`http://localhost:8080/today/todo/${userId}`,{
+    return fetch(`http://45.132.18.71/today/todo/${userId}`,{
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -279,7 +279,7 @@ export const TodayWorkHTTP = (userId) =>{
 
 export const TodoChangeExperienseAtHTTP = (expireAt,todoId) =>{
     console.log(JSON.stringify({expireAt:expireAt}))
-    return fetch(`http://localhost:8080/todo/change/${todoId}`,{
+    return fetch(`http://45.132.18.71/todo/change/${todoId}`,{
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -296,7 +296,7 @@ export const TodoChangeExperienseAtHTTP = (expireAt,todoId) =>{
 }
 export const NewContrAgent = (NewAgent,user) =>{
    
-    return fetch(`http://localhost:8080/new/agent/${user}`,{
+    return fetch(`http://45.132.18.71/new/agent/${user}`,{
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -313,7 +313,7 @@ export const NewContrAgent = (NewAgent,user) =>{
 }
 export const ContrAgentList = () =>{
    
-    return fetch(`http://localhost:8080/agent/list`,{
+    return fetch(`http://45.132.18.71/agent/list`,{
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -329,7 +329,7 @@ export const ContrAgentList = () =>{
 }
 export const GetAgentProfile = (agentId) =>{
    
-    return fetch(`http://localhost:8080/agent/${agentId}`,{
+    return fetch(`http://45.132.18.71/agent/${agentId}`,{
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -346,7 +346,7 @@ export const GetAgentProfile = (agentId) =>{
 
 
 export const AddManageForAgent = (tags,agentId) =>{
-    return fetch(`http://localhost:8080/new/manage/agent/${agentId}`, {
+    return fetch(`http://45.132.18.71/new/manage/agent/${agentId}`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json"
@@ -361,7 +361,7 @@ export const AddManageForAgent = (tags,agentId) =>{
 }
 
 export const MyAgentList = (workerId) =>{
-    return fetch(`http://localhost:8080/agent/manage/`, {
+    return fetch(`http://45.132.18.71/agent/manage/`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json"
@@ -374,7 +374,7 @@ export const MyAgentList = (workerId) =>{
     .catch(err =>console.log(err))
 }
 export const MyHistoryActive = (userId) =>{
-    return fetch(`http://localhost:8080/my/history/active/`, {
+    return fetch(`http://45.132.18.71/my/history/active/`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json"
@@ -387,7 +387,7 @@ export const MyHistoryActive = (userId) =>{
     .catch(err =>console.log(err))
 }
 export const MyHistoryBeginer = (userId) =>{
-    return fetch(`http://localhost:8080/my/history/beginer/`, {
+    return fetch(`http://45.132.18.71/my/history/beginer/`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json"
@@ -401,7 +401,7 @@ export const MyHistoryBeginer = (userId) =>{
 }
 
 export const MyHistoryComplete = (userId) =>{
-    return fetch(`http://localhost:8080/my/history/complete/`, {
+    return fetch(`http://45.132.18.71/my/history/complete/`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json"
@@ -414,7 +414,7 @@ export const MyHistoryComplete = (userId) =>{
     .catch(err =>console.log(err))
 }
 export const OneHistoryGet = (HistoryById) =>{
-    return fetch(`http://localhost:8080/history/${HistoryById}`, {
+    return fetch(`http://45.132.18.71/history/${HistoryById}`, {
         method: "GET",
         headers: {
             Accept: "application/json", "Content-Type": "application/json"
@@ -427,7 +427,7 @@ export const OneHistoryGet = (HistoryById) =>{
 }
 
 export const ChangeHistory = (historyId,changeHisitoryPayload) =>{
-    return fetch(`http://localhost:8080/change/history/${historyId}`, {
+    return fetch(`http://45.132.18.71/change/history/${historyId}`, {
         method: "PUT",
         headers: {
             Accept: "application/json", "Content-Type": "application/json"
