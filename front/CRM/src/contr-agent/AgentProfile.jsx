@@ -128,7 +128,7 @@ export default class AgentProfile extends Component {
         return (
             <div>
                 <div className="postisitonRelativeSmeni">
-                <div className="">
+                <div className="" >
                 <Descriptions title="Корпаративная  информация" layout="vertical">
     <Descriptions.Item label="Имя компании"><p>{name}</p></Descriptions.Item>
     <Descriptions.Item label="Телефон">{phone}</Descriptions.Item>
@@ -151,6 +151,7 @@ export default class AgentProfile extends Component {
     <Button type="danger">Удалить менеджеров</Button>
                 </div>
                 </div>
+                
             </div>
 
         )

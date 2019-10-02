@@ -2,7 +2,7 @@
 для авторизации
 */
 export const signin = user => {
-    return fetch(`http://45.132.18.71/signin`, {
+    return fetch(`http://localhost:8080/signin`, {
        method: "POST",
        headers: {
            Accept: "application/json", "Content-Type": "application/json"
@@ -30,7 +30,7 @@ signout - уничтожает JWT  из локлал строджа
 export const signout = (next) =>{
     if(typeof window !== "undefined") localStorage.removeItem("jwt")
     next()
-    return fetch(`http://45.132.18.71/signout`,{
+    return fetch(`http://localhost:8080/signout`,{
         method: "GET"
     })
     .then(response =>{

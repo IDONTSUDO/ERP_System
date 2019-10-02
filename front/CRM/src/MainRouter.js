@@ -6,6 +6,8 @@ import PrivateRoute from './Auth/PrivateRouter'
 import Profile from './User/Profile'
 import Company from './User/Company'
 import News from './User/News'
+import MyStatistic from './User/MyStatistic'
+
 
 import AgentProfile from './contr-agent/AgentProfile'
 import NewAgent from './contr-agent/NewAngent.jsx'
@@ -30,7 +32,9 @@ const MainRouter = ()  =>(
     <Switch>
         <Route exact path="/signin" component={Signin}/>
         <PrivateRoute exact path="/news" component={News}/>
+        <PrivateRoute exact path="/news" component={News}/>
         <PrivateRoute exact path="/user/:userId" component={Profile}/>
+        <PrivateRoute exact path="/statistic/:userId" component={MyStatistic}/>
         <PrivateRoute exact path="/company" component={Company}/>
         <PrivateRoute exact path="/create/work" component={Work}/>
         <PrivateRoute exact path="/new/worker" component={NewWorker}/>

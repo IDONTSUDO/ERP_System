@@ -153,7 +153,7 @@ export default class MyAgent extends Component {
             </Row>
             <Row>
               <Col span={12}>
-                <DescriptionItem title="Birthday" content="February 2,1900" />
+                <DescriptionItem title="Birthday" content="{Date}" />
               </Col>
               <Col span={12}>
                 <DescriptionItem title="Website" content="-" />
@@ -171,15 +171,15 @@ export default class MyAgent extends Component {
             <p style={pStyle}>Данные о компании</p>
             <Row>
               <Col span={12}>
-                <DescriptionItem title="Position" content="Programmer" />
+                <DescriptionItem title="ИНН" content={INN} />
               </Col>
               <Col span={12}>
-                <DescriptionItem title="Responsibilities" content="Coding" />
+                <DescriptionItem title="ОГРН" content={OGRN} />
               </Col>
             </Row>
             <Row>
               <Col span={12}>
-                <DescriptionItem title="Department" content="AFX" />
+                <DescriptionItem title="Department" content={full_name} />
               </Col>
               <Col span={12}>
                 <DescriptionItem title="Supervisor" content={<a>Lin</a>} />

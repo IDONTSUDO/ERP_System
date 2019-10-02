@@ -31,8 +31,8 @@ class SiderDemo extends React.Component {
         </>
       )}
       {isAuthenticated() && ( 
-        <div style={{  display: 'flex', minHeight: '1000px' }}>
-        <Layout style={{ minHeight: '1000px' }}>
+        <div style={{  display: 'flex', minHeight: '2000px' }}>
+        <Layout style={{ minHeight: '2000px' }}>
         <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
           <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
@@ -96,9 +96,9 @@ class SiderDemo extends React.Component {
                 </span>
               }
             >
-              <Menu.Item key="7"><Link to={`/today/${isAuthenticated().direct._id}`} ><span>Дела на сегодня</span></Link></Menu.Item>
-              <Menu.Item key="8"><Link to={`/user/work/${isAuthenticated().direct._id}`} ><span>Мои дела</span></Link></Menu.Item>
-              <Menu.Item key="12"><Link to="/create/work"><span>Новое дело</span></Link></Menu.Item>
+              <Menu.Item key="16"><Link to={`/today/${isAuthenticated().direct._id}`} ><span>Дела на сегодня</span></Link></Menu.Item>
+              <Menu.Item key="17"><Link to={`/user/work/${isAuthenticated().direct._id}`} ><span>Мои дела</span></Link></Menu.Item>
+              <Menu.Item key="18"><Link to="/create/work"><span>Новое дело</span></Link></Menu.Item>
               </SubMenu>
               <SubMenu
               key="sub6"

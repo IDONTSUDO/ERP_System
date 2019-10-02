@@ -155,9 +155,7 @@ class EditProfile extends Component {
     )
     render() {
         const { id,password,name,email,redirectToProfile, error, loading,about} = this.state 
-        if(redirectToProfile){
-           return <Redirect to={`/user/${id}`}/>
-        }
+
         const photoUrl = id 
         ? `${process.env.REACT_APP_API_URL}/user/photo/${id}?${new Date().getTime()}` 
         : DefaultProfile
