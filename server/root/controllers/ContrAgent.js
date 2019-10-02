@@ -30,17 +30,34 @@ exports.getAgentProfile = (req,res) =>{
     res.status(200).json(req.agent)
 }
 exports.SearchAgent = (req,res) =>{
-    let searchItemCollection  = req.body.search
-    ContrAgent.find({searchItemCollection: new RegExp(req.body.item, 'i')}) 
+
+    ContrAgent.find({name: new RegExp(req.body.item, 'i')})
+    .select("_id name")
     .then(result => res.json(result))
     .catch(e => console.error(e))
 }
-exports.AllAgent = (req,res) =>{
-    const agent = ContrAgent.find()
-    .then((agent) =>{
-        res.status(200).json(agent)
-    })
-    .catch(err => console.log(err))
+exports.AllAgent = async (req,res) =>{
+   
+      const currentPage = req.query.page || 1
+      console.log(req.query.page)
+      const perPage = 6
+      var totalItems
+  
+      const agents = await ContrAgent.find()
+       
+          .countDocuments()
+          .then(count => {
+              totalItems = count;
+              return ContrAgent.find()
+                  .skip((currentPage - 1) * perPage)
+                  .select('_id name')
+                  .limit(perPage)
+                //.sort({ })
+          })
+          .then(agents => {
+              res.status(200).json(agents)
+          })
+          .catch(err => console.log(err))
 }
 exports.ChangeAgent = (req,res) =>{
     let agent = req.agent

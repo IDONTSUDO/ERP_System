@@ -27,6 +27,9 @@ const AgentHistorySchema =  new mongoose.Schema({
     },
     commentStart:{
         type: String
+    },
+    id:{
+        type:String
     }
 })
 module.exports = mongoose.model("AgentHistory", AgentHistorySchema)

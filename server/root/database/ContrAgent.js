@@ -60,7 +60,6 @@ const contrAgentSchema =  new mongoose.Schema({
     },
     payment_account:{
         type: String
-    },
-    redirectTo:false
+    }
 })
 module.exports = mongoose.model("Agent", contrAgentSchema)

@@ -14,6 +14,12 @@ exports.HistoryById = async (req, res , next , id) =>{
         next()
     })
 }
+
+exports.GetHistoryOne = async (req, res) =>{
+    let history = req.history
+
+    res.status(200).json(history)
+}
 exports.NewHistory = async (req, res) =>{
 
     const history = new History(req.body)
@@ -36,8 +42,8 @@ exports.NewComent = async (req, res) =>{
 }
 exports.changeHistory = async (req, res) =>{
     let history = req.history 
-    
-    
+    console.log(history)
+    console.log(req.body)
     history = _.extend(history,req.body)
     
    
@@ -55,9 +61,9 @@ exports.changeHistory = async (req, res) =>{
 
 exports.myHistoryActive= async (req, res) =>{
     let userId = req.body.userId
-    let statusSearch = "Выполнено"
+    let statusSearch = "Активно"
 
-    History.find({ $and: [ { postedBy: { $in: userId } }, { status: { $in: statusSearch } } ] })  
+    await History.find({ $and: [ { postedBy: { $in: userId } }, { status: { $in: statusSearch } } ] })  
     
     .exec((err, history) =>{
         if(err){
@@ -70,5 +76,34 @@ exports.myHistoryActive= async (req, res) =>{
     })
 }
 exports.myHistoryBeginer= async (req, res) =>{
+    let userId = req.body.userId
+    let statusSearch = "Начато"
 
+    await History.find({ $and: [ { postedBy: { $in: userId } }, { status: { $in: statusSearch } } ] })  
+    
+    .exec((err, history) =>{
+        if(err){
+            return res.status(400).json({
+                error: err
+            })
+        }
+
+        res.json(history)
+    })
+}
+exports.myHistoryComplete = async (req, res) =>{
+    let userId = req.body.userId
+    let statusSearch = "Завершено"
+
+    await History.find({ $and: [ { postedBy: { $in: userId } }, { status: { $in: statusSearch } } ] })  
+    
+    .exec((err, history) =>{
+        if(err){
+            return res.status(400).json({
+                error: err
+            })
+        }
+
+        res.json(history)
+    })
 }
