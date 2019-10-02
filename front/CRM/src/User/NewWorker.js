@@ -102,7 +102,7 @@ class NewWorker extends Component{
             <label className="text-muted">Дата рождения</label>
             <div style={{padding:"10px"}}></div>
             <DatePicker
-                className="form-group"
+                className="input"
                 selected={this.state.startDate}
                 onChange={this.handleChangeDate}
             />

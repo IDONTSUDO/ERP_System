@@ -2,7 +2,7 @@ const express = require("express")
 const { NewUserQuality,DeleteUserQuality,GetUserQuality,NewStatisticTabel } = require("../controllers/Statistic")
 
 const router = express.Router({mergeParams: true});
-NewStatisticTabel
+
 router.post('/new/qauality/user/statistic',NewUserQuality )
 router.post('/new/tabel/',NewStatisticTabel)
 

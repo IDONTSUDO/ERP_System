@@ -4,7 +4,7 @@ import {isAuthenticated} from "../Api/Auth"
 import DefaultProfile from '../Assets/default.png' 
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
-import { Button } from 'antd';
+import { Button,Card } from 'antd';
 
 const RealetivPositionComponent = styled.div`
 .postisitonRelative{
@@ -34,6 +34,7 @@ export default class Company extends Component {
         super()
         this.state={
             worker: [],
+            page: 1
         }
     }
     handleClick(userId) {
@@ -46,21 +47,17 @@ export default class Company extends Component {
             }
         })
     }
-    componentDidMount() {
-        list().then(data =>{
-            if(data.error){
-                console.log(data.error)
-            }else{
-                this.setState({worker:data})
-            }
-        })
-    }
+    componentDidMount(){
+        this.LoadCompanyUser(this.state.page);
+      }
     handleChange = name => event => {
       this.setState({ error: "" })
       this.setState({ [name]: event.target.value })
     }
+
     forceUpdate(){
-        list().then(data =>{
+        const {page} = this.state
+        list(page).then(data =>{
             if(data.error){
                 console.log(data.error)
             }else{
@@ -68,32 +65,79 @@ export default class Company extends Component {
             }
         })
     }
+
+    LoadCompanyUser = page => {
+        list(page)
+          .then(data =>{
+          this.setState({worker:data})
+        })
+        .catch(data =>{
+          console.log(data)
+        })
+    }
+
+    loadMore = number => {
+        this.setState({ page: this.state.page + number });
+        this.LoadCompanyUser(this.state.page + number);
+    }
+  
+    loadLess = number => {
+        this.setState({ page: this.state.page - number });
+        this.LoadCompanyUser(this.state.page - number);
+    }
+
     render() {
-        const {worker} = this.state
+        const {worker,page} = this.state
         return (
             <RealetivPositionComponent>
             <div className="postisitonRelative">
-            <div className="container">
+
+            <div style={{padding:"5px"}}>
             <div className="row">
             {worker.map((user, i) => (
             <>
-            <div className="card col-md-4" style={{ width: "18rem"}}key={i}>
-            <img className="card-img-top" src={`http://localhost:8080/user/photo/${user._id}?`}
-                         onError={i => (i.target.src = `${DefaultProfile}`)}
-                         alt={user.name}
-                         style={{height: "50px", width:"50px"}}
-                         />
-                         <div className="card-body">
-                         <h5 className="card-title">{user.name}</h5>
-                         <p className="card-text">{user.email}</p>
-                         <Button ><Link to={`/user/${user._id}`} >Посмотреть профиль</Link></Button>
-                         
-                         <Button  type="danger" onClick={(userId) => this.handleClick(user._id, userId)}>Удалить Пользователя</Button>    
-                         </div>
+            <div className="">
             </div>
+            <Card  size="small"  title={user.role}>
+            <img className="card-img-top" src={`http://localhost:8080/user/photo/${user._id}?`}
+            onError={i => (i.target.src = `${DefaultProfile}`)}
+            alt={user.name}
+            style={{height: "50px", width:"50px"}}
+            />
+            
+            <h5 className="card-title">{user.name}</h5>
+            <p className="card-text">{user.email}</p>
+            
+            
+            <Button ><Link to={`/user/${user._id}`} >Посмотреть профиль</Link></Button>
+                         <div style={{padding:"5px"}} ></div>
+                         <Button  type="danger" onClick={(userId) => this.handleClick(user._id, userId)}>Удалить Пользователя</Button>    
+            </Card>
             </>
             ))}
+        
             </div>
+            {worker.length ? (
+                <Button
+                    className="ButtonPosition"
+                    onClick={() => this.loadMore(1)}
+                >
+                    Вперед ({page + 1})
+                </Button>
+            ) : (
+                ""
+            )}
+            {page > 1 ? (
+                <Button
+                    className="ButtonPosition"
+                    onClick={() => this.loadLess(1)}
+                >
+                    Назад ({this.state.page - 1})
+                </Button>
+                
+            ) : (
+                ""
+            )}
             </div>
             </div>
             </RealetivPositionComponent>

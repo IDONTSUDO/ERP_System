@@ -65,8 +65,14 @@ export default class NewAgent extends Component {
     })
     
     }
-    NewAgentForm = (company, full_name,name,phone,INN,general_director,OGRN,email, any,legal_address,actual_address,payment_account) =>(
-        <form>
+
+    render() {
+        const {company, full_name,name,phone,INN,general_director,OGRN,email,any,legal_address,actual_address,payment_account} =  this.state
+        return (
+            <div className="postisitonRelativeSmeni">
+            <div className="container">
+                 <div className="row">
+                 <form>
                 <div >
                     <label  className="text-muted">Название компании</label>
                     <input className="form-control" onChange={this.handleChange("company")} type="text"  value={company} />
@@ -119,13 +125,19 @@ export default class NewAgent extends Component {
                   
                     value={email}/>
                 </div>
-                <div >
+                </form>
+                </div>
+                <div className="part2">
+                <div>
+                 <div className="row">
+                 <form>
+                 <div >
                     <label className="text-muted">ОГРН компании</label>
                     <input
                     className="form-control"
                     onChange={this.handleChange("OGRN")}
                     type="text"
-                  
+                    style={{width:"15em"}}
                     value={OGRN}/>
                 </div>
                 <div >
@@ -157,20 +169,13 @@ export default class NewAgent extends Component {
                     type="text"
                     value={payment_account}/>
                 </div>
-                
+                     </form>
+                     </div>
+                     </div>
+                </div>
                 <div style={{padding:"10px"}}></div>
                 <button  className="btn btn-raised btn-primary" onClick={this.clickSubmit } >Создать</button>
-            </form>
-      )
-    render() {
-        const {company, full_name,name,phone,INN,general_director,OGRN,email,any,legal_address,actual_address,payment_account} =  this.state
-        return (
-            <div className="postisitonRelativeSmeni">
-            <div className="container">
-                 <div className="row">
-                 {this.NewAgentForm(company, full_name,name,phone,INN,general_director,OGRN,email,any,legal_address,actual_address,payment_account)}
                  </div>
-            </div>
         </div>
         )
     }

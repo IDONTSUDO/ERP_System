@@ -195,7 +195,6 @@ class Work extends React.Component {
     className="form-control" 
         selected={this.state.startDate}
         onChange={this.handleChange}
-        
       />
     </div>
     </Col>
@@ -208,6 +207,7 @@ class Work extends React.Component {
     <div className="Tags">
     <ReactTags
         tags={this.state.tags}
+        placeholderText={this.state.user}
         suggestions={worker}
         handleDelete={this.handleDelete.bind(this)}
         handleAddition={this.handleAddition.bind(this)} />

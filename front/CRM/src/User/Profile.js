@@ -51,7 +51,7 @@ class Profile extends Component {
     }
     render() {
         const  {redirectToSignin, user} = this.state
-        if(redirectToSignin) return <Redirect to="/signin"/>
+       
         const photoUrl = user._id
         ? `http://localhost:8080/user/photo/${user._id}?${new Date().getTime()}` 
         : DefaultProfile
@@ -63,18 +63,7 @@ class Profile extends Component {
 
                 <div class=""></div>
                 </div>
-                <div className="">
-                {isAuthenticated().direct._id === user._id ? (
-                   
-                    <div className="">
-                        <Link className="" to={`/user/edit/${user._id}`}>
-                            Edit Profile
-                        </Link>
-                       
-                    </div>
-                ):(
-                    <></>
-                )}      
+                <div className="">  
                 </div>
                 <h2 className="">Профиль сотрудника </h2>
                 <div className="">

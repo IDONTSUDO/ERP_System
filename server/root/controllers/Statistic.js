@@ -1,4 +1,4 @@
-const STATISTIC = require('../database/Statistic')
+const STATISTIC= require('../database/Statistic')
 
 
 
@@ -8,7 +8,6 @@ exports.NewStatisticTabel= (req,res) =>{
     newTabel.save()
     res.status(200).json({ message: "Tabel create!" })
 }
-
 
 exports.NewUserQuality = (req,res) =>{
 
@@ -34,7 +33,25 @@ exports.NewUserQuality = (req,res) =>{
     })
 }
 exports.DeleteUserQuality = (req,res) =>{
+    STATISTIC.find().select(" worker_quality ").exec((err, stat) =>{
+        if(err){
+            return res.status(400).json({
+                error: err
+            })
+        }
+       
+        let worker_quality = stat[0].worker_quality - 1
+       
+        let save = JSON.stringify({worker_quality})
+
+        const  statistic = new STATISTICworker(save) 
+        statistic.save().then(result =>{
+            res.status(200).json({
+            stat: result
+        })
+    })
     
+    })
 }
 exports.GetUserQuality = (req,res) =>{
     STATISTIC.find().select(" worker_quality ")
@@ -47,3 +64,5 @@ exports.GetUserQuality = (req,res) =>{
         res.json(stat)
     })
 }
+
+exports.Statistic
