@@ -39,7 +39,7 @@ class Signin extends Component{
             }
                 
         })
-        //console.log(user)
+        
     }
     render(){
         const { email,password,error,redirectToRefer,loading } = this.state
@@ -69,7 +69,7 @@ class Signin extends Component{
                 <input  onChange={this.handleChange("email")} type="email" className="form-control" value={email} />
             </div>
             <div className="form-group">
-                <label className="text-muted">Password</label>
+                <label className="text-muted">Пароль</label>
                 <input onChange={this.handleChange("password")} type="password" className="form-control" value={password} />
             </div>
             <button onClick={this.clickSubmit } className="btn btn-raised btn-primary">Отправить</button>

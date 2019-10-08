@@ -10,36 +10,14 @@ import {
 } from '../Api/Http'
 import {isAuthenticated} from '../Api/Auth'
 import {Redirect} from  'react-router-dom'
-import { Select,Button } from 'antd';
+import { Comment,Tooltip,Select,Button,Card } from 'antd';
 
 import DefaultProfile from '../Assets/default.png' 
 import {Link} from 'react-router-dom'
 
-import styled from 'styled-components'
 
-const RealetivPositionComponent = styled.div`
-.postisitonRelative{
-    left:15em;
-    top: 2em;
-    bottom: 20em;
-    position: absolute;
-    display: flex; 
-}
-.message{
-    border-radius: 5px 20px 5px;
-    background: #BADA55;
-    padding:10px;
-}
-.news{
-    border-color:#2196F3!important;
-    width: "500px";
-    height:"20px";
-    border-left: 6px solid red;
-    background-color: lightgrey;
-    margin:15px;
-}  
-`;
-const { Option } = Select;
+
+
 
 export default class Job extends Component {
     constructor(){
@@ -71,7 +49,6 @@ export default class Job extends Component {
                 
                 this.forceUpdate()
                 TodoChangeExperienseAtHTTP(expireAt,todoId)
-                
                 
             }
         })
@@ -226,14 +203,15 @@ export default class Job extends Component {
        
 
         return(
-            <RealetivPositionComponent>
-            <div className="postisitonRelative">
+           
+            <div className="postisitonRelativeSmeni">
             <div className="container">
             
             <div class="row">
                 <div class="col-sm-8"></div>
-                <h3 className="text-primary">{comments.length} Коментарии</h3>
-                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+            <Card> 
+                <h3 className="text-primary">{comments.length} Количество коментариев</h3>
+                <a>
                             <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">{todo.titel}</h5>
                             <small class="text-muted">{todo.status}</small>
@@ -241,11 +219,7 @@ export default class Job extends Component {
                         <p class="mb-1">{todo.description}</p>
                         <small class="text-muted"></small>
                         </a>
-                        
-                    </div>
-                <div>
-                
-                <div class="btn-group dropup">
+                        <div class="btn-group dropup">
                             <button onChange={this.handleAction("weq")} value={status} style={{width:200, height:50}}  type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Статус
                             </button>
@@ -253,20 +227,17 @@ export default class Job extends Component {
                             <button onClick={this.clickSetStatusCompleteJob}  class="dropdown-item" type="button">Выполнено</button>
                             <button onClick={this.clickSetStatusMoreInfoJob} value={status} class="dropdown-item" type="button">Требуется уточнение</button>
                             <button onClick={this.clickSetStatusMoreInfoJob } value={status} class="dropdown-item" type="button">Что то еще</button>
-                            </div>
-                            <Select defaultValue="lucy" style={{ width: 120 }} >
-<Option value="jack">Jack</Option>
-<Option value="lucy">Lucy</Option>
-<Option value="disabled" disabled>
-  Disabled
-</Option>
-<Option value="Yiminghe">yiminghe</Option>
-</Select>
+                            </div>    
+  
+                    </div>
+            </Card>
+                <div>
                 
-                        
+              
+                                   
                 {todo.tags.map((tod, i) => (
                     <>
-                    <div className="card" key={i}>
+                    <Card key={i}>
                     
                     <Link  to={`/user/${tod._id}`}>
                     <img className="card-img-top" src={`http://localhost:8080/user/photo/${tod._id}?`}
@@ -279,14 +250,24 @@ export default class Job extends Component {
                          <small class="text-muted">{tod.name}</small>
                          <small class="text-muted">{tod.role}</small>
                          
-                    </div>
+                    </Card>
                     </>
                     ))}    
                 </div>
                 <div>
+
+                </div>
+                </div>
+                <hr style={{width:"75em"}} />
+                <div className="container">
+                <div class="row">
+                <div >
                 {comments.map((comment, i) => (
                     <>
-                    <div className="card" key={i}>
+
+                    <Card style={{width:"75em"}} >
+                    <Comment key={i}>
+                    <Tooltip>
                     <Link  to={`/user/${comment.worker}`}>
                     <img className="card-img-top" src={`http://localhost:8080/user/photo/${comment.worker}`}
                          onError={i => (i.target.src = `${DefaultProfile}`)}
@@ -295,13 +276,14 @@ export default class Job extends Component {
                          />      
                     </Link>
                     <h5>{comment.body}</h5>
-                         <small class="text-muted">{comment.name}</small>
+                         <h5 class="text-muted">{comment.name}</h5>
                          <small class="text-muted">{comment.created}</small>
-                    </div>
+                    </Tooltip>
+                    </Comment>
                     {isAuthenticated().direct._id ===
                         comment.worker && (
                             <>
-                                <span
+                                <Button
                                     onClick={() =>
                                         this.deleteConfirmed(
                                             comment._id
@@ -310,23 +292,31 @@ export default class Job extends Component {
                                     className="text-danger float-right mr-1"
                                 >
                                     Удалить
-                                </span>
+                                </Button>
                             </>
                         )}
+                    </Card>
                     </>
+                    
                     ))}    
                 </div>
                 <>
-                <div class="form-group">
+                <div style={{padding:"5px"}}>
+                </div>
+                <div class="form-group col-sm-8 ">
                 <label for="exampleFormControlTextarea1">Новый Коментарий</label>
                 <textarea value={body} onChange={this.handleAction("body")} class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                <button onClick={this.clickSubmit } className="btn btn-primary">Отправить</button>
+                <div style={{padding:"10px"}}>
+                <Button onClick={this.clickSubmit } className="btn btn-primary">Отправить</Button>
                 </div>
+                </div>
+               
                 </>
+
+                </div>
+                </div>
                 </div>
             </div>
-            </div>
-            </RealetivPositionComponent>
         )
     }
 }

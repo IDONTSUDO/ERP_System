@@ -51,7 +51,7 @@ class Profile extends Component {
     }
     render() {
         const  {redirectToSignin, user} = this.state
-       
+        //  TODO: Change CSS and loading and ERRORS
         const photoUrl = user._id
         ? `http://localhost:8080/user/photo/${user._id}?${new Date().getTime()}` 
         : DefaultProfile

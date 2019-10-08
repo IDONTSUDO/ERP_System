@@ -10,7 +10,7 @@ const { SubMenu } = Menu;
 
 
 
-class SiderDemo extends React.Component {
+class MenuMain extends React.Component {
   state = {
     collapsed: false
   };
@@ -52,13 +52,14 @@ class SiderDemo extends React.Component {
               key="sub2"
               title={
                 <span>
+
                   <Icon type="team" />
                   <span>Компания</span>
                 </span>
               }
             >
               <Menu.Item key="2"><Link to={`/company`} ><span>Предприятие</span></Link></Menu.Item>
-              <Menu.Item key="3"><Link to={`/user/${isAuthenticated().direct._id}`} ><span>Статистика</span></Link></Menu.Item>
+              <Menu.Item key="3"><Link to={`/company/statistic`} ><span>Статистика</span></Link></Menu.Item>
               <Menu.Item key="11"><Link to={`/new/worker`} ><span>Новый работник</span></Link></Menu.Item>
             </SubMenu>
             <SubMenu
@@ -125,6 +126,6 @@ class SiderDemo extends React.Component {
   }
 }
 
-export default  SiderDemo
+export default  MenuMain
 // <PrivateRoute exact path="/new/deal/:agentId" component={NewDeal}/> 
 // <PrivateRoute exact path="/deal/history/:userId" component={DealHistory}/> 

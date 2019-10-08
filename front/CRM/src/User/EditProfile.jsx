@@ -3,31 +3,7 @@ import {isAuthenticated} from '../Api/Auth'
 import {read,update,updateUser} from '../Api/Http'
 import {Redirect} from  'react-router-dom'
 import DefaultProfile from '../Assets/default.png'
-import styled from 'styled-components'
-
-const RealetivPositionComponent = styled.div`
-.postisitonRelative{
-    left:15em;
-    top: 2em;
-    bottom: 20em;
-    position: absolute;
-    display: flex; 
-}
-.message{
-    border-radius: 5px 20px 5px;
-    background: #BADA55;
-    padding:10px;
-}
-.news{
-    border-color:#2196F3!important;
-    width: "500px";
-    height:"20px";
-    border-left: 6px solid red;
-    background-color: lightgrey;
-    margin:15px;
-}  
-`;
-
+import {Button} from 'antd'
 class EditProfile extends Component {
 
     constructor(){
@@ -150,21 +126,19 @@ class EditProfile extends Component {
                     value={name}/>
                 </div>
                 <div style={{padding:"10px"}}></div>
-                <button  className="btn btn-raised btn-primary" onClick={this.clickSubmit } >Обновить</button>
+                <Button   onClick={this.clickSubmit } >Обновить</Button>
             </form>
     )
     render() {
         const { id,password,name,email,redirectToProfile, error, loading,about} = this.state 
-
+ //  TODO: Change CSS and loading and ERRORS
         const photoUrl = id 
         ? `${process.env.REACT_APP_API_URL}/user/photo/${id}?${new Date().getTime()}` 
         : DefaultProfile
 
         return (
-            <RealetivPositionComponent
-            
-            >
-            <div  className="postisitonRelative">
+          
+            <div  className="postisitonRelativeSmeni">
             <div className="container">
                 <h2> Редактирование профиля</h2>
                 <div className="alert alert-danger" style={{ display: error ? "" : "none"}} > 
@@ -188,7 +162,7 @@ class EditProfile extends Component {
 
             </div>
             </div>
-            </RealetivPositionComponent>
+
         )
     }
 }

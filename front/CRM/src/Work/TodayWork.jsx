@@ -2,32 +2,8 @@ import React, { Component } from 'react'
 import {isAuthenticated} from "../Api/Auth"
 import {TodayWorkHTTP} from '../Api/Http'
 import {Link} from 'react-router-dom'
-import { Button } from 'antd';
+import { Button } from 'antd'
 
-import styled from 'styled-components'
-
-const RealetivPositionComponent = styled.div`
-.postisitonRelative{
-    left:15em;
-    top: 2em;
-    bottom: 20em;
-    position: absolute;
-    display: flex; 
-}
-.message{
-    border-radius: 5px 20px 5px;
-    background: #BADA55;
-    padding:10px;
-}
-.news{
-    border-color:#2196F3!important;
-    width: "500px";
-    height:"20px";
-    border-left: 6px solid red;
-    background-color: lightgrey;
-    margin:15px;
-}  
-`;
 export default class TodayWork extends Component {
     constructor(){
         super()
@@ -60,9 +36,10 @@ export default class TodayWork extends Component {
     }
     render() {
         const {todos,user} = this.state
+           //  TODO: Change CSS and loading
         return (
-            <RealetivPositionComponent>
-            <div className="postisitonRelative">
+
+            <div className="postisitonRelativeSmeni">
            
             <div>
            
@@ -72,12 +49,12 @@ export default class TodayWork extends Component {
             {
                 todos.map((tod, i) => (
             <>
-            <div  className="card col-md-4" style={{ width: "18rem"}}key={i}>
+            <div  className="col-md-4"key={i}>
             
             <h3>{tod.title}</h3>
             <div>{tod.status}</div>
             <div>{tod.time}</div>
-            <Button type="primary"><Link to={`/job/${tod._id}`}>Посмотреть дело</Link></Button>
+            <Button ><Link to={`/job/${tod._id}`}>Посмотреть дело</Link></Button>
             </div>
             </>
             ))}
@@ -89,7 +66,6 @@ export default class TodayWork extends Component {
             
             </div>
             </div>
-            </RealetivPositionComponent>
         )
     }
 }

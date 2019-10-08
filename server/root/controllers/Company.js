@@ -96,7 +96,7 @@ exports.workerAll = async (req,res) =>{
     .catch(err => console.log(err))
 }
 exports.workerFinancyAll = (req, res) =>{
-
+res.status(200)
 }
 exports.workerDelete = async (req,res) => {
     let worker = req.worker;

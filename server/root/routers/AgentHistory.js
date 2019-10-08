@@ -8,9 +8,8 @@ const {
     myHistoryBeginer,
     myHistoryComplete,
     GetHistoryOne } = require("../controllers/AgentHistory.js")
-const {workerSelectId} = require("../controllers/Company")
+const {workerSelectId} = require("../controllers/Company.js")
 const router = express.Router({mergeParams: true});
-
 
 router.get('/history/:HistoryById', GetHistoryOne)
 router.post('/new/history/:workerById', NewHistory)

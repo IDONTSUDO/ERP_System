@@ -1,70 +1,14 @@
 import React from 'react'
 import ReactTags from 'react-tag-autocomplete'
 import DatePicker from "react-datepicker";
+import dateFormat from 'dateformat'
+
 import {list,NewTodo} from "../Api/Http"
 import {isAuthenticated} from "../Api/Auth"
-import styled from 'styled-components'
-import { Row, Col } from 'antd';
+
+import { Button,Spin } from 'antd'
 
 import "react-datepicker/dist/react-datepicker.css";
-const RealetivPositionComponent = styled.div`
-.postisitonRelative{
-    left:15em;
-    top: 2em;
-    bottom: 20em;
-    position: absolute;
-    display: flex; 
-}
-.piker{
-    left:-33em;
-    right: 2em;
-    top: 12em;
-    bottom: 20em;
-    position: absolute;
-    display: flex; 
-}
-.Ispolnitely{
-    left:-33em;
-    right: 2em;
-    top: 18em;
-    bottom: 20em;
-    position: absolute;
-    display: flex;
-}
-.Tags{
-  left: 0px;
-    right: 2em;
-    top: 3em;
-    bottom: 0p;
-    position: absolute;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-}
-.buttonR{
-    left: 0px;
-    right: 2em;
-    top: 11em;
-    bottom: 0p;
-    position: absolute;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-}
-.label_position{
-    left:0px;
-    right: 2em;
-    top: -2em;
-    bottom: 0p;
-    position: absolute;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-}
-`;
 
 class Work extends React.Component {
   constructor (props) {
@@ -114,24 +58,16 @@ class Work extends React.Component {
     event.preventDefault()
     this.setState({loading: true})
     const { tags,title,description,user,startDate }  = this.state
-
-    let yyyy = startDate.getFullYear()
-    let mm = startDate.getMonth()
-    let dd = startDate.getDate()
-    // 
-    let FuckingDataPicker =  + mm + 1
-    // 
-    let ItsRealyFucking = "0" + FuckingDataPicker
-    // 
-    let time  = dd + '/' + ItsRealyFucking + '/' + yyyy
-    // 
+    let  time_now = startDate
+    let time = dateFormat(time_now, "dddd, mmmm, yyyy")
+  
     const todo ={
         tags,
         title,
         description,
         time
     }
-    // 
+    
     NewTodo(todo,user).then(data => {
       if (data.error){
         console.log(data.error)
@@ -142,7 +78,8 @@ class Work extends React.Component {
           name: "",
           email:"",
           password:"",
-          open: true
+          open: true,
+          error:""
     })
     })
   }
@@ -151,45 +88,42 @@ class Work extends React.Component {
     const { worker,loading,open } = this.state 
     return (
       
-     
 
-      <RealetivPositionComponent>
-      <div className="postisitonRelative">
-      
+         <div className="postisitonRelativeSmeni">
+        <div className="container">
+                    <div className="row">
+
     <>
     <div style={{width:"15em"}} className="alert alert-info" style={{ display: open ? "" : "none"}}>
       Новое дело создано
     </div>
-    <Row gutter={16}>
     {loading ?(
-      <div className="jumbotron text-center">
-      <h2>Загрузка...</h2>
-      </div>
+     <>
+     <Spin></Spin>
+     </>
   ):(
       ""
   )}
 
-    <form>
-    <Col  className="gutter-row" span={12}>
+    <form className="col-md-6">
+   
     <div >
       <label  className="text-muted" for="exampleFormControlInput1">Название</label>
       <input onChange={this.handleAction("title")} type="email" class="form-control" id="exampleFormControlInput1"/>
     </div>
-    </Col>
-    <Col span={12}>
+
     <div>
    
       <label className="text-muted" for="exampleFormControlTextarea1">Описание</label>
       <textarea onChange={this.handleAction("description")} class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
 
     </div>
-    </Col>
-    </form>
-    </Row>
-    <Row>
 
-    <Col span={12} offset={6}>
-    <div className="piker">
+    </form>
+
+
+
+    <div className="col-md-4" >
     <label className="label_position text-muted" for="exampleFormControlTextarea1">Сроки Выполнения</label>
     <DatePicker
     className="form-control" 
@@ -197,33 +131,34 @@ class Work extends React.Component {
         onChange={this.handleChange}
       />
     </div>
-    </Col>
-    </Row>
-    <Row>
-
     
-    <div className="Ispolnitely">
+    {/* <div style={{padding:"5px"}}> */}
+    <div className="col-md-4">
     <h3>Исполнители</h3>
     <div className="Tags">
     <ReactTags
         tags={this.state.tags}
-        placeholderText={this.state.user}
+        placeholder={("Добавить исполнителя")}
         suggestions={worker}
         handleDelete={this.handleDelete.bind(this)}
         handleAddition={this.handleAddition.bind(this)} />
     </div>
-    <div className="buttonR">
-    <button onClick={this.clickSubmit } className="btn btn-primary">Отправить</button>
-    </div> 
     </div>
 
-    </Row>
+    <div ></div>
+    <div style={{padding:"50px"}} className="col-md-4" >
+    <Button onClick={this.clickSubmit }>Отправить</Button>
+    </div>
+    {/* </div> */}
+
+   
     
     </>
    
     </div>
+    </div>
+    </div>
     
-    </RealetivPositionComponent>
     )
   }
 }

@@ -1,34 +1,35 @@
 import React from 'react'
 import  {Route, Switch} from 'react-router-dom'
-import SiderDemo from './Core/Menu'
-import Signin from './Auth/SignIn'
-import PrivateRoute from './Auth/PrivateRouter'
-import Profile from './User/Profile'
-import Company from './User/Company'
-import News from './User/News'
-import MyStatistic from './User/MyStatistic'
+import PrivateRoute from './PrivateRouter'
+
+import MenuMain from '../Core/Menu.jsx'
+import Signin from '../Auth/SignIn.jsx'
+import Profile from '../User/Profile.jsx'
+import Company from '../User/Company.jsx'
+import News from '../User/News.jsx'
+import MyStatistic from '../User/MyStatistic.jsx'
+
+import AgentProfile from '../contr-agent/AgentProfile.jsx'
+import NewAgent from '../contr-agent/NewAngent.jsx'
+import MyAgent from '../contr-agent/MyAgent.jsx'
+import AllAgent from '../contr-agent/AllAgent.jsx'
+import SearchAgent from '../contr-agent/SearchAgent.jsx'
+
+import Work from '../Work/NewWork.jsx'
+import NewWorker from '../User/NewWorker.jsx' 
+import EditProfile from '../User/EditProfile.jsx'
+import MyWork from '../Work/MyWork.jsx'
+import Job from '../Work/Job.jsx'
+import TodayWork from '../Work/TodayWork.jsx'
+
+import NewDeal from '../Deal/NewDeal.jsx'
+import DealHistory from '../Deal/DealHistory.jsx'
 
 
-import AgentProfile from './contr-agent/AgentProfile'
-import NewAgent from './contr-agent/NewAngent.jsx'
-import MyAgent from './contr-agent/MyAgent.jsx'
-import AllAgent from './contr-agent/AllAgent'
-import SearchAgent from './contr-agent/SearchAgent'
-
-
-import Work from './Work/NewWork'
-import NewWorker from './User/NewWorker' 
-import EditProfile from './User/EditProfile'
-import MyWork from './Work/MyWork'
-import Job from './Work/Job'
-import TodayWork from './Work/TodayWork.js'
-
-
-import NewDeal from './Deal/NewDeal.jsx'
-import DealHistory from './Deal/DealHistory'
+import CompanyStatistic from '../statistic/CompanyStatistic.jsx'
 const MainRouter = ()  =>(
     <div>
-        <SiderDemo />
+        <MenuMain />
     <Switch>
         <Route exact path="/signin" component={Signin}/>
         <PrivateRoute exact path="/news" component={News}/>
@@ -52,6 +53,8 @@ const MainRouter = ()  =>(
 
         <PrivateRoute exact path="/new/deal/:userId" component={NewDeal}/> 
         <PrivateRoute exact path="/deal/history/:userId" component={DealHistory}/> 
+
+        <PrivateRoute exact path="/company/statistic" component={CompanyStatistic}/> 
     </Switch>
     </div>
 )

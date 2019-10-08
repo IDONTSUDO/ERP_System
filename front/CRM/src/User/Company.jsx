@@ -88,6 +88,7 @@ export default class Company extends Component {
 
     render() {
         const {worker,page} = this.state
+         //  TODO: Change CSS and loading and ERRORS
         return (
             <RealetivPositionComponent>
             <div className="postisitonRelative">

@@ -3,30 +3,8 @@ import {isAuthenticated} from '../Api/Auth'
 import {readMyTodo} from '../Api/Http'
 import {Link} from 'react-router-dom'
 import DefaultProfile from '../Assets/default.png' 
-import styled from 'styled-components'
 
-const RealetivPositionComponent = styled.div`
-.postisitonRelative{
-    left:15em;
-    top: 2em;
-    bottom: 20em;
-    position: absolute;
-    display: flex; 
-}
-.message{
-    border-radius: 5px 20px 5px;
-    background: #BADA55;
-    padding:10px;
-}
-.news{
-    border-color:#2196F3!important;
-    width: "500px";
-    height:"20px";
-    border-left: 6px solid red;
-    background-color: lightgrey;
-    margin:15px;
-}  
-`;
+import { Button } from 'antd'
 export default class MyWork extends Component {
     constructor(){
         super()
@@ -57,12 +35,13 @@ export default class MyWork extends Component {
             })
     }
     render() {
+           //  TODO: Change CSS and loading and ERRORS
         const {todos,user} = this.state
         return (
-            <RealetivPositionComponent>
+
             <>
         
-            <div className="postisitonRelative">
+            <div className="postisitonRelativeSmeni">
             <>
 
             </>
@@ -71,8 +50,7 @@ export default class MyWork extends Component {
             <div className="container">
             <div className="row">
             
-            {
-                todos.map((tod, i) => (
+            {todos.map((tod, i) => (
             <>
             <div className="card col-md-4" style={{ width: "18rem"}}key={i}>
             
@@ -87,7 +65,9 @@ export default class MyWork extends Component {
                              style={{height: "50px", width:"50px"}}
                              />      
                         </Link>
-            <Link to={`/job/${tod._id}`} className="btn btn-primary">Посмотреть дело</Link>
+            <div style={{padding:"10px"}}>
+            <Button><Link to={`/job/${tod._id}`} >Посмотреть дело</Link></Button>
+            </div>
             </div>
             </>
             ))}
@@ -101,7 +81,6 @@ export default class MyWork extends Component {
             </div>
             
             </>
-            </RealetivPositionComponent>
         )
     }
 }

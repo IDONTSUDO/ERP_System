@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import {NewPeopel} from '../Api/Http'
 import DatePicker from "react-datepicker"
 import { Form, Icon, Input, Button } from 'antd';
+import moment from'moment'
+
 import styled from 'styled-components'
 
 
@@ -120,6 +122,7 @@ class NewWorker extends Component{
         </form>
 )
     render(){
+         //  TODO: Change CSS and loading and ERRORS
         const { name,email,password,error, open,phone,startDate,role} = this.state 
         return(
             <RealetivPositionComponent>

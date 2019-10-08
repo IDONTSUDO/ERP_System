@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {MyAgentList,GetAgentProfile} from '../Api/Http.js'
-import { Button,Drawer, List, Avatar, Divider, Col, Row,Spin} from 'antd'
+import { Button,Drawer, List,  Divider, Col, Row,Spin,Card} from 'antd'
 import {Link} from 'react-router-dom'
 
 const pStyle = {
@@ -113,15 +113,22 @@ export default class MyAgent extends Component {
         let {agentList,open,email,OGRN,general_director,INN,phone,full_name,name,company,worker, any,legal_address,actual_address,payment_account} = this.state 
         return (
             <div className="postisitonRelativeSmeni">
-                
+              <div className="container">
+                <div className="row">
                           {agentList.map((agent, i) => (
                             <>
-                            <br/>
-                            <small class="text-muted">Имя {agent.name}</small>
+                             <div >
+                            <Card styles={{width:"auto",height:"autocomplete"}}> 
+                           
+                            <h5 class="text-muted">Имя {agent.name}</h5>
                             <Button  onClick={(agentId) => this.handleClick(agent._id, agentId)}>Посмотреть профиль</Button>
                             <br/>
+                            </Card>
+                            </div>
                             </>
                          ))}
+                    </div>
+                    </div>
         <Drawer
           width={640}
           placement="right"

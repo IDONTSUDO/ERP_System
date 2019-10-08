@@ -52,9 +52,9 @@ const renderActiveShape = (props) => {
         {`(Rate ${(percent * 100).toFixed(2)}%)`}
       </text>
     </g>
-  );
-};
-
+  )
+}
+ //  TODO: Change CSS and loading and ERRORS
 
 export default class MyStatistic extends PureComponent {
   static jsfiddleUrl = 'https://jsfiddle.net/alidingling/hqnrgxpj/';
