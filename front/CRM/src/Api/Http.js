@@ -1,5 +1,5 @@
-export const list = () =>{
-    return fetch(`http://localhost:8080/all/worker/list`,{
+export const list = page =>{
+    return fetch(`http://localhost:8080/all/worker/list/?page=${page}`,{
         method: "GET",
         headers: {
             Accept: "application/json"
@@ -311,9 +311,9 @@ export const NewContrAgent = (NewAgent,user) =>{
     console.log(err)
 })
 }
-export const ContrAgentList = () =>{
+export const ContrAgentList = page =>{
    
-    return fetch(`http://localhost:8080/agent/list`,{
+    return fetch(`http://localhost:8080/agent/list/?page=${page}`,{
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -433,6 +433,31 @@ export const ChangeHistory = (historyId,changeHisitoryPayload) =>{
             Accept: "application/json", "Content-Type": "application/json"
         },
         body: JSON.stringify(changeHisitoryPayload)
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}
+export const SearchContrAgent = (item) =>{
+    return fetch(`http://localhost:8080/agent/search`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        },
+        body: JSON.stringify({item})
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}
+export const listStatisticCompany = () =>{
+    return fetch(`http://localhost:8080/get/qauality/user/statistic`, {
+        method: "GET",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        }
     })
     .then(responce =>{
         return responce.json()

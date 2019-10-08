@@ -96,7 +96,7 @@ exports.workerAll = async (req,res) =>{
     .catch(err => console.log(err))
 }
 exports.workerFinancyAll = (req, res) =>{
-
+res.status(200)
 }
 exports.workerDelete = async (req,res) => {
     let worker = req.worker;
@@ -120,11 +120,26 @@ exports.workerPhoto = async (req,res, next) =>{
 }
 
 exports.ListworkerAll = async (req,res) =>{
-     const worker =  Worker.find().select(" _id email name phone role ")
-    .then((worker) =>{
-        res.status(200).json(worker)
-    })
-    .catch(err => console.log(err))
+    const currentPage = req.query.page || 1
+
+    const perPage = 24
+    var totalItems
+
+    const company = await Worker.find()
+     
+        .countDocuments()
+        .then(count => {
+            totalItems = count;
+            return Worker.find()
+                .skip((currentPage - 1) * perPage)
+                .select('_id name')
+                .limit(perPage)
+              //.sort({ })
+        })
+        .then(data => {
+            res.status(200).json(data)
+        })
+        .catch(err => console.log(err))
 }
 
 

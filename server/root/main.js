@@ -9,6 +9,8 @@ const expressValidator = require('express-validator')
 const cookieParser = require('cookie-parser')
 const fs = require('fs')
 const cors = require('cors')
+const path = require('path');
+
 dotenv.config()
 
 mongoose.connect(`mongodb://localhost/svarog-crm-system`, {useNewUrlParser: true}).then(() =>console.log("DB Conected"))
@@ -17,7 +19,7 @@ mongoose.connection.on('error', err =>{
 })
 mongoose.set('debug', true)
 const DirectAuthRoutes = require("./routers/Auth")
-const DirectCompanyhRoutes = require("./routers/Company")
+const DirectCompanyhRoutes = require("./routers/Company.js")
 //COMMON
 const CommonTodoRoutes = require("./routers/todo")
 const StatisticRouter = require("./routers/Statistic")
@@ -37,9 +39,11 @@ app.use("/", DirectCompanyhRoutes)
 app.use("/", NewsRouter)
 app.use("/", AgentRouter)
 app.use("/", NewHistory)
-//ROUTES MANAGE
-//ROUTES COMMON 
 app.use("/", CommonTodoRoutes)
+
+// static
+
+
 app.get('/docs',(req,res) =>{
     fs.readFile('documentation/ApiDocs.json', (err,data) =>{
         if(err){

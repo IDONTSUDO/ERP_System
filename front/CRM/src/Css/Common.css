@@ -56,3 +56,65 @@
     border-image: initial;
     transition: background-color 0.2s ease 0s, opacity 0.1s ease 0s;
 }
+.part2{
+    left:25em;
+    top: 0em;
+    bottom: 20em;
+    position: absolute;
+    display: flex; 
+}
+.input{
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.modal-list-search{
+    padding:5px;
+}
+
+.modal-dialog {
+    top: -15em;
+}
+.modal-content-position{
+    /* left: 10px;
+    right: 12px; */
+    width:100%;
+    position: absolute;
+    top: 25em;
+    /*TODO: Hack  css   */
+}
+.search_positon{
+    left:35em;
+    position: absolute;
+
+}
+.square-red{
+	width: 1em;
+	height: 1em;
+	background: red;
+}
+.square-yellow{
+	width: 1em;
+	height: 1em;
+	background: yellow;
+}
+.square-green{
+	width: 1em;
+	height: 1em;
+	background: green;
+}
+.square-return{
+	width: 1em;
+	height: 1em;
+	background: white;
+}

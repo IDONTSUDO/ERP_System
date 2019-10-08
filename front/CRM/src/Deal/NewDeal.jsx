@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {MyAgentList} from '../Api/Http.js'
-import { Button } from 'antd';
+import { Button,notification } from 'antd';
 import ReactTags from 'react-tag-autocomplete'
 
 export default class NewDeal extends Component {
@@ -10,7 +10,8 @@ export default class NewDeal extends Component {
             user:"",
             agentList:[],
             tags:[],
-            id:""
+            id:"",
+            loading: false,
         }
     }
     componentDidMount(){
@@ -40,20 +41,28 @@ export default class NewDeal extends Component {
         this.setState({ error: "" })
         this.setState({ [name]: event.target.value })
     }
+    clickSubmit =  event =>{
+        event.preventDefault()
+        this.setState({loading: true})
 
+       
+      }
+      
     render() {
-        let {agentList,price,id} = this.state
+        let {agentList,price,name,loading} = this.state
         return (
             <div>
+                
                 <div className="postisitonRelativeSmeni">
-                    
+                {loading ?(
+                <div className="jumbotron text-center">
+                <h2>Загрузка...</h2>
+                </div>
+                ):(
+                ""
+                )}
                 <div className="container">
                 <div className="row">
-                <ReactTags
-                tags={this.state.tags}
-                suggestions={agentList}
-                handleDelete={this.handleDelete.bind(this)}
-                handleAddition={this.handleAddition.bind(this)} />
                 <form>
                 <div >
                     <label  >Прайс</label>
@@ -61,12 +70,25 @@ export default class NewDeal extends Component {
                 </div>
                 <div >
                     <label  >Название</label>
-                    <input className="form-control" onChange={this.handleAction("id")} type="text"  value={price} />
+                    <input className="form-control" onChange={this.handleAction("name")} type="text"  value={name} />
                 </div>
+                
+                <div style={{padding:"10px"}}>
+                <ReactTags
+                tags={this.state.tags}
+                placeholder={("Добавить контр-агента")}
+                suggestions={agentList}
+                handleDelete={this.handleDelete.bind(this)}
+                handleAddition={this.handleAddition.bind(this)} />
+                  <div style={{padding:"10px"}}></div>
+                <Button  className="btn btn-raised btn-primary" onClick={this.clickSubmit } >Новая сделка</Button>    
+                </div>
+                
                 </form>
-                <button  className="btn btn-raised btn-primary" onClick={this.clickSubmit } >Новая сделка</button>    
+               
                 </div>
                 </div>
+                
                 </div>
             </div>
         )

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { Modal, Button,Comment, Tooltip, List,Spin  } from 'antd'
+import { Modal, Button,Comment, Tooltip, List,Spin,Card  } from 'antd'
 import { 
     MyHistoryComplete,
     MyHistoryBeginer,
@@ -8,82 +7,7 @@ import {
     OneHistoryGet,
     ChangeHistory } from "../Api/Http"
 import {isAuthenticated} from '../Api/Auth'
-// fake data generator
-const getItems = (count, offset = 0) =>
-    Array.from({ length: count }, (v, k) => k).map(k => ({
-        id: `item-${k + offset}`,
-        content: `item ${k + offset}`
-    }));
-
-// a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-
-    return result;
-};
-
-/**_id
- * Moves an item from one list to another list.
- */
-const move = (source, destination, droppableSource, droppableDestination) => {
-    const sourceClone = Array.from(source);
-    const destClone = Array.from(destination);
-    const [removed] = sourceClone.splice(droppableSource.index, 1);
-    let {_id,status} = destination[0]
-
-    let historyId = _id
-    if(status == "Начато"){
-
-       let SeTstatus = status
-       status = "Активно"
-       let changeHisitoryPayload = {
-           status
-       }
-       ChangeHistory(historyId,changeHisitoryPayload).then(data =>{
-        if(data.error){
-           console.log(data.error) // this.setState({redirectToSignin: true})
-        }else{
-            console.log(200)
-            this.forceUpdate()
-        }})
-    }
-    if(status == "Активно"){
-        console.log(status)
-    }
-  
-  
-    destClone.splice(droppableDestination.index, 0, removed);
-
-    const result = {};
-    result[droppableSource.droppableId] = sourceClone;
-    result[droppableDestination.droppableId] = destClone;
-
-    return result;
-};
-
-const grid = 8;
-
-const getItemStyle = (isDragging, draggableStyle) => ({
-    // some basic styles to make the items look a bit nicer
-    userSelect: 'none',
-    padding: grid * 2,
-    margin: `0 0 ${grid}px 0`,
-
-    // change background colour if dragging
-    background: isDragging ? 'red' : 'grey',
-    // styles we need to apply on draggables
-    ...draggableStyle
-});
-
-const getListStyle = isDraggingOver => ({
-    background: isDraggingOver ? '#BFA130' : '#FFD640',
-    padding: grid,
-    width: "auto",
-    height:"auto"
-});
-
+import {Link} from 'react-router-dom'
 
 export default class DealHistory extends Component {
     constructor(){
@@ -106,48 +30,6 @@ export default class DealHistory extends Component {
             body:"",
             name:"",
             workerId:""
-        }
-    }
-    id2List = {
-        droppable: 'items',
-        droppable2: 'selected'
-    }
-    getList = _id => this.state[this.id2List[_id]];
-
-    onDragEnd = result => {
-        const { source, destination } = result;
-
-        // dropped outside the list
-        if (!destination) {
-            return;
-        }
-
-        if (source.droppableId === destination.droppableId) {
-            const items = reorder(
-                this.getList(source.droppableId),
-                source.index,
-                destination.index
-            );
-
-            let state = { items };
-
-            if (source.droppableId === 'droppable2') {
-                state = { selected: items };
-            }
-
-            this.setState(state);
-        } else {
-            const result = move(
-                this.getList(source.droppableId),
-                this.getList(destination.droppableId),
-                source,
-                destination
-            );
-
-            this.setState({
-                items: result.droppable,
-                selected: result.droppable2
-            });
         }
     }
 
@@ -235,75 +117,44 @@ export default class DealHistory extends Component {
                  {open ?(
             <Spin size="large" />
         ):(
-            <DragDropContext onDragEnd={this.onDragEnd}>
-            <Droppable droppableId="droppable">
-                {(provided, snapshot) => (
-                    <div
-                        ref={provided.innerRef}
-                        style={getListStyle(snapshot.isDraggingOver)}>
-                        {this.state.items.map((item, index) => (
-                            <Draggable
-                                key={item.id}
-                                draggableId={item.id}
-                                index={index}>
-                                {(provided, snapshot) => (
-                                    <div
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                        style={getItemStyle(
-                                            snapshot.isDragging,
-                                            provided.draggableProps.style
-                                        )}>
-                                        <h5 style={{padding:"5px"}}>Начатая</h5>
-                                        {item.id}
+    <>
+    <Card title="Активные сделки">
+    {/* <p
+      style={{
+        fontSize: 14,
+        color: 'rgba(0, 0, 0, 0.85)',
+        marginBottom: 16,
+        fontWeight: 500,
+      }}
+    >
+      Group title
+    </p> */}
+    {items.map((agn, i) => (
+            <>
+            <Card className="col-md-6" size="small"  title="Контр Агент">
+      <p>Еще какая то инфа</p>
+      Имя: <p>{agn.name}</p>
+      <Button ><Link to={`/agent/${agn._id}`} >Посмотреть профиль</Link></Button>
+    </Card>
+           
+            <hr/>
+            </>
+            ))}
 
-    <Button  onClick={(itemId) => this.handleClick(item._id, itemId)}> Инофрмация о сделке</Button>
-                                    </div>
-                                    
-                                )}
-                            </Draggable>
-                        ))}
-                        {provided.placeholder}
-                    </div>
-                )}
-            </Droppable>
-
-            <Droppable droppableId="droppable2">
-                {(provided, snapshot) => (
-                    <div
-                        ref={provided.innerRef}
-                        style={getListStyle(snapshot.isDraggingOver)}>
-                        {this.state.selected.map((item, index) => (
-                           
-                            <Draggable
-                                key={item.id}
-                                draggableId={item.id}
-                                index={index}>
-                                {(provided, snapshot) => (
-                                    
-                                    <div
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                        style={getItemStyle(
-                                            snapshot.isDragging,
-                                            provided.draggableProps.style
-                                        )}>
-                                             <h1>Активная</h1>
-                                        {item.id}
-                                        <Button  onClick={(itemId) => this.handleClick(item._id, itemId)}> Инофрмация о сделке</Button>
-                                    </div>
-                                    
-                                )}
-                            </Draggable>
-                        ))}
-                        {provided.placeholder}
-                    </div>
-                )}
-            </Droppable>
-            
-        </DragDropContext>
+    }
+    {/* <Card type="inner" title="Inner Card title" extra={<a href="#">More</a>}>
+      Inner Card content
+    </Card>
+    <Card
+      style={{ marginTop: 16 }}
+      type="inner"
+      title="Inner Card title"
+      extra={<a href="#">More</a>}
+    >
+      Inner Card content
+    </Card> */}
+  </Card>
+    </>
         )}
                 
             <Modal

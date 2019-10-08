@@ -31,5 +31,8 @@ const todoSchema =  new mongoose.Schema({
         type: Date,
         index: { expires: '5m' },
     },
+    importance:{
+        type:String
+    }
 })
 module.exports = mongoose.model("TODO", todoSchema)

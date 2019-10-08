@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import {MyAgentList,GetAgentProfile} from '../Api/Http.js'
-import { Button,Drawer, List, Avatar, Divider, Col, Row,Spin} from 'antd'
+import { Button,Drawer, List,  Divider, Col, Row,Spin,Card,Select} from 'antd'
 import {Link} from 'react-router-dom'
+
 
 const pStyle = {
     fontSize: 16,
@@ -109,19 +110,27 @@ export default class MyAgent extends Component {
             }
         })
     }
+    // status
     render() {
         let {agentList,open,email,OGRN,general_director,INN,phone,full_name,name,company,worker, any,legal_address,actual_address,payment_account} = this.state 
         return (
             <div className="postisitonRelativeSmeni">
-                
+              <div className="container">
+                <div className="row">
                           {agentList.map((agent, i) => (
                             <>
-                            <br/>
-                            <small class="text-muted">Имя {agent.name}</small>
+                             <div >
+                            <Card styles={{width:"auto",height:"autocomplete"}}> 
+                           
+                            <h5 class="text-muted">Имя {agent.name}</h5>
                             <Button  onClick={(agentId) => this.handleClick(agent._id, agentId)}>Посмотреть профиль</Button>
                             <br/>
+                            </Card>
+                            </div>
                             </>
                          ))}
+                    </div>
+                    </div>
         <Drawer
           width={640}
           placement="right"
@@ -153,7 +162,7 @@ export default class MyAgent extends Component {
             </Row>
             <Row>
               <Col span={12}>
-                <DescriptionItem title="Birthday" content="February 2,1900" />
+                <DescriptionItem title="Birthday" content="{Date}" />
               </Col>
               <Col span={12}>
                 <DescriptionItem title="Website" content="-" />
@@ -171,15 +180,15 @@ export default class MyAgent extends Component {
             <p style={pStyle}>Данные о компании</p>
             <Row>
               <Col span={12}>
-                <DescriptionItem title="Position" content="Programmer" />
+                <DescriptionItem title="ИНН" content={INN} />
               </Col>
               <Col span={12}>
-                <DescriptionItem title="Responsibilities" content="Coding" />
+                <DescriptionItem title="ОГРН" content={OGRN} />
               </Col>
             </Row>
             <Row>
               <Col span={12}>
-                <DescriptionItem title="Department" content="AFX" />
+                <DescriptionItem title="Department" content={full_name} />
               </Col>
               <Col span={12}>
                 <DescriptionItem title="Supervisor" content={<a>Lin</a>} />
@@ -213,6 +222,12 @@ export default class MyAgent extends Component {
                     </a>
                   }
                 />
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+              <Button>Сменить статус</Button>
+              <Button><Link>Посмотреть историю работ</Link></Button>
               </Col>
             </Row>
             </>
