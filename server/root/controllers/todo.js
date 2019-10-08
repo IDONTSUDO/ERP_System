@@ -4,6 +4,7 @@ const WORKER =  require('../database/Company')
 const formidable = require('formidable')
 const fs = require('fs')
 const _  = require('lodash')
+const dateFormat = require('dateformat')
 
 exports.TodoById = (req, res, next, id) =>{
     
@@ -39,22 +40,10 @@ exports.SOSotodo =(req,res) =>{
     
 }
 exports.myTodoItsDay = (req,res,next) =>{
-
-
-    // TODO:! перепиши 
-    var date = new Date()
-    var year = date.getFullYear()
-    // определение времени
-    var month = date.getMonth() + 1
-    // @month так как дата пикер говно, то приходится делать вот так
-    month = (month < 10 ? "0" : "") + month
-    "0"+ month  // @month больно
-    var day  = date.getDate()
-    day = (day < 10 ? "0" : "") + day
-    
-    
-    
-    let time = day + "/" + month + "/"  + year
+    let time_now = Date.now()
+    let time = dateFormat(time_now, "dddd, mmmm, yyyy")
+    console.log(time)
+   
     
     TODO.find({ $and: [{"time" :{  $eq: `${time}`}},{ tags: { $elemMatch :{"_id":`${req.worker._id}`}} }]}) 
   

@@ -10,42 +10,44 @@ const {
     workerDelete,
     workerPhoto,
     ListworkerAll,
-    searchWorker } = require("../controllers/Company")
+    searchWorker,
+    Listworker } = require('../controllers/Company.js')
+
 
 const router = express.Router({mergeParams: true});
-// ---------- создание нового пользователя ---------- // 
+// // ---------- создание нового пользователя ---------- // 
 router.post('/new/worker/', Newworker)
-// ---------- блок пользователя  ---------- // 
+// // ---------- блок пользователя  ---------- // 
 router.post('/block/worker/:workerById',  workerBlock)
 
 
-// ---------- удаление пользователя  ---------- // 
+// // ---------- удаление пользователя  ---------- // 
 router.delete('/delete/worker/:workerById',  workerDelete)
 
 
-// ---------- изменение пользователя ---------- // 
+// // ---------- изменение пользователя ---------- // 
 router.put('/edit/worker/:workerById',  workerEdit)
 
 
 
-// ---------- выдача информации по ID пользователя  ---------- // 
+// // ---------- выдача информации по ID пользователя  ---------- // 
 router.get('/worker/get/:workerById',  workerGet)
-// ---------- список всех пользователей  ---------- // 
+// // // ---------- список всех пользователей  ---------- // 
 router.get('/all/worker',workerAll)
-// ---------- выдача всех пользователей  ---------- // 
+// // // ---------- выдача всех пользователей  ---------- // 
 router.get('/all/worker/list',ListworkerAll)
-// ---------- выдает пользовательское фото принемает ID ---------- // 
+// // // ---------- выдает пользовательское фото принемает ID ---------- // 
 router.get('/user/photo/:workerById', workerPhoto)
-// ----------  ---------- // 
+// // // ----------  ---------- // 
 router.get('/all/financy',workerFinancyAll)
 
+// router.get('/all/workers/list/', Listworker)
 
 
 // ----------  ---------- // 
 router.post('/test/search/', searchWorker)
 
-
-// ----------  ---------- // 
+// // ----------  ---------- // 
 router.param('workerById',workerById)
 
 module.exports = router

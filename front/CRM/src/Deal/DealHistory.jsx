@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { Modal, Button,Comment, Tooltip, List,Spin  } from 'antd'
 import { 
     MyHistoryComplete,
@@ -235,75 +234,8 @@ export default class DealHistory extends Component {
                  {open ?(
             <Spin size="large" />
         ):(
-            <DragDropContext onDragEnd={this.onDragEnd}>
-            <Droppable droppableId="droppable">
-                {(provided, snapshot) => (
-                    <div
-                        ref={provided.innerRef}
-                        style={getListStyle(snapshot.isDraggingOver)}>
-                        {this.state.items.map((item, index) => (
-                            <Draggable
-                                key={item.id}
-                                draggableId={item.id}
-                                index={index}>
-                                {(provided, snapshot) => (
-                                    <div
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                        style={getItemStyle(
-                                            snapshot.isDragging,
-                                            provided.draggableProps.style
-                                        )}>
-                                        <h5 style={{padding:"5px"}}>Начатая</h5>
-                                        {item.id}
-
-    <Button  onClick={(itemId) => this.handleClick(item._id, itemId)}> Инофрмация о сделке</Button>
-                                    </div>
-                                    
-                                )}
-                            </Draggable>
-                        ))}
-                        {provided.placeholder}
-                    </div>
-                )}
-            </Droppable>
-
-            <Droppable droppableId="droppable2">
-                {(provided, snapshot) => (
-                    <div
-                        ref={provided.innerRef}
-                        style={getListStyle(snapshot.isDraggingOver)}>
-                        {this.state.selected.map((item, index) => (
-                           
-                            <Draggable
-                                key={item.id}
-                                draggableId={item.id}
-                                index={index}>
-                                {(provided, snapshot) => (
-                                    
-                                    <div
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                        style={getItemStyle(
-                                            snapshot.isDragging,
-                                            provided.draggableProps.style
-                                        )}>
-                                             <h1>Активная</h1>
-                                        {item.id}
-                                        <Button  onClick={(itemId) => this.handleClick(item._id, itemId)}> Инофрмация о сделке</Button>
-                                    </div>
-                                    
-                                )}
-                            </Draggable>
-                        ))}
-                        {provided.placeholder}
-                    </div>
-                )}
-            </Droppable>
-            
-        </DragDropContext>
+    <>
+    </>
         )}
                 
             <Modal

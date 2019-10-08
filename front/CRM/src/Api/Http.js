@@ -452,3 +452,15 @@ export const SearchContrAgent = (item) =>{
     })
     .catch(err =>console.log(err))
 }
+export const listStatisticCompany = () =>{
+    return fetch(`http://localhost:8080/get/qauality/user/statistic`, {
+        method: "GET",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        }
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}

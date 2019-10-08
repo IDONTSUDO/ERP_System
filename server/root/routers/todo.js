@@ -12,7 +12,7 @@ const {
     DeleteComent,
     ComentById,
     myTodoItsDay
-} = require("../controllers/todo")
+} = require("../controllers/todo.js")
 const {workerById,workerSelectId} = require("../controllers/Company")
 const router = express.Router({mergeParams: true});
 
@@ -40,3 +40,4 @@ router.param('workerById',workerById)
 router.param('todoid',TodoById)
 
 module.exports = router
+    

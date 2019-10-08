@@ -19,7 +19,7 @@ mongoose.connection.on('error', err =>{
 })
 mongoose.set('debug', true)
 const DirectAuthRoutes = require("./routers/Auth")
-const DirectCompanyhRoutes = require("./routers/Company")
+const DirectCompanyhRoutes = require("./routers/Company.js")
 //COMMON
 const CommonTodoRoutes = require("./routers/todo")
 const StatisticRouter = require("./routers/Statistic")
@@ -39,16 +39,10 @@ app.use("/", DirectCompanyhRoutes)
 app.use("/", NewsRouter)
 app.use("/", AgentRouter)
 app.use("/", NewHistory)
-//ROUTES MANAGE
-//ROUTES COMMON 
 app.use("/", CommonTodoRoutes)
 
 // static
-app.use(express.static(path.join(__dirname, '../../front/CRM/public/index.html')));
 
-app.get('/s', function(req, res) {
-  res.sendFile(path.join(__dirname, 'index.html', 'index.html'));
-});
 
 app.get('/docs',(req,res) =>{
     fs.readFile('documentation/ApiDocs.json', (err,data) =>{
