@@ -2,7 +2,7 @@ import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import {Link,Redirect} from 'react-router-dom'
-import {isAuthenticated} from '../Api/Auth'
+import {isAuthenticated,signout} from '../Api/Auth'
 import styled from 'styled-components'
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -12,25 +12,25 @@ const { SubMenu } = Menu;
 
 class MenuMain extends React.Component {
   state = {
-    collapsed: false
+    collapsed: true,
+    window_width:""
   };
 
   onCollapse = collapsed => {
     console.log(collapsed);
     this.setState({ collapsed });
   }
-  
+  componentDidMount(){
+    this.setState({window_width: window.innerHeight})
+  }
   render() {
-    
+    const { window_width} = this.state 
+    console.log(window_width)
     return (
       <>
-
-      {!isAuthenticated() && (
-        <>
-        
-        </>
-      )}
-      {isAuthenticated() && ( 
+      {window_width > "20" ? (
+                <>
+                 {isAuthenticated() && ( 
         <div style={{  display: 'flex', minHeight: '2000px' }}>
         <Layout style={{ minHeight: '2000px' }}>
         <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
@@ -73,7 +73,7 @@ class MenuMain extends React.Component {
             >
               <Menu.Item key="4"><Link to={`/user/${isAuthenticated().direct._id}`} ><span>Мой профиль</span></Link></Menu.Item>
               <Menu.Item key="5"><Link to={`/user/edit/${isAuthenticated().direct._id}`} ><span>Настройки</span></Link></Menu.Item>
-              <Menu.Item key="6"><Link to="/signin"><span>Выход</span></Link></Menu.Item>
+              <Menu.Item key="6"><Link onClick={() => signout(() => ('/signin'))} to="/signin"><span>Выход</span></Link></Menu.Item>
             </SubMenu>
             <SubMenu
               key="sub5"
@@ -120,7 +120,15 @@ class MenuMain extends React.Component {
         
       </Layout>
         </div>
-      )}        
+      )}       
+                </>
+            ):("")}
+      {!isAuthenticated() && (
+        <>
+        
+        </>
+      )}
+      
       </>
     );
   }

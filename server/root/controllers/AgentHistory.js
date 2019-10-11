@@ -24,6 +24,9 @@ exports.NewHistory = async (req, res) =>{
 
     const history = new History(req.body)
     history.postedBy = req.body.userId
+    console.log(req.body)
+    console.log(req.userId)
+
     await history.save().then(result =>{
         res.status(200).json({
             "История":"создана!"
@@ -71,7 +74,7 @@ exports.myHistoryActive= async (req, res) =>{
                 error: err
             })
         }
-
+        console.log(history)
         res.json(history)
     })
 }
@@ -106,4 +109,25 @@ exports.myHistoryComplete = async (req, res) =>{
 
         res.json(history)
     })
+}
+exports.AllAgentHistotory = async (req, res) =>{
+    let agentId = req.body.agentId
+    const currentPage = req.query.page || 1
+
+    const perPage = 5
+    var totalItems
+
+    const company = await History.find( { agentByid: { $in: agentId }   }  )
+        .countDocuments()
+        .then(count => {
+            totalItems = count;
+            return History.find( { agentByid: { $in: agentId }   }  )
+                .skip((currentPage - 1) * perPage)
+                .select('_id name Date')
+                .limit(perPage)
+        })
+        .then(data => {
+            res.status(200).json(data)
+        })
+        .catch(err => console.log(err))
 }

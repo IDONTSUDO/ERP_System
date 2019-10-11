@@ -3,7 +3,7 @@ const { ObjectId } = mongoose.Schema
 const AgentHistorySchema =  new mongoose.Schema({
     Date:{
         type: Date,
-        default:Date.now
+        default: Date.now
     },
     agentByid:{
         type: String,
@@ -14,7 +14,9 @@ const AgentHistorySchema =  new mongoose.Schema({
     },
     status:{
         type: String,
-       
+    },
+    name:{
+        type:String,
     },
     postedBy:{
         type:String
@@ -28,8 +30,11 @@ const AgentHistorySchema =  new mongoose.Schema({
     commentStart:{
         type: String
     },
-    id:{
+    item:{
         type:String
+    },
+    rate:{
+        type:Number
     }
 })
 module.exports = mongoose.model("AgentHistory", AgentHistorySchema)

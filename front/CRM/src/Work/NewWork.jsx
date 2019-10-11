@@ -147,6 +147,7 @@ class Work extends React.Component {
   </div>
     </div>
     
+    {/* <div style={{padding:"5px"}}> */}
     <div className="col-md-4">
     <h3>Исполнители</h3>
     <div className="Tags">

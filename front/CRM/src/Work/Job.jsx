@@ -11,9 +11,12 @@ import {
 import {isAuthenticated} from '../Api/Auth'
 import {Redirect} from  'react-router-dom'
 import { Comment,Tooltip,Select,Button,Card,Typography } from 'antd';
+
 import DefaultProfile from '../Assets/default.png' 
 import {Link} from 'react-router-dom'
 const { Title } = Typography
+
+
 
 
 
@@ -210,6 +213,7 @@ export default class Job extends Component {
                 <div class="col-sm-8"></div>
             <Card> 
                 <h3>{comments.length} Количество коментариев</h3>
+                <h3 className="text-primary">{comments.length} Количество коментариев</h3>
                 <a>
                             <div class="d-flex w-100 justify-content-between">
                             <Title class="mb-1">{todo.title}</Title>

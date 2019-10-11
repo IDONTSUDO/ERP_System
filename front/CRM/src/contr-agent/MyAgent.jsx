@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {MyAgentList,GetAgentProfile} from '../Api/Http.js'
-import { Button,Drawer, List,  Divider, Col, Row,Spin,Card,Select} from 'antd'
+import { Button,Drawer, List,  Divider, Col, Row,Spin,Card} from 'antd'
 import {Link} from 'react-router-dom'
 
 

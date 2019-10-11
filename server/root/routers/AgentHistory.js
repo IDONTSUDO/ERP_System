@@ -7,19 +7,23 @@ const {
     myHistoryActive,
     myHistoryBeginer,
     myHistoryComplete,
-    GetHistoryOne } = require("../controllers/AgentHistory.js")
+    GetHistoryOne,
+    AllAgentHistotory } = require("../controllers/AgentHistory.js")
 const {workerSelectId} = require("../controllers/Company.js")
 const router = express.Router({mergeParams: true});
 
 router.get('/history/:HistoryById', GetHistoryOne)
-router.post('/new/history/:workerById', NewHistory)
+
+router.post('/new/history/', NewHistory)
 router.post('/new/comment/',  NewComent)
-
-
-router.put('/change/history/:HistoryById',  changeHistory)
+router.post('/all/agent/history/',  AllAgentHistotory)
 router.post('/my/history/active/', myHistoryActive)
 router.post('/my/history/beginer/', myHistoryBeginer)
 router.post('/my/history/complete/', myHistoryComplete)
+
+
+router.put('/change/history/:HistoryById',  changeHistory)
+
 router.param('HistoryById',HistoryById)
 router.param('workerById',workerSelectId)
 module.exports = router

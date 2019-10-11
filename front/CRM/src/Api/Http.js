@@ -464,3 +464,30 @@ export const listStatisticCompany = () =>{
     })
     .catch(err =>console.log(err))
 }
+export const NewDealHistory = (payload) =>{
+    return fetch(`http://localhost:8080/new/history/`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}
+export const AllAgentHistory = (agentId) =>{
+   
+    return fetch(`http://localhost:8080/all/agent/history/`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        },
+        body: JSON.stringify({agentId:agentId})
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}

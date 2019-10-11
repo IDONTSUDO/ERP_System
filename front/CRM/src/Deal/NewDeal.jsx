@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import {MyAgentList} from '../Api/Http.js'
-import { Button,notification } from 'antd';
+import {MyAgentList,NewDealHistory} from '../Api/Http.js'
+import { Button,notification,Card } from 'antd';
 import ReactTags from 'react-tag-autocomplete'
-
+import {Link} from 'react-router-dom'
 export default class NewDeal extends Component {
     constructor(){
         super()
@@ -12,6 +12,7 @@ export default class NewDeal extends Component {
             tags:[],
             id:"",
             loading: false,
+            item:""
         }
     }
     componentDidMount(){
@@ -44,12 +45,35 @@ export default class NewDeal extends Component {
     clickSubmit =  event =>{
         event.preventDefault()
         this.setState({loading: true})
-
+        let {tags,item,name,user} = this.state
+        let agentByid 
+        let userId = user
+        let status = "Начато"
+        console.log(name)
+        
+        agentByid = tags[0]._id
+ 
+        
+        
+        let payload = {
+            status,
+            name,
+            agentByid,
+            item,
+            userId
+        }
        
-      }
+        NewDealHistory(payload).then(data =>{
+            if(data.error){
+                console.log(data.error)
+            }else{
+                this.setState({loading: false})
+            }
+        })
+    }
       
     render() {
-        let {agentList,price,name,loading} = this.state
+        let {agentList,item,name,loading} = this.state
         return (
             <div>
                 
@@ -65,12 +89,10 @@ export default class NewDeal extends Component {
                 <div className="row">
                 <form>
                 <div >
-                    <label  >Прайс</label>
-                    <input className="form-control" onChange={this.handleAction("price")} type="text"  value={price} />
-                </div>
-                <div >
                     <label  >Название</label>
                     <input className="form-control" onChange={this.handleAction("name")} type="text"  value={name} />
+                    <label  >Предмет сделки</label>
+                    <input className="form-control" onChange={this.handleAction("item")} type="text"  value={item} />
                 </div>
                 
                 <div style={{padding:"10px"}}>
@@ -85,7 +107,24 @@ export default class NewDeal extends Component {
                 </div>
                 
                 </form>
-               
+                <div style={{padding:"2em"}}>
+                <Card title="Мои контр-агенты" bordered={true} >
+                   
+                {agentList.map((agent, i) => (
+                            <>
+                             <div >
+                            
+
+                            <div><Link to={`/agent/${agent._id}`} class="text-muted"> {agent.name}</Link></div>
+                         
+                            <br/>
+                            
+                            </div>
+                            </>)
+                )}
+         
+                </Card>
+                </div>
                 </div>
                 </div>
                 

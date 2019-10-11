@@ -29,6 +29,7 @@ signout - уничтожает JWT  из локлал строджа
 */
 export const signout = (next) =>{
     if(typeof window !== "undefined") localStorage.removeItem("jwt")
+    window.location.reload()
     next()
     return fetch(`http://localhost:8080/signout`,{
         method: "GET"
