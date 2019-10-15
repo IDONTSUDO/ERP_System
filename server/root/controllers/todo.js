@@ -28,12 +28,12 @@ exports.ComentById = (req, res, next, id) =>{
             if (err || !coment) {
                 return res.status(400).json({
                     error: "коментарий не найден"
-                });
+                })
             }
             
             req.coment = coment;
-            next();
-        });
+            next()
+        })
 }
 
 exports.SOSotodo =(req,res) =>{
@@ -42,7 +42,7 @@ exports.SOSotodo =(req,res) =>{
 exports.myTodoItsDay = (req,res,next) =>{
     let time_now = Date.now()
     let time = dateFormat(time_now, "dddd, mmmm, yyyy")
-    console.log(time)
+
    
     
     TODO.find({ $and: [{"time" :{  $eq: `${time}`}},{ tags: { $elemMatch :{"_id":`${req.worker._id}`}} }]}) 

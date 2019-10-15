@@ -48,11 +48,12 @@ exports.changeHistory = async (req, res) =>{
     console.log(history)
     console.log(req.body)
     history = _.extend(history,req.body)
-    
+    console.log(history)
    
     await history.save((err, result) => {
-        
+
         if (err) {
+            console.log(err)
             return res.status(400).json({
                 error: err
             })

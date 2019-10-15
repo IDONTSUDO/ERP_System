@@ -11,7 +11,8 @@ const {
     workerPhoto,
     ListworkerAll,
     searchWorker,
-    Listworker } = require('../controllers/Company.js')
+    Listworker,
+    WokerToManagerRole } = require('../controllers/Company.js')
 
 
 const router = express.Router({mergeParams: true});
@@ -19,7 +20,7 @@ const router = express.Router({mergeParams: true});
 router.post('/new/worker/', Newworker)
 // // ---------- блок пользователя  ---------- // 
 router.post('/block/worker/:workerById',  workerBlock)
-
+router.post('/worker/manager/',  WokerToManagerRole)
 
 // // ---------- удаление пользователя  ---------- // 
 router.delete('/delete/worker/:workerById',  workerDelete)

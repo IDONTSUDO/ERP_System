@@ -75,7 +75,7 @@ exports.workerEdit = async(req,res,next) =>{
             worker.photo.contentType = files.photo.type
         }
 
-        worker.save((err, result) => {
+          worker.save((err, result) => {
             if (err) {
                 return res.status(400).json({
                     error: err
@@ -148,4 +148,18 @@ exports.searchWorker = (req,res) =>{
     Worker.find({searchItemCollection: new RegExp(req.body.item, 'i')}) 
     .then(worker => res.json(worker))
     .catch(e => console.error(e))
+}
+exports.WokerToManagerRole = (req, res) =>{
+    let FindQuery =  'Менеджер'
+    Worker.find({ role:`${FindQuery}`})  
+    .select(" _id name ")
+    .exec((err, user) =>{
+        if(err){
+            return res.status(400).json({
+                error: err
+            })
+        }
+
+        res.json({user})
+    })
 }

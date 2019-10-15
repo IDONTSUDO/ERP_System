@@ -20,6 +20,10 @@ const NewsSchema = new mongoose.Schema({
   dateCreated:{
     type:Date,
     default:Date.now()
+  },  
+  expireAt: {
+    type: Date,
+    index: { expires: '5m' },
   }
 })
 module.exports = mongoose.model("News", NewsSchema)
