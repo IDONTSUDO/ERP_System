@@ -531,3 +531,16 @@ export const TodoUpTime = (ID,UpTime) =>{
     })
     .catch(err =>console.log(err))
 }
+export const ChangeAgent = (AgentId,status) =>{
+    return fetch(`http://localhost:8080/change/agent/${AgentId}`, {
+        method: "PUT", 
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        },
+        body: JSON.stringify({status:status})
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}

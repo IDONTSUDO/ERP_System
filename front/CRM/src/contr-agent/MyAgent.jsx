@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import {MyAgentList,GetAgentProfile} from '../Api/Http.js'
-import { Button,Drawer, List,  Divider, Col, Row,Spin,Card} from 'antd'
+import {MyAgentList,GetAgentProfile,ChangeAgent} from '../Api/Http.js'
+import { Button,Drawer, List,  Divider, Col, Row,Spin,Card,Icon,notification } from 'antd'
 import {Link} from 'react-router-dom'
 import {isAuthenticated} from '../Api/Auth'
 
@@ -54,6 +54,7 @@ export default class MyAgent extends Component {
             legal_address:"",
             actual_address:"",
             payment_account:"",
+            status:""
         }
     }
     componentDidMount(){
@@ -105,41 +106,128 @@ export default class MyAgent extends Component {
                     legal_address:data.legal_address,
                     actual_address:data.actual_address,
                     payment_account:data.payment_account,
+                    status:data.status,
                     open:false
                 })
             }
         })
     }
-    // status
+    forceUpdate(){
+      const userId = this.props.match.params.userId
+      this.setState({user:userId})
+      let workerId = userId
+      
+      MyAgentList(workerId).then(data =>{
+          if(data.error){
+              console.log(data.error)
+          }else{
+              this.setState({agentList:data})
+          }
+      })
+    }
+    ChangeAgentStatus1(AgentId){
+     let status = "Друг"
+     ChangeAgent(AgentId,status).then(data => {
+       if(data.error){
+        this.openNotificationError()
+       }
+       else{
+        this.openNotificationSetAgentStatus()
+        this.forceUpdate()
+       }
+     })
+    }
+    ChangeAgentStatus2(AgentId){
+      let status = "Капризный"
+      ChangeAgent(AgentId,status).then(data => {
+        if(data.error){
+         this.openNotificationError()
+        }
+        else{
+         this.openNotificationSetAgentStatus()
+         this.forceUpdate()
+        }
+      })
+    }
+    ChangeAgentStatus3(AgentId){
+      let status = "Упертый"
+      ChangeAgent(AgentId,status).then(data => {
+        if(data.error){
+         this.openNotificationError()
+        }
+        else{
+         this.openNotificationSetAgentStatus()
+         this.forceUpdate()
+        }
+      })
+    }
+    openNotificationError(){
+      notification.open({
+        message: 'Ой что то пошло не так, мне жаль',
+        icon: <Icon type="frown" style={{ color: '#108ee9' }} />,
+      })
+    }
+    openNotificationSetAgentStatus(){
+      notification.open({
+        message: 'Статус изменен',
+        icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+      })
+    }
     render() {
-        let {agentList,open,email,OGRN,general_director,INN,phone,full_name,name,company,worker, any,legal_address,actual_address,payment_account} = this.state 
+        let {id,agentList,open,email,OGRN,general_director,INN,phone,full_name,name,company,worker, any,legal_address,actual_address,payment_account,status} = this.state 
         return (
             <div className="postisitonRelativeSmeni">
               <div className="container">
                 <div className="row">
                           {agentList.map((agent, i) => (
                             <>
-                             <div >
+                            <div >
                             <Card styles={{width:"auto",height:"autocomplete"}}> 
-                           
+                            
                             <h5 class="text-muted">Имя {agent.name}</h5>
-                            {/* /agent/history/:agentId */}
-                            <Button  styles={{padding:"5em"}}><Link to={`/agent/history/${agent._id}`} >История сделок</Link></Button>
+                            {agent.status === "Друг" ? (
+                    <>
+                    <div>
+                    <div className="square-green"></div>
+                    </div>
+                    </>
+                    ):("")}
+                    {agent.status === "Капризный" ? (
+                    <>
+                    <div>
+                    <div className="square-red"></div>
+                    </div>
+                    </>
+                    ):("")}
+                    {agent.status === "Упертый" ? (
+                    <>
+                    <div>
+                    <div className="square-yellow"></div>
+                    </div>
+                    </>
+                    ):("")}
+                    
                             <Button  onClick={(agentId) => this.handleClick(agent._id, agentId)}>Посмотреть профиль</Button>
                             <br/>
+                            
                             </Card>
                             </div>
+                           
+
+
                             </>
                          ))}
                     </div>
                     </div>
         <Drawer
+     
           width={640}
           placement="right"
           closable={false}
           onClose={this.onClose}
           visible={this.state.visible}
         >
+
         {open ?(
             <Spin size="large" />
         ):(
@@ -148,10 +236,10 @@ export default class MyAgent extends Component {
             <p style={pStyle}>Персональные данные</p>
             <Row>
               <Col span={12}>
-                <DescriptionItem title="Full Name" content="Lily" />{' '}
+                {/* <DescriptionItem title="Full Name" content="Lily" />{' '} */}
               </Col>
               <Col span={12}>
-                <DescriptionItem title="Account" content="AntDesign@example.com" />
+                {/* <DescriptionItem title="Account" content="AntDesign@example.com" /> */}
               </Col>
             </Row>
             <Row>
@@ -163,19 +251,14 @@ export default class MyAgent extends Component {
               </Col>
             </Row>
             <Row>
-              <Col span={12}>
-                <DescriptionItem title="Birthday" content="{Date}" />
-              </Col>
-              <Col span={12}>
-                <DescriptionItem title="Website" content="-" />
-              </Col>
+             
             </Row>
             <Row>
               <Col span={24}>
-                <DescriptionItem
+                {/* <DescriptionItem
                   title="Message"
                   content="Make things as simple as possible but no simpler."
-                />
+                /> */}
               </Col>
             </Row>
             <Divider />
@@ -190,46 +273,58 @@ export default class MyAgent extends Component {
             </Row>
             <Row>
               <Col span={12}>
-                <DescriptionItem title="Department" content={full_name} />
+                <DescriptionItem title="Расчетный счет" content={<a>{payment_account}</a>} />
               </Col>
               <Col span={12}>
-                <DescriptionItem title="Supervisor" content={<a>Lin</a>} />
+                <DescriptionItem title="Актуальный адрес" content={<a>{actual_address}</a>} />
+              </Col>
+              <Col span={12}>
+                <DescriptionItem title="Юридический адрес" content={<a>{legal_address}</a>} />
+              </Col>
+              <Col span={12}>
+                <DescriptionItem title="Полное имя компании" content={full_name} />
+              </Col>
+              <Col span={12}>
+                <DescriptionItem title="Юридический адрес" content={<a>{name}</a>} />
+              </Col>
+              <Col span={12}>
+                <DescriptionItem title="Генеральный директор" content={<a>{general_director}</a>} />
               </Col>
             </Row>
-            <Row>
-              <Col span={24}>
-                <DescriptionItem
-                  title="Skills"
-                  content="C / C + +, data structures, software engineering, operating systems, computer networks, databases, compiler theory, computer architecture, Microcomputer Principle and Interface Technology, Computer English, Java, ASP, etc."
-                />
-              </Col>
-            </Row>
+            
             <Divider />
-            <p style={pStyle}>Контакты</p>
+            <p style={pStyle}>Контактные данные</p>
             <Row>
               <Col span={12}>
-                <DescriptionItem title="Email" content="AntDesign@example.com" />
+                <DescriptionItem title="Email" content={email} />
               </Col>
               <Col span={12}>
-                <DescriptionItem title="Phone Number" content="+86 181 0000 0000" />
+                <DescriptionItem title="Номер телефона" content={phone} />
+              </Col>
+              <Col span={12}>
+                <DescriptionItem title="Полезная информация" content={any} />
               </Col>
             </Row>
             <Row>
-              <Col span={24}>
+              {/* <Col span={24}>
                 <DescriptionItem
-                  title="Github"
+                  title="Статус"
                   content={
-                    <a href="http://github.com/ant-design/ant-design/">
-                      github.com/ant-design/ant-design/
-                    </a>
-                  }
+                  
+                    }
                 />
-              </Col>
+                <div>
+
+                </div>
+              </Col> */}
             </Row>
             <Row>
               <Col span={24}>
-              <Button>Сменить статус</Button>
-              <Button><Link>Посмотреть историю работ</Link></Button>
+                  
+              <button onClick={(AgentId) => this.ChangeAgentStatus1(id, AgentId)} className="square-red-sort"></button>
+              <button onClick={(AgentId) => this.ChangeAgentStatus2(id, AgentId)} className="square-green-sort"></button>
+              <button onClick={(AgentId) => this.ChangeAgentStatus3(id, AgentId)} className="square-yellow-sort"></button>
+              <Button><Link to={`/agent/history/${id}`} >История сделок</Link></Button>
               </Col>
             </Row>
             </>

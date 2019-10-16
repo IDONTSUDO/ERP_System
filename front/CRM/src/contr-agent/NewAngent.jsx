@@ -21,7 +21,8 @@ export default class NewAgent extends Component {
             actual_address:"",
             payment_account:"",
             loading: false,
-            error:""
+            error:"",
+            
         }
     }
     componentDidMount(){
