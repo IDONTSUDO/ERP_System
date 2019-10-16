@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { PieChart, Pie, Sector } from 'recharts';
-
+import {isAuthenticated} from '../Api/Auth'
 const data = [
   { name: 'Кофе выпито', value: 400 },
   { name: 'Завершено задач', value: 300 },

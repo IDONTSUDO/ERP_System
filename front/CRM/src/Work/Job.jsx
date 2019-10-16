@@ -6,14 +6,22 @@ import {
     DeleteComment,
     NewNews,
     SetStatusJob,
-    TodoChangeExperienseAtHTTP
+    TodoChangeExperienseAtHTTP,
+    TodoUpTime,
+    TodoDelete
 } from '../Api/Http'
 import {isAuthenticated} from '../Api/Auth'
 import {Redirect} from  'react-router-dom'
-import { Comment,Tooltip,Select,Button,Card,Typography } from 'antd';
-
+import { Comment,Tooltip,Select,Button,Card,Typography,notification, Icon,Modal } from 'antd'
+import dateFormat from 'dateformat'
+import DatePicker from "react-datepicker"
 import DefaultProfile from '../Assets/default.png' 
+import ReactMarkdown from 'react-markdown'
+
 import {Link} from 'react-router-dom'
+
+
+const { Option } = Select;
 const { Title } = Typography
 
 
@@ -35,10 +43,12 @@ export default class Job extends Component {
 	        ID:"",
             name:"",
             event:"",
+            startDate:"",
+            loading: false,
+            visible: false
         }
     }
-    clickSetStatusCompleteJob = event =>{
-        event.preventDefault()
+    clickSetStatusCompleteJob = () =>{
         const  {ID} = this.state
         const todoId = ID
         let expireAt = new Date()
@@ -50,13 +60,14 @@ export default class Job extends Component {
             }else{
                 
                 this.forceUpdate()
+                
                 TodoChangeExperienseAtHTTP(expireAt,todoId)
                 
             }
         })
     }
-    clickSetStatusMoreInfoJob = event =>{
-        event.preventDefault()
+    clickSetStatusMoreInfoJob = () =>{
+       
         const  {ID,worker,todo} = this.state
         const todoId = ID
 
@@ -82,7 +93,7 @@ export default class Job extends Component {
                     event,
                     tags
                 }
-                console.log(payload)
+                this.openNotificationNewStatus()
                 NewNews(payload)
 
             }
@@ -136,8 +147,8 @@ export default class Job extends Component {
         this.setState({ [name]: event.target.value })
     }
 
-    clickSubmit =  event =>{
-        event.preventDefault()
+    clickSubmit =  () =>{
+        
         const { body,worker,ID,name,todo }  = this.state
         let todoId = ID 
         let comment = JSON.stringify({body,worker,todoId,name})
@@ -165,7 +176,7 @@ export default class Job extends Component {
                     worker_by,
                     event
                 }
-                console.log(payload)
+                this.openNotificationNewComment()
                 NewNews(payload)
             }
         })
@@ -178,6 +189,11 @@ export default class Job extends Component {
             this.deleteComment(comment);
         }
     }
+    handleChange = date => {
+        this.setState({
+          startDate: date
+        })
+      }
     deleteComment = comment => {
         
         const {todo,worker} = this.state
@@ -186,7 +202,7 @@ export default class Job extends Component {
                 console.log(data.error)
             }else{
                 this.forceUpdate()
-                
+                this.openNotification()
                 
                 
             }
@@ -199,43 +215,129 @@ export default class Job extends Component {
         this.setState({ID:todoId})
         this.setState({body:""})
     }
-    
-    render() {
-        const  {redirectToSignin, todo,comments,body,status} = this.state
+    NewDate = event =>{
+        event.preventDefault()
+        const {startDate,ID} = this.state
        
+        let UpTime = dateFormat(startDate)
+        TodoUpTime(ID,UpTime).then(data =>{
+            if(data.error){
+                console.log(data.error)
 
+            }else{
+               this.openNotificationNewDate()
+            }
+        })
+    }
+    
+    DeleteTodo = event => {
+        event.preventDefault()
+        const {ID} = this.state
+        let todoId = ID
+        let expireAt = new Date()
+        TodoChangeExperienseAtHTTP(expireAt,todoId)
+    }
+    showModal = () => {
+        this.setState({
+          visible: true,
+        })
+      }
+    
+      handleOk = () => {
+        this.setState({ loading: true })
+        setTimeout(() => {
+          this.setState({ loading: false, visible: false })
+        }, 3000)
+      }
+    
+    handleCancel = () => {
+        this.setState({ visible: false })
+    }
+    openNotification(){
+        notification.open({
+          message: 'Коментарий удален',
+          icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+        })
+    }
+    openNotificationNewDate(){
+        notification.open({
+          message: 'Новая дата выставлена',
+          icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+        })
+    }
+    openNotificationNewStatus(){
+        notification.open({
+          message: 'Статус дела изменен',
+          icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+        })
+    }
+    openNotificationNewComment(){
+        notification.open({
+          message: 'Новый коментарий создан',
+          icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+        })
+    }
+    openNotificationError(){
+        notification.open({
+          message: 'Ой что то пошло не так, мне жаль',
+          icon: <Icon type="frown" style={{ color: '#108ee9' }} />,
+        })
+    }
+    handleChange = (value) => {
+       
+        if(value == "Выполнено"){
+            console.log(200)
+            this.clickSetStatusCompleteJob()
+        }if(value == "Требуется уточнение"){
+            this.clickSetStatusMoreInfoJob()
+        }else{
+            return
+        }
+    }
+    render() {
+        const  {redirectToSignin, todo,comments,body,status,postedBy,visible, loading } = this.state
+
+        
+          
         return(
            
             <div className="postisitonRelativeSmeni">
             <div className="container">
             
             <div class="row">
-                <div class="col-sm-8"></div>
+                <div class="col-md-4">
             <Card> 
-                <h3>{comments.length} Количество коментариев</h3>
-                <h3 className="text-primary">{comments.length} Количество коментариев</h3>
+            
                 <a>
-                            <div class="d-flex w-100 justify-content-between">
-                            <Title class="mb-1">{todo.title}</Title>
-                            <small class="text-muted">{todo.status}</small>
+                        <div class="d-flex w-100 justify-content-between">
+                         
+                        <small class="text-muted">{todo.status}</small>
+                           
                         </div>
-                        <Title level={4}>{todo.description}</Title>
+                        <ReactMarkdown 
+                                source={todo.description} />
                         <small class="text-muted"></small>
                         </a>
                         <div class="btn-group dropup">
-                            <button onChange={this.handleAction("weq")} value={status} style={{width:200, height:50}}  type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Статус
-                            </button>
-                            <div class="dropdown-menu">
-                            <button onClick={this.clickSetStatusCompleteJob}  class="dropdown-item" type="button">Выполнено</button>
-                            <button onClick={this.clickSetStatusMoreInfoJob} value={status} class="dropdown-item" type="button">Требуется уточнение</button>
-                            <button onClick={this.clickSetStatusMoreInfoJob } value={status} class="dropdown-item" type="button">Что то еще</button>
-                            </div>    
+                            
+                            <Select defaultValue="Статус" style={{ width: 120 }} onChange={this.handleChange}>
+                              <Option value="Выполнено">Выполнено</Option>
+                              <Option value="Требуется уточнение">Требуется уточнение</Option>
+                            </Select>
+                          
   
                     </div>
             </Card>
+            </div>
                 <div>
-                
+                {isAuthenticated().direct._id ===
+                        todo.postedBy && (
+                            <>
+                                <Button type="primary" onClick={this.showModal}>
+                                Редактировать
+                                </Button>
+                            </>
+                        )}                
               
                                    
                 {todo.tags.map((tod, i) => (
@@ -246,7 +348,7 @@ export default class Job extends Component {
                     <img className="card-img-top" src={`http://localhost:8080/user/photo/${tod._id}?`}
                          onError={i => (i.target.src = `${DefaultProfile}`)}
                          alt={tod.name}
-                         style={{height: "50px", width:"50px"}}
+                         style={{height: "5em", width:"5em"}}
                          />      
                     </Link>
                          <small class="text-muted">{tod.email}</small>
@@ -319,15 +421,24 @@ export default class Job extends Component {
                 </div>
                 </div>
                 </div>
+                <Modal
+          visible={visible}
+          title="Редактировать дело"
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          
+        >
+
+                                <DatePicker
+                                  className="form-control" 
+                                  selected={this.state.startDate}
+                                  onChange={this.handleChange}
+                                />
+                                <Button onClick={this.NewDate}>Новая дата</Button>
+                                <Button onClick={this.DeleteTodo}>Удалить досрочно</Button>
+                          
+        </Modal>
             </div>
         )
     }
 }
-// <Select defaultValue="lucy" style={{ width: 120 }} onChange={handleChange}>
-// <Option value="jack">Jack</Option>
-// <Option value="lucy">Lucy</Option>
-// <Option value="disabled" disabled>
-//   Disabled
-// </Option>
-// <Option value="Yiminghe">yiminghe</Option>
-// </Select>

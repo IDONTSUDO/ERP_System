@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import ReactTags from 'react-tag-autocomplete'
 import {GetAgentProfile,list,AddManageForAgent} from '../Api/Http'
-import { Button,Descriptions } from 'antd';
+import { Button,Descriptions,Icon,notification } from 'antd'
+import {isAuthenticated} from '../Api/Auth'
 export default class AgentProfile extends Component {
     constructor(){
         super()
@@ -27,9 +28,9 @@ export default class AgentProfile extends Component {
     }
 
     componentDidMount(){
-
+        const token = isAuthenticated().token  
         const agentId = this.props.match.params.agentId
-        GetAgentProfile(agentId).then(data => {
+        GetAgentProfile(agentId,token).then(data => {
             if(data.error){
                 this.setState({redirectToProfile: true})
             }else{
@@ -82,10 +83,12 @@ export default class AgentProfile extends Component {
         event.preventDefault()
         this.setState({loading: true})
         const {tags,id} = this.state
-        AddManageForAgent(tags,id).then(data =>{
+        const token = isAuthenticated().token  
+        AddManageForAgent(tags,id,token).then(data =>{
           if(data.error){
-              console.log(data.error)
+              this.openNotificationError()
           }else{
+            this.openNotificationNewUserList()
             this.forceUpdate()
           }
       })
@@ -123,6 +126,18 @@ export default class AgentProfile extends Component {
             }
         })
     }
+    openNotificationError(){
+        notification.open({
+          message: 'Ой что то пошло не так, мне жаль',
+          icon: <Icon type="frown" style={{ color: '#108ee9' }} />,
+        })
+    }
+    openNotificationNewUserList(){
+        notification.open({
+          message: 'Назначено',
+          icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+        })
+    }
     render() {
         const {email,OGRN,general_director,INN,phone,full_name,name,company,worker, any,legal_address,actual_address,payment_account} =  this.state
         return (
@@ -147,8 +162,6 @@ export default class AgentProfile extends Component {
     </div>
     <div style={{padding:"5px"}}></div>
     <Button onClick={this.clickSubmit }>Назначить</Button>
-    <div style={{padding:"5px"}}></div>
-    <Button type="danger">Удалить менеджеров</Button>
                 </div>
                 </div>
                 

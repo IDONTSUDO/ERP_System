@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {Link,Route} from 'react-router-dom'
 import {ContrAgentList,SearchContrAgent} from "../Api/Http"
 import { Button,Modal,Icon,Card } from 'antd'
-
+import {isAuthenticated} from '../Api/Auth'
 export default class AllAgent extends Component {
     constructor(){
         super()

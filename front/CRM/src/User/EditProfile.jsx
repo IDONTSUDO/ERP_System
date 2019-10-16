@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {isAuthenticated} from '../Api/Auth'
 import {read,update,updateUser} from '../Api/Http'
+import {notification,Icon} from 'antd'
 import {Redirect} from  'react-router-dom'
 import DefaultProfile from '../Assets/default.png'
 import {Button} from 'antd'
@@ -20,7 +21,7 @@ class EditProfile extends Component {
             about: ""
         }
     }
-    // init функция принимающая userId and token в последствии передает даннные в функцию read 
+   
     init = userId =>{
         const token = isAuthenticated().token  
             read(userId, token).then(data => {
@@ -43,7 +44,7 @@ class EditProfile extends Component {
             this.init(userId)
     
         }
-        // isValid функция валидации берет данные из стейта и валидирует
+
         isValid = () =>{
             const {name, email, password, fileSize } = this.state
             if(fileSize > 100000){
@@ -85,6 +86,7 @@ class EditProfile extends Component {
                     this.setState({ error: data.error })
                 }
                     else 
+                    this.openNotificationEditProile()
                     updateUser(data, () =>{
                         this.setState({
                             name: data.name,
@@ -94,7 +96,19 @@ class EditProfile extends Component {
                 })
             })
             }
-            //console.log(user)
+           
+        }
+        openNotificationError(){
+            notification.open({
+              message: 'Ой что то пошло не так, мне жаль',
+              icon: <Icon type="frown" style={{ color: '#108ee9' }} />,
+            })
+        }
+        openNotificationEditProile(){
+            notification.open({
+              message: 'Ваш профиль изменен',
+              icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+            })
         }
         SignUpForm = (name,email,password, about) =>(  
             <form>

@@ -21,7 +21,7 @@ import EditProfile from '../User/EditProfile.jsx'
 import MyWork from '../Work/MyWork.jsx'
 import Job from '../Work/Job.jsx'
 import TodayWork from '../Work/TodayWork.jsx'
-
+import AgentHistory from '../Deal/AgentHystory.jsx'
 import NewDeal from '../Deal/NewDeal.jsx'
 import DealHistory from '../Deal/DealHistory.jsx'
 
@@ -55,6 +55,9 @@ const MainRouter = ()  =>(
         <PrivateRoute exact path="/deal/history/:userId" component={DealHistory}/> 
 
         <PrivateRoute exact path="/company/statistic" component={CompanyStatistic}/> 
+
+        <PrivateRoute exact path="/agent/history/:agentId" component={AgentHistory}/> 
+
     </Switch>
     </div>
 )

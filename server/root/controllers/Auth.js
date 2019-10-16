@@ -40,7 +40,3 @@ exports.signout = (req, res) =>{
     return res.json({message: "Sign Out Complite"})
 }
 
-exports.requireSignin = expressJwt({
-    secret: process.env.JWT_SECRET,
-    userProperty: "auth"
-})

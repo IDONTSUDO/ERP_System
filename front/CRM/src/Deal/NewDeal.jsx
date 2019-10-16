@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import {MyAgentList,NewDealHistory} from '../Api/Http.js'
-import { Button,notification,Card } from 'antd';
+import { Button,notification,Card,Icon } from 'antd'
 import ReactTags from 'react-tag-autocomplete'
 import {Link} from 'react-router-dom'
+import {isAuthenticated} from '../Api/Auth'
+
+
 export default class NewDeal extends Component {
     constructor(){
         super()
@@ -12,7 +15,9 @@ export default class NewDeal extends Component {
             tags:[],
             id:"",
             loading: false,
-            item:""
+            item:"",
+            error:"",
+            name:""
         }
     }
     componentDidMount(){
@@ -42,49 +47,77 @@ export default class NewDeal extends Component {
         this.setState({ error: "" })
         this.setState({ [name]: event.target.value })
     }
+    isValid = () =>{
+        const {tags,item,name} = this.state
+        if(name.length == 0){
+            this.setState({error: "Название сделки обязательно"})
+            return false
+        }
+        if(tags.length == 0){
+            this.setState({error: "Контр агент и предмет сделки являются обязательным параметрами"})
+            return false
+        }
+        if(item.length == 0){
+            this.setState({error:"Предмет сделки обязателен"})
+        }
+        if(tags.length >= 2) { 
+            this.setState({error: "Нельзя заключить сделку с несколькими контр-агентами"})
+            return false
+        }
+        return true
+    }
     clickSubmit =  event =>{
         event.preventDefault()
-        this.setState({loading: true})
-        let {tags,item,name,user} = this.state
-        let agentByid 
-        let userId = user
-        let status = "Начато"
-        console.log(name)
-        
-        agentByid = tags[0]._id
- 
-        
-        
-        let payload = {
-            status,
-            name,
-            agentByid,
-            item,
-            userId
-        }
-       
-        NewDealHistory(payload).then(data =>{
-            if(data.error){
-                console.log(data.error)
-            }else{
-                this.setState({loading: false})
+        if(this.isValid()){
+            this.setState({loading: true})
+            let {tags,item,name,user} = this.state
+            let agentByid 
+            let userId = user
+            let status = "Начато"
+            
+            agentByid = tags[0]._id
+     
+            
+            
+            let payload = {
+                status,
+                name,
+                agentByid,
+                item,
+                userId
             }
-        })
+           
+            NewDealHistory(payload).then(data =>{
+                if(data.error){
+                    console.log(data.error)
+                }else{
+                    this.openNotificationNewDeal()
+                }
+            })
+        }
+     
     }
-      
+    openNotificationErrorValidation(){
+        const {error} = this.state
+        notification.open({
+          message: `${error}`,
+          icon: <Icon type="frown" style={{ color: '#108ee9' }} />,
+        })
+        this.setState({error:""})
+    }
+    openNotificationNewDeal(){
+        notification.open({
+          message: 'Новая сделка заключена',
+          icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+        })
+      }
     render() {
-        let {agentList,item,name,loading} = this.state
+        let {agentList,item,name,loading,error} = this.state
+    
         return (
             <div>
                 
                 <div className="postisitonRelativeSmeni">
-                {loading ?(
-                <div className="jumbotron text-center">
-                <h2>Загрузка...</h2>
-                </div>
-                ):(
-                ""
-                )}
                 <div className="container">
                 <div className="row">
                 <form>
@@ -129,6 +162,9 @@ export default class NewDeal extends Component {
                 </div>
                 
                 </div>
+                {error.length > 2 ? (
+                this.openNotificationErrorValidation()
+                ):("")}
             </div>
         )
     }

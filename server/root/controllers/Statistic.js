@@ -2,16 +2,16 @@ const STATISTIC= require('../database/Statistic')
 
 
 
-exports.NewStatisticTabel= (req,res) =>{
+exports.NewStatisticTabel = async(req,res) =>{
    
     const newTabel =  new STATISTIC(req.body)
-    newTabel.save()
+    await newTabel.save()
     res.status(200).json({ message: "Tabel create!" })
 }
 // worker_quality++
-exports.NewUserQuality = (req,res) =>{
+exports.NewUserQuality = async (req,res) =>{
 
-    STATISTIC.find().select("worker_quality _id").exec((err, stat) =>{
+    await STATISTIC.find().select("worker_quality _id").exec((err, stat) =>{
         if(err){
             return res.status(400).json({
                 error: err
@@ -36,15 +36,15 @@ exports.NewUserQuality = (req,res) =>{
     })
 }
 // create_todo++
-exports.NewTODOQuality = (req,res) =>{
+exports.NewTODOQuality = async (req,res) =>{
 
-    STATISTIC.find().select("create_todo _id").exec((err, stat) =>{
+    await STATISTIC.find().select("create_todo _id").exec((err, stat) =>{
         if(err){
             return res.status(400).json({
                 error: err
             })
         }
-        console.log(stat[0].create_todo)
+      
         let id_stat = stat[0]._id
         let create_todo_plus = stat[0].create_todo + 1
         
@@ -63,15 +63,14 @@ exports.NewTODOQuality = (req,res) =>{
     })
 }
 // TEST complete_todo++ 
-exports.NewCompleteTODOQuality = (req,res) =>{
+exports.NewCompleteTODOQuality = async (req,res) =>{
 
-    STATISTIC.find().select("complete_todo _id").exec((err, stat) =>{
+    await STATISTIC.find().select("complete_todo _id").exec((err, stat) =>{
         if(err){
             return res.status(400).json({
                 error: err
             })
         }
-        console.log(stat[0].complete_todo)
         let id_stat = stat[0]._id
         let complete_todo_plus = stat[0].complete_todo + 1
         
@@ -91,15 +90,15 @@ exports.NewCompleteTODOQuality = (req,res) =>{
 }
 // TEST CompleteSeil++
 
-exports.NewCompleteSeil = (req,res) =>{
+exports.NewCompleteSeil = async (req,res) =>{
 
-    STATISTIC.find().select("CompleteSeil _id").exec((err, stat) =>{
+    await STATISTIC.find().select("CompleteSeil _id").exec((err, stat) =>{
         if(err){
             return res.status(400).json({
                 error: err
             })
         }
-        console.log(stat[0].CompleteSeil)
+      
         let id_stat = stat[0]._id
         let CompleteSeil_plus = stat[0].CompleteSeil + 1
         
@@ -119,9 +118,9 @@ exports.NewCompleteSeil = (req,res) =>{
 }
 // TEST
 // SeilAll++
-exports.NewCompleteSeilAll = (req,res) =>{
+exports.NewCompleteSeilAll = async (req,res) =>{
 
-    STATISTIC.find().select("SeilAll _id").exec((err, stat) =>{
+    await STATISTIC.find().select("SeilAll _id").exec((err, stat) =>{
         if(err){
             return res.status(400).json({
                 error: err
@@ -146,9 +145,9 @@ exports.NewCompleteSeilAll = (req,res) =>{
     })
 }
 // differenceSeil ++
-exports.NewCompleteSeilDiffence = (req,res) =>{
+exports.NewCompleteSeilDiffence = async (req,res) =>{
 
-    STATISTIC.find().select("differenceSeil _id").exec((err, stat) =>{
+    await STATISTIC.find().select("differenceSeil _id").exec((err, stat) =>{
         if(err){
             return res.status(400).json({
                 error: err
@@ -172,8 +171,8 @@ exports.NewCompleteSeilDiffence = (req,res) =>{
         )
     })
 }
-exports.DeleteUserQuality = (req,res) =>{
-    STATISTIC.find().select(" worker_quality ").exec((err, stat) =>{
+exports.DeleteUserQuality = async (req,res) =>{
+    await STATISTIC.find().select(" worker_quality ").exec((err, stat) =>{
         if(err){
             return res.status(400).json({
                 error: err
@@ -193,8 +192,8 @@ exports.DeleteUserQuality = (req,res) =>{
     
     })
 }
-exports.GetUserQuality = (req,res) =>{
-    STATISTIC.find()
+exports.GetUserQuality = async (req,res) =>{
+    await STATISTIC.find()
     .exec((err, stat) =>{
         if(err){
             return res.status(400).json({

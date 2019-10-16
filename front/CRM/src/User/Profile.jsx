@@ -1,27 +1,17 @@
 import React, { Component } from 'react'
 import {isAuthenticated} from '../Api/Auth'
 import {Redirect, Link } from 'react-router-dom'
+import {notification,Icon} from 'antd'
 import {read} from '../Api/Http'
 import DefaultProfile from '../Assets/default.png'
-import styled from 'styled-components'
 
-const RealetivPositionComponent = styled.div`
-.postisitonRelative{
-    left:15em;
-    top: 2em;
-    bottom: 20em;
-    position: absolute;
-    display: flex; 
-}
-
-`;
 
 class Profile extends Component {
     constructor(){
         super()
         this.state = {
             user: {},
-            redirectToSignin: false,
+            
             error: ""
         }
     }
@@ -30,34 +20,37 @@ class Profile extends Component {
         read(userId, token)
         .then(data =>{
             if(data.error){
-                this.setState({redirectToSignin: true})
+                this. openNotificationError()
             }else{
-                
                 this.setState({ user: data})
-                
             }
         })
     }
-    //componentDidMount()  хук жизненого цикла
+  
     componentDidMount(){
         const userId = this.props.match.params.userId
         this.init(userId)
     }
-    //изменяет компонент componentWillReceiveProps()
+   
     componentWillReceiveProps(props){
         const userId = props.match.params.userId
         this.init(userId)
 
     }
+    openNotificationError(){
+        notification.open({
+          message: 'Ой что то пошло не так, мне жаль',
+          icon: <Icon type="frown" style={{ color: '#108ee9' }} />,
+        })
+    }
     render() {
         const  {redirectToSignin, user} = this.state
-        //  TODO: Change CSS and loading and ERRORS
         const photoUrl = user._id
         ? `http://localhost:8080/user/photo/${user._id}?${new Date().getTime()}` 
         : DefaultProfile
         return(
-            <RealetivPositionComponent>
-            <div className="postisitonRelative">
+            
+            <div className="postisitonRelativeSmeni">
             <div className="">
             <div class="">
 
@@ -87,8 +80,7 @@ class Profile extends Component {
                 </div>
                 </div>
             </div>
-            </div>     
-            </RealetivPositionComponent>
+            </div>    
         )
     }
   

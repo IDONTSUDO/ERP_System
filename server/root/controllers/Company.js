@@ -75,7 +75,7 @@ exports.workerEdit = async(req,res,next) =>{
             worker.photo.contentType = files.photo.type
         }
 
-          worker.save((err, result) => {
+        worker.save((err, result) => {
             if (err) {
                 return res.status(400).json({
                     error: err
@@ -86,21 +86,21 @@ exports.workerEdit = async(req,res,next) =>{
     })
 }
 exports.workerGet = async (req,res) =>{
-     return res.json(req.worker)
+    return res.json(req.worker)
 }
 exports.workerAll = async (req,res) =>{
-    const worker = Worker.find().select(" _id name")
+    const worker = await Worker.find().select(" _id name")
     .then((worker) =>{
         res.status(200).json(worker)
     })
     .catch(err => console.log(err))
 }
-exports.workerFinancyAll = (req, res) =>{
+exports.workerFinancyAll =  async (req, res) =>{
 res.status(200)
 }
 exports.workerDelete = async (req,res) => {
     let worker = req.worker;
-    worker.remove((err,worker) => {
+    await  worker.remove((err,worker) => {
         if (err) {
             return res.status(400).json({
                 error: err
@@ -143,15 +143,15 @@ exports.ListworkerAll = async (req,res) =>{
 }
 
 
-exports.searchWorker = (req,res) =>{
+exports.searchWorker = async (req,res) =>{
     let searchItemCollection  = req.body.search
-    Worker.find({searchItemCollection: new RegExp(req.body.item, 'i')}) 
+    await Worker.find({searchItemCollection: new RegExp(req.body.item, 'i')}) 
     .then(worker => res.json(worker))
     .catch(e => console.error(e))
 }
-exports.WokerToManagerRole = (req, res) =>{
+exports.WokerToManagerRole = async (req, res) =>{
     let FindQuery =  'Менеджер'
-    Worker.find({ role:`${FindQuery}`})  
+    await Worker.find({ role:`${FindQuery}`})  
     .select(" _id name ")
     .exec((err, user) =>{
         if(err){

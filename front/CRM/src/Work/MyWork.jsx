@@ -100,10 +100,10 @@ export default class MyWork extends Component {
             </>
             
             <ul>
-            <Button onClick={this.returnSort}className="square-return"></Button>
-            <Button onClick={this.yellowSort} className="square-yellow"></Button>
-            <Button onClick={this.greenSort} className="square-green"></Button>
-            <Button onClick={this.redSort} className="square-red"></Button>
+            <button onClick={this.returnSort}className="square-return-sort"></button>
+            <button onClick={this.yellowSort} className="square-yellow-sort"></button>
+            <button onClick={this.greenSort} className="square-green-sort"></button>
+            <button onClick={this.redSort} className="square-red-sort"></button>
             <div className="container">
             <div className="row">
             

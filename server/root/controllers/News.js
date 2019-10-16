@@ -14,19 +14,18 @@ exports.NewsId = async (req, res, next , id) =>{
         next()
     })
 }
-exports.newNews = (req,res) =>{
+exports.newNews = async(req,res) =>{
     const news = new NEWS(req.body) 
-    news.save().then(result =>{
+    await news.save().then(result =>{
         res.status(200).json({
             news: result
         })
     })
 }
 
-exports.readNews = (req, res) =>{
+exports.readNews = async(req, res) =>{
     let worker = req.body.id
-    console.log(req.body.id)
-    NEWS.find({worker_by:worker})  
+    await NEWS.find({worker_by:worker})  
     .select(" link event worker_by ")
     .exec((err, news) =>{
         if(err){
@@ -40,13 +39,13 @@ exports.readNews = (req, res) =>{
     })
 }
 
-exports.NewsSetDateDelete = (req, res) =>{
+exports.NewsSetDateDelete = async(req, res) =>{
     let NewsKill = req.news 
 
     NewsKill = _.extend(NewsKill, req.body)
     NewsKill.expireAt = Date.now()
 
-    NewsKill.save((err, result) => {
+    await NewsKill.save((err, result) => {
         if (err) {
             return res.status(400).json({
                 error: err
@@ -56,9 +55,9 @@ exports.NewsSetDateDelete = (req, res) =>{
     });
 }
 
-exports.NewsKills  = (req, res,next) =>{
+exports.NewsKills  = async(req, res,next) =>{
     let NewsKill = req.news 
-    NEWS.find({worker_by:worker})  
+    await NEWS.find({worker_by:worker})  
     .select(" _id")
     .exec((err, news) =>{
         if(err){

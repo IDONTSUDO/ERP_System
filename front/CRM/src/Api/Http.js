@@ -426,13 +426,26 @@ export const OneHistoryGet = (HistoryById) =>{
     .catch(err =>console.log(err))
 }
 
-export const ChangeHistory = (historyId,changeHisitoryPayload) =>{
-    return fetch(`http://localhost:8080/change/history/${historyId}`, {
+export const ChangeHistory = (DealId,status) =>{
+    return fetch(`http://localhost:8080/change/history/${DealId}`, {
         method: "PUT",
         headers: {
             Accept: "application/json", "Content-Type": "application/json"
         },
-        body: JSON.stringify(changeHisitoryPayload)
+        body: JSON.stringify({status})
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}
+export const ChangeHistoryItem = (DealId,payload) =>{
+    return fetch(`http://localhost:8080/change/history/${DealId}`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
     })
     .then(responce =>{
         return responce.json()
@@ -485,6 +498,33 @@ export const AllAgentHistory = (agentId) =>{
             Accept: "application/json", "Content-Type": "application/json"
         },
         body: JSON.stringify({agentId:agentId})
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}
+export const UpdateNews = (NewsArray)=>{
+    console.log(NewsArray)
+    for (let news  of NewsArray) {
+        console.log(news)
+        fetch(`http://localhost:8080/worker/read/${news}`, {
+            method: "POST",
+            headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        }
+   })
+   .catch(err =>console.log(err))
+   }
+}
+export const TodoUpTime = (ID,UpTime) =>{
+ 
+    return fetch(`http://localhost:8080/todo/change/${ID}`, {
+        method: "POST", 
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        },
+        body: JSON.stringify({time:UpTime})
     })
     .then(responce =>{
         return responce.json()

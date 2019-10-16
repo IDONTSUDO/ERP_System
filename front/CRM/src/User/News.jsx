@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {isAuthenticated} from '../Api/Auth'
-import {listNews} from '../Api/Http'
+import {listNews,UpdateNews} from '../Api/Http'
 import {Link} from 'react-router-dom'
 import { Button } from 'antd';
 import { Row, Col } from 'antd';
@@ -45,8 +45,17 @@ export default class News extends Component {
             }else{
                 Object.keys(data)
                 this.setState({newsList:data})
+                console.log(data)
+                var NewsArray = []
+                for (var i = 0; data.length > i; i++) {
+                    // console.log(data[i]._id)
+                    NewsArray.push(data[i]._id);
+                }
+                UpdateNews(NewsArray)
             }
         })
+        let {newsList} = this.state 
+        
     }
     render() {
         const {newsList} = this.state

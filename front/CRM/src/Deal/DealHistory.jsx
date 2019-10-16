@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Modal, Button,Comment, Tooltip, List,Spin,Card,Icon, Drawer, Form, Input,Rate } from 'antd'
+import { Modal, Button,Comment, Tooltip, List,Spin,Card,Icon, Drawer, Form, Input,Rate,BackTop } from 'antd'
 import dateFormat from 'dateformat'
 import { 
     MyHistoryComplete,
@@ -8,11 +8,12 @@ import {
     OneHistoryGet,
     ChangeHistory,
     GetAgentProfile,
-    AllAgentHistory } from "../Api/Http"
+    AllAgentHistory,
+    ChangeHistoryItem } from "../Api/Http"
 import {isAuthenticated} from '../Api/Auth'
 import {Link} from 'react-router-dom'
-import Moment from 'react-moment';
-import DealForm from './DealForm'
+import Moment from 'react-moment'
+
 export default class DealHistory extends Component {
     constructor(){
         super()
@@ -21,6 +22,7 @@ export default class DealHistory extends Component {
             visible: false, 
             childrenDrawer: false,
             visibleLeft:false,
+            modal2Visible: false,
             beginer: [],
             selected:[],
             user:"",
@@ -71,7 +73,10 @@ export default class DealHistory extends Component {
             confirmLoading: false,
 
             rate: Number,
-            comentDeal:""
+            comentDeal:"",
+
+
+            manageList:[]
         }
     }
     showDrawer = () => {
@@ -91,7 +96,9 @@ export default class DealHistory extends Component {
           childrenDrawer: true,
         })
     }
-    
+    setModal2Visible(modal2Visible) {
+        this.setState({ modal2Visible });
+    }
     onChildrenDrawerClose = () => {
         this.setState({
           childrenDrawer: false,
@@ -185,9 +192,8 @@ export default class DealHistory extends Component {
     }
     
     helperAgent = (AgentId) =>{
-        console.log(AgentId)
+        
         this.showChildrenDrawer()
-        console.log(AgentId)
         GetAgentProfile(AgentId).then(data =>{
             if(data.error){
 
@@ -209,7 +215,7 @@ export default class DealHistory extends Component {
             }
         })
     }
-    // AllAgentHistory
+
     helperAgentHistory = (AgentId) =>{
     
         GetAgentProfile(AgentId).then(data =>{
@@ -237,14 +243,14 @@ export default class DealHistory extends Component {
         let {user} =  this.state
         MyHistoryBeginer(user).then(data =>{
             if(data.error){
-               console.log(data.error) // this.setState({redirectToSignin: true})
+               console.log(data.error) 
             }else{
                 this.setState({ beginer:  data})
             }
         })
         MyHistoryActive(user).then(data =>{
             if(data.error){
-               console.log(data.error) // this.setState({redirectToSignin: true})
+               console.log(data.error)
             }else{
                 this.setState({ selected:  data})
             }
@@ -252,26 +258,48 @@ export default class DealHistory extends Component {
     }
 
     handleCancel = () => {
-        console.log('Clicked cancel button');
-     this.setState({
+    this.setState({
+        comentDeal:"",
+        price:"",
+        ItemOne:"",
+        rate: Number
+    })   
+    this.setState({
         visibleEdit: false,
-        })
+    })
     }
     handleOk = () => {
         this.setState({
-          ModalText: 'The modal will be closed after two seconds',
           confirmLoading: true,
-        });
+        })
+        let {dealAcctive,ItemOne,CommentDeal,price,rate } = this.state
+        const payload ={
+            ItemOne,
+            CommentDeal,
+            price,
+            rate
+        }
+        ChangeHistoryItem(dealAcctive,payload).then(data => {
+            if(data.error){
+                console.log(data.error)
+            }else{
+                console.log(data)
+            }
+        })
+    
         setTimeout(() => {
           this.setState({
             visibleEdit: false,
             confirmLoading: false,
           })
         }, 2000)
+
     }
-    showModal = () => {
-        this.setState({
-            visibleEdit: true,
+    showModal(oneDeal){
+        console.log(oneDeal)
+        this.setState({ 
+            dealAcctive:oneDeal,
+            visibleEdit: true
         })
     }
     handleChangeRate = rate => {
@@ -282,6 +310,43 @@ export default class DealHistory extends Component {
     }
     handleChangePrice = price => event => {
         this.setState({ price })
+    }
+    // set Status
+    handelSetStatus = AgentId =>{
+        const payload = this.state 
+        ChangeHistory()
+
+    }
+    // ChangeHistoryHelper(oneDeal){
+    //     let stastus = "Активно" 
+    //     console.log(oneDeal)
+    //     // ChangeHistory(DealId).then(data =>{
+
+    //     // })
+    // }
+    changeHistoryEdit(DealId){
+        // const {} this.state
+        console.log(DealId)
+    }
+    ChangeHistoryStatusActive(DealId) {
+        console.log(DealId)
+        let status =  "Активно"
+        ChangeHistory(DealId,status).then(data =>{
+            if(data.error){
+                console.log(data.error)
+            }
+            this.forceUpdate()
+        }) 
+    }
+    ChangeHistoryStatusComplete(DealId){
+        console.log(DealId)
+        let status =  "Завершено"
+        ChangeHistory(DealId,status).then(data =>{
+            if(data.error){
+                console.log(data.error)
+            }
+            this.forceUpdate()
+        }) 
     }
     render() {
         const toUpperCaseFilter = (d) => {
@@ -330,7 +395,9 @@ export default class DealHistory extends Component {
             confirmLoading,
             ModalText,
             comentDeal,
-            rate
+            rate,
+
+            selected
         
                         } = this.state
                        
@@ -338,6 +405,7 @@ export default class DealHistory extends Component {
 
         return (
             <div>
+                
                 <div className="postisitonRelativeSmeni">
                         <div className="container">
                                 <div className="row">
@@ -347,8 +415,11 @@ export default class DealHistory extends Component {
                                 <>
                                
                                       
-                               
-                                <div class="col-sm">
+                {beginer.length > 0 ? (
+                <>
+                
+                <div class="col-sm">
+                                    <h1>Начатые</h1>
                                     {beginer.map((oneDeal, i) => (
                                     <>
                                         <Card
@@ -363,9 +434,11 @@ export default class DealHistory extends Component {
                                             onClick={(DealId) => this.helperDeal(oneDeal._id, DealId)}/>,
                                             <Icon type="edit" key="edit" 
                                             onClick={(DealId) => this.showModal(oneDeal._id, DealId)}
+                                          
                                             theme="twoTone" twoToneColor="#37CBC1"  />,
-                                            <Icon type="right-circle" theme="twoTone" />
+                                            <Icon type="right-circle" theme="twoTone" onClick={(DealId) => this.ChangeHistoryStatusActive(oneDeal._id, DealId)}/>
                                             ]}
+                                          
                                             onClick={this.clickSubmit}>
                                                 <div>Предмет сделки:  {oneDeal.item}</div>
                                                 <div>Названиие:  {oneDeal.name}</div>
@@ -377,18 +450,33 @@ export default class DealHistory extends Component {
                                     ))}
                                        
                                 </div>
-
-                                
-                                <div class="col-sm">
-                                {beginer.map((oneDeal, i) => (
+                </>
+            ):("")}
+            {selected.length+beginer.length === 0 ? (  
+                <>
+                <h1>У вас нет сделок</h1>
+                </>
+            ):("")}
+            {selected.length > 0 ? (
+                <>
+                  <div class="col-sm">
+                                <h1>Активные</h1>
+                                {selected.map((oneDeal, i) => (
                                     <>
                                           <Card
 
 style={{width:"20em"}}
 actions={[
-<Icon type="setting" key="setting" theme="twoTone" twoToneColor="#eb2f96"   onClick={this.showDrawer}/>,
-<Icon type="edit" key="edit" theme="twoTone" twoToneColor="#37CBC1"  />,
-<Icon type="right-circle" theme="twoTone" />
+<Icon 
+                                            type="setting"
+                                            key="setting"
+                                            theme="twoTone"
+                                            twoToneColor="#eb2f96"
+                                            onClick={(DealId) => this.helperDeal(oneDeal._id, DealId)}/>,
+                                            <Icon type="edit" key="edit" 
+                                            onClick={(oneDeal) => this.showModal(oneDeal._id, oneDeal)}
+                                            theme="twoTone" twoToneColor="#37CBC1"  />,
+<Icon type="right-circle" theme="twoTone"onClick={(DealId) => this.ChangeHistoryStatusComplete(oneDeal._id, DealId)} />
 ]}
 onClick={this.clickSubmit}>
     <div>Предмет сделки:  {oneDeal.item}</div>
@@ -400,6 +488,10 @@ onClick={this.clickSubmit}>
                                     </> 
                                     ))}
                                 </div>
+                </>
+            ):("")}
+                                
+                              
 
                                     </>
                                 )}  
@@ -418,6 +510,9 @@ onClick={this.clickSubmit}>
           <Button type="primary" onClick={(agent) => this.helperAgentHystory(AgentId, agent)}>
            Все сделки
           </Button>
+          <Button type="primary" onClick={() => this.setModal2Visible(true)}>
+          Vertically centered modal dialog
+        </Button>
           <Moment format="D MMM YYYY" >{DateCrated}</Moment>
             <div>Счет:<b>{OnePrice}</b></div>
             <div>Статус сделки: <b>{StatusOne}</b> </div>
@@ -483,17 +578,7 @@ onClick={this.clickSubmit}>
               borderRadius: '0 0 4px 4px',
             }}
           >
-            <Button
-              style={{
-                marginRight: 8,
-              }}
-              onClick={this.onClose}
-            >
-              Cancel
-            </Button>
-            <Button onClick={this.onClose} type="primary">
-              Submit
-            </Button>
+           
           </div>
         </Drawer>
         
@@ -507,9 +592,39 @@ onClick={this.clickSubmit}>
           onOk={this.handleOk}
           confirmLoading={confirmLoading}
           onCancel={this.handleCancel}
+          okText="отправить"
+          cancelText="отменить"
         >
-       <DealForm/>
-       
+           <form>
+            <div className="form-group">
+                <label  className="text-muted">Выставить счет</label>
+                <input  onChange={this.handleChange("price")} type="text" className="form-control" value={price} />
+            </div>
+            <div className="form-group">
+                <label  className="text-muted">Предметы сделки</label>
+                <input  onChange={this.handleChange("ItemOne")} type="text" className="form-control" value={ItemOne} />
+            </div>
+            <div className="form-group">
+                <label  className="text-muted">Коментарии</label>
+                <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3" onChange={this.handleChange("comentDeal")}  value={comentDeal}></textarea>
+            </div>
+            <span>
+           <div className="form-group">Поставте оценку</div>
+           <Rate tooltips={desc} onChange={this.handleChangeRate} value={rate} />
+           {rate ? <span className="ant-rate-text">{desc[rate - 1]}</span> : ''}
+           </span>
+        </form>
+        </Modal>
+        <Modal
+          title="Vertically centered modal dialog"
+          centered
+          visible={this.state.modal2Visible}
+          onOk={() => this.setModal2Visible(false)}
+          onCancel={() => this.setModal2Visible(false)}
+        >
+          <p>some contents...</p>
+          <p>some contents...</p>
+          <p>some contents...</p>
         </Modal>
             </div>
         )

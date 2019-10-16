@@ -145,3 +145,27 @@
     align-items: center;
     justify-content: center
 }
+.square-red-sort{
+    width:3em;
+	height:3em;
+	background: red;
+    border: none;
+}
+.square-return-sort{
+    width: 3em;
+	height: 3em;
+	background: white;
+    border: none;
+}
+.square-green-sort{
+	width: 3em;
+	height: 3em;
+    background: green;
+    border: none;
+}
+.square-yellow-sort{
+	width: 3em;
+    height: 3em;
+    border: none;
+	background: yellow;
+}

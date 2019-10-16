@@ -6,9 +6,9 @@ const fs = require('fs')
 const _  = require('lodash')
 const dateFormat = require('dateformat')
 
-exports.TodoById = (req, res, next, id) =>{
+exports.TodoById = async (req, res, next, id) =>{
     
-    TODO.findById(id)
+    await TODO.findById(id)
         .exec((err, todo) => {
             if (err || !todo) {
                 return res.status(400).json({
@@ -21,9 +21,9 @@ exports.TodoById = (req, res, next, id) =>{
         });
 }
 
-exports.ComentById = (req, res, next, id) =>{
+exports.ComentById = async (req, res, next, id) =>{
     
-    COMMENTS.findById(id)
+    await COMMENTS.findById(id)
         .exec((err, coment) => {
             if (err || !coment) {
                 return res.status(400).json({
@@ -39,13 +39,13 @@ exports.ComentById = (req, res, next, id) =>{
 exports.SOSotodo =(req,res) =>{
     
 }
-exports.myTodoItsDay = (req,res,next) =>{
+exports.myTodoItsDay = async(req,res,next) =>{
     let time_now = Date.now()
     let time = dateFormat(time_now, "dddd, mmmm, yyyy")
 
    
     
-    TODO.find({ $and: [{"time" :{  $eq: `${time}`}},{ tags: { $elemMatch :{"_id":`${req.worker._id}`}} }]}) 
+    await TODO.find({ $and: [{"time" :{  $eq: `${time}`}},{ tags: { $elemMatch :{"_id":`${req.worker._id}`}} }]}) 
   
     .exec((err, todos) =>{
         if(err){
@@ -60,10 +60,10 @@ exports.myTodoItsDay = (req,res,next) =>{
     
 
 }
-exports.myTODO = (req,res) =>{
+exports.myTODO = async (req,res) =>{
 
 
-    TODO.find({ tags: { $elemMatch :{"_id":`${req.worker._id}`}} })  
+    await TODO.find({ tags: { $elemMatch :{"_id":`${req.worker._id}`}} })  
   
     .exec((err, todos) =>{
         if(err){
@@ -75,9 +75,9 @@ exports.myTODO = (req,res) =>{
         res.json({todos})
     })
 }
-exports.MyTodoAwesome = (req,res) =>{
+exports.MyTodoAwesome = async (req,res) =>{
     
-    TODO.find({ tags: req.worker._id})
+    await TODO.find({ tags: req.worker._id})
     .exec((err, posts) =>{
         if(err){
             return res.status(400).json({
@@ -87,13 +87,13 @@ exports.MyTodoAwesome = (req,res) =>{
         res.json(posts)
     })
 }
-exports.NewTodoUserAwesome = (req,res) =>{
+exports.NewTodoUserAwesome = async (req,res) =>{
 
-    console.log(req.worker )
+  
     const todo = new TODO(req.body)
     todo.postedBy = req.worker 
 
-    todo.save().then(result =>{
+    await todo.save().then(result =>{
         res.status(200).json({
             "дело":"создано!"
         })
@@ -101,13 +101,13 @@ exports.NewTodoUserAwesome = (req,res) =>{
     
 }
 
-exports.TodoChange = (req,res) =>{
-    console.log(200)
+exports.TodoChange =  async (req,res) =>{
+  
         let todo = req.todo;
         todo = _.extend(todo, req.body);
         todo.updated = Date.now();
 
-        todo.save((err, result) => {
+        await todo.save((err, result) => {
             if (err) {
                 return res.status(400).json({
                     error: err
@@ -117,9 +117,9 @@ exports.TodoChange = (req,res) =>{
         });
 
 }
-exports.NewUserNews = (req,res) =>{
+exports.NewUserNews = async (req,res) =>{
 
-    WORKER.findByIdAndUpdate(req.body.workerId, { $push: { news: req.body.todoId } }, { new: true }).exec(
+    await WORKER.findByIdAndUpdate(req.body.workerId, { $push: { news: req.body.todoId } }, { new: true }).exec(
         (err, result) => {
             if (err) {
                 return res.status(400).json({
@@ -131,21 +131,21 @@ exports.NewUserNews = (req,res) =>{
         }
     );
 }
-exports.GetTodo = (req,res) =>{
-    return res.json(req.todo)
+exports.GetTodo = async (req,res) =>{
+    return await res.json(req.todo)
 }
-exports.NewComents = (req,res) =>{
+exports.NewComents = async (req,res) =>{
     const comments = new COMMENTS(req.body) 
-    comments.save().then(result =>{
+    await comments.save().then(result =>{
         res.status(200).json({
             comments: result
         })
     })
 }
-exports.FindComments = (req,res) =>{
-    console.log(req.body.todoId)
+exports.FindComments = async (req,res) =>{
+    
 
-    COMMENTS.find({ todoId: req.body.todoId})
+    await COMMENTS.find({ todoId: req.body.todoId})
     .exec((err, posts) =>{
         if(err){
             return res.status(400).json({
@@ -156,10 +156,10 @@ exports.FindComments = (req,res) =>{
     })
 }
 
-exports.DeleteComent = (req,res) =>{
+exports.DeleteComent = async (req,res) =>{
   
     let coment = req.coment
-    coment.remove((err, coment) => {
+    await coment.remove((err, coment) => {
         if (err) {
             return res.status(400).json({
                 error: err

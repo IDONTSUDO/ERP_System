@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {MyAgentList,GetAgentProfile} from '../Api/Http.js'
 import { Button,Drawer, List,  Divider, Col, Row,Spin,Card} from 'antd'
 import {Link} from 'react-router-dom'
-
+import {isAuthenticated} from '../Api/Auth'
 
 const pStyle = {
     fontSize: 16,
@@ -60,7 +60,7 @@ export default class MyAgent extends Component {
         const userId = this.props.match.params.userId
         this.setState({user:userId})
         let workerId = userId
-        console.log(JSON.stringify({workerId}))
+        
         MyAgentList(workerId).then(data =>{
             if(data.error){
                 console.log(data.error)
@@ -123,6 +123,8 @@ export default class MyAgent extends Component {
                             <Card styles={{width:"auto",height:"autocomplete"}}> 
                            
                             <h5 class="text-muted">Имя {agent.name}</h5>
+                            {/* /agent/history/:agentId */}
+                            <Button  styles={{padding:"5em"}}><Link to={`/agent/history/${agent._id}`} >История сделок</Link></Button>
                             <Button  onClick={(agentId) => this.handleClick(agent._id, agentId)}>Посмотреть профиль</Button>
                             <br/>
                             </Card>

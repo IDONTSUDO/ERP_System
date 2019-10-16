@@ -10,6 +10,7 @@ const {
     GetHistoryOne,
     AllAgentHistotory } = require("../controllers/AgentHistory.js")
 const {workerSelectId} = require("../controllers/Company.js")
+const {} = require("../middleware/middleware.js")
 const router = express.Router({mergeParams: true});
 
 router.get('/history/:HistoryById', GetHistoryOne)
