@@ -76,9 +76,11 @@ export default class AllAgent extends Component {
             {agent.map((agn, i) => (
             <>
             <Card className="col-md-6" size="small"  title="Контр Агент">
-      <p>Еще какая то инфа</p>
-      Имя: <p>{agn.name}</p>
+     
+      Имя: {agn.name}
+      <div style={{padding:"5px"}}>
       <Button ><Link to={`/agent/${agn._id}`} >Посмотреть профиль</Link></Button>
+      </div>
     </Card>
            
             <hr/>

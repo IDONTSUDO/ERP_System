@@ -302,6 +302,16 @@ export default class Job extends Component {
         return(
            
             <div className="postisitonRelativeSmeni">
+            {isAuthenticated().direct._id ===
+                        todo.postedBy && (
+                            <>
+                            <div classname="positionLeft">
+                                <Button type="primary" onClick={this.showModal}>
+                                Редактировать
+                                </Button>
+                            </div>
+                            </>
+                        )}     
             <div className="container">
             
             <div class="row">
@@ -329,17 +339,7 @@ export default class Job extends Component {
                     </div>
             </Card>
             </div>
-                <div>
-                {isAuthenticated().direct._id ===
-                        todo.postedBy && (
-                            <>
-                                <Button type="primary" onClick={this.showModal}>
-                                Редактировать
-                                </Button>
-                            </>
-                        )}                
-              
-                                   
+                <div>              
                 {todo.tags.map((tod, i) => (
                     <>
                     <Card key={i}>
@@ -348,7 +348,7 @@ export default class Job extends Component {
                     <img className="card-img-top" src={`http://localhost:8080/user/photo/${tod._id}?`}
                          onError={i => (i.target.src = `${DefaultProfile}`)}
                          alt={tod.name}
-                         style={{height: "5em", width:"5em"}}
+                         style={{height: "3em", width:"3em"}}
                          />      
                     </Link>
                          <small class="text-muted">{tod.email}</small>

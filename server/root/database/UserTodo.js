@@ -33,6 +33,9 @@ const todoSchema =  new mongoose.Schema({
     },
     importance:{
         type:String
+    },
+    comand:{
+        type:Boolean
     }
 })
 module.exports = mongoose.model("TODO", todoSchema)

@@ -4,7 +4,7 @@ import {readMyTodo} from '../Api/Http'
 import {Link} from 'react-router-dom'
 import DefaultProfile from '../Assets/default.png' 
 
-import { Button } from 'antd'
+import { Button,BackTop } from 'antd'
 export default class MyWork extends Component {
     constructor(){
         super()
@@ -100,10 +100,10 @@ export default class MyWork extends Component {
             </>
             
             <ul>
-            <button onClick={this.returnSort}className="square-return-sort"></button>
-            <button onClick={this.yellowSort} className="square-yellow-sort"></button>
-            <button onClick={this.greenSort} className="square-green-sort"></button>
-            <button onClick={this.redSort} className="square-red-sort"></button>
+            <Button onClick={this.returnSort}className="square-return"></Button>
+                <Button onClick={this.yellowSort} className="square-yellow"></Button>
+                <Button onClick={this.greenSort} className="square-green"></Button>
+                <Button onClick={this.redSort} className="square-red"></Button>
             <div className="container">
             <div className="row">
             
@@ -134,7 +134,7 @@ export default class MyWork extends Component {
                         <img className="card-img-top" src={`http://localhost:8080/user/photo/${tod.postedBy}?`}
                              onError={i => (i.target.src = `${DefaultProfile}`)}
                              alt={tod.postedBy}
-                             style={{height: "50px", width:"50px"}}
+                             style={{height: "2em", width:"2em"}}
                              />      
                         </Link>
             <div style={{padding:"10px"}}>
@@ -143,7 +143,12 @@ export default class MyWork extends Component {
             </div>
             </>
             ))}
-           
+                <div>
+                <BackTop>
+                <div className="ant-back-top-inner">UP</div>
+                </BackTop>
+                </div>
+ 
             </div>
             </div>
             

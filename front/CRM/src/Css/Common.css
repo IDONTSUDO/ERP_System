@@ -169,3 +169,24 @@
     border: none;
 	background: yellow;
 }
+.positionLeft{
+    width: 8em;
+    max-width: 100%;
+    min-height: 2em;
+    margin: 0 0 0 auto; /* то же, что margin-left: auto;  */ 
+    border: 1px solid orange;
+    background: #fff5d7;
+}
+.ant-back-top {
+    bottom: 100px;
+}
+.ant-back-top-inner {
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    border-radius: 4px;
+    background-color: #1088e9;
+    color: #fff;
+    text-align: center;
+    font-size: 20px;
+  }
