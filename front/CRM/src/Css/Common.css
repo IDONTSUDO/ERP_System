@@ -189,4 +189,11 @@
     color: #fff;
     text-align: center;
     font-size: 20px;
-  }
+}
+.icon-work{
+    height: 10em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+

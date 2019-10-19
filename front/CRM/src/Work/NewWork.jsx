@@ -205,43 +205,10 @@ class Work extends React.Component {
   
     }
     }
-    callback = (key) => {
-  
-      let fucking_react = ""
-      if(key === "3"){
-        this.setState({
-          title:fucking_react,
-          description:fucking_react,
-          workerJob0:fucking_react,
-          workerJob1:fucking_react,
-          workerJob2:fucking_react,
-          workerJob3:fucking_react,
-          workerJob4:fucking_react,
-          workerJob5:fucking_react,
-          workerJob6:fucking_react,
-          workerJob7:fucking_react,
-          workerJob8:fucking_react,
-          workerJob9:fucking_react,
-          workerJob10:fucking_react,
-          workerTime0:fucking_react,
-          workerTime1:fucking_react,
-          workerTime2:fucking_react,
-          workerTime3:fucking_react,
-          workerTime4:fucking_react,
-          workerTime5:fucking_react,
-          workerTime6:fucking_react,
-          workerTime7:fucking_react,
-          workerTime8:fucking_react,
-          workerTime9:fucking_react,
-        })
-      }else{
-        return
-      }
-     
-    }
     clickSubmitExtedensJob =  event =>{
       event.preventDefault()
       const { tags,
+        worker,
         workerJob0,
         workerJob1,
         workerJob2,
@@ -261,21 +228,80 @@ class Work extends React.Component {
         workerTime6,
         workerTime7,
         workerTime8,
-        workerTime9 }  = this.state
+        workerTime9,
+        importance,
+        title
+       }  = this.state
+        let timeArray = []
+        let newTimeArray = []
+        let lastTimeArray = []
         let newArray = []
+        let userValidArray = []
+        let SortOfArray = []
+        let tired = []
+
+        timeArray.push(workerTime0,workerTime1,workerTime2,workerTime3,workerTime4,workerTime5,workerTime6,workerTime7,workerTime8,workerTime9) 
+       
         newArray.push(workerJob0,workerJob1,workerJob2,workerJob3,workerJob4,workerJob5,workerJob6,workerJob7,workerJob8,workerJob9)        
-        var filtered = newArray.filter(function (el) {
-          return el != ""
+        for(let t = 0; timeArray.length > t; t++){
+          newTimeArray.push(timeArray[t]._d)
+        }
+    
+        var filteredTime = newTimeArray.filter(function (el) {
+          return el != undefined
         })
 
        
-        for(let i = 0; tags.length > i; i++){
-          // console.log(tags[i]._id)
-          console.log(filtered[i])
-          if(tags[0] == tags[i]){
-            console.log(tags[0]._id + 1111)
+        for(let k = 0;  filteredTime.length > k; k++){
+          lastTimeArray.push(dateFormat(filteredTime[k], "dddd, mmmm, yyyy"))
+        }
+        
+
+        var filtered = newArray.filter(function (el) {
+          return el != ""
+        })   
+        
+        for(let i = 0;tags.length > i; i++) {
+          if(i == 0){
+            userValidArray.push(tags[0] + "IAMWORKED")
+          }else{
+            userValidArray.push(tags[i]) 
+          }
+
+        }
+        let i = 0
+        while( worker.length > i){
+            for(let el2 = 0;tags.length > el2;el2++){
+              if(worker[i].name == tags[el2]){
+                SortOfArray.push(worker[i]._id,worker[i].name)
+              }
+          }
+          i++
+        }
+
+        for(let ar1 = 0; tags.length > ar1; ar1++){
+         
+          for(let ar2 = 0;SortOfArray.length > ar2; ar2++){
+          
+            if(tags[ar1] == SortOfArray[ar2]){
+              tired.push(SortOfArray[ar2-1])
+            }
           }
         }
+       
+        let lastArray = tired.map((user, index) => {
+          return {
+            user: user,
+            date: lastTimeArray[index],
+            action: filtered[index]
+          }
+        })
+        console.log(lastArray)
+        // var filteredLastArray = lastArray.filter(function (el) {
+        //     return el.date != undefined
+        //     return el.action != undefined
+        // })   
+        // console.log(lastArray)
     }
 
   openNotificationError(){
@@ -296,6 +322,7 @@ class Work extends React.Component {
       message: `${error}`,
       icon: <Icon type="frown" style={{ color: '#108ee9' }} />,
     })
+    this.setState({error:""})
   }
   render () {
    
@@ -309,28 +336,15 @@ class Work extends React.Component {
     workerJob6,
     workerJob7,
     workerJob8,
-    workerJob9,
-    workerTime0,
-    workerTime1,
-    workerTime2,
-    workerTime3,
-    workerTime4,
-    workerTime5,
-    workerTime6,
-    workerTime7,
-    workerTime8,
-    workerTime9} = this.state 
-
-    function onChange(date, dateString) {
-      
-    }
+    workerJob9} = this.state 
     return (
       
 
          <div className="postisitonRelativeSmeni">
+           <div className="screen-reader">
         <div className="container">
                     <div className="row">
-                    <Tabs onChange={this.callback}  defaultActiveKey="1"  style={{width:"100em"}}>
+                    <Tabs   defaultActiveKey="1"  style={{width:"75em"}}>
     <TabPane tab="Редактировать" key="1">
     <form className="col-md-6">
    
@@ -352,7 +366,7 @@ class Work extends React.Component {
 
    <div className="col-md-4" >
    <label className="label_position text-muted" for="exampleFormControlTextarea1">Сроки Выполнения</label>
-   <DatePicker onChange={this.onChangeworkerTime1} />
+   <DatePicker onChange={this.onChangeworkerTime1}  placeholder="Выберите дату" />
        <div class="form-group">
    <label for="exampleFormControlSelect1">Приоретет задачи</label>
    <select  onChange={this.handleChangeForm("importance")} class="form-control" >
@@ -363,8 +377,6 @@ class Work extends React.Component {
    </select>
  </div>
    </div>
-   
-   {/* <div style={{padding:"5px"}}> */}
    <div className="col-md-4">
    <h3>Исполнители</h3>
    <div className="Tags">
@@ -374,6 +386,8 @@ class Work extends React.Component {
     placeholder="Выберете исполнителей"
     onChange={this.handleChange}
     optionLabelProp="label"
+    defaultActiveFirstOption={false}
+    allowClear={true}
   >
    {worker.map((workerOne, i = 1) => (
            <Option value={workerOne._id} label={workerOne.name}>
@@ -427,9 +441,11 @@ class Work extends React.Component {
     placeholder="Выберете исполнителей"
     onChange={this.handleChange}
     optionLabelProp="label"
+    defaultActiveFirstOption={false}
+    allowClear={true}
   >
    {worker.map((workerOne, i = 1) => (
-           <Option value={workerOne._id} label={workerOne.name}>
+           <Option value={workerOne.name} label={workerOne.name}>
            <span role="img" aria-label="China">
            {workerOne.name}
            </span>
@@ -447,70 +463,90 @@ class Work extends React.Component {
    {tags.length > 0 ? (
                 <>
                  <Input placeholder="Заголовок дела..." />
+                 <label for="exampleFormControlSelect1">Приоретет задачи</label>
+                  <select  onChange={this.handleChangeForm("importance")} class="form-control" >
+                    <option>Выберите приоретет</option>
+                    <option>Очень важное</option>
+                    <option>Средней важности</option>
+                    <option>Не очень важное</option>
+                  </select>
                 </>
             ):("")}
    {tags.map((tod, i = 1) => (
      <>
-     <label className="text-muted" for="exampleFormControlTextarea1">Описание дела №{i} для {tod.name}</label>
+  {tags.length < 10 ? (
+    <>
+     <form>
+     <label className="text-muted" for="exampleFormControlTextarea1">Описание дела №{i}<h5>{tod}</h5></label>
      <textarea onChange={this.handleAction(`workerJob${i}`)} class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </form>
+    {i == 0 ? (
+       <>
+       </>
+     ):("")}
       {i === 0 ? (
                 <>
-                  <DatePicker onChange={this.onChangeworkerTime0} />
+                  <DatePicker onChange={this.onChangeworkerTime0}  placeholder="Выберите дату"  />
                 </>
             ):("")}
       {i === 1 ? (
                 <>
-                  <DatePicker onChange={this.onChangeworkerTime1} />
+                  <DatePicker onChange={this.onChangeworkerTime1}  placeholder="Выберите дату"  />
                 </>
             ):("")}
         {i === 2 ? (
                 <>
-                 <DatePicker onChange={this.onChangeworkerTime2} />
+                 <DatePicker onChange={this.onChangeworkerTime2}  placeholder="Выберите дату"  />
                 </>
             ):("")}
         {i === 3 ? (
                 <>
-                 <DatePicker onChange={this.onChangeworkerTime3} />
+                 <DatePicker onChange={this.onChangeworkerTime3}  placeholder="Выберите дату"  />
                 </>
             ):("")}
         {i === 4 ? (
                 <>
-                 <DatePicker onChange={this.onChangeworkerTime4} />
+                 <DatePicker onChange={this.onChangeworkerTime4} placeholder="Выберите дату"  />
                 </>
             ):("")}
         {i === 5 ? (
                 <>
-                 <DatePicker onChange={this.onChangeworkerTime5} />
+                 <DatePicker onChange={this.onChangeworkerTime5} placeholder="Выберите дату"  />
                 </>
             ):("")}
         {i === 6 ? (
                 <>
-                 <DatePicker onChange={this.onChangeworkerTime6} />
+                 <DatePicker onChange={this.onChangeworkerTime6} placeholder="Выберите дату"  />
                 </>
             ):("")}
         {i === 7 ? (
                 <>
-                 <DatePicker onChange={this.onChangeworkerTime7} />
+                 <DatePicker onChange={this.onChangeworkerTime7} placeholder="Выберите дату"  />
                 </>
             ):("")}
         {i === 8 ? (
                 <>
-                 <DatePicker onChange={this.onChangeworkerTime8} />
+                 <DatePicker onChange={this.onChangeworkerTime8}  placeholder="Выберите дату"  />
                 </>
             ):("")}
         {i === 9 ? (
                 <>
-                 <DatePicker onChange={this.onChangeworkerTime9} />
+                 <DatePicker onChange={this.onChangeworkerTime9}  placeholder="Выберите дату"  />
                 </>
             ):("")}
+    </>
+  ):(
+    <>
+      <h5>Нельзя создавать больше 10 дел одновременно</h5>
+    </>
+  )}
      </>
     ))}   
-
-      {tags.length >= 1 ? (
-               <Button onClick={this.clickSubmitExtedensJob}> Создать</Button>
-            ):("")}
    </div>
-  
+   {tags.length > 1 ? (
+        <>        <div style={{padding:"0.5em"}}> <Button onClick={this.clickSubmitExtedensJob}> Создать</Button></div> </>
+            ):(<>
+            </>)}
 
     </TabPane>
   </Tabs>  
@@ -520,7 +556,8 @@ class Work extends React.Component {
                 this.openNotificationErrorValidation()
             ):("")}
     </div>
-    
+
+    </div>
     )
   }
 }
