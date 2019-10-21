@@ -1,4 +1,5 @@
 export const list = page =>{
+
     return fetch(`http://localhost:8080/all/worker/list/?page=${page}`,{
         method: "GET",
         headers: {
@@ -13,6 +14,7 @@ export const list = page =>{
 })
 }
 export const DeleteUser = (userId,token) =>{
+
     return fetch(`http://localhost:8080/delete/worker/${userId}`,{
         method: "DELETE",
         headers: {
@@ -28,6 +30,7 @@ export const DeleteUser = (userId,token) =>{
 })
 }
 export const NewPeopel = user =>{
+
     return fetch(`http://localhost:8080/new/worker/`, {
        method: "POST",
        headers: {
@@ -68,7 +71,7 @@ export const NewTodo = (todo,user) =>{
     
 }
 export const read = (userId,token) =>{
-    console.log(userId, token)
+    
     return fetch(`http://localhost:8080/worker/get/${userId}`,{
         method: "GET",
         headers: {
@@ -85,7 +88,7 @@ export const read = (userId,token) =>{
 })
 }
 export const update = (userId,token,user ) =>{
-    console.log(userId, token, user)
+   
     return fetch(`http://localhost:8080/edit/worker/${userId}`,{
         method: "PUT",
         headers: {
@@ -102,7 +105,7 @@ export const update = (userId,token,user ) =>{
 })
 }
 export const updateUser = (user, next) =>{
-    console.log(user)
+
     if(typeof window !== "undefined"){
         if(localStorage.getItem("jwt")){
             let auth = JSON.parse(localStorage.getItem("jwt"))
@@ -115,6 +118,7 @@ export const updateUser = (user, next) =>{
     }
 }
 export const readMyTodo = (userId,token) =>{
+
         return fetch(`http://localhost:8080/my/todo/soso/${userId}`,{
             method: "GET",
             headers: {
@@ -130,7 +134,7 @@ export const readMyTodo = (userId,token) =>{
 }
 
 export const soloJob = (todoId,token) =>{
-    console.log(todoId, token)
+  
     return fetch(`http://localhost:8080/todo/${todoId}`,{
         method: "GET",
         headers: {
@@ -185,6 +189,7 @@ export const NewComent = (comment,token) =>{
 }
 
 export const DeleteComment = (comment) =>{
+    
     return fetch(`http://localhost:8080/delete/comment/${comment}`,{
         method: "POST",
         headers: {
@@ -203,6 +208,7 @@ export const DeleteComment = (comment) =>{
 }
 
 export const NewNews = (payload) =>{
+   
     return fetch(`http://localhost:8080/new/news`,{
         method: "POST",
         headers: {
@@ -222,7 +228,7 @@ export const NewNews = (payload) =>{
 }
 
 export const listNews = (id) =>{
-    console.log(JSON.stringify({id}))
+    
     return fetch(`http://localhost:8080/worker/news`,{
         method: "POST",
         headers: {
@@ -242,8 +248,6 @@ export const listNews = (id) =>{
 }
 export const SetStatusJob = (status,todoId) =>{
     
-    console.log(JSON.stringify({status:status}))
-    console.log(todoId)
     return fetch(`http://localhost:8080/todo/change/${todoId}`,{
         method: "POST",
         headers: {
@@ -544,3 +548,30 @@ export const ChangeAgent = (AgentId,status) =>{
     })
     .catch(err =>console.log(err))
 }
+export const MyTodoGetComandWorked = (userId) =>{
+    return fetch(`http://localhost:8080/get/comand/todo/`, {
+        method: "POST", 
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        },
+        body: JSON.stringify({userId})
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}
+// export const WorkerList = (users) =>{
+//     for (let user of users) {
+//                 return fetch(`http://localhost:8080/worker/get/${user}`, {
+//                     method: "GET",
+//                     headers: {
+//                     Accept: "application/json", "Content-Type": "application/json"
+//                 }
+//            })
+//            .then(responce =>{
+//             return responce.json()
+//             })
+//            .catch(err =>console.log(err))
+//     }
+// }

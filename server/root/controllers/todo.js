@@ -45,7 +45,7 @@ exports.myTodoItsDay = async(req,res,next) =>{
 
    
     
-    await TODO.find({ $and: [{"time" :{  $eq: `${time}`}},{ tags: { $elemMatch :{"_id":`${req.worker._id}`}} }]}) 
+    await TODO.find({ $and: [{"time" :{  $eq: `${time}`}},{ tags: `${req.worker._id}`}]}) 
   
     .exec((err, todos) =>{
         if(err){
@@ -53,7 +53,7 @@ exports.myTodoItsDay = async(req,res,next) =>{
                 error: err
             })
         }
-
+        console.log(todos)
         res.json({todos})
     })
 
@@ -63,7 +63,7 @@ exports.myTodoItsDay = async(req,res,next) =>{
 exports.myTODO = async (req,res) =>{
 
 
-    await TODO.find({ tags: { $elemMatch :{"_id":`${req.worker._id}`}} })  
+    await TODO.find({ tags: `${req.worker._id}`})  
   
     .exec((err, todos) =>{
         if(err){
@@ -93,7 +93,7 @@ exports.NewTodoUserAwesome = async (req,res) =>{
     const todo = new TODO(req.body)
     todo.postedBy = req.worker 
 
-    await todo.save().then(result =>{
+    todo.save().then(result =>{
         res.status(200).json({
             "дело":"создано!"
         })
@@ -124,19 +124,20 @@ exports.NewUserNews = async (req,res) =>{
             if (err) {
                 return res.status(400).json({
                     error: err
-                });
+                })
             } else {
-                res.json(result);
+                res.json(result)
             }
         }
-    );
+    )
 }
 exports.GetTodo = async (req,res) =>{
+console.log(req.todo)
     return await res.json(req.todo)
 }
 exports.NewComents = async (req,res) =>{
     const comments = new COMMENTS(req.body) 
-    await comments.save().then(result =>{
+    comments.save().then(result =>{
         res.status(200).json({
             comments: result
         })
@@ -168,5 +169,18 @@ exports.DeleteComent = async (req,res) =>{
         res.json({
             message: 'Coment deleted successfully'
         })
+    })
+}
+exports.GetcomandTodo = async (req,res)=>{
+    let userId = req.body.userId
+    TODO.find({JobArray:  { $elemMatch:  {user:userId}}})
+    .select("comand _id title importance JobArray status postedBy")
+    .exec((err, result) =>{
+        if(err){
+            return res.status(400).json({
+                error: err
+            })
+        }
+        res.json({result})
     })
 }

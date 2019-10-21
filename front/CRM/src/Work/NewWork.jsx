@@ -1,15 +1,13 @@
 import React from 'react'
-import ReactTags from 'react-tag-autocomplete'
-import DatePickerReact from "react-datepicker"
 import dateFormat from 'dateformat'
 import ReactMarkdown from 'react-markdown'
 import {list,NewTodo} from "../Api/Http"
 import {isAuthenticated} from "../Api/Auth"
-import { Button,Spin,Tabs,notification, Icon,DatePicker,Input,Select } from 'antd'
+import { Button,Tabs,notification, Icon,DatePicker,Input,Select } from 'antd'
 import "react-datepicker/dist/react-datepicker.css";
 
 
-const { Option } = Select;
+const { Option } = Select
 const { TabPane } = Tabs
 
 class Work extends React.Component {
@@ -17,6 +15,7 @@ class Work extends React.Component {
     super(props)
 
     this.state = {
+      newEvent:"",
       startDate: new Date(),
       tags: [],
       worker: [],
@@ -76,23 +75,11 @@ class Work extends React.Component {
   handleCancel = () => {
     this.setState({ visible: false });
   }
-  handleDelete (i) {
-    const tags = this.state.tags.slice(0)
-    tags.splice(i, 1)
-    this.setState({ tags })
-  }
-
-  handleAddition (tag) {
-    const tags = [].concat(this.state.tags, tag)
-    this.setState({ tags })
-  }
- 
   handleChangeForm = name => event => {
     this.setState({ error: "" })
     this.setState({ [name]: event.target.value })
   }
   handleAction = name => event => {
-    console.log(name)
     this.setState({ error: "" })
     this.setState({ [name]: event.target.value })
   }
@@ -146,8 +133,8 @@ class Work extends React.Component {
   onChangeDate = (date, dateString) =>{
     this.setState({startDate:date})
   }
+  // изменяет состояние формы ввода тэг бара
   handleChange = (value) => {
-    
     this.setState({tags:value})
   }
   
@@ -156,18 +143,30 @@ class Work extends React.Component {
     event.preventDefault()
     if(this.isValid()){
       this.setState({loading: true})
-      const { tags,title,description,user,startDate,importance }  = this.state
+      let { tags,title,description,user,startDate,importance,worker }  = this.state
       let  time_now = startDate
       let time = dateFormat(time_now, "dddd, mmmm, yyyy")
-    
+      let tagsArray = []
+      for(let index  = 0; tags.length > index; index++){
+     
+        for (let index1 = 0; worker.length > index1; index1++) {
+          if(worker[index1].name ==  tags[index]){
+            tagsArray.push(worker[index1]._id)
+          }
+        }
+      }
+      tags = []
+      tags = tagsArray
+      console.log(tags)
+      let  comand = false
       const todo ={
           tags,
           title,
           description,
           time,
-          importance
+          importance,
+          comand
       }
-      
       NewTodo(todo,user).then(data => {
         if (data.error){
          this.openNotificationError()
@@ -198,8 +197,6 @@ class Work extends React.Component {
           workerTime9:"",
           tags:[] 
         })
-        let value = ""
-        // this.handleChange(value)
         this.openNotificationNewWork()
       })
   
@@ -207,7 +204,8 @@ class Work extends React.Component {
     }
     clickSubmitExtedensJob =  event =>{
       event.preventDefault()
-      const { tags,
+      const { 
+        tags,
         worker,
         workerJob0,
         workerJob1,
@@ -230,7 +228,8 @@ class Work extends React.Component {
         workerTime8,
         workerTime9,
         importance,
-        title
+        title,
+        user
        }  = this.state
         let timeArray = []
         let newTimeArray = []
@@ -239,7 +238,7 @@ class Work extends React.Component {
         let userValidArray = []
         let SortOfArray = []
         let tired = []
-
+        let NoHope = []
         timeArray.push(workerTime0,workerTime1,workerTime2,workerTime3,workerTime4,workerTime5,workerTime6,workerTime7,workerTime8,workerTime9) 
        
         newArray.push(workerJob0,workerJob1,workerJob2,workerJob3,workerJob4,workerJob5,workerJob6,workerJob7,workerJob8,workerJob9)        
@@ -288,20 +287,40 @@ class Work extends React.Component {
             }
           }
         }
-       
-        let lastArray = tired.map((user, index) => {
+          
+        for(let i = 0;tired.length > i; i++) {
+          if(i == 0){
+            NoHope.push(tired[0] + "IAMWORKED")
+          }else{
+            NoHope.push(tired[i]) 
+          }
+
+        }
+     
+        let JobArray = NoHope.map((user, index) => {
           return {
             user: user,
             date: lastTimeArray[index],
             action: filtered[index]
           }
         })
-        console.log(lastArray)
-        // var filteredLastArray = lastArray.filter(function (el) {
-        //     return el.date != undefined
-        //     return el.action != undefined
-        // })   
-        // console.log(lastArray)
+        
+
+        let  comand = true
+        let todo = {
+          JobArray,
+          comand,
+          importance,
+          title
+        }
+        NewTodo(todo,user).then(data =>{
+            if(data.error){
+              this.openNotificationError()
+            }else{
+              this.openNotificationNewWork()
+            }
+        })
+
     }
 
   openNotificationError(){
@@ -369,7 +388,7 @@ class Work extends React.Component {
    <DatePicker onChange={this.onChangeworkerTime1}  placeholder="Выберите дату" />
        <div class="form-group">
    <label for="exampleFormControlSelect1">Приоретет задачи</label>
-   <select  onChange={this.handleChangeForm("importance")} class="form-control" >
+   <select  onChange={this.handleAction("importance")} class="form-control" >
      <option>Выберите приоретет</option>
      <option>Очень важное</option>
      <option>Средней важности</option>
@@ -390,7 +409,7 @@ class Work extends React.Component {
     allowClear={true}
   >
    {worker.map((workerOne, i = 1) => (
-           <Option value={workerOne._id} label={workerOne.name}>
+           <Option value={workerOne.name} label={workerOne.name}>
            <span role="img" aria-label="China">
            {workerOne.name}
            </span>
@@ -462,7 +481,7 @@ class Work extends React.Component {
    <div>
    {tags.length > 0 ? (
                 <>
-                 <Input placeholder="Заголовок дела..." />
+                 <Input value={title} onChange={this.handleChangeForm("title")}  placeholder="Заголовок дела..." />
                  <label for="exampleFormControlSelect1">Приоретет задачи</label>
                   <select  onChange={this.handleChangeForm("importance")} class="form-control" >
                     <option>Выберите приоретет</option>

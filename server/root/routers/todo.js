@@ -11,7 +11,8 @@ const {
     FindComments,
     DeleteComent,
     ComentById,
-    myTodoItsDay
+    myTodoItsDay,
+    GetcomandTodo
 } = require("../controllers/todo.js")
 const {workerById,workerSelectId} = require("../controllers/Company")
 const router = express.Router({mergeParams: true});
@@ -21,7 +22,7 @@ router.get('/todo/:todoid',GetTodo)
 router.get('/my/todo/soso/:workerSelectId', myTODO)
 
 router.get('/today/todo/:workerSelectId', myTodoItsDay)
-
+router.post('/get/comand/todo/',GetcomandTodo)
 router.post('/get/todo/coments/', FindComments)
 router.post('/new/todo/so-so/:workerById', SOSotodo )
 router.post('/new/todo/awesome/:workerSelectId',NewTodoUserAwesome)

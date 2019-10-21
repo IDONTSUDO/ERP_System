@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import {isAuthenticated} from '../Api/Auth'
-import {readMyTodo} from '../Api/Http'
+import {readMyTodo,MyTodoGetComandWorked} from '../Api/Http'
 import {Link} from 'react-router-dom'
 import DefaultProfile from '../Assets/default.png' 
-
+import { Spin } from "antd" 
 import { Button,BackTop } from 'antd'
 export default class MyWork extends Component {
     constructor(){
@@ -11,7 +11,10 @@ export default class MyWork extends Component {
         this.state = {
             todos:[],
             redirectToSignin:"",
-            user:""
+            user:"",
+            comand:[],
+            userID:"",
+            open:true
         }
     }
     componentDidMount(){
@@ -31,6 +34,21 @@ export default class MyWork extends Component {
                     Object.keys(data)
                     console.log(data.todos)
                     this.setState({todos: data.todos})
+                }
+            })
+        let userfindString 
+
+        userfindString = userId + "IAMWORKED"
+
+        this.setState({userID:userfindString})
+        MyTodoGetComandWorked(userfindString,token)
+            .then(data =>{
+                if(data.error){
+                    console.log(data.error)
+                }
+                else{
+                    this.setState({comand:data.result})
+                    this.setState({open:false})
                 }
             })
     }
@@ -88,16 +106,17 @@ export default class MyWork extends Component {
         this.setState({todos:RedSortArray})
     }
     render() {
-           //  TODO: Change CSS and loading and ERRORS
-        const {todos,user} = this.state
+           //  TODO: обьедени два массива в один
+        const {todos,userID,comand,open} = this.state
         return (
 
             <>
         
             <div className="postisitonRelativeSmeni">
             <>
-
-            </>
+            {open ?(
+                <Spin size="large" />
+            ):(<>
             
             <ul>
             <Button onClick={this.returnSort}className="square-return"></Button>
@@ -106,7 +125,6 @@ export default class MyWork extends Component {
                 <Button onClick={this.redSort} className="square-red"></Button>
             <div className="container">
             <div className="row">
-            
             {todos.map((tod, i) => (
             <>
             <div className="card col-md-4" style={{ width: "18rem"}}key={i}>
@@ -143,6 +161,64 @@ export default class MyWork extends Component {
             </div>
             </>
             ))}
+            {comand.map((comandOne, i) =>(
+                <>
+                 <div className="card col-md-4" style={{ backgroundColor:"#82D97C",width: "18rem"}}key={i}>
+                 <h3>{comandOne.title}</h3>
+                
+                {comandOne.importance === "Очень важное" ? (
+                <>
+                <div className="square-red"></div>
+                </>
+                ):("")}
+                {comandOne.importance === "Средней важности" ? (
+                <>
+                <div className="square-yellow"></div>
+                </>
+                ):("")}
+                {comandOne.importance === "Не очень важное" ? (
+                <>
+                <div className="square-green"></div>
+                </>
+                ):("")}
+                <div>{comandOne.status}</div>
+                {comandOne.JobArray.map((todoOne, i) =>(
+                  <>
+                  {todoOne.user == userID ? (
+                    <>
+                    
+                    <div><b>{todoOne.date}</b></div>
+                    
+                    </>
+
+
+
+
+
+                ):(
+                    <>
+
+                </>
+
+                )}
+                
+                  </>  
+                ))}
+                <Link  to={`/user/${comandOne.postedBy}`}>
+                        <img className="card-img-top" src={`http://localhost:8080/user/photo/${comandOne.postedBy}`}
+                             onError={i => (i.target.src = `${DefaultProfile}`)}
+                             alt={comandOne.postedBy}
+                             style={{height: "2em", width:"2em"}}
+                             />      
+                        </Link>
+                        <div style={{padding:"10px"}}>
+            <Button><Link to={`/job/${comandOne._id}`} >Посмотреть дело</Link></Button>
+            </div>
+                </div>
+                </>
+            ))
+
+            }
                 <div>
                 <BackTop>
                 <div className="ant-back-top-inner">UP</div>
@@ -154,6 +230,9 @@ export default class MyWork extends Component {
             
             </ul>
             
+            
+            </>)}
+            </>
         
             </div>
             

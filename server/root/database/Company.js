@@ -35,45 +35,8 @@ const workerSchema = new mongoose.Schema({
     },
     phone:{
         type: String,
-    },
-    by_appointment_TODO:[{ type: ObjectId, ref: "Задача со стороны" }],
-    January:{
-        type:Number
-    },
-    February:{
-        type:Number
-    },
-    March:{
-        type:Number
-    },
-    April:{
-        type:Number
-    },
-    May:{
-        type:Number
-    },
-    June:{
-        type:Number
-    },
-    July:{
-        type:Number
-    },
-    August:{
-        type:Number
-    },
-    September:{
-        type:Number
-    },
-    October:{
-        type:Number
-    },
-    November:{
-        type:Number
-    },
-    December:{
-        type:Number
-    }
-});
+    }  
+})
 
 workerSchema
     .virtual("password")

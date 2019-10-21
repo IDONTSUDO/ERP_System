@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import {MyAgentList,NewDealHistory} from '../Api/Http.js'
-import { Button,notification,Card,Icon } from 'antd'
+import { Button,notification,Card,Icon,Select } from 'antd'
 import ReactTags from 'react-tag-autocomplete'
 import {Link} from 'react-router-dom'
 import {isAuthenticated} from '../Api/Auth'
 
+
+const { Option } = Select
 
 export default class NewDeal extends Component {
     constructor(){
@@ -32,20 +34,14 @@ export default class NewDeal extends Component {
             }
         })
     }
-    handleDelete (i) {
-        const tags = this.state.tags.slice(0)
-        tags.splice(i, 1)
-        this.setState({ tags })
-    }
-    
-    handleAddition (tag) {
-        const tags = [].concat(this.state.tags, tag)
-        this.setState({ tags })
-    }
+
 
     handleAction = name => event => {
         this.setState({ error: "" })
         this.setState({ [name]: event.target.value })
+    }
+    handleChange = (value) => {
+        this.setState({tags:value})
     }
     isValid = () =>{
         const {tags,item,name} = this.state
@@ -70,14 +66,22 @@ export default class NewDeal extends Component {
         event.preventDefault()
         if(this.isValid()){
             this.setState({loading: true})
-            let {tags,item,name,user} = this.state
+            let {tags,item,name,user,agentList} = this.state
             let agentByid 
             let userId = user
             let status = "Начато"
-            
-            agentByid = tags[0]._id
-     
-            
+           
+
+
+            for(let index  = 0; tags.length > index; index++){
+                for(let index1 = 0; agentList.length > index1; index1++){
+                    if(agentList[index1].name ==  tags[index]){
+                        agentByid = agentList[index1]._id
+                    }
+                }
+
+            }
+            console.log(agentByid) 
             
             let payload = {
                 status,
@@ -126,38 +130,39 @@ export default class NewDeal extends Component {
                     <input className="form-control" onChange={this.handleAction("name")} type="text"  value={name} />
                     <label  >Предмет сделки</label>
                     <input className="form-control" onChange={this.handleAction("item")} type="text"  value={item} />
-                </div>
+                </div>w
                 
                 <div style={{padding:"10px"}}>
-                <ReactTags
+                <Select
+    mode="multiple"
+    style={{ width: '100%' }}
+    placeholder="Выберете исполнителей"
+    onChange={this.handleChange}
+    optionLabelProp="label"
+    defaultActiveFirstOption={false}
+    allowClear={true}
+  >
+   {agentList.map((agnetOne, i = 1) => (
+           <Option value={agnetOne.name} label={agnetOne.name}>
+           <span role="img" aria-label="China">
+           {agnetOne.name}
+           </span>
+         </Option>    
+    ))
+
+    }
+  </Select>
+                {/* <ReactTags
                 tags={this.state.tags}
                 placeholder={("Добавить контр-агента")}
                 suggestions={agentList}
                 handleDelete={this.handleDelete.bind(this)}
-                handleAddition={this.handleAddition.bind(this)} />
+                handleAddition={this.handleAddition.bind(this)} /> */}
                   <div style={{padding:"10px"}}></div>
                 <Button  className="btn btn-raised btn-primary" onClick={this.clickSubmit } >Новая сделка</Button>    
                 </div>
                 
                 </form>
-                <div style={{padding:"2em"}}>
-                <Card title="Мои контр-агенты" bordered={true} >
-                   
-                {agentList.map((agent, i) => (
-                            <>
-                             <div >
-                            
-
-                            <div><Link to={`/agent/${agent._id}`} class="text-muted"> {agent.name}</Link></div>
-                         
-                            <br/>
-                            
-                            </div>
-                            </>)
-                )}
-         
-                </Card>
-                </div>
                 </div>
                 </div>
                 

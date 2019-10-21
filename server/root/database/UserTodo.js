@@ -2,12 +2,10 @@ const mongoose = require('mongoose')
 const { ObjectId } = mongoose.Schema
 const todoSchema =  new mongoose.Schema({
     title:{
-        type: String,
-        required:true
+        type: String
     },
     description:{
-        type: String,
-        required:true
+        type: String
     },
     status:{
         type: String,
@@ -19,6 +17,12 @@ const todoSchema =  new mongoose.Schema({
     },
     time:{
         type: String,
+    },
+    timeComand:{
+        type:Array
+    },
+    JobArray:{
+        type:Array
     },
     tags:[{
         type:Object
