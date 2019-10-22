@@ -246,9 +246,7 @@ class Work extends React.Component {
           newTimeArray.push(timeArray[t]._d)
         }
     
-        var filteredTime = newTimeArray.filter(function (el) {
-          return el != undefined
-        })
+
 
        
         for(let k = 0;  filteredTime.length > k; k++){

@@ -83,7 +83,7 @@ export default class Job extends Component {
             if(data.error){
                 console.log(data.error)
             }else{
-// TODO: 
+
                 let tags = [todo.postedBy]
 
 
@@ -113,7 +113,6 @@ export default class Job extends Component {
                 this.setState({redirectToSignin: true})
             }else{
                 this.setState({ 
-                    // todo: data.todo, 
                     status:data.status,
                     tags: data.tags, 
                     importance:data.importance,
@@ -294,10 +293,78 @@ export default class Job extends Component {
           icon: <Icon type="frown" style={{ color: '#108ee9' }} />,
         })
     }
+    clickSetStatusCompleteJobWorker = () =>{
+       let {JobArray,worker,ID} = this.state
+       let NextJob = []
+       let ActiveUser = []
+       let TimeUser = [] 
+       var str2
+       let i = 0 
+       let LastUserArray = []
+   
+        while(JobArray.length > i){
+            TimeUser.push(JobArray[i].date)
+            ActiveUser.push(JobArray[i].active)
+            NextJob.push(JobArray[i].user)
+            i++
+        }
+        var str4
+        let str5  
+        let str6 
+        let str3 = 0
+        while(NextJob.length > str3){
+           
+            // if(NextJob[str3] == worker+"IAMWORKED"){        
+            //         str6 = NextJob[str3].slice(0, -9)
+            //         console.log(str6)
+            //         LastUserArray.push(str6)
+            //         str4 = str3 
+                    
+            //         str5 = NextJob[str4+1]+"IAMWORKED"
+            //         LastUserArray.push(str5) 
+            // }
+
+            
+            if(NextJob[str3] == worker+"IAMWORKED"){
+              
+                str4 = str3 
+                
+                str5 = NextJob[str4+1]+"IAMWORKED"
+                LastUserArray.push(str5)
+            }
+            if(NextJob[str3] != worker+"IAMWORKED"){
+                LastUserArray.push(NextJob[str3])
+            }
+            str3++
+        }
+
+     
+        let LastArray = LastUserArray.map((user, index) => {
+            return {
+              user: user,
+              date: TimeUser[index],
+              action: ActiveUser[index]
+            }
+        })
+        console.log("НАЧАЛЬНЫЙ МАССИВ", JobArray)
+        console.log("ИТОГОВЫЙ МАССИВ",LastUserArray)
+        console.log("ИТОГОВЫЙ ОБЬЕКТ",LastArray)
+        
+    }
+    handleChangeComandWork = (value) => {
+       
+        if(value == "Выполнено"){
+            this.clickSetStatusCompleteJobWorker()
+        }if(value == "Требуется уточнение"){
+            this.clickSetStatusMoreInfoJob()
+        }else{
+            return
+        }
+    }
     handleChange = (value) => {
        
         if(value == "Выполнено"){
-            console.log(200)
+           
             this.clickSetStatusCompleteJob()
         }if(value == "Требуется уточнение"){
             this.clickSetStatusMoreInfoJob()
@@ -345,11 +412,11 @@ export default class Job extends Component {
                        
                     </div>
                   
-                    <small class="text-muted"></small>
+                   
                     </a>
                     <div class="btn-group dropup">
                         
-                        <Select defaultValue="Статус" style={{ width: 120 }} onChange={this.handleChange}>
+                        <Select defaultValue="Статус" style={{ width: 120 }} onChange={this.handleChangeComandWork}>
                           <Option value="Выполнено">Выполнено</Option>
                           <Option value="Требуется уточнение">Требуется уточнение</Option>
                         </Select>
@@ -370,31 +437,28 @@ export default class Job extends Component {
                     </>):("") }
                     </>
                 ))}
-                {/* <Popconfirm
+>                  
+    <Popconfirm
+                placement="bottom" 
                 style={{backgroundColor:"black"}}
                 okText="Ок"
                 cancelText="Отменить"
     title={
-        tags.map((tod, i) => (
+        JobArray.map((job, i) => (
             <>
-            <Link  to={`/user/${tod}`}>
-            <img className="card-img-top" src={`http://localhost:8080/user/photo/${tod}?`}
+            <Link  to={`/user/${job.user}`}>
+            <img className="card-img-top" src={`http://localhost:8080/user/photo/${job.user}`}
                  onError={i => (i.target.src = `${DefaultProfile}`)}
                  style={{height: "2em", width:"2em"}}
                  />      
+            <div>{job.action}</div>
+            <div>{job.date}</div>
             </Link> 
             </>
-            ))} 
-  >
-    <h6 style={{color:"#266DCA"}}>Исполнителей {tags.length}</h6>
-                    <HeartIcon  style={{ fontSize: '32px' }}>
-            
-                    
-
-  </HeartIcon>
-  </Popconfirm> */}
-                  
-                    
+            ))}
+    >  
+    <h6 style={{color:"#266DCA"}}>Посмотреть дело</h6>
+  </Popconfirm>    
         </Card>
                         </div>
                         </div>

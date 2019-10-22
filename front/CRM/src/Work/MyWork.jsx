@@ -163,7 +163,7 @@ export default class MyWork extends Component {
             ))}
             {comand.map((comandOne, i) =>(
                 <>
-                 <div className="card col-md-4" style={{ backgroundColor:"#82D97C",width: "18rem"}}key={i}>
+                 <div className="card col-md-4" style={{ backgroundColor:"#E8E9E8",width: "18rem"}}key={i}>
                  <h3>{comandOne.title}</h3>
                 
                 {comandOne.importance === "Очень важное" ? (
