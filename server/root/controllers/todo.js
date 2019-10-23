@@ -104,17 +104,22 @@ exports.NewTodoUserAwesome = async (req,res) =>{
 exports.TodoChange =  async (req,res) =>{
   
         let todo = req.todo;
-        todo = _.extend(todo, req.body);
-        todo.updated = Date.now();
+        console.log(req.body.payload)
+        todo = _.extend(todo, req.body.payload);
+       
 
-        await todo.save((err, result) => {
+        todo.updated = Date.now()
+        todoNew = new TODO(todo)
+        await todoNew.save((err, result) => {
+            console.log(200)
             if (err) {
                 return res.status(400).json({
                     error: err
-                });
+                })
             }
-            res.json(todo);
-        });
+            
+            res.json(result)
+        })
 
 }
 exports.NewUserNews = async (req,res) =>{
@@ -132,7 +137,7 @@ exports.NewUserNews = async (req,res) =>{
     )
 }
 exports.GetTodo = async (req,res) =>{
-console.log(req.todo)
+
     return await res.json(req.todo)
 }
 exports.NewComents = async (req,res) =>{

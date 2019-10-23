@@ -196,4 +196,22 @@
     align-items: center;
     justify-content: center;
 }
+.TodoListBorder{
+    /* background: #f6efef;  */
+    /* border: 1px solid rgb(8, 134, 218);  */
+    padding: 1em; 
+    margin-bottom: 1.5em;
+}
+.TodoListOneJob{
+    /* background: #ffc422;  */
+    border: 0.3em solid #002140;
+    border-radius: 8px;
+    padding: 1em; 
+    margin-bottom: 1.5em;
+}
+.TextDealHistory{
+    text-align: center
+}
+.CenteredCard{
 
+}

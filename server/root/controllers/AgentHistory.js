@@ -46,10 +46,9 @@ exports.NewComent = async (req, res) =>{
 }
 exports.changeHistory = async (req, res) =>{
     let history = req.history 
-    console.log(history)
-    console.log(req.body)
+
     history = _.extend(history,req.body)
-    console.log(history)
+    
    
     await history.save((err, result) => {
 
@@ -125,7 +124,7 @@ exports.AllAgentHistotory = async (req, res) =>{
             totalItems = count;
             return History.find( { agentByid: { $in: agentId }   }  )
                 .skip((currentPage - 1) * perPage)
-                .select('_id name Date')
+                // .select('_id name Date')
                 .limit(perPage)
         })
         .then(data => {

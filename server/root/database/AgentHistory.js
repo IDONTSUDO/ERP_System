@@ -21,13 +21,7 @@ const AgentHistorySchema =  new mongoose.Schema({
     postedBy:{
         type:String
     },
-    commentResult:{
-        type: String
-    },
-    commentAverage:{
-        type: String
-    },
-    commentStart:{
+    comment:{
         type: String
     },
     item:{

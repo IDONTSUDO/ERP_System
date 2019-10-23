@@ -5,11 +5,11 @@ const NewsSchema = new mongoose.Schema({
   event: {
     type: String,
   },
-  tags:[{
-    type:Object
-  }],
   worker_by:{
     type:String 
+  },
+  posted_by:{
+    type:String
   },
   link:{
     type:String

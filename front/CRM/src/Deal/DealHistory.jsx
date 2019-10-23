@@ -47,9 +47,7 @@ export default class DealHistory extends Component {
             StatusOne:"",
             OneName:"",
             postedBy:"",
-            commentResult:"",
-            commentAverage:"",
-            commentStart:"",
+            comment:"",
             ItemOne:"",
 
 
@@ -272,12 +270,13 @@ export default class DealHistory extends Component {
         this.setState({
           confirmLoading: true,
         })
-        let {dealAcctive,ItemOne,CommentDeal,price,rate } = this.state
+        let {dealAcctive,ItemOne,comment,price,rate } = this.state
         const payload ={
             ItemOne,
-            CommentDeal,
+            comment,
             price,
-            rate
+            rate,
+            comment
         }
         ChangeHistoryItem(dealAcctive,payload).then(data => {
             if(data.error){
@@ -296,7 +295,49 @@ export default class DealHistory extends Component {
 
     }
     showModal(oneDeal){
-        console.log(oneDeal)
+        
+        OneHistoryGet(oneDeal).then(data =>{
+
+            console.log(data)
+            if(data.error){
+                console.log(data.error)
+            }  
+            else{
+                this.setState({
+                    OnePrice:data.price,
+                    StatusOne:data.status,
+                    OneName:data.name,
+                    ItemOne:data.item,
+                    rate:data.rate,
+                    DateCrated: data.Date,
+                })
+            }
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         this.setState({ 
             dealAcctive:oneDeal,
             visibleEdit: true
@@ -371,9 +412,7 @@ export default class DealHistory extends Component {
             OnePrice,
             StatusOne,
             OneName,
-            commentResult,
-            commentAverage,
-            commentStart,
+            comment,
             ItemOne,
         
             company,
@@ -474,10 +513,10 @@ actions={[
                                             twoToneColor="#eb2f96"
                                             onClick={(DealId) => this.helperDeal(oneDeal._id, DealId)}/>,
                                             <Icon type="edit" key="edit" 
-                                            onClick={(oneDeal) => this.showModal(oneDeal._id, oneDeal)}
+                                            onClick={(DealId) => this.showModal(oneDeal._id, DealId)}
                                             theme="twoTone" twoToneColor="#37CBC1"  />,
-<Icon type="right-circle" theme="twoTone"onClick={(DealId) => this.ChangeHistoryStatusComplete(oneDeal._id, DealId)} />
-]}
+                                            <Icon type="right-circle" theme="twoTone"onClick={(DealId) => this.ChangeHistoryStatusComplete(oneDeal._id, DealId)} />
+                                                ]}
 onClick={this.clickSubmit}>
     <div>Предмет сделки:  {oneDeal.item}</div>
     <div>Названиие:  {oneDeal.name}</div>
@@ -504,33 +543,34 @@ onClick={this.clickSubmit}>
           visible={this.state.visible}
         >
             <div className="col-md-4">
-          <Button type="primary" onClick={(agent) => this.helperAgent(AgentId, agent)}>
-          Посмотреть профиль контр-агента
-          </Button>
-          <Button type="primary" onClick={(agent) => this.helperAgentHystory(AgentId, agent)}>
-           Все сделки
-          </Button>
-          <Button type="primary" onClick={() => this.setModal2Visible(true)}>
-          Vertically centered modal dialog
-        </Button>
-          <Moment format="D MMM YYYY" >{DateCrated}</Moment>
-            <div>Счет:<b>{OnePrice}</b></div>
-            <div>Статус сделки: <b>{StatusOne}</b> </div>
-            <div>Названиие сделки: <b>{OneName}</b> </div>  
-            <div>{commentResult}</div>
-            <div>{commentAverage}</div>  
-            <div>{commentStart}</div>
-            <div>Предмет сделки: <b>{ItemOne}</b> </div>
+        <div className="">
+        <div className="">
+          <Moment className="" format="D MMM YYYY" >{DateCrated}</Moment>
+            <div className=""> Счет:<b>{OnePrice}</b></div>
+            <div className="">Статус сделки: <b>{StatusOne}</b> </div>
+            <div className="">Названиие сделки: <b>{OneName}</b> </div>  
+            <div className="">{comment}</div>
+            <div className="">Предмет сделки: <b>{ItemOne}</b> </div>
+            
             </div>
-           
+        </div>
+        <div style={{padding:"10px"}}><Button type="primary" onClick={(agent) => this.helperAgent(AgentId, agent)}>
+          Посмотреть профиль контр-агента
+          </Button></div>
+        <div style={{padding:"10px"}}><Button type="primary" onClick={(agent) => this.helperAgentHystory(AgentId, agent)}>
+           Все сделки
+          </Button></div>
+        {/* <div style={{padding:"10px"}}><Button type="primary" onClick={() => this.setModal2Visible(true)}>
+         
+        </Button></div> */}
+        </div>
           <Drawer
-          
             width={320}
             closable={false}
             onClose={this.onChildrenDrawerClose}
             visible={this.state.childrenDrawer}
           >
-                 {company[0] !== undefined ? (
+                 {company != "" ? (
                 <>
                  <div className="layer-list-agent">
                 <div>Компания:<b>{company}</b></div>
@@ -556,11 +596,11 @@ onClick={this.clickSubmit}>
 
                                             style={{width:"20em"}}
                                         >
-                                                <div>Предмет сделки:  {oneHistory.name}</div>
-                                                <div>Названиие:  {oneHistory._id}</div>
+                                                <div>Предмет сделки:  {oneHistory.item}</div>
+                                                <div>Названиие: {oneHistory.name}</div>
                                                 <hr/>
                                                 <Moment filter={toUpperCaseFilter}>{oneHistory.Date}</Moment>
-
+                                                <Rate disabled defaultValue={oneHistory.rate} />
                                         </Card>
                                     </> 
                                     ))}
@@ -598,7 +638,7 @@ onClick={this.clickSubmit}>
            <form>
             <div className="form-group">
                 <label  className="text-muted">Выставить счет</label>
-                <input  onChange={this.handleChange("price")} type="text" className="form-control" value={price} />
+                <input  onChange={this.handleChange("OnePrice")} type="text" className="form-control" value={OnePrice} />
             </div>
             <div className="form-group">
                 <label  className="text-muted">Предметы сделки</label>
@@ -606,7 +646,7 @@ onClick={this.clickSubmit}>
             </div>
             <div className="form-group">
                 <label  className="text-muted">Коментарии</label>
-                <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3" onChange={this.handleChange("comentDeal")}  value={comentDeal}></textarea>
+                <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3" onChange={this.handleChange("comment")}  value={comment}></textarea>
             </div>
             <span>
            <div className="form-group">Поставте оценку</div>

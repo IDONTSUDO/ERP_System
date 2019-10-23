@@ -535,6 +535,20 @@ export const TodoUpTime = (ID,UpTime) =>{
     })
     .catch(err =>console.log(err))
 }
+export const TodoChangeComandList = (todoId,payload) =>{
+ 
+    return fetch(`http://localhost:8080/todo/change/${todoId}`, {
+        method: "POST", 
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json"
+        },
+        body: JSON.stringify({payload})
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}
 export const ChangeAgent = (AgentId,status) =>{
     return fetch(`http://localhost:8080/change/agent/${AgentId}`, {
         method: "PUT", 
