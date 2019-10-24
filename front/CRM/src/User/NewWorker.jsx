@@ -72,8 +72,8 @@ class NewWorker extends Component{
                 role,
                 Date_of_Birth
             }
-            
-            NewPeopel(user).then(data => {
+            const token = isAuthenticated().token  
+            NewPeopel(user,token).then(data => {
                 if (data.error){
                     this.openNotificationError()
                 }else 

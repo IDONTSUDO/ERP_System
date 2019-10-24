@@ -55,7 +55,7 @@ export default class MyWork extends Component {
     returnSort = () => {
         const {user} = this.state
         const token = isAuthenticated().token  
-        readMyTodo(user)
+        readMyTodo(user,token)
             .then(data =>{
                 if(data.error){
                     this.setState({redirectToSignin: true})

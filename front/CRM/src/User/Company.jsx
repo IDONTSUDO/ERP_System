@@ -6,29 +6,6 @@ import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import { Button,Card } from 'antd';
 
-const RealetivPositionComponent = styled.div`
-.postisitonRelative{
-    left:15em;
-    top: 2em;
-    bottom: 20em;
-    position: absolute;
-    display: flex; 
-}
-.message{
-    border-radius: 5px 20px 5px;
-    background: #BADA55;
-    padding:10px;
-}
-.news{
-    border-color:#2196F3!important;
-    width: "500px";
-    height:"20px";
-    border-left: 6px solid red;
-    background-color: lightgrey;
-    margin:15px;
-}  
-`;
-
 export default class Company extends Component {
     constructor(){
         super()
@@ -57,7 +34,8 @@ export default class Company extends Component {
 
     forceUpdate(){
         const {page} = this.state
-        list(page).then(data =>{
+        const token = isAuthenticated().token  
+        list(page,token).then(data =>{
             if(data.error){
                 console.log(data.error)
             }else{
@@ -90,8 +68,8 @@ export default class Company extends Component {
         const {worker,page} = this.state
          //  TODO: Change CSS and loading and ERRORS
         return (
-            <RealetivPositionComponent>
-            <div className="postisitonRelative">
+           
+            <div className="postisitonRelativeSmeni">
 
             <div style={{padding:"5px"}}>
             <div className="row">
@@ -146,7 +124,7 @@ export default class Company extends Component {
             )}
             </div>
             </div>
-            </RealetivPositionComponent>
+           
         )
     }
 }

@@ -5,30 +5,7 @@ import {listNews,UpdateNews} from '../Api/Http'
 import {Link} from 'react-router-dom'
 import { Button } from 'antd';
 import { Row, Col } from 'antd';
-import styled from 'styled-components'
 
-const RealetivPositionComponent = styled.div`
-.postisitonRelative{
-    left:15em;
-    top: 2em;
-    bottom: 20em;
-    position: absolute;
-    display: flex; 
-}
-.message{
-    border-radius: 5px 20px 5px;
-    background: #BADA55;
-    padding:1px;    
-}
-.news{
-    border-color:#2196F3!important;
-    width:100vh;
-    height:60px;
-    border-left: 6px solid red;
-    background-color: lightgrey;
-    margin:15px;
-}  
-`;
 export default class News extends Component {
     constructor(){
         super()
@@ -39,8 +16,9 @@ export default class News extends Component {
     }
     componentDidMount(){
         const Id = isAuthenticated().direct._id  
+        const token = isAuthenticated().token  
         this.setState({userId: Id})
-        listNews(Id).then(data =>{
+        listNews(Id,token).then(data =>{
             if(data.error){
                 console.log(data.error)
             }else{
@@ -61,10 +39,8 @@ export default class News extends Component {
     render() {
         const {newsList} = this.state
         return (
-            
-            <>
-            <RealetivPositionComponent>
-            <div className="postisitonRelative">
+
+            <div className="postisitonRelativeSmeni">
             <div className="">
             <div style={{padding: '20px'}}>
             {newsList.map((news, i) => (
@@ -82,9 +58,6 @@ export default class News extends Component {
             </div>
             </div>
             </div>
-            </RealetivPositionComponent>
-            
-            </>
         )
     }
 }

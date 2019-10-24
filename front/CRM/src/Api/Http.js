@@ -1,9 +1,13 @@
-export const list = page =>{
+import {isAuthenticated} from './Auth.js'
+const token = isAuthenticated().token  
 
+export const list = page =>{
+  
     return fetch(`http://localhost:8080/all/worker/list/?page=${page}`,{
         method: "GET",
         headers: {
-            Accept: "application/json"
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`
         }
     })
 .then(response =>{
@@ -13,8 +17,8 @@ export const list = page =>{
     console.log(error)
 })
 }
-export const DeleteUser = (userId,token) =>{
-
+export const DeleteUser = (userId) =>{
+  
     return fetch(`http://localhost:8080/delete/worker/${userId}`,{
         method: "DELETE",
         headers: {
@@ -30,11 +34,12 @@ export const DeleteUser = (userId,token) =>{
 })
 }
 export const NewPeopel = user =>{
-
+    console.log(token)
     return fetch(`http://localhost:8080/new/worker/`, {
        method: "POST",
        headers: {
-           Accept: "application/json", "Content-Type": "application/json"
+           Accept: "application/json", "Content-Type": "application/json",
+           Authorization: `Bearer ${token}`
        },
        body: JSON.stringify(user)
    })
@@ -48,7 +53,8 @@ export const NewTodo = (todo,user) =>{
     return fetch(`http://localhost:8080/new/todo/awesome/${user._id}`, {
         method: "POST",
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(todo)
         
@@ -57,18 +63,6 @@ export const NewTodo = (todo,user) =>{
         return responce.json()
     })
     .catch(err =>console.log(err))
-
-//     for (let tag of tags) {
-//         fetch(`http://localhost:8080/new/todo/awesome/${tag._id}`, {
-//             method: "POST",
-//             headers: {
-//             Accept: "application/json", "Content-Type": "application/json"
-//         },
-//         body: JSON.stringify(todo)
-//    })
-//    .catch(err =>console.log(err))
-//    }
-    
 }
 export const read = (userId,token) =>{
     
@@ -122,7 +116,8 @@ export const readMyTodo = (userId,token) =>{
         return fetch(`http://localhost:8080/my/todo/soso/${userId}`,{
             method: "GET",
             headers: {
-                Accept: "application/json"
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`
             }
         })
     .then(response =>{
@@ -157,6 +152,7 @@ export const readComentList = (todoId,token) =>{
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body:JSON.stringify({todoId})
     })
@@ -176,6 +172,7 @@ export const NewComent = (comment,token) =>{
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body:comment
     })
@@ -195,6 +192,7 @@ export const DeleteComment = (comment) =>{
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         
     })
@@ -214,6 +212,7 @@ export const NewNews = (payload) =>{
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body:JSON.stringify(payload)
         
@@ -234,6 +233,7 @@ export const listNews = (id) =>{
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body:JSON.stringify({id})
         
@@ -253,6 +253,7 @@ export const SetStatusJob = (status,todoId) =>{
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body:JSON.stringify({status:status})
     })
@@ -270,7 +271,8 @@ export const TodayWorkHTTP = (userId) =>{
         method: "GET",
         headers: {
             Accept: "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         }
         })
 .then(response =>{
@@ -287,7 +289,8 @@ export const TodoChangeExperienseAtHTTP = (expireAt,todoId) =>{
         method: "POST",
         headers: {
             Accept: "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({expireAt:expireAt})
         })
@@ -304,7 +307,8 @@ export const NewContrAgent = (NewAgent,user) =>{
         method: "POST",
         headers: {
             Accept: "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(NewAgent)
         })
@@ -321,7 +325,8 @@ export const ContrAgentList = page =>{
         method: "GET",
         headers: {
             Accept: "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         })
 .then(response =>{
@@ -337,7 +342,8 @@ export const GetAgentProfile = (agentId) =>{
         method: "GET",
         headers: {
             Accept: "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         })
 .then(response =>{
@@ -353,7 +359,8 @@ export const AddManageForAgent = (tags,agentId) =>{
     return fetch(`http://localhost:8080/new/manage/agent/${agentId}`, {
         method: "POST",
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({tags})
         
@@ -368,7 +375,8 @@ export const MyAgentList = (workerId) =>{
     return fetch(`http://localhost:8080/agent/manage/`, {
         method: "POST",
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({workerId})
     })
@@ -381,7 +389,8 @@ export const MyHistoryActive = (userId) =>{
     return fetch(`http://localhost:8080/my/history/active/`, {
         method: "POST",
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({userId})
     })
@@ -394,7 +403,8 @@ export const MyHistoryBeginer = (userId) =>{
     return fetch(`http://localhost:8080/my/history/beginer/`, {
         method: "POST",
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({userId})
     })
@@ -408,7 +418,8 @@ export const MyHistoryComplete = (userId,page) =>{
     return fetch(`http://localhost:8080/my/history/complete/?page=${page}`, {
         method: "POST",
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({userId})
     })
@@ -421,7 +432,8 @@ export const OneHistoryGet = (HistoryById) =>{
     return fetch(`http://localhost:8080/history/${HistoryById}`, {
         method: "GET",
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         }
     })
     .then(responce =>{
@@ -434,7 +446,8 @@ export const ChangeHistory = (DealId,status) =>{
     return fetch(`http://localhost:8080/change/history/${DealId}`, {
         method: "PUT",
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({status})
     })
@@ -448,7 +461,8 @@ export const ChangeHistoryItem = (DealId,payload) =>{
     return fetch(`http://localhost:8080/change/history/${DealId}`, {
         method: "PUT",
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(payload)
     })
@@ -461,7 +475,8 @@ export const SearchContrAgent = (item) =>{
     return fetch(`http://localhost:8080/agent/search`, {
         method: "POST",
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({item})
     })
@@ -474,7 +489,8 @@ export const listStatisticCompany = () =>{
     return fetch(`http://localhost:8080/get/qauality/user/statistic`, {
         method: "GET",
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         }
     })
     .then(responce =>{
@@ -486,7 +502,8 @@ export const NewDealHistory = (payload) =>{
     return fetch(`http://localhost:8080/new/history/`, {
         method: "POST",
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(payload)
     })
@@ -500,7 +517,8 @@ export const AllAgentHistory = (agentId) =>{
     return fetch(`http://localhost:8080/all/agent/history/`, {
         method: "POST",
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({agentId:agentId})
     })
@@ -516,7 +534,8 @@ export const UpdateNews = (NewsArray)=>{
         fetch(`http://localhost:8080/worker/read/${news}`, {
             method: "POST",
             headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         }
    })
    .catch(err =>console.log(err))
@@ -527,7 +546,8 @@ export const TodoUpTime = (ID,UpTime) =>{
     return fetch(`http://localhost:8080/todo/change/${ID}`, {
         method: "POST", 
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({time:UpTime})
     })
@@ -541,7 +561,8 @@ export const TodoChangeComandList = (todoId,payload) =>{
     return fetch(`http://localhost:8080/todo/change/${todoId}`, {
         method: "POST", 
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({payload})
     })
@@ -554,7 +575,8 @@ export const ChangeAgent = (AgentId,status) =>{
     return fetch(`http://localhost:8080/change/agent/${AgentId}`, {
         method: "PUT", 
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({status:status})
     })
@@ -567,7 +589,8 @@ export const MyTodoGetComandWorked = (userId) =>{
     return fetch(`http://localhost:8080/get/comand/todo/`, {
         method: "POST", 
         headers: {
-            Accept: "application/json", "Content-Type": "application/json"
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({userId})
     })
@@ -576,17 +599,3 @@ export const MyTodoGetComandWorked = (userId) =>{
     })
     .catch(err =>console.log(err))
 }
-// export const WorkerList = (users) =>{
-//     for (let user of users) {
-//                 return fetch(`http://localhost:8080/worker/get/${user}`, {
-//                     method: "GET",
-//                     headers: {
-//                     Accept: "application/json", "Content-Type": "application/json"
-//                 }
-//            })
-//            .then(responce =>{
-//             return responce.json()
-//             })
-//            .catch(err =>console.log(err))
-//     }
-// }

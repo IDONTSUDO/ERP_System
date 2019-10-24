@@ -14,25 +14,26 @@ const {
     myTodoItsDay,
     GetcomandTodo
 } = require("../controllers/todo.js")
+const {requireSignin} = require("../middleware/middleware.js")
 const {workerById,workerSelectId} = require("../controllers/Company")
 const router = express.Router({mergeParams: true});
 
 
-router.get('/todo/:todoid',GetTodo)
-router.get('/my/todo/soso/:workerSelectId', myTODO)
+router.get('/todo/:todoid',requireSignin,GetTodo)
+router.get('/my/todo/soso/:workerSelectId',requireSignin, myTODO)
 
-router.get('/today/todo/:workerSelectId', myTodoItsDay)
-router.post('/get/comand/todo/',GetcomandTodo)
-router.post('/get/todo/coments/', FindComments)
-router.post('/new/todo/so-so/:workerById', SOSotodo )
-router.post('/new/todo/awesome/:workerSelectId',NewTodoUserAwesome)
-router.post('/comment/todo/',NewComents)
-router.post('/delete/comment/:comentById',DeleteComent)
+router.get('/today/todo/:workerSelectId',requireSignin, myTodoItsDay)
+router.post('/get/comand/todo/',requireSignin,GetcomandTodo)
+router.post('/get/todo/coments/',requireSignin, FindComments)
+router.post('/new/todo/so-so/:workerById',requireSignin, SOSotodo )
+router.post('/new/todo/awesome/:workerSelectId',requireSignin,NewTodoUserAwesome)
+router.post('/comment/todo/',requireSignin,NewComents)
+router.post('/delete/comment/:comentById',requireSignin,DeleteComent)
 
  
-router.put('/user/news/', NewUserNews)
+router.put('/user/news/',requireSignin, NewUserNews)
  
-router.post('/todo/change/:todoid', TodoChange)
+router.post('/todo/change/:todoid',requireSignin, TodoChange)
 
 
 router.param('comentById',ComentById) 

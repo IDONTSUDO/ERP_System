@@ -73,14 +73,14 @@ export default class Job extends Component {
         })
     }
     clickSetStatusMoreInfoJob = () =>{
-       
+        const token = isAuthenticated().token  
         const  {ID,worker,todo} = this.state
         const todoId = ID
 
        
         let status =  "Требуется уточнение"
         
-        SetStatusJob(status,todoId).then(data => {
+        SetStatusJob(status,todoId,token).then(data => {
             if(data.error){
                 console.log(data.error)
             }else{
@@ -88,7 +88,7 @@ export default class Job extends Component {
                 let tags = [todo.postedBy]
 
 
-                this.forceUpdate()
+                this.forceUpdate(token)
                  
                 let worker_by = worker
                 let link = ID
@@ -100,7 +100,8 @@ export default class Job extends Component {
                     tags
                 }
                 this.openNotificationNewStatus()
-                NewNews(payload)
+                
+                NewNews(payload,token)
 
             }
         })
@@ -124,7 +125,7 @@ export default class Job extends Component {
                 })
             }
         })
-        readComentList(todoId).then(data =>{
+        readComentList(todoId,token).then(data =>{
             if(data.error){
                 this.setState({redirectToSignin: true})
             }else{
@@ -160,15 +161,15 @@ export default class Job extends Component {
     }
 
     clickSubmit =  () =>{
-        
+        const token = isAuthenticated().token  
         const { body,worker,ID,name,todo }  = this.state
         let todoId = ID 
         let comment = JSON.stringify({body,worker,todoId,name})
-        NewComent(comment).then(data => {
+        NewComent(comment,token).then(data => {
             if(data.error){
                 console.log(data.error)
             }else{
-                this.forceUpdate()
+                this.forceUpdate(token)
 
                 let tagsArray = todo.tags
                 let arr = new Array()
@@ -220,7 +221,7 @@ export default class Job extends Component {
             }
         })
     }
-    forceUpdate(){
+    forceUpdate(token){
         const todoId = this.props.match.params.todoId
         this.init(todoId)
         this.setState({ID:todoId})

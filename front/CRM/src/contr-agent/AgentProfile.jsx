@@ -28,9 +28,9 @@ export default class AgentProfile extends Component {
     }
 
     componentDidMount(){
-        const token = isAuthenticated().token  
+       
         const agentId = this.props.match.params.agentId
-        GetAgentProfile(agentId,token).then(data => {
+        GetAgentProfile(agentId).then(data => {
             if(data.error){
                 this.setState({redirectToProfile: true})
             }else{
