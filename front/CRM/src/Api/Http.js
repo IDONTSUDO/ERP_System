@@ -404,8 +404,8 @@ export const MyHistoryBeginer = (userId) =>{
     .catch(err =>console.log(err))
 }
 
-export const MyHistoryComplete = (userId) =>{
-    return fetch(`http://localhost:8080/my/history/complete/`, {
+export const MyHistoryComplete = (userId,page) =>{
+    return fetch(`http://localhost:8080/my/history/complete/?page=${page}`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json"
@@ -444,6 +444,7 @@ export const ChangeHistory = (DealId,status) =>{
     .catch(err =>console.log(err))
 }
 export const ChangeHistoryItem = (DealId,payload) =>{
+    console.log( JSON.stringify(payload))
     return fetch(`http://localhost:8080/change/history/${DealId}`, {
         method: "PUT",
         headers: {

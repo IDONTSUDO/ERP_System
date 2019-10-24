@@ -83,8 +83,10 @@ class MenuMain extends React.Component {
                   <span>Контр Агенты</span>
                 </span>
               }
-            >
+            >{isAuthenticated().direct.role === "Директор" ? (
               <Menu.Item key="7"><Link to={`/all/agent`} ><span>Все контр-агенты</span></Link></Menu.Item>
+            ):("")}
+             
               <Menu.Item key="8"><Link to={`/my/agent/${isAuthenticated().direct._id}`} ><span>Мои контр агенты</span></Link></Menu.Item>
               <Menu.Item key="12"><Link to="/new/agent"><span>Создать нового </span></Link></Menu.Item>
               </SubMenu>
@@ -111,8 +113,8 @@ class MenuMain extends React.Component {
               }
             >
               <Menu.Item key="13"><Link to={`/new/deal/${isAuthenticated().direct._id}`} ><span>Новая сделка</span></Link></Menu.Item>
-              <Menu.Item key="14"><Link to={`/deal/history/${isAuthenticated().direct._id}`} ><span>История сделок</span></Link></Menu.Item>
-              <Menu.Item key="15"><Link to="/create/work"><span>Активные сделки</span></Link></Menu.Item>
+              <Menu.Item key="14"><Link to={`/my/deal/${isAuthenticated().direct._id}`} ><span>История сделок</span></Link></Menu.Item>
+              <Menu.Item key="15"><Link to={`/my/deal/history/${isAuthenticated().direct._id}`} ><span>Завершенные сделки</span></Link></Menu.Item>
               </SubMenu>
               
           </Menu>

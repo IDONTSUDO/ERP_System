@@ -158,7 +158,7 @@ export default class DealHistory extends Component {
                  this.setState({ 
                     DateCrated:data.Date,
                     AgentId:data.agentByid,
-                    OnePrice:data.price,
+                    price:data.price,
                     StatusOne:data.status,
                     OneName:data.name,
                     postedBy:data.postedBy,
@@ -304,12 +304,13 @@ export default class DealHistory extends Component {
             }  
             else{
                 this.setState({
-                    OnePrice:data.price,
+                    price:data.price,
                     StatusOne:data.status,
                     OneName:data.name,
                     ItemOne:data.item,
                     rate:data.rate,
                     DateCrated: data.Date,
+                    comment:data.comment
                 })
             }
         })
@@ -638,7 +639,7 @@ onClick={this.clickSubmit}>
            <form>
             <div className="form-group">
                 <label  className="text-muted">Выставить счет</label>
-                <input  onChange={this.handleChange("OnePrice")} type="text" className="form-control" value={OnePrice} />
+                <input  onChange={this.handleChange("price")} type="text" className="form-control" value={price} />
             </div>
             <div className="form-group">
                 <label  className="text-muted">Предметы сделки</label>

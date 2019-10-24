@@ -24,7 +24,7 @@ import TodayWork from '../Work/TodayWork.jsx'
 import AgentHistory from '../Deal/AgentHystory.jsx'
 import NewDeal from '../Deal/NewDeal.jsx'
 import DealHistory from '../Deal/DealHistory.jsx'
-
+import MyDealHistory from '../Deal/MyDealHistory.jsx'
 
 import CompanyStatistic from '../statistic/CompanyStatistic.jsx'
 const MainRouter = ()  =>(
@@ -52,10 +52,9 @@ const MainRouter = ()  =>(
 
 
         <PrivateRoute exact path="/new/deal/:userId" component={NewDeal}/> 
-        <PrivateRoute exact path="/deal/history/:userId" component={DealHistory}/> 
-
+        <PrivateRoute exact path="/my/deal/:userId" component={DealHistory}/> 
         <PrivateRoute exact path="/company/statistic" component={CompanyStatistic}/> 
-
+        <PrivateRoute exact path="/my/deal/history/:userId" component={MyDealHistory}/> 
         <PrivateRoute exact path="/agent/history/:agentId" component={AgentHistory}/> 
 
     </Switch>

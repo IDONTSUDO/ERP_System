@@ -112,7 +112,12 @@ export default class Company extends Component {
             
             <Button ><Link to={`/user/${user._id}`} >Посмотреть профиль</Link></Button>
                          <div style={{padding:"5px"}} ></div>
-                         <Button  type="danger" onClick={(userId) => this.handleClick(user._id, userId)}>Удалить Пользователя</Button>    
+                         <>
+                         {/* {isAuthenticated().direct.role === "Директор" ? ( */}
+                            <Button  type="danger" onClick={(userId) => this.handleClick(user._id, userId)}>Удалить Пользователя</Button>    
+                         {/* ):("")} */}
+                         </>
+
             </Card>
             </>
             ))}

@@ -15,7 +15,7 @@ export default class AllAgent extends Component {
         }
     }
     componentDidMount(){
-      this.LoadContrAgentList(this.state.page);
+      this.LoadContrAgentList(this.state.page)
     }
     LoadContrAgentList = page => {
       ContrAgentList(page)
@@ -125,11 +125,13 @@ export default class AllAgent extends Component {
               <div class="modal-content-position">
   {search.map((agn, i) => (
   <>
-  <div class="modal-content">
+  <div class="modal-content" style={{padding:"5px"}}>
   <div className="modal-list-search">
-  <Button><a href={`/agent/${agn._id}`}>Посмотреть профиль</a></Button>
-  <h5>Контр Агент: {agn.name}</h5>
-
+    <div className="row">
+      <div className="col-md-4">
+      <h1><a href={`/agent/${agn._id}`}>{agn.name}</a></h1>
+      </div>
+    </div>
   </div>
   </div>
   </>

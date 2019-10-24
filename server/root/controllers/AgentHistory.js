@@ -38,7 +38,7 @@ exports.NewHistory = async (req, res) =>{
 exports.NewComent = async (req, res) =>{
 
     const historyComent = new CommentHistory(req.body)
-    await historyComent.save().then(result =>{
+    historyComent.save().then(result =>{
         res.status(200).json({
             "Новый кометарий":"создан!"
         })
@@ -48,9 +48,9 @@ exports.changeHistory = async (req, res) =>{
     let history = req.history 
 
     history = _.extend(history,req.body)
-    
-   
-    await history.save((err, result) => {
+    let ChangeHis =  new History(history)
+    console.log(ChangeHis)
+    await ChangeHis.save((err, result) => {
 
         if (err) {
             console.log(err)
@@ -75,7 +75,7 @@ exports.myHistoryActive= async (req, res) =>{
                 error: err
             })
         }
-        console.log(history)
+       
         res.json(history)
     })
 }
@@ -96,20 +96,26 @@ exports.myHistoryBeginer= async (req, res) =>{
     })
 }
 exports.myHistoryComplete = async (req, res) =>{
+
     let userId = req.body.userId
     let statusSearch = "Завершено"
+    const currentPage = req.query.page || 1
+    console.log(req.query.page)
+    const perPage = 50
+    var totalItems
 
-    await History.find({ $and: [ { postedBy: { $in: userId } }, { status: { $in: statusSearch } } ] })  
-    
-    .exec((err, history) =>{
-        if(err){
-            return res.status(400).json({
-                error: err
-            })
-        }
-
-        res.json(history)
-    })
+    const historyComplete = History.find({ $and: [ { postedBy: { $in: userId } }, { status: { $in: statusSearch } } ] })
+        .countDocuments()
+        .then(count => {
+            totalItems = count;
+            return History.find({ $and: [ { postedBy: { $in: userId } }, { status: { $in: statusSearch } } ] })
+                .skip((currentPage - 1) * perPage)
+                .limit(perPage)
+        })
+        .then(data => {
+            res.status(200).json(data)
+        })
+        .catch(err => console.log(err))
 }
 exports.AllAgentHistotory = async (req, res) =>{
     let agentId = req.body.agentId
