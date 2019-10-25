@@ -1,34 +1,34 @@
 const mongoose = require('mongoose')
 const { ObjectId } = mongoose.Schema
-const AgentHistorySchema =  new mongoose.Schema({
-    Date:{
+const AgentHistorySchema = new mongoose.Schema({
+    Date: {
         type: Date,
         default: Date.now
     },
-    agentByid:{
+    agentByid: {
         type: String,
-        required:true
+        required: true
     },
-    price:{
+    price: {
         type: Number,
     },
-    status:{
+    status: {
         type: String,
     },
-    name:{
-        type:String,
+    name: {
+        type: String,
     },
-    postedBy:{
-        type:String
-    },
-    comment:{
+    postedBy: {
         type: String
     },
-    item:{
-        type:String
+    comment: {
+        type: String
     },
-    rate:{
-        type:Number
+    item: {
+        type: String
+    },
+    rate: {
+        type: Number
     }
 })
 module.exports = mongoose.model("AgentHistory", AgentHistorySchema)

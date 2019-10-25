@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import {MyAgentList,GetAgentProfile,ChangeAgent} from '../Api/Http.js'
-import { Button,Drawer, List,  Divider, Col, Row,Spin,Card,Icon,notification } from 'antd'
+import { Button,Drawer,  Divider, Col, Row,Spin,Card,Icon,notification } from 'antd'
 import {Link} from 'react-router-dom'
-import {isAuthenticated} from '../Api/Auth'
+
 
 const pStyle = {
     fontSize: 16,
@@ -174,7 +174,7 @@ export default class MyAgent extends Component {
       })
     }
     render() {
-        let {id,agentList,open,email,OGRN,general_director,INN,phone,full_name,name,company,worker, any,legal_address,actual_address,payment_account,status} = this.state 
+        let {id,agentList,open,email,OGRN,general_director,INN,phone,full_name,name, any,legal_address,actual_address,payment_account} = this.state 
         return (
             <div className="postisitonRelativeSmeni">
               <div className="container">
@@ -321,10 +321,10 @@ export default class MyAgent extends Component {
             <Row>
               <Col span={24}>
                   
-              <button onClick={(AgentId) => this.ChangeAgentStatus1(id, AgentId)} className="square-red-sort"></button>
-              <button onClick={(AgentId) => this.ChangeAgentStatus2(id, AgentId)} className="square-green-sort"></button>
+              <button onClick={(AgentId) => this.ChangeAgentStatus2(id, AgentId)}  className="square-red-sort"></button>
+              <button  onClick={(AgentId) => this.ChangeAgentStatus1(id, AgentId)} className="square-green-sort"></button>
               <button onClick={(AgentId) => this.ChangeAgentStatus3(id, AgentId)} className="square-yellow-sort"></button>
-              <Button><Link to={`/agent/history/${id}`} >История сделок</Link></Button>
+              <div style={{padding:"5px"}}><Button><Link to={`/agent/history/${id}`} >История сделок</Link></Button></div>
               </Col>
             </Row>
             </>

@@ -74,7 +74,7 @@ export default class NewAgent extends Component {
     isValid = () =>{
         
         const {name,company, full_name,phone,INN,general_director,OGRN,email,legal_address,actual_address,payment_account} = this.state
-        if(name.length == 0){
+        if(name.length === 0){
             this.setState({error: "Короткое имя компании является обязательным параметром", loading: false})
             return false
         }
@@ -82,39 +82,39 @@ export default class NewAgent extends Component {
             this.setState({error: "Email не валиден", loading: false})
             return false
         }
-        if(company.length == 0){
+        if(company.length === 0){
             this.setState({error: "Название компании является обязательным параметром" , loading: false})
             return false
         }
-        if(full_name.length == 0){
+        if(full_name.length === 0){
             this.setState({error: "Полное имя компании является обязательным параметром" , loading: false})
             return false
         }
-        if(phone.length == 0){
+        if(phone.length === 0){
             this.setState({error: "номер телефона является обязательным параметром" , loading: false})
             return false
         }
-        if(INN.length == 0){
+        if(INN.length === 0){
             this.setState({error: "Инн является обязательным параметром" , loading: false})
             return false
         }
-        if(general_director.length == 0){
+        if(general_director.length === 0){
             this.setState({error: "генеральный директор является обязательным параметром" , loading: false})
             return false
         }
-        if(OGRN.length == 0){
+        if(OGRN.length === 0){
             this.setState({error: "ОГРН является обязательным параметром" , loading: false})
             return false
         }
-        if(legal_address.length == 0){
+        if(legal_address.length === 0){
             this.setState({error: "Фактический адрес является обязательным параметром" , loading: false})
             return false
         }
-        if(actual_address.length == 0){
+        if(actual_address.length === 0){
             this.setState({error: "Актуальный адрес является обязательным параметром" , loading: false})
             return false
         }
-        if(payment_account.length == 0){
+        if(payment_account.length === 0){
             this.setState({error: "Рассчетный счет является обязательным параметром" , loading: false})
             return false
         }
@@ -141,7 +141,7 @@ export default class NewAgent extends Component {
     }
    
     render() {
-        const {company, full_name,name,phone,INN,general_director,OGRN,email,any,legal_address,actual_address,payment_account,loading, error} =  this.state
+        const {company, full_name,name,phone,INN,general_director,OGRN,email,any,legal_address,actual_address,payment_account, error} =  this.state
         return (
             <div className="postisitonRelativeSmeni">
             {error.length !== 0 ? (

@@ -86,15 +86,15 @@ class Work extends React.Component {
   isValid = () =>{
         
     const { tags,title,description} = this.state
-    if(title.length == 0){
+    if(title.length === 0){
         this.setState({error: "Заголовок является обязательным"})
         return false
     }
-    if(tags.length == 0) { 
+    if(tags.length === 0) { 
         this.setState({error: "Вы должны добавить хоть одного исполнителя"})
         return false
     }
-    if(description.length == 0){
+    if(description.length === 0){
         this.setState({error: "Описание задачи является обязательным параметром" })
         return false
     }
@@ -150,7 +150,7 @@ class Work extends React.Component {
       for(let index  = 0; tags.length > index; index++){
      
         for (let index1 = 0; worker.length > index1; index1++) {
-          if(worker[index1].name ==  tags[index]){
+          if(worker[index1].name ===  tags[index]){
             tagsArray.push(worker[index1]._id)
           }
         }
@@ -262,7 +262,7 @@ class Work extends React.Component {
         })   
         
         for(let i = 0;tags.length > i; i++) {
-          if(i == 0){
+          if(i === 0){
             userValidArray.push(tags[0] + "IAMWORKED")
           }else{
             userValidArray.push(tags[i]) 
@@ -272,7 +272,7 @@ class Work extends React.Component {
         let i = 0
         while( worker.length > i){
             for(let el2 = 0;tags.length > el2;el2++){
-              if(worker[i].name == tags[el2]){
+              if(worker[i].name === tags[el2]){
                 SortOfArray.push(worker[i]._id,worker[i].name)
               }
           }
@@ -283,7 +283,7 @@ class Work extends React.Component {
          
           for(let ar2 = 0;SortOfArray.length > ar2; ar2++){
           
-            if(tags[ar1] == SortOfArray[ar2]){
+            if(tags[ar1] === SortOfArray[ar2]){
               tired.push(SortOfArray[ar2-1])
             }
           }
@@ -346,7 +346,7 @@ class Work extends React.Component {
   }
   render () {
    
-    const { worker,loading,open,description,error,tags,title,
+    const { worker,description,error,tags,title,
     workerJob0,
     workerJob1,
     workerJob2,

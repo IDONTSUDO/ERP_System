@@ -1,99 +1,99 @@
 const ContrAgent = require('../database/ContrAgent')
-const _  = require('lodash')
-exports.agentId = async (req, res , next , id) =>{
+const _ = require('lodash')
+exports.agentId = async (req, res, next, id) => {
     await ContrAgent.findById(id)
-    .exec((err, agent)=>{
-        if(err || !agent){
-            return res.status(400).json({
-                error: "Agent not found"
-            })
-        }
-        req.agent  = agent 
-        next()
-    })
+        .exec((err, agent) => {
+            if (err || !agent) {
+                return res.status(400).json({
+                    error: "Agent not found"
+                })
+            }
+            req.agent = agent
+            next()
+        })
 }
-exports.getMyListAgent = async (req,res) =>{
-    
-    await ContrAgent.find({ tags: { $elemMatch :{"_id":`${req.body.workerId}`}} })  
-  
-    .exec((err, agent) =>{
-        if(err){
-            return res.status(400).json({
-                error: err
-            })
-        }
+exports.getMyListAgent = async (req, res) => {
 
-        res.json(agent)
-    })
+    await ContrAgent.find({ tags: { $elemMatch: { "_id": `${req.body.workerId}` } } })
+
+        .exec((err, agent) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+
+            res.json(agent)
+        })
 }
-exports.getAgentProfile = async (req,res) =>{
+exports.getAgentProfile = async (req, res) => {
     await res.status(200).json(req.agent)
 }
-exports.SearchAgent =  async (req,res) =>{
+exports.SearchAgent = async (req, res) => {
 
-    await ContrAgent.find({name: new RegExp(req.body.item, 'i')})
-    .select("_id name")
-    .then(result => res.json(result))
-    .catch(e => console.error(e))
+    await ContrAgent.find({ name: new RegExp(req.body.item, 'i') })
+        .select("_id name")
+        .then(result => res.json(result))
+        .catch(e => console.error(e))
 }
-exports.AllAgent = async (req,res) =>{
-   
-      const currentPage = req.query.page || 1
-      const perPage = 6
-      var totalItems
-  
-      const agents = await ContrAgent.find()
-       
-          .countDocuments()
-          .then(count => {
-              totalItems = count;
-              return ContrAgent.find()
-                  .skip((currentPage - 1) * perPage)
-                  .select('_id name')
-                  .limit(perPage)
-                //.sort({ })
-          })
-          .then(agents => {
-              res.status(200).json(agents)
-          })
-          .catch(err => console.log(err))
+exports.AllAgent = async (req, res) => {
+
+    const currentPage = req.query.page || 1
+    const perPage = 6
+    var totalItems
+
+    const agents = await ContrAgent.find()
+
+        .countDocuments()
+        .then(count => {
+            totalItems = count;
+            return ContrAgent.find()
+                .skip((currentPage - 1) * perPage)
+                .select('_id name')
+                .limit(perPage)
+         
+        })
+        .then(agents => {
+            res.status(200).json(agents)
+        })
+        .catch(err => console.log(err))
 }
-exports.ChangeAgent = async (req,res) =>{
+exports.ChangeAgent = async (req, res) => {
     let agent = req.agent
-    
-    agent = _.extend(agent, req.body)
-    
-   
-    await agent.save((err, result) => {
-        
-        if (err) {
-            return res.status(400).json({
-                error: err
-            })
-        }
-        
-        res.json(result)
-    })
-}
-exports.ManageAddAgent = async (req,res) =>{
-    let agent = req.agent 
-    agent.tags =  req.body.tags
 
-    agent = _.extend(agent,req.body)
-    
-   
+    agent = _.extend(agent, req.body)
+
+
     await agent.save((err, result) => {
-        
+
         if (err) {
             return res.status(400).json({
                 error: err
             })
         }
-        
+
         res.json(result)
     })
 }
-exports.DeleteManagerForAgent = async (req,res) =>{
+exports.ManageAddAgent = async (req, res) => {
+    let agent = req.agent
+    agent.tags = req.body.tags
+
+    agent = _.extend(agent, req.body)
+
+
+    await agent.save((err, result) => {
+
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+
+        res.json(result)
+    })
+}
+exports.DeleteManagerForAgent = async (req, res) => {
     await ContrAgent.findByIdAndUpdate(req.body.agentId, { $pull: { tags: req.body.workerId } }, { new: true }).exec(
         (err, result) => {
             if (err) {
@@ -106,7 +106,7 @@ exports.DeleteManagerForAgent = async (req,res) =>{
         }
     );
 }
-exports.ManageAddAgentA = async (req,res) =>{
+exports.ManageAddAgentA = async (req, res) => {
     await ContrAgent.findByIdAndUpdate(req.body.agentId, { $push: { tags: req.body.workerId } }, { new: true }).exec(
         (err, result) => {
             if (err) {
@@ -120,11 +120,11 @@ exports.ManageAddAgentA = async (req,res) =>{
     );
 }
 
-exports.NewAgent = async (req,res) =>{
+exports.NewAgent = async (req, res) => {
     const agent = new ContrAgent(req.body)
-    agent.postedBy = req.worker 
+    agent.postedBy = req.worker
 
-    await agent.save().then(result =>{
+    await agent.save().then(result => {
         res.status(200).json({
             result
         })

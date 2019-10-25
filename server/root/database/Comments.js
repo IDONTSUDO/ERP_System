@@ -1,22 +1,22 @@
 const mongoose = require('mongoose');
- 
+
 const { ObjectId } = mongoose.Schema.Types;
- 
+
 const commentSchema = new mongoose.Schema({
   body: {
     type: String,
 
   },
-  name:{
-    type:String,
-  },
-  worker:{
+  name: {
     type: String,
-    ref:  "User"
   },
-  todoId:{
+  worker: {
     type: String,
-    ref:  "TodoId"
+    ref: "User"
+  },
+  todoId: {
+    type: String,
+    ref: "TodoId"
   },
   created: {
     type: Date,

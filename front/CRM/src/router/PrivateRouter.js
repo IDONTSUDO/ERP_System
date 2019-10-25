@@ -1,9 +1,9 @@
-import React  from "react";
+import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { isAuthenticated } from "../Api/Auth";
-/*
-Компонент который выкидывает не залогиненного пользователя
-*/
+
+
+
 const PrivateRoute = ({ component: Component, ...rest }) => (
 
     <Route
@@ -12,13 +12,13 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
             isAuthenticated() ? (
                 <Component {...props} />
             ) : (
-                <Redirect
-                    to={{
-                        pathname: "/signin",
-                        state: { from: props.location }
-                    }}
-                />
-            )
+                    <Redirect
+                        to={{
+                            pathname: "/signin",
+                            state: { from: props.location }
+                        }}
+                    />
+                )
         }
     />
 )

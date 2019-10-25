@@ -1,58 +1,58 @@
-const _  = require('lodash')
+const _ = require('lodash')
 const fs = require('fs')
 const formidable = require("formidable")
 const Worker = require('../database/Company')
 
-exports.workerSelectId = async (req, res , next , id) =>{
+exports.workerSelectId = async (req, res, next, id) => {
     await Worker.findById(id).select(" _id ")
-    .exec((err, worker)=>{
-        if(err || !worker){
-            return res.status(400).json({
-                error: "Worker not found"
-            })
-        }
-        req.worker  = worker 
-        next()
-    })
+        .exec((err, worker) => {
+            if (err || !worker) {
+                return res.status(400).json({
+                    error: "Worker not found"
+                })
+            }
+            req.worker = worker
+            next()
+        })
 }
 
-exports.workerById = async (req, res , next , id) =>{
+exports.workerById = async (req, res, next, id) => {
     await Worker.findById(id)
-    .exec((err, worker)=>{
-        if(err || !worker){
-            return res.status(400).json({
-                error: "Worker not found"
-            })
-        }
-        req.worker  = worker 
-        
-        next()
-    })
+        .exec((err, worker) => {
+            if (err || !worker) {
+                return res.status(400).json({
+                    error: "Worker not found"
+                })
+            }
+            req.worker = worker
+
+            next()
+        })
 }
-exports.Newworker = async(req,res)=>{
-    const workerExists = await Worker.findOne({email: req.body.email})
-    if(workerExists) return res.status(403).json({
+exports.Newworker = async (req, res) => {
+    const workerExists = await Worker.findOne({ email: req.body.email })
+    if (workerExists) return res.status(403).json({
         error: "Email is taken"
     })
     const worker = await new Worker(req.body)
     await worker.save()
     res.status(200).json({ message: "Worker create!" })
 }
-exports.workerBlock = async (req,res) =>{
+exports.workerBlock = async (req, res) => {
     res.status(200)
 }
-exports.workerDelete = async (req,res) =>{
-     let worker =  req.worker
-     await worker.remove((err, worker) =>{
-        if(err){
+exports.workerDelete = async (req, res) => {
+    let worker = req.worker
+    await worker.remove((err, worker) => {
+        if (err) {
             return res.status(400).json({
                 error: err
             })
         }
-        res.json({ message: "Worker delete!"})
+        res.json({ message: "Worker delete!" })
     })
 }
-exports.workerEdit = async(req,res,next) =>{
+exports.workerEdit = async (req, res, next) => {
     let form = new formidable.IncomingForm()
 
     form.keepExtensions = true;
@@ -63,9 +63,9 @@ exports.workerEdit = async(req,res,next) =>{
             });
         }
 
-        let worker =  req.worker
-        
-        worker =  _.extend(worker, fields)
+        let worker = req.worker
+
+        worker = _.extend(worker, fields)
 
         worker.updated = Date.now()
 
@@ -81,26 +81,26 @@ exports.workerEdit = async(req,res,next) =>{
                     error: err
                 })
             }
-            res.json({worker})
+            res.json({ worker })
         })
     })
 }
-exports.workerGet = async (req,res) =>{
+exports.workerGet = async (req, res) => {
     return res.json(req.worker)
 }
-exports.workerAll = async (req,res) =>{
+exports.workerAll = async (req, res) => {
     const worker = await Worker.find().select(" _id name")
-    .then((worker) =>{
-        res.status(200).json(worker)
-    })
-    .catch(err => console.log(err))
+        .then((worker) => {
+            res.status(200).json(worker)
+        })
+        .catch(err => console.log(err))
 }
-exports.workerFinancyAll =  async (req, res) =>{
-res.status(200)
+exports.workerFinancyAll = async (req, res) => {
+    res.status(200)
 }
-exports.workerDelete = async (req,res) => {
+exports.workerDelete = async (req, res) => {
     let worker = req.worker;
-    await  worker.remove((err,worker) => {
+    await worker.remove((err, worker) => {
         if (err) {
             return res.status(400).json({
                 error: err
@@ -111,22 +111,22 @@ exports.workerDelete = async (req,res) => {
         });
     });
 }
-exports.workerPhoto = async (req,res, next) =>{
-    if(req.worker.photo.data){
+exports.workerPhoto = async (req, res, next) => {
+    if (req.worker.photo.data) {
         res.set(("Content-Type", req.worker.photo.contentType))
         return res.send(req.worker.photo.data)
     }
     next()
 }
 
-exports.ListworkerAll = async (req,res) =>{
+exports.ListworkerAll = async (req, res) => {
     const currentPage = req.query.page || 1
 
     const perPage = 24
     var totalItems
 
     const company = await Worker.find()
-     
+
         .countDocuments()
         .then(count => {
             totalItems = count;
@@ -134,7 +134,7 @@ exports.ListworkerAll = async (req,res) =>{
                 .skip((currentPage - 1) * perPage)
                 .select('_id name')
                 .limit(perPage)
-              //.sort({ })
+            
         })
         .then(data => {
             res.status(200).json(data)
@@ -143,23 +143,23 @@ exports.ListworkerAll = async (req,res) =>{
 }
 
 
-exports.searchWorker = async (req,res) =>{
-    let searchItemCollection  = req.body.search
-    await Worker.find({searchItemCollection: new RegExp(req.body.item, 'i')}) 
-    .then(worker => res.json(worker))
-    .catch(e => console.error(e))
+exports.searchWorker = async (req, res) => {
+    let searchItemCollection = req.body.search
+    await Worker.find({ searchItemCollection: new RegExp(req.body.item, 'i') })
+        .then(worker => res.json(worker))
+        .catch(e => console.error(e))
 }
-exports.WokerToManagerRole = async (req, res) =>{
-    let FindQuery =  'Менеджер'
-    await Worker.find({ role:`${FindQuery}`})  
-    .select(" _id name ")
-    .exec((err, user) =>{
-        if(err){
-            return res.status(400).json({
-                error: err
-            })
-        }
+exports.WokerToManagerRole = async (req, res) => {
+    let FindQuery = 'Менеджер'
+    await Worker.find({ role: `${FindQuery}` })
+        .select(" _id name ")
+        .exec((err, user) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
 
-        res.json({user})
-    })
+            res.json({ user })
+        })
 }

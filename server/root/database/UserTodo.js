@@ -1,45 +1,45 @@
 const mongoose = require('mongoose')
 const { ObjectId } = mongoose.Schema
-const todoSchema =  new mongoose.Schema({
-    title:{
+const todoSchema = new mongoose.Schema({
+    title: {
         type: String
     },
-    description:{
+    description: {
         type: String
     },
-    status:{
+    status: {
         type: String,
         default: "в работе"
     },
-    created:{
+    created: {
         type: Date,
         default: Date.now
     },
-    time:{
+    time: {
         type: String,
     },
-    timeComand:{
-        type:Array
+    timeComand: {
+        type: Array
     },
-    JobArray:{
-        type:Array
+    JobArray: {
+        type: Array
     },
-    tags:[{
-        type:Object
+    tags: [{
+        type: Object
     }],
-    postedBy:{
+    postedBy: {
         type: ObjectId,
-        ref:  "User"
+        ref: "User"
     },
     expireAt: {
         type: Date,
         index: { expires: '5m' },
     },
-    importance:{
-        type:String
+    importance: {
+        type: String
     },
-    comand:{
-        type:Boolean
+    comand: {
+        type: Boolean
     }
 })
 module.exports = mongoose.model("TODO", todoSchema)

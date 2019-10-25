@@ -1,5 +1,5 @@
 const express = require("express")
-const { 
+const {
     workerById,
     Newworker,
     workerBlock,
@@ -14,42 +14,29 @@ const {
     Listworker,
     WokerToManagerRole } = require('../controllers/Company.js')
 
-const {requireSignin} = require("../middleware/middleware.js")
+const { requireSignin } = require("../middleware/middleware.js")
 
-const router = express.Router({mergeParams: true});
-// // ---------- создание нового пользователя ---------- // 
-router.post('/new/worker/',requireSignin, Newworker)
-// // ---------- блок пользователя  ---------- // 
-router.post('/block/worker/:workerById',requireSignin,  workerBlock)
-router.post('/worker/manager/',requireSignin,  WokerToManagerRole)
+const router = express.Router({ mergeParams: true });
 
-// // ---------- удаление пользователя  ---------- // 
+
+
+router.get('/worker/get/:workerById', requireSignin, workerGet)
+router.get('/all/worker', requireSignin, workerAll)
+router.get('/all/worker/list', requireSignin, ListworkerAll)
+router.get('/user/photo/:workerById', workerPhoto)
+router.get('/all/financy', requireSignin, workerFinancyAll)
+
+
+router.post('/new/worker/', requireSignin, Newworker)
+router.post('/test/search/', searchWorker)
+router.post('/block/worker/:workerById', requireSignin, workerBlock)
+router.post('/worker/manager/', requireSignin, WokerToManagerRole)
+
+
 router.delete('/delete/worker/:workerById', requireSignin, workerDelete)
 
+router.put('/edit/worker/:workerById', requireSignin, workerEdit)
 
-// // ---------- изменение пользователя ---------- // 
-router.put('/edit/worker/:workerById',requireSignin,  workerEdit)
-
-
-
-// // ---------- выдача информации по ID пользователя  ---------- // 
-router.get('/worker/get/:workerById',requireSignin,  workerGet)
-// // // ---------- список всех пользователей  ---------- // 
-router.get('/all/worker',requireSignin,workerAll)
-// // // ---------- выдача всех пользователей  ---------- // 
-router.get('/all/worker/list',requireSignin,ListworkerAll)
-// // // ---------- выдает пользовательское фото принемает ID ---------- // 
-router.get('/user/photo/:workerById', workerPhoto)
-// // // ----------  ---------- // 
-router.get('/all/financy',requireSignin,workerFinancyAll)
-
-// router.get('/all/workers/list/', Listworker)
-
-
-// ----------  ---------- // 
-router.post('/test/search/', searchWorker)
-
-// // ----------  ---------- // 
-router.param('workerById',workerById)
+router.param('workerById', workerById)
 
 module.exports = router

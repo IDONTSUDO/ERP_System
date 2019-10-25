@@ -4,11 +4,11 @@ const crypto = require("crypto")
 const { ObjectId } = mongoose.Schema;
 
 const workerSchema = new mongoose.Schema({
-    name:{
+    name: {
         type: String,
         required: true
     },
-    Date_of_Birth:{
+    Date_of_Birth: {
         type: String,
     },
     email: {
@@ -33,14 +33,14 @@ const workerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    phone:{
+    phone: {
         type: String,
-    }  
+    }
 })
 
 workerSchema
     .virtual("password")
-    .set(function(password) {
+    .set(function (password) {
 
         this._password = password;
 
@@ -48,17 +48,17 @@ workerSchema
 
         this.hashed_password = this.encryptPassword(password)
     })
-    .get(function() {
+    .get(function () {
         return this._password
     });
 
 
 workerSchema.methods = {
-    authenticate: function(plainText) {
+    authenticate: function (plainText) {
         return this.encryptPassword(plainText) === this.hashed_password
     },
 
-    encryptPassword: function(password) {
+    encryptPassword: function (password) {
         if (!password) return ""
         try {
             return crypto

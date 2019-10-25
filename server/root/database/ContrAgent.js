@@ -1,64 +1,56 @@
 const mongoose = require('mongoose')
 const { ObjectId } = mongoose.Schema
-const contrAgentSchema =  new mongoose.Schema({
-    company:{
+const contrAgentSchema = new mongoose.Schema({
+    company: {
         type: String,
-        // required:true
+
     },
-    full_name:{
+    full_name: {
         type: String,
-        // required:true
     },
-    name:{
+    name: {
         type: String,
-        // required:true
     },
-    phone:{
+    phone: {
         type: String,
-        // required:true
     },
-    status:{
+    status: {
         type: String,
-       
     },
-    INN:{
+    INN: {
         type: String,
-        
     },
-    general_director:{
+    general_director: {
         type: String,
-        // required:true
     },
-    OGRN:{
+    OGRN: {
         type: String,
-        // required:true
     },
-    email:{
+    email: {
         type: String,
-        // required:true
     },
 
-    Date:{
+    Date: {
         type: Date,
-        default:Date.now
+        default: Date.now
     },
-    tags:[{
-        type:Object
+    tags: [{
+        type: Object
     }],
-    postedBy:{
+    postedBy: {
         type: ObjectId,
-        ref:  "User"
+        ref: "User"
     },
-    any:{
-        type:String
-    },
-    legal_address:{
+    any: {
         type: String
     },
-    actual_address:{
+    legal_address: {
         type: String
     },
-    payment_account:{
+    actual_address: {
+        type: String
+    },
+    payment_account: {
         type: String
     }
 })

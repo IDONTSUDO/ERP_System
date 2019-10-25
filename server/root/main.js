@@ -13,8 +13,8 @@ const path = require('path');
 
 dotenv.config()
 
-mongoose.connect(`mongodb://localhost/svarog-crm-system`, {useNewUrlParser: true}).then(() =>console.log("DB Conected"))
-mongoose.connection.on('error', err =>{
+mongoose.connect(`mongodb://localhost/svarog-crm-system`, { useNewUrlParser: true }).then(() => console.log("DB Conected"))
+mongoose.connection.on('error', err => {
     console.log(`DB connection error: ${err.message}`)
 })
 mongoose.set('debug', true)
@@ -27,7 +27,7 @@ const NewsRouter = require("./routers/News")
 const AgentRouter = require("./routers/ContAgent")
 const NewHistory = require("./routers/AgentHistory.js")
 app.use(cookieParser())
-app.use(morgan ("dev"))
+app.use(morgan("dev"))
 app.use(bodyParser.json())
 app.use(expressValidator())
 app.use(cors())
@@ -44,11 +44,11 @@ app.use("/", CommonTodoRoutes)
 // static
 
 
-app.get('/docs',(req,res) =>{
-    fs.readFile('documentation/ApiDocs.json', (err,data) =>{
-        if(err){
+app.get('/docs', (req, res) => {
+    fs.readFile('documentation/ApiDocs.json', (err, data) => {
+        if (err) {
             res.status(400).json({
-                error:err
+                error: err
             })
         }
         const docs = JSON.parse(data)
@@ -56,9 +56,9 @@ app.get('/docs',(req,res) =>{
     })
 })
 
-app.use(function (err, req,res,  next){
-    if(err.name === 'UnauthorizedError'){
-        res.status(401).json({error: "unathorized!"})
+app.use(function (err, req, res, next) {
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({ error: "unathorized!" })
     }
 })
 app.listen(port, () => console.log(`Server listening on port localhost:8080!`))

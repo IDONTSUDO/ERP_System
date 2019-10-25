@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import {listStatisticCompany} from "../Api/Http"
-import {isAuthenticated} from "../Api/Auth"
 import {Statistic,Icon} from 'antd'
 
 class CompanyStatistic extends Component {
