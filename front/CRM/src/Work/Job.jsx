@@ -28,6 +28,7 @@ import dateFormat from "dateformat";
 import DatePicker from "react-datepicker";
 import DefaultProfile from "../Assets/default.png";
 import ReactMarkdown from "react-markdown";
+import Moment from "react-moment";
 
 import { Link } from "react-router-dom";
 
@@ -54,51 +55,35 @@ export default class Job extends Component {
       description: ""
     };
   }
-  clickSetStatusCompleteJob = () => {
-    const { ID } = this.state;
-    const todoId = ID;
-    let expireAt = new Date();
-    let status = "Выполнено";
+  // life hooks 
+  componentDidMount() {
+    const todoId = this.props.match.params.todoId;
+    const workerId = isAuthenticated().direct._id;
+    const nameWorker = isAuthenticated().direct.name;
+    this.init(todoId);
+    this.setState({ ID: todoId });
+    this.setState({ worker: workerId });
+    this.setState({ name: nameWorker });
+  }
 
-    SetStatusJob(status, todoId).then(data => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        this.forceUpdate();
-
-        TodoChangeExperienseAtHTTP(expireAt, todoId);
-      }
-    });
+  componentWillReceiveProps(props) {
+    const todoId = props.match.params.todoId;
+    this.init(todoId);
+  }
+  forceUpdate() {
+    const todoId = this.props.match.params.todoId;
+    this.init(todoId);
+    this.setState({ ID: todoId });
+    this.setState({ body: "" });
+  }
+  // other
+  handleChange = name => event => {
+    this.setState({ error: "" });
+    this.setState({ [name]: event.target.value });
   };
-  clickSetStatusMoreInfoJob = () => {
-    const token = isAuthenticated().token;
-    const { ID, worker, todo } = this.state;
-    const todoId = ID;
-
-    let status = "Требуется уточнение";
-
-    SetStatusJob(status, todoId, token).then(data => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        let tags = [todo.postedBy];
-
-        this.forceUpdate(token);
-
-        let worker_by = worker;
-        let link = ID;
-        let event = "новый статус";
-        let payload = {
-          link,
-          worker_by,
-          event,
-          tags
-        };
-        this.openNotificationNewStatus();
-
-        NewNews(payload, token);
-      }
-    });
+  handleAction = name => event => {
+    this.setState({ error: "" });
+    this.setState({ [name]: event.target.value });
   };
 
   init = todoId => {
@@ -126,52 +111,131 @@ export default class Job extends Component {
       }
     });
   };
-  componentDidMount() {
-    const todoId = this.props.match.params.todoId;
-    const workerId = isAuthenticated().direct._id;
-    const nameWorker = isAuthenticated().direct.name;
-    this.init(todoId);
-    this.setState({ ID: todoId });
-    this.setState({ worker: workerId });
-    this.setState({ name: nameWorker });
-  }
-
-  componentWillReceiveProps(props) {
-    const todoId = props.match.params.todoId;
-    this.init(todoId);
-  }
-  handleChange = name => event => {
-    this.setState({ error: "" });
-    this.setState({ [name]: event.target.value });
-  };
-  handleAction = name => event => {
-    this.setState({ error: "" });
-    this.setState({ [name]: event.target.value });
-  };
-
-  clickSubmit = () => {
-    const token = isAuthenticated().token;
-    const { body, worker, ID, name, todo } = this.state;
-    let todoId = ID;
-    let comment = JSON.stringify({ body, worker, todoId, name });
-    NewComent(comment, token).then(data => {
+  // Status Job 
+  clickSetStatusCompleteJob = () => {
+    const { ID } = this.state;
+    const todoId = ID;
+    let expireAt = new Date();
+    let status = "Выполнено";
+    console.log(status)
+    let payload = {
+      status
+    }
+    SetStatusJob(payload, todoId).then(data => {
       if (data.error) {
         console.log(data.error);
       } else {
-        this.forceUpdate(token);
+        console.log(data)
+        this.forceUpdate();
 
-        let tagsArray = todo.tags;
-        // let arr = new Array()
-        let arr = [];
-        for (let i = 0; i < tagsArray.length; i++) {
-          if (tagsArray[i]._id != worker) {
-            arr.push(tagsArray[i]._id);
-          }
-        }
+        TodoChangeExperienseAtHTTP(expireAt, todoId);
+      }
+    });
+  };
+  clickSetStatusMoreInfoJob = () => {
+
+    const { ID, worker, todo } = this.state;
+    const todoId = ID;
+
+    let status = "Требуется уточнение";
+    let payload = {
+      status
+    }
+    SetStatusJob(payload, todoId).then(data => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        let tags = [todo.postedBy];
+
+        this.forceUpdate();
 
         let worker_by = worker;
         let link = ID;
-        let tags = arr;
+        let event = "новый статус";
+        let payload = {
+          link,
+          worker_by,
+          event,
+          tags
+        };
+        this.openNotificationNewStatus();
+
+        NewNews(payload);
+      }
+    });
+  };
+  handleChangeComandWork = value => {
+    if (value == "Выполнено") {
+      this.clickSetStatusCompleteJobWorker();
+    }
+    if (value == "Требуется уточнение") {
+      this.clickSetStatusMoreInfoJob();
+    } else {
+      return;
+    }
+  };
+  handleChange = value => {
+    if (value == "Выполнено") {
+      this.clickSubmitOneJob();
+    }
+    if (value == "Требуется уточнение") {
+      this.clickSetStatusMoreInfoJob();
+    } else {
+      return;
+    }
+  };
+  // coment 
+  clickSubmitSoloJob = event => {
+    event.preventDefault()
+        const { body,worker,ID,name,todo }  = this.state
+        let todoId = ID 
+        let comment = JSON.stringify({body,worker,todoId,name})
+        NewComent(comment).then(data => {
+            if(data.error){
+                console.log(data.error)
+            }else{
+                this.forceUpdate()
+
+                let tagsArray = todo.tags
+                let arr = new Array()
+                for(let i = 0; i < tagsArray.length; i++){
+                    if(tagsArray[i]._id != worker){
+                        arr.push(tagsArray[i]._id)
+                    }
+                }
+                
+                let worker_by = worker
+                let link = ID
+                let tags = arr
+                let event = "новый коментарий"
+                let payload = {
+                    tags,
+                    link,
+                    worker_by,
+                    event
+                }
+                NewNews(payload)
+            }
+        })
+  }
+
+  clickSubmit = () => {
+    // обработка коментария командного дела. 
+    const { body, worker, ID, name, JobArray } = this.state;
+    let todoId = ID;
+    let tags = []
+    for(let i;JobArray.length > i;i++){
+      tags.push(JobArray[i].user)
+    }
+    let comment = JSON.stringify({ body, worker, todoId, name })
+    NewComent(comment).then(data => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        this.forceUpdate();
+      console.log(tags)
+        let worker_by = worker;
+        let link = ID;
         let event = "новый коментарий";
         let payload = {
           tags,
@@ -184,17 +248,53 @@ export default class Job extends Component {
       }
     });
   };
+  clickSubmitOneJob = () => {
+  
+    const { ID, tags } = this.state;
+    // let todoId = ID;
+    // let comment = JSON.stringify({ body, worker, todoId, name });
+    // NewComent(comment).then(data => {
+    //   if (data.error) {
+    //     console.log(data.error);
+    //   } else {
+    //     this.forceUpdate();
+      
+    //     let tagsArray = tags;
+    //     // let arr = new Array()
+    //     let arr = [];
+    //     for (let i = 0; i < tagsArray.length; i++) {
+    //       if (tagsArray[i]._id != worker) {
+    //         arr.push(tagsArray[i]._id);
+    //       }
+    //     }
+
+    //     let worker_by = worker;
+    //     let link = ID;
+    //     let tags = arr;
+    //     let event = "новый коментарий";
+    //     let payload = {
+    //       tags,
+    //       link,
+    //       worker_by,
+    //       event
+    //     };
+    //     this.openNotificationNewComment();
+    //     NewNews(payload);
+      // }
+    // });
+  };
   deleteConfirmed = comment => {
     let answer = window.confirm("Точно?");
     if (answer) {
       this.deleteComment(comment);
     }
   };
-  handleChange = date => {
-    this.setState({
-      startDate: date
-    });
-  };
+  
+  // handleChange = date => {
+  //   this.setState({
+  //     startDate: date
+  //   });
+  // };
   deleteComment = comment => {
     const { todo, worker } = this.state;
     DeleteComment(comment).then(data => {
@@ -206,12 +306,7 @@ export default class Job extends Component {
       }
     });
   };
-  forceUpdate(token) {
-    const todoId = this.props.match.params.todoId;
-    this.init(todoId);
-    this.setState({ ID: todoId });
-    this.setState({ body: "" });
-  }
+
   NewDate = event => {
     event.preventDefault();
     const { startDate, ID } = this.state;
@@ -354,26 +449,7 @@ export default class Job extends Component {
       }
     });
   };
-  handleChangeComandWork = value => {
-    if (value == "Выполнено") {
-      this.clickSetStatusCompleteJobWorker();
-    }
-    if (value == "Требуется уточнение") {
-      this.clickSetStatusMoreInfoJob();
-    } else {
-      return;
-    }
-  };
-  handleChange = value => {
-    if (value == "Выполнено") {
-      this.clickSetStatusCompleteJob();
-    }
-    if (value == "Требуется уточнение") {
-      this.clickSetStatusMoreInfoJob();
-    } else {
-      return;
-    }
-  };
+
   content = (JobArray, worker) => (
     <form>
       <div className="form-group">
@@ -440,6 +516,16 @@ export default class Job extends Component {
       </svg>
     );
     const HeartIcon = props => <Icon component={HeartSvg} {...props} />;
+
+    /* TODO: 
+    1.Сделать исключение на запрос по созданию новостей.
+     Если пользователь 1 и он является. Создателем дела.
+     
+    2.Сделать фильтрцию массива что бы новость о коментарии не прилетала
+    тому кто запостил 
+    */ 
+
+
     return (
       <div className="postisitonRelativeSmeni">
         {comand ? (
@@ -458,6 +544,7 @@ export default class Job extends Component {
 
                     {JobArray.map((job, i) => (
                       <>
+                        {/* когда дело командное  */}
                         {isAuthenticated().direct._id + "IAMWORKED" ==
                         job.user ? (
                           <>
@@ -518,9 +605,9 @@ export default class Job extends Component {
                               </Link>
                               <h5>{comment.body}</h5>
                               <h5 class="text-muted">{comment.name}</h5>
-                              <small class="text-muted">
+                              <Moment class="text-muted">
                                 {comment.created}
-                              </small>
+                              </Moment>
                             </Tooltip>
                           </Comment>
                           {isAuthenticated().direct._id === comment.worker && (
@@ -580,6 +667,7 @@ export default class Job extends Component {
                       <small class="text-muted"></small>
                     </a>
                     <div class="btn-group dropup">
+                       {/* когда работа по делу производится одним человеком  */}
                       <Select
                         defaultValue="Статус"
                         style={{ width: 120 }}
@@ -592,11 +680,8 @@ export default class Job extends Component {
                       </Select>
                     </div>
                     <div style={{ padding: "10px" }}>
-                      <Popconfirm
-                        style={{ backgroundColor: "black" }}
-                        okText="Ок"
-                        cancelText="Отменить"
-                        title={tags.map((tod, i) => (
+                    <Popover
+                        content={tags.map((tod, i) => (
                           <>
                             <Link to={`/user/${tod}`}>
                               <img
@@ -610,12 +695,11 @@ export default class Job extends Component {
                             </Link>
                           </>
                         ))}
+                        trigger="hover"
+                        placement="bottom"
                       >
-                        <h6 style={{ color: "#266DCA" }}>
-                          Исполнителей {tags.length}
-                        </h6>
-                        <HeartIcon style={{ fontSize: "32px" }}></HeartIcon>
-                      </Popconfirm>
+                        <Button type="dashed">Посмотреть дело </Button>
+                      </Popover>
                     </div>
                   </Card>
                 </div>
@@ -642,10 +726,10 @@ export default class Job extends Component {
                                 />
                               </Link>
                               <h5>{comment.body}</h5>
-                              <h5 class="text-muted">{comment.name}</h5>
-                              <small class="text-muted">
+                              <h5 className="text-muted">{comment.name}</h5>
+                              <Moment  style={{ color: "#FEFEFE" }} format="D MMM YYYY">
                                 {comment.created}
-                              </small>
+                              </Moment>
                             </Tooltip>
                           </Comment>
                           {isAuthenticated().direct._id === comment.worker && (

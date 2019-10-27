@@ -3,7 +3,7 @@ const token = isAuthenticated().token
 
 export const list = page =>{
   
-    return fetch(`http://localhost:8080/all/worker/list/?page=${page}`,{
+    return fetch(`${process.env.REACT_APP_API_URL}/all/worker/list/?page=${page}`,{
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -19,7 +19,7 @@ export const list = page =>{
 }
 export const DeleteUser = (userId) =>{
   
-    return fetch(`http://localhost:8080/delete/worker/${userId}`,{
+    return fetch(`${process.env.REACT_APP_API_URL}/delete/worker/${userId}`,{
         method: "DELETE",
         headers: {
             Accept: "application/json",
@@ -34,8 +34,8 @@ export const DeleteUser = (userId) =>{
 })
 }
 export const NewPeopel = user =>{
-    console.log(token)
-    return fetch(`http://localhost:8080/new/worker/`, {
+   
+    return fetch(`${process.env.REACT_APP_API_URL}/new/worker/`, {
        method: "POST",
        headers: {
            Accept: "application/json", "Content-Type": "application/json",
@@ -50,7 +50,7 @@ export const NewPeopel = user =>{
 }
 
 export const NewTodo = (todo,user) =>{
-    return fetch(`http://localhost:8080/new/todo/awesome/${user._id}`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/new/todo/awesome/${user._id}`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -64,9 +64,9 @@ export const NewTodo = (todo,user) =>{
     })
     .catch(err =>console.log(err))
 }
-export const read = (userId,token) =>{
+export const read = (userId) =>{
     
-    return fetch(`http://localhost:8080/worker/get/${userId}`,{
+    return fetch(`${process.env.REACT_APP_API_URL}/worker/get/${userId}`,{
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -81,9 +81,9 @@ export const read = (userId,token) =>{
     console.log(err)
 })
 }
-export const update = (userId,token,user ) =>{
+export const update = (userId,user ) =>{
    
-    return fetch(`http://localhost:8080/edit/worker/${userId}`,{
+    return fetch(`${process.env.REACT_APP_API_URL}/edit/worker/${userId}`,{
         method: "PUT",
         headers: {
             Accept: "application/json",
@@ -111,9 +111,9 @@ export const updateUser = (user, next) =>{
         return console.log("ERRORs")
     }
 }
-export const readMyTodo = (userId,token) =>{
+export const readMyTodo = (userId) =>{
 
-        return fetch(`http://localhost:8080/my/todo/soso/${userId}`,{
+        return fetch(`${process.env.REACT_APP_API_URL}/my/todo/soso/${userId}`,{
             method: "GET",
             headers: {
                 Accept: "application/json",
@@ -128,9 +128,9 @@ export const readMyTodo = (userId,token) =>{
     })
 }
 
-export const soloJob = (todoId,token) =>{
+export const soloJob = (todoId) =>{
   
-    return fetch(`http://localhost:8080/todo/${todoId}`,{
+    return fetch(`${process.env.REACT_APP_API_URL}/todo/${todoId}`,{
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -145,9 +145,9 @@ export const soloJob = (todoId,token) =>{
     console.log(err)
 })
 }
-export const readComentList = (todoId,token) =>{
+export const readComentList = (todoId) =>{
     
-    return fetch(`http://localhost:8080/get/todo/coments/`,{
+    return fetch(`${process.env.REACT_APP_API_URL}/get/todo/coments/`,{
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -165,9 +165,9 @@ export const readComentList = (todoId,token) =>{
 })
 }
 
-export const NewComent = (comment,token) =>{
+export const NewComent = (comment) =>{
 
-    return fetch(`http://localhost:8080/comment/todo/`,{
+    return fetch(`${process.env.REACT_APP_API_URL}/comment/todo/`,{
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -187,7 +187,7 @@ export const NewComent = (comment,token) =>{
 
 export const DeleteComment = (comment) =>{
     
-    return fetch(`http://localhost:8080/delete/comment/${comment}`,{
+    return fetch(`${process.env.REACT_APP_API_URL}/delete/comment/${comment}`,{
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -207,7 +207,7 @@ export const DeleteComment = (comment) =>{
 
 export const NewNews = (payload) =>{
    
-    return fetch(`http://localhost:8080/new/news`,{
+    return fetch(`${process.env.REACT_APP_API_URL}/new/news`,{
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -228,7 +228,7 @@ export const NewNews = (payload) =>{
 
 export const listNews = (id) =>{
     
-    return fetch(`http://localhost:8080/worker/news`,{
+    return fetch(`${process.env.REACT_APP_API_URL}/worker/news`,{
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -246,16 +246,16 @@ export const listNews = (id) =>{
     console.log(error)
 })
 }
-export const SetStatusJob = (status,todoId) =>{
-    
-    return fetch(`http://localhost:8080/todo/change/${todoId}`,{
+export const SetStatusJob = (payload,todoId) =>{
+    console.log(payload)
+    return fetch(`${process.env.REACT_APP_API_URL}/todo/change/${todoId}`,{
         method: "POST",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`
         },
-        body:JSON.stringify({status:status})
+        body:JSON.stringify({payload})
     })
 .then(response =>{
 
@@ -266,8 +266,8 @@ export const SetStatusJob = (status,todoId) =>{
 })
 }
 export const TodayWorkHTTP = (userId) =>{
-    console.log(userId)
-    return fetch(`http://localhost:8080/today/todo/${userId}`,{
+
+    return fetch(`${process.env.REACT_APP_API_URL}/today/todo/${userId}`,{
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -284,8 +284,8 @@ export const TodayWorkHTTP = (userId) =>{
 }
 
 export const TodoChangeExperienseAtHTTP = (expireAt,todoId) =>{
-    console.log(JSON.stringify({expireAt:expireAt}))
-    return fetch(`http://localhost:8080/todo/change/${todoId}`,{
+    
+    return fetch(`${process.env.REACT_APP_API_URL}/todo/change/${todoId}`,{
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -303,7 +303,7 @@ export const TodoChangeExperienseAtHTTP = (expireAt,todoId) =>{
 }
 export const NewContrAgent = (NewAgent,user) =>{
    
-    return fetch(`http://localhost:8080/new/agent/${user}`,{
+    return fetch(`${process.env.REACT_APP_API_URL}/new/agent/${user}`,{
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -321,7 +321,7 @@ export const NewContrAgent = (NewAgent,user) =>{
 }
 export const ContrAgentList = page =>{
    
-    return fetch(`http://localhost:8080/agent/list/?page=${page}`,{
+    return fetch(`${process.env.REACT_APP_API_URL}/agent/list/?page=${page}`,{
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -338,7 +338,7 @@ export const ContrAgentList = page =>{
 }
 export const GetAgentProfile = (agentId) =>{
    
-    return fetch(`http://localhost:8080/agent/${agentId}`,{
+    return fetch(`${process.env.REACT_APP_API_URL}/agent/${agentId}`,{
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -356,7 +356,7 @@ export const GetAgentProfile = (agentId) =>{
 
 
 export const AddManageForAgent = (tags,agentId) =>{
-    return fetch(`http://localhost:8080/new/manage/agent/${agentId}`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/new/manage/agent/${agentId}`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -372,7 +372,7 @@ export const AddManageForAgent = (tags,agentId) =>{
 }
 
 export const MyAgentList = (workerId) =>{
-    return fetch(`http://localhost:8080/agent/manage/`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/agent/manage/`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -386,7 +386,7 @@ export const MyAgentList = (workerId) =>{
     .catch(err =>console.log(err))
 }
 export const MyHistoryActive = (userId) =>{
-    return fetch(`http://localhost:8080/my/history/active/`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/my/history/active/`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -400,7 +400,7 @@ export const MyHistoryActive = (userId) =>{
     .catch(err =>console.log(err))
 }
 export const MyHistoryBeginer = (userId) =>{
-    return fetch(`http://localhost:8080/my/history/beginer/`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/my/history/beginer/`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -415,7 +415,7 @@ export const MyHistoryBeginer = (userId) =>{
 }
 
 export const MyHistoryComplete = (userId,page) =>{
-    return fetch(`http://localhost:8080/my/history/complete/?page=${page}`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/my/history/complete/?page=${page}`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -429,7 +429,7 @@ export const MyHistoryComplete = (userId,page) =>{
     .catch(err =>console.log(err))
 }
 export const OneHistoryGet = (HistoryById) =>{
-    return fetch(`http://localhost:8080/history/${HistoryById}`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/history/${HistoryById}`, {
         method: "GET",
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -443,7 +443,7 @@ export const OneHistoryGet = (HistoryById) =>{
 }
 
 export const ChangeHistory = (DealId,status) =>{
-    return fetch(`http://localhost:8080/change/history/${DealId}`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/change/history/${DealId}`, {
         method: "PUT",
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -458,7 +458,7 @@ export const ChangeHistory = (DealId,status) =>{
 }
 export const ChangeHistoryItem = (DealId,payload) =>{
     console.log( JSON.stringify(payload))
-    return fetch(`http://localhost:8080/change/history/${DealId}`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/change/history/${DealId}`, {
         method: "PUT",
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -472,7 +472,7 @@ export const ChangeHistoryItem = (DealId,payload) =>{
     .catch(err =>console.log(err))
 }
 export const SearchContrAgent = (item) =>{
-    return fetch(`http://localhost:8080/agent/search`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/agent/search`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -486,7 +486,7 @@ export const SearchContrAgent = (item) =>{
     .catch(err =>console.log(err))
 }
 export const listStatisticCompany = () =>{
-    return fetch(`http://localhost:8080/get/qauality/user/statistic`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/get/qauality/user/statistic`, {
         method: "GET",
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -499,7 +499,7 @@ export const listStatisticCompany = () =>{
     .catch(err =>console.log(err))
 }
 export const NewDealHistory = (payload) =>{
-    return fetch(`http://localhost:8080/new/history/`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/new/history/`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -514,7 +514,7 @@ export const NewDealHistory = (payload) =>{
 }
 export const AllAgentHistory = (agentId) =>{
    
-    return fetch(`http://localhost:8080/all/agent/history/`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/all/agent/history/`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -531,7 +531,7 @@ export const UpdateNews = (NewsArray)=>{
     console.log(NewsArray)
     for (let news  of NewsArray) {
         console.log(news)
-        fetch(`http://localhost:8080/worker/read/${news}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/worker/read/${news}`, {
             method: "POST",
             headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -543,7 +543,7 @@ export const UpdateNews = (NewsArray)=>{
 }
 export const TodoUpTime = (ID,UpTime) =>{
  
-    return fetch(`http://localhost:8080/todo/change/${ID}`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/todo/change/${ID}`, {
         method: "POST", 
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -558,7 +558,7 @@ export const TodoUpTime = (ID,UpTime) =>{
 }
 export const TodoChangeComandList = (todoId,payload) =>{
  
-    return fetch(`http://localhost:8080/todo/change/${todoId}`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/todo/change/${todoId}`, {
         method: "POST", 
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -572,7 +572,7 @@ export const TodoChangeComandList = (todoId,payload) =>{
     .catch(err =>console.log(err))
 }
 export const ChangeAgent = (AgentId,status) =>{
-    return fetch(`http://localhost:8080/change/agent/${AgentId}`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/change/agent/${AgentId}`, {
         method: "PUT", 
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
@@ -586,7 +586,21 @@ export const ChangeAgent = (AgentId,status) =>{
     .catch(err =>console.log(err))
 }
 export const MyTodoGetComandWorked = (userId) =>{
-    return fetch(`http://localhost:8080/get/comand/todo/`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/get/comand/todo/`, {
+        method: "POST", 
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId})
+    })
+    .then(responce =>{
+        return responce.json()
+    })
+    .catch(err =>console.log(err))
+}
+export const MytodoComandItsDay =  (userId) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/get/comand/todo/time/`, {
         method: "POST", 
         headers: {
             Accept: "application/json", "Content-Type": "application/json",

@@ -187,23 +187,17 @@ export default class MyAgent extends Component {
                             <h5 class="text-muted">Имя {agent.name}</h5>
                             {agent.status === "Друг" ? (
                     <>
-                    <div>
-                    <div className="square-green"></div>
-                    </div>
+                    <div><div style={{padding:"5px"}}><div className="square-green"></div></div></div>
                     </>
                     ):("")}
                     {agent.status === "Капризный" ? (
                     <>
-                    <div>
-                    <div className="square-red"></div>
-                    </div>
+                    <div><div style={{padding:"5px"}}><div className="square-red"></div></div></div>
                     </>
                     ):("")}
                     {agent.status === "Упертый" ? (
                     <>
-                    <div>
-                    <div className="square-yellow"></div>
-                    </div>
+                    <div><div style={{padding:"5px"}}><div className="square-yellow"></div></div></div>
                     </>
                     ):("")}
                     

@@ -75,6 +75,18 @@ exports.myTODO = async (req, res) => {
             res.json({ todos })
         })
 }
+exports.MyComandTodo = async (req, res) => {
+
+    await TODO.find({ $and: [{ "time": { $eq: `${time}` } }, { tags: `${req.worker._id}` }] })
+        .exec((err, posts) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            res.json(posts)
+        })
+}
 exports.MyTodoAwesome = async (req, res) => {
 
     await TODO.find({ tags: req.worker._id })
@@ -102,16 +114,15 @@ exports.NewTodoUserAwesome = async (req, res) => {
 }
 
 exports.TodoChange = async (req, res) => {
-
+    console.log(req.body.payload|| req.body )
     let todo = req.todo;
-    console.log(req.body.payload)
-    todo = _.extend(todo, req.body.payload);
+    todo = _.extend(todo, req.body.payload || req.body );
 
 
     todo.updated = Date.now()
-    todoNew = new TODO(todo)
-    await todoNew.save((err, result) => {
-        console.log(200)
+    console.log(todo)
+    await todo.save((err, result) => {
+       
         if (err) {
             return res.status(400).json({
                 error: err

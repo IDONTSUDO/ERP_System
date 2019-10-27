@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {isAuthenticated} from "../Api/Auth"
 import {TodayWorkHTTP} from '../Api/Http'
 import {Link} from 'react-router-dom'
-import { Button } from 'antd'
+import { Button,Card } from 'antd'
 
 export default class TodayWork extends Component {
     constructor(){
@@ -88,7 +88,7 @@ export default class TodayWork extends Component {
     }
     render() {
         const {todos,user} = this.state
-           //  TODO: Change CSS and loading
+        
         return (
 
             <div className="postisitonRelativeSmeni">
@@ -102,34 +102,56 @@ export default class TodayWork extends Component {
                 <Button onClick={this.greenSort} className="square-green"></Button>
                 <Button onClick={this.redSort} className="square-red"></Button>
             <div className="row">
-            {
-                todos.map((tod, i) => (
-            <>
-            <div  className="col-md-4"key={i}>
-            <h3>{tod.title}</h3>
-                           
-            {tod.importance === "Очень важное" ? (
-                <>
-                <div className="square-red"></div>
-                </>
-            ):("")}
-            {tod.importance === "Средней важности" ? (
-                <>
-                <div className="square-yellow"></div>
-                </>
-            ):("")}
-            {tod.importance === "Не очень важное" ? (
-                <>
-                <div className="square-green"></div>
-                </>
-            ):("")}
-            <div>{tod.status}</div>
-            <div>{tod.time}</div>
-            
-            <Button ><Link to={`/job/${tod._id}`}>Посмотреть дело</Link></Button>
-            </div>
-            </>
-            ))}
+            {todos.map((tod, i) => (
+      <>
+      
+    
+      
+      {tod.importance === "Очень важное" ? (
+          <>
+          <div className="todo-phone-red">
+           <Card className="todo-red" key={i}>
+           <Link to={`/job/${tod._id}`}><h3 style={{color:"#ffffff"}}  >{tod.title}</h3></Link>
+           {tod.status === "в работе" ?(
+          <div className="todo-text-status-job">{tod.status}</div>
+          ):(
+            "")}
+          <div style={{color:"#fff5f5"}}>{tod.time}</div>
+          </Card>
+          </div>
+          </>
+      ):("")}
+      {tod.importance === "Средней важности" ? (
+          <>
+           <div className="todo-phone-yellow">
+          <Card className="todo-yellow" key={i}>
+          <Link to={`/job/${tod._id}`}><h3 style={{color:"#141412"}}  >{tod.title}</h3></Link>
+          {tod.status === "в работе" ?(
+          <div className="todo-text-status-job">{tod.status}</div>
+          ):(
+            "")}
+         
+          <div style={{color:"#141412"}}>{tod.time}</div>
+          </Card>
+          </div>
+          </>
+      ):("")}
+      {tod.importance === "Не очень важное" ? (
+          <>
+                     <div className="todo-phone-green">
+          <Card className="todo-green">
+          <Link to={`/job/${tod._id}`}><h3 style={{color:"#ffffff"}}>{tod.title}</h3></Link>
+          {tod.status === "в работе" ?(
+          <div className="todo-text-status-green">{tod.status}</div>
+          ):(
+            "")}
+          <div style={{color:"#ffffff"}}>{tod.date}</div>
+          </Card>
+          </div>
+          </>
+      ):("")}
+      </>
+      ))}
            
             </div>
             </div>

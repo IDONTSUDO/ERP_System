@@ -39,7 +39,7 @@ class AgentHistory extends Component {
           {agentHistoryRes.map((agentHistoryOne, i) => (
             <>
               <div>
-                <Card style={{ backgroundColor: "#996BD5" }}>
+                <Card  className="deal-purpur">
                   <div style={{ color: "#FEFEFE" }}>{agentHistoryOne.name}</div>
                   <div style={{ color: "#FEFEFE" }}>{agentHistoryOne.item}</div>
                   <Moment

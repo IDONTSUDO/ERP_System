@@ -65,7 +65,8 @@ export default class MyDealHistory extends Component {
           <div className="row">
             {history.map((oneDeal, i) => (
               <>
-                <Card style={{ backgroundColor: "#996BD5" }}>
+              <div className="deal-phone-green">
+                <Card className="deal-purpur">
                   <div style={{ color: "#FEFEFE" }}>{oneDeal.price}</div>
                   <div style={{ color: "#FEFEFE" }}>{oneDeal.name}</div>
                   <Moment style={{ color: "#FEFEFE" }} format="D MMM YYYY">
@@ -76,6 +77,7 @@ export default class MyDealHistory extends Component {
                     <Rate disabled defaultValue={oneDeal.rate} />
                   </div>
                 </Card>
+                </div>
               </>
             ))}
           </div>

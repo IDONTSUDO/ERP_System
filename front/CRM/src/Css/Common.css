@@ -108,6 +108,94 @@
 	height: 1em;
 	background: yellow;
 }
+.todo-yellow{
+    padding:5px;
+    background:#fff30fc0;
+    max-width: 100%;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    /* box-shadow: inset 5em 1em gold; */
+}
+.todo-red{
+    padding:5px;
+    background: #f72d2dc9;
+    max-width: 100%;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    
+    /* box-shadow: inset 5em 1em #f24141; */
+}
+.todo-comand-yellow{
+    padding:5px;
+    background:#fff30fc0;
+    max-width: 100%;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    box-shadow: inset 5em 1em gold;
+}
+.todo-comand-red{
+    padding:5px;
+    background: #f72d2dc9;
+    max-width: 100%;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    
+    box-shadow: inset 1em 0em rgb(219, 23, 17);
+}
+/* :hover */
+.deal-purpur{
+    padding:5px;
+    background: #996BD5;
+    max-width: 100%;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    
+    /* box-shadow: inset 5em 1em #f24141; */
+}
+/* :hover */
+.deal-purpurs:hover{
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.1);
+}
+.todo-red:hover{
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.1);
+}
+.todo-green:hover{
+    -webkit-transform: rotateZ(20deg);
+    -ms-transform: rotateZ(20deg);
+    transform: scale(1.1);
+}
+.todo-yellow:hover{
+    /* -webkit-transform: rotateZ(10deg); */
+    /* -ms-transform: rotateZ(10deg); */
+    transform: scale(1.1);
+}
+.todo-green{
+    padding:5px;
+    background: #15b11ac4;
+    max-width: 100%;
+    /* box-shadow: inset 5em 1em #50ba29; */
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    
+    
+
+}
+.todo-phone-red{
+    background: #ec26269d;
+    padding: 5px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+.todo-phone-yellow{
+    background: #fff30f86;
+    padding: 5px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+.todo-phone-green{
+    background: #8ed61398;
+    padding: 5px;
+}
+.deal-phone-green{
+    background:#7b4f7ddc;
+    padding: 5px;
+}
 .square-green{
 	width: 1em;
 	height: 1em;
@@ -211,4 +299,13 @@
 }
 .TextDealHistory{
     text-align: center
+}
+.ant-card-bordered{
+    border:none
+}
+.todo-text-status-job{
+    background-color:  #064f8b36;
+}
+.todo-text-status-green{
+    background-color:  #20ac9977;
 }

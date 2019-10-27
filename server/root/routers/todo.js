@@ -12,7 +12,8 @@ const {
     DeleteComent,
     ComentById,
     myTodoItsDay,
-    GetcomandTodo
+    GetcomandTodo,
+    MyComandTodo
 } = require("../controllers/todo.js")
 const { requireSignin } = require("../middleware/middleware.js")
 const { workerById, workerSelectId } = require("../controllers/Company")
@@ -23,6 +24,7 @@ router.get('/todo/:todoid', requireSignin, GetTodo)
 router.get('/my/todo/soso/:workerSelectId', requireSignin, myTODO)
 router.get('/today/todo/:workerSelectId', requireSignin, myTodoItsDay)
 
+router.post('/get/comand/todo/time/', requireSignin, MyComandTodo)
 router.post('/get/comand/todo/', requireSignin, GetcomandTodo)
 router.post('/get/todo/coments/', requireSignin, FindComments)
 router.post('/new/todo/so-so/:workerById', requireSignin, SOSotodo)

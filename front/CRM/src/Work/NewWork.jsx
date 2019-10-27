@@ -306,7 +306,7 @@ class Work extends React.Component {
           }
         })
         
-
+        console.log(JobArray)
         let  comand = true
         let todo = {
           JobArray,
@@ -357,6 +357,11 @@ class Work extends React.Component {
     workerJob7,
     workerJob8,
     workerJob9} = this.state 
+    /*
+    TODO: 
+    валидация
+    
+    */
     return (
       
 
