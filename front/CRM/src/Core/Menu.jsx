@@ -156,11 +156,7 @@ class MenuMain extends React.Component {
                             <Link
                               to={`/user/work/${isAuthenticated().direct._id}`}
                             >
-                              <span>Мои дела</span>{" "}
-                              <Badge
-                                count={this.state.getComandTodo}
-                                style={{ backgroundColor: "#52c41a" }}
-                              />{" "}
+                              <span>Мои дела</span>
                             </Link>
                           </Menu.Item>
                           <Menu.Item key="18">

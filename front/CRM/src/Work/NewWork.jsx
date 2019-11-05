@@ -157,6 +157,7 @@ class Work extends React.Component {
       }
       let  time = moment(startDate).locale("ru").format("LL")
       tags = []
+      let finalyUserArray = []
       tags = tagsArray
 
       let  comand = false

@@ -30,7 +30,7 @@ export default class News extends Component {
         for (var i = 0; data.length > i; i++) {
           NewsArray.push(data[i]._id);
         }
-        // UpdateNews(NewsArray);
+        UpdateNews(NewsArray);
       }
     });
   }
@@ -168,15 +168,19 @@ export default class News extends Component {
                     ):("")}
                   
                     {news.jobNews.length > 1 ? (<>
-                        <Badge status="red" text="Командное"/>
                         {news.jobNews.map((news, i) => (<>
                           {news.user == userID ? (
+                            <>
+                              <Badge status="red" text="Командное"/>
                           <div className="ComandTodoBorder" style={{wordBreak: "break-all"}}>
+
                             <div>Подробности</div>
+                            
                             <div style={{ padding: "5px" }}>{news.action}</div>
                             <div style={{ padding: "5px" }}>{news.date}</div>
                           
                           </div>
+                          </>
                           ):("")}
                         
                         

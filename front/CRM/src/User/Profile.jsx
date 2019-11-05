@@ -44,6 +44,8 @@ class Profile extends Component {
     const { redirectToSignin, user,open } = this.state;
     console.log(typeof user)
     const photoUrl = user._id
+        ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` 
+        : DefaultProfile
     const avatarBolean = user.avatar
       
     return (
@@ -56,12 +58,11 @@ class Profile extends Component {
           <h2 className="">Профиль сотрудника </h2>
           <div className="">
             <div className="">
-            <img
-                style={{ height: "200px", width: "auto" }}
+            <img 
+                style={{height: "200px", width:"auto"}}
                 className="img-thumbnail"
                 onError={i => (i.target.src = `${DefaultProfile}`)}
-                src={photoUrl}
-              />
+                src={photoUrl} />
 
               <div className="">
                 <p>Имя: {user.name}</p>

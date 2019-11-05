@@ -29,7 +29,7 @@ import DatePicker from "react-datepicker";
 import DefaultProfile from "../Assets/default.png";
 import ReactMarkdown from "react-markdown";
 import Moment from "react-moment";
-import 'moment/locale/ru';
+import "moment/locale/ru";
 
 import { Link } from "react-router-dom";
 
@@ -54,10 +54,10 @@ export default class Job extends Component {
       tags: [],
       JobArray: [],
       description: "",
-      todoTitel:""
+      todoTitel: ""
     };
   }
-  // life hooks 
+  // life hooks
   componentDidMount() {
     const todoId = this.props.match.params.todoId;
     const workerId = isAuthenticated().direct._id;
@@ -89,7 +89,6 @@ export default class Job extends Component {
   };
 
   init = todoId => {
-   
     soloJob(todoId).then(data => {
       if (data.error) {
         this.setState({ redirectToSignin: true });
@@ -114,16 +113,16 @@ export default class Job extends Component {
       }
     });
   };
-  // Status Job 
+  // Status Job
   clickSetStatusCompleteJob = () => {
     const { ID } = this.state;
     const todoId = ID;
     let expireAt = new Date();
     let status = "Выполнено";
-   
+
     let payload = {
       status
-    }
+    };
     SetStatusJob(payload, todoId).then(data => {
       if (data.error) {
         console.log(data.error);
@@ -147,14 +146,13 @@ export default class Job extends Component {
     });
   };
   clickSetStatusMoreInfoJob = () => {
-
-    const { ID, worker, todo,postedBy } = this.state;
+    const { ID, worker, todo, postedBy } = this.state;
     const todoId = ID;
 
     let status = "Требуется уточнение";
     let payload = {
       status
-    }
+    };
     SetStatusJob(payload, todoId).then(data => {
       if (data.error) {
         console.log(data.error);
@@ -162,12 +160,12 @@ export default class Job extends Component {
         this.forceUpdate();
 
         let worker_by = worker;
-        let link = `/job/`+ID;
+        let link = `/job/` + ID;
         let eventNews = "Новый статус";
         let payload = {
           link,
           worker_by,
-          eventNews,
+          eventNews
         };
         this.openNotificationNewStatus();
 
@@ -195,84 +193,75 @@ export default class Job extends Component {
       return;
     }
   };
-  // coment 
   clickSubmitSoloJob = event => {
-    event.preventDefault()
-        const { body,worker,ID,name,todo,tags }  = this.state
-        let todoId = ID 
-        console.log(tags)
-        let comment = JSON.stringify({body,worker,todoId,name})
-        NewComent(comment).then(data => {
-            if(data.error){
-                console.log(data.error)
-            }else{
-                this.forceUpdate()
+    event.preventDefault();
+    const { body, worker, ID, name, todo, tags } = this.state;
+    let todoId = ID;
 
-                
-                let arr = []
-                for(let i = 0; i < tags.length; i++){
-                    if(tags[i]._id != worker){
-                        arr.push(tags[i]._id)
-                    }
-                }
-               
-                let worker_by = tags.map((user, index) => {
-                  return {
-                    user: user
-                  }
-                })
-                let link = `/job/` + ID
-                
-        let posted_by = isAuthenticated().direct._id
-        let name_posted = isAuthenticated().direct.name
-        // let link = `${process.env.REACT_APP_API_NEWS_JOB}`
-        // let paylod = {
-        //   link,
-        //   worker_by,
-        //   eventNews,
-        //   posted_by,
-        //   name_posted,
-        //   JobArray,
-        //   comand,
-        //   importance,
-        //   title,
-        //   jobNews
-        // }
-                let eventNews = "Новый коментарий"
-                let payload = {
-                    link,
-                    worker_by,
-                    eventNews,
-                    name_posted,
-                    posted_by
-                }
-            
-                NewNews(payload)
-            }
-        })
-  }
-  clickSubmitComentOneJob = () => {
-    const { body, worker, ID, todoTitel, tags,postedBy,name } = this.state;
-    let todoId = ID
-    let comment = JSON.stringify({ body, worker, todoId, name })
+    let userID = isAuthenticated().direct._id;
+
+    let comment = JSON.stringify({ body, worker, todoId, name });
     NewComent(comment).then(data => {
       if (data.error) {
         console.log(data.error);
       } else {
         this.forceUpdate();
-        
-      
-        let worker_by = tags.map((user, index) => {
+
+        let arr = [];
+        for (let i = 0; i < tags.length; i++) {
+          if (tags[i]._id != worker) {
+            arr.push(tags[i]._id);
+          }
+        }
+        let fynalyArray = tags.filter().filter(el => el != userID);
+        let worker_by = fynalyArray.map((user, index) => {
           return {
-            user: user,
+            user: user
           };
-        })
-        let link =  `/job/` + todoId
-            
-        let name_posted = isAuthenticated().direct.name 
-        let posted_by = isAuthenticated().direct._id
-        let description = body
-       
+        });
+        let link = `/job/` + ID;
+
+        let posted_by = isAuthenticated().direct._id;
+        let name_posted = isAuthenticated().direct.name;
+        let eventNews = "Новый коментарий";
+        let payload = {
+          link,
+          worker_by,
+          eventNews,
+          name_posted,
+          posted_by
+        };
+
+        NewNews(payload);
+      }
+    });
+  };
+  clickSubmitComentOneJob = () => {
+    // функция для коментариев дела которое не переходит от пользователя к пользователю
+    const { body, worker, ID, todoTitel, tags, postedBy, name } = this.state;
+    let todoId = ID;
+    let comment = JSON.stringify({ body, worker, todoId, name });
+
+    let userID = isAuthenticated().direct._id;
+    //
+    NewComent(comment).then(data => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        this.forceUpdate();
+        let finalyUser = [];
+        finalyUser = tags.filter(el => el != userID); //валидируем, что бы в массиве не было юзер айди того кто отправляет коменатрий
+        let worker_by = finalyUser.map((user, index) => {
+          return {
+            user: user
+          };
+        });
+        let link = `/job/` + todoId;
+
+        let name_posted = isAuthenticated().direct.name;
+        let posted_by = isAuthenticated().direct._id;
+        let description = body;
+
         let eventNews = "Новый коментарий";
         let payload = {
           tags,
@@ -287,41 +276,43 @@ export default class Job extends Component {
         NewNews(payload);
       }
     });
-  }
+  };
   clickSubmit = () => {
-    // обработка коментария одиночного  дела. 
+    // обработка коментария одиночного  дела.
     const { body, worker, ID, name, JobArray } = this.state;
-    let WorkerException = worker + "IAMWORKED"
+    let WorkerException = worker + "IAMWORKED";
     let todoId = ID;
-    let tags = []
-    for(let i = 0;JobArray.length > i;i++){
-      if(JobArray[i].user[25] == "A"){
-        tags.push(JobArray[i].user.slice(0, -9))
+    let tags = [];
+    for (let i = 0; JobArray.length > i; i++) {
+      if (JobArray[i].user[25] == "A") {
+        tags.push(JobArray[i].user.slice(0, -9));
       }
-      if(JobArray[i].user[25] == undefined){
-        tags.push(JobArray[i].user)
+      if (JobArray[i].user[25] == undefined) {
+        tags.push(JobArray[i].user);
       }
     }
-    
-    let comment = JSON.stringify({ body, worker, todoId, name })
+   
+
+    let comment = JSON.stringify({ body, worker, todoId, name });
     NewComent(comment).then(data => {
       if (data.error) {
         console.log(data.error);
       } else {
         this.forceUpdate();
-        
-      
-        let worker_by = tags.map((user, index) => {
+        let link = `/job/` + todoId;
+
+        let name_posted = isAuthenticated().direct.name;
+        let posted_by = isAuthenticated().direct._id;
+        let description = body;
+        let fynalyArray = []
+        fynalyArray = tags.filter(el =>  el != posted_by);
+        let worker_by = fynalyArray.map((user, index) => {
           return {
-            user: user,
+            user: user
           };
-        })
-        let link =  `/job/` + todoId
-            
-        let name_posted = isAuthenticated().direct.name 
-        let posted_by = isAuthenticated().direct._id
-        let description = body
+        });
        
+
         let eventNews = "Новый коментарий";
         let payload = {
           tags,
@@ -339,27 +330,26 @@ export default class Job extends Component {
     });
   };
   clickSubmitOneJob = () => {
-  // TODO Генерация новости
-    const { ID, tags,postedBy,name,TodoTitel } = this.state;
-    let description 
-    description = TodoTitel
- 
-    let status = "Выполнено" 
-    let expireAt = new Date()
+    // TODO Генерация новости
+    const { ID, tags, postedBy, name, TodoTitel } = this.state;
+    let description;
+    description = TodoTitel;
+
+    let status = "Выполнено";
+    let expireAt = new Date();
     let payload = {
       status,
       expireAt
-    }
-    TodoChangeComandList(ID,payload).then(data =>{
-      if(data.error){
-
-      }else{
-        this.forceUpdate()
-        let link = ID
-        let posted_by  =  isAuthenticated().direct._id
-        let name_posted = isAuthenticated().direct.name
-        let worker_by = {user:postedBy}
-        let eventNews = status
+    };
+    TodoChangeComandList(ID, payload).then(data => {
+      if (data.error) {
+      } else {
+        this.forceUpdate();
+        let link = ID;
+        let posted_by = isAuthenticated().direct._id;
+        let name_posted = isAuthenticated().direct.name;
+        let worker_by = { user: postedBy };
+        let eventNews = status;
         let payload = {
           worker_by,
           eventNews,
@@ -367,11 +357,10 @@ export default class Job extends Component {
           name_posted,
           posted_by,
           description
-        }
-        console.log(200)
-        NewNews(payload)
+        };
+        NewNews(payload);
       }
-    })
+    });
   };
   deleteConfirmed = comment => {
     let answer = window.confirm("Точно?");
@@ -480,7 +469,6 @@ export default class Job extends Component {
       };
     });
 
-    
     news = El3;
     JobArray = LastArray;
     let status = "Требуется уточнение";
@@ -608,8 +596,7 @@ export default class Job extends Component {
      
     2.Сделать фильтрцию массива что бы новость о коментарии не прилетала
     тому кто запостил 
-    */ 
-
+    */
 
     return (
       <div className="postisitonRelativeSmeni">
@@ -680,7 +667,7 @@ export default class Job extends Component {
                               <Link to={`/user/${comment.worker}`}>
                                 <img
                                   className="card-img-top"
-                                  src={`http://localhost:8080/user/photo/${comment.worker}`}
+                                  src={`${process.env.REACT_APP_API_URL}/user/photo/${comment.worker}`}
                                   onError={i =>
                                     (i.target.src = `${DefaultProfile}`)
                                   }
@@ -690,8 +677,8 @@ export default class Job extends Component {
                               </Link>
                               <h5>{comment.body}</h5>
                               <h5 class="text-muted">{comment.name}</h5>
-                              <Moment  locale="ru" format="D MMM YYYY">
-                                {comment.created }
+                              <Moment locale="ru" format="D MMM YYYY">
+                                {comment.created}
                               </Moment>
                             </Tooltip>
                           </Comment>
@@ -752,7 +739,7 @@ export default class Job extends Component {
                       <small class="text-muted"></small>
                     </a>
                     <div class="btn-group dropup">
-                       {/* когда работа по делу производится одним человеком  */}
+                      {/* когда работа по делу производится одним человеком  */}
                       <Select
                         defaultValue="Статус"
                         style={{ width: 120 }}
@@ -765,7 +752,7 @@ export default class Job extends Component {
                       </Select>
                     </div>
                     <div style={{ padding: "10px" }}>
-                    <Popover
+                      <Popover
                         content={tags.map((tod, i) => (
                           <>
                             <Link to={`/user/${tod}`}>
@@ -797,7 +784,7 @@ export default class Job extends Component {
                     {comments.map((comment, i) => (
                       <>
                         <Card style={{ width: "55em" }}>
-                          <Comment style={{wordBreak:"break-all"}} key={i}>
+                          <Comment style={{ wordBreak: "break-all" }} key={i}>
                             <Tooltip>
                               <Link to={`/user/${comment.worker}`}>
                                 <img
@@ -812,7 +799,7 @@ export default class Job extends Component {
                               </Link>
                               <h5>{comment.body}</h5>
                               <h5 className="text-muted">{comment.name}</h5>
-                              <Moment  locale="ru" format="D MMM YYYY">
+                              <Moment locale="ru" format="D MMM YYYY">
                                 {comment.created}
                               </Moment>
                             </Tooltip>
@@ -834,7 +821,6 @@ export default class Job extends Component {
                     ))}
                   </div>
                   <>
-                  
                     <div style={{ padding: "5px" }}></div>
                     <div class="form-group col-sm-8 ">
                       <label for="exampleFormControlTextarea1">
@@ -848,25 +834,25 @@ export default class Job extends Component {
                         rows="3"
                       ></textarea>
                       <div style={{ padding: "10px" }}>
-                      {comand == true ? (
-                        <>
-                        <Button
-                          onClick={this.clickSubmit}
-                          className="btn btn-primary"
-                        >
-                          Отправить
-                        </Button>
-                        </>
-                      ):(
-                  <>
-                  <Button
-                          onClick={this.clickSubmitComentOneJob}
-                          className="btn btn-primary"
-                        >
-                          Отправить
-                        </Button>
-                  </>
-                      )}
+                        {comand == true ? (
+                          <>
+                            <Button
+                              onClick={this.clickSubmit}
+                              className="btn btn-primary"
+                            >
+                              Отправить
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button
+                              onClick={this.clickSubmitComentOneJob}
+                              className="btn btn-primary"
+                            >
+                              Отправить
+                            </Button>
+                          </>
+                        )}
                       </div>
                     </div>
                   </>
