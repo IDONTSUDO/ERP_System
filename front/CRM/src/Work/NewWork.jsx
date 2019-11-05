@@ -1,9 +1,10 @@
 import React from 'react'
 import dateFormat from 'dateformat'
 import ReactMarkdown from 'react-markdown'
-import {list,NewTodo} from "../Api/Http"
+import {list,NewTodo,NewNewsJob} from "../Api/Http"
 import {isAuthenticated} from "../Api/Auth"
 import { Button,Tabs,notification, Icon,DatePicker,Input,Select } from 'antd'
+import moment from "moment"
 import "react-datepicker/dist/react-datepicker.css";
 
 
@@ -133,7 +134,6 @@ class Work extends React.Component {
   onChangeDate = (date, dateString) =>{
     this.setState({startDate:date})
   }
-  // изменяет состояние формы ввода тэг бара
   handleChange = (value) => {
     this.setState({tags:value})
   }
@@ -144,8 +144,8 @@ class Work extends React.Component {
     if(this.isValid()){
       this.setState({loading: true})
       let { tags,title,description,user,startDate,importance,worker }  = this.state
-      let  time_now = startDate
-      let time = dateFormat(time_now, "dddd, mmmm, yyyy")
+
+   
       let tagsArray = []
       for(let index  = 0; tags.length > index; index++){
      
@@ -155,19 +155,41 @@ class Work extends React.Component {
           }
         }
       }
+      let  time = moment(startDate).locale("ru").format("LL")
       tags = []
       tags = tagsArray
-      console.log(tags)
+
       let  comand = false
-      const todo ={
-          tags,
-          title,
-          description,
-          time,
-          importance,
-          comand
+
+      
+      let posted_by = isAuthenticated().direct._id
+      let name_posted = isAuthenticated().direct.name
+     
+      let jobNews = tags
+      let eventNews = "Назначено новое дело"
+      let link = `/job/`
+      let worker_by = tags.map((user,index) =>{
+        return {
+          user: user,
+        }
+      })
+    let paylod = {
+        posted_by,  
+        link,
+        name_posted,
+        eventNews,
+        comand,
+        importance,
+        title,
+        jobNews,
+        description,
+        time,
+        worker_by,
+        tags
       }
-      NewTodo(todo,user).then(data => {
+    //TODO
+    // добавить валидацию
+    NewNewsJob(paylod).then(data => {
         if (data.error){
          this.openNotificationError()
         }
@@ -237,7 +259,7 @@ class Work extends React.Component {
         let newArray = []
         let userValidArray = []
         let SortOfArray = []
-        let tired = []
+        let tired = [] //массив с юзер айди
         let NoHope = []
         timeArray.push(workerTime0,workerTime1,workerTime2,workerTime3,workerTime4,workerTime5,workerTime6,workerTime7,workerTime8,workerTime9) 
        
@@ -253,7 +275,7 @@ class Work extends React.Component {
 
        
         for(let k = 0;  filteredTime.length > k; k++){
-          lastTimeArray.push(dateFormat(filteredTime[k], "dddd, mmmm, yyyy"))
+          lastTimeArray.push(moment(filteredTime[k]).locale("ru").format("LL"))
         }
         
 
@@ -295,9 +317,28 @@ class Work extends React.Component {
           }else{
             NoHope.push(tired[i]) 
           }
-
         }
-     
+
+        let newsFinalyArray = [] //Users clear
+        for(let i = 0;NoHope.length > i; i++){
+           
+            if(NoHope[i][25] === "A"){
+            
+              newsFinalyArray.push(NoHope[i].slice(0, -9))
+            }
+            if(NoHope[i][25] == undefined){
+              newsFinalyArray.push(NoHope[i])
+            }
+          }
+        console.log(newsFinalyArray)
+        let jobNews = newsFinalyArray.map((user,index) =>{
+          return {
+            user: user,
+            date: lastTimeArray[index],
+            action: filtered[index]
+          }
+        })
+       
         let JobArray = NoHope.map((user, index) => {
           return {
             user: user,
@@ -306,21 +347,33 @@ class Work extends React.Component {
           }
         })
         
-        console.log(JobArray)
+     
         let  comand = true
-        let todo = {
+        
+        let posted_by = isAuthenticated().direct._id
+        let name_posted = isAuthenticated().direct.name
+        let worker_by = jobNews
+        let eventNews = "Назначено новое дело"
+        let link = `${process.env.REACT_APP_API_NEWS_JOB}`
+        let paylod = {
+          link,
+          worker_by,
+          eventNews,
+          posted_by,
+          name_posted,
           JobArray,
           comand,
           importance,
-          title
+          title,
+          jobNews
         }
-        NewTodo(todo,user).then(data =>{
-            if(data.error){
-              this.openNotificationError()
-            }else{
-              this.openNotificationNewWork()
-            }
-        })
+        NewNewsJob(paylod).then(data =>{
+          if(data.error){
+            this.openNotificationError()
+          }else{
+            this.openNotificationNewWork()
+          }
+      })
 
     }
 

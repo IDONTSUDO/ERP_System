@@ -28,6 +28,7 @@ import {
 import { isAuthenticated } from "../Api/Auth";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
+import "moment/locale/ru";
 
 export default class DealHistory extends Component {
   constructor() {
@@ -474,7 +475,7 @@ export default class DealHistory extends Component {
                               <div>Предмет сделки: {oneDeal.item}</div>
                               <div>Названиие: {oneDeal.name}</div>
                               <hr />
-                              <Moment filter={toUpperCaseFilter}>
+                              <Moment locale="ru" fromNow>
                                 {oneDeal.Date}
                               </Moment>
                             </Card>
@@ -535,7 +536,7 @@ export default class DealHistory extends Component {
                               <div>Предмет сделки: {oneDeal.item}</div>
                               <div>Названиие: {oneDeal.name}</div>
                               <hr />
-                              <Moment filter={toUpperCaseFilter}>
+                              <Moment locale="ru" fromNow>
                                 {oneDeal.Date}
                               </Moment>
                             </Card>
@@ -559,7 +560,7 @@ export default class DealHistory extends Component {
                 <div className="col-md-4">
                   <div className="">
                     <div className="">
-                      <Moment className="" format="D MMM YYYY">
+                      <Moment locale="ru" format="D MMM YYYY">
                         {DateCrated}
                       </Moment>
                       <div className="">
@@ -655,7 +656,7 @@ export default class DealHistory extends Component {
                         <div>Предмет сделки: {oneHistory.item}</div>
                         <div>Названиие: {oneHistory.name}</div>
                         <hr />
-                        <Moment filter={toUpperCaseFilter}>
+                        <Moment locale="ru" format="D MMM YYYY">
                           {oneHistory.Date}
                         </Moment>
                         <Rate disabled defaultValue={oneHistory.rate} />

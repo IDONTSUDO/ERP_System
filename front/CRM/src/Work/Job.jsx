@@ -29,6 +29,7 @@ import DatePicker from "react-datepicker";
 import DefaultProfile from "../Assets/default.png";
 import ReactMarkdown from "react-markdown";
 import Moment from "react-moment";
+import 'moment/locale/ru';
 
 import { Link } from "react-router-dom";
 
@@ -52,7 +53,8 @@ export default class Job extends Component {
       visible: false,
       tags: [],
       JobArray: [],
-      description: ""
+      description: "",
+      todoTitel:""
     };
   }
   // life hooks 
@@ -87,8 +89,8 @@ export default class Job extends Component {
   };
 
   init = todoId => {
-    const token = isAuthenticated().token;
-    soloJob(todoId, token).then(data => {
+   
+    soloJob(todoId).then(data => {
       if (data.error) {
         this.setState({ redirectToSignin: true });
       } else {
@@ -99,11 +101,12 @@ export default class Job extends Component {
           JobArray: data.JobArray,
           comand: data.comand,
           description: data.description,
-          postedBy: data.postedBy
+          postedBy: data.posted_by,
+          TodoTitel: data.title
         });
       }
     });
-    readComentList(todoId, token).then(data => {
+    readComentList(todoId).then(data => {
       if (data.error) {
         this.setState({ redirectToSignin: true });
       } else {
@@ -117,7 +120,7 @@ export default class Job extends Component {
     const todoId = ID;
     let expireAt = new Date();
     let status = "Выполнено";
-    console.log(status)
+   
     let payload = {
       status
     }
@@ -125,16 +128,27 @@ export default class Job extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
-        console.log(data)
         this.forceUpdate();
 
         TodoChangeExperienseAtHTTP(expireAt, todoId);
+        // let worker_by = worker;
+        // let link = `/job/`+ID;
+        // let eventNews = "Новый статус";
+        // let payload = {
+        //   link,
+        //   worker_by,
+        //   eventNews,
+        //   tags
+        // };
+        this.openNotificationNewStatus();
+
+        // NewNews(payload);
       }
     });
   };
   clickSetStatusMoreInfoJob = () => {
 
-    const { ID, worker, todo } = this.state;
+    const { ID, worker, todo,postedBy } = this.state;
     const todoId = ID;
 
     let status = "Требуется уточнение";
@@ -145,18 +159,15 @@ export default class Job extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
-        let tags = [todo.postedBy];
-
         this.forceUpdate();
 
         let worker_by = worker;
-        let link = ID;
-        let event = "новый статус";
+        let link = `/job/`+ID;
+        let eventNews = "Новый статус";
         let payload = {
           link,
           worker_by,
-          event,
-          tags
+          eventNews,
         };
         this.openNotificationNewStatus();
 
@@ -187,8 +198,9 @@ export default class Job extends Component {
   // coment 
   clickSubmitSoloJob = event => {
     event.preventDefault()
-        const { body,worker,ID,name,todo }  = this.state
+        const { body,worker,ID,name,todo,tags }  = this.state
         let todoId = ID 
+        console.log(tags)
         let comment = JSON.stringify({body,worker,todoId,name})
         NewComent(comment).then(data => {
             if(data.error){
@@ -196,92 +208,170 @@ export default class Job extends Component {
             }else{
                 this.forceUpdate()
 
-                let tagsArray = todo.tags
-                let arr = new Array()
-                for(let i = 0; i < tagsArray.length; i++){
-                    if(tagsArray[i]._id != worker){
-                        arr.push(tagsArray[i]._id)
+                
+                let arr = []
+                for(let i = 0; i < tags.length; i++){
+                    if(tags[i]._id != worker){
+                        arr.push(tags[i]._id)
                     }
                 }
+               
+                let worker_by = tags.map((user, index) => {
+                  return {
+                    user: user
+                  }
+                })
+                let link = `/job/` + ID
                 
-                let worker_by = worker
-                let link = ID
-                let tags = arr
-                let event = "новый коментарий"
+        let posted_by = isAuthenticated().direct._id
+        let name_posted = isAuthenticated().direct.name
+        // let link = `${process.env.REACT_APP_API_NEWS_JOB}`
+        // let paylod = {
+        //   link,
+        //   worker_by,
+        //   eventNews,
+        //   posted_by,
+        //   name_posted,
+        //   JobArray,
+        //   comand,
+        //   importance,
+        //   title,
+        //   jobNews
+        // }
+                let eventNews = "Новый коментарий"
                 let payload = {
-                    tags,
                     link,
                     worker_by,
-                    event
+                    eventNews,
+                    name_posted,
+                    posted_by
                 }
+            
                 NewNews(payload)
             }
         })
   }
-
-  clickSubmit = () => {
-    // обработка коментария командного дела. 
-    const { body, worker, ID, name, JobArray } = this.state;
-    let todoId = ID;
-    let tags = []
-    for(let i;JobArray.length > i;i++){
-      tags.push(JobArray[i].user)
-    }
+  clickSubmitComentOneJob = () => {
+    const { body, worker, ID, todoTitel, tags,postedBy,name } = this.state;
+    let todoId = ID
     let comment = JSON.stringify({ body, worker, todoId, name })
     NewComent(comment).then(data => {
       if (data.error) {
         console.log(data.error);
       } else {
         this.forceUpdate();
-      console.log(tags)
-        let worker_by = worker;
-        let link = ID;
-        let event = "новый коментарий";
+        
+      
+        let worker_by = tags.map((user, index) => {
+          return {
+            user: user,
+          };
+        })
+        let link =  `/job/` + todoId
+            
+        let name_posted = isAuthenticated().direct.name 
+        let posted_by = isAuthenticated().direct._id
+        let description = body
+       
+        let eventNews = "Новый коментарий";
         let payload = {
           tags,
           link,
           worker_by,
-          event
+          eventNews,
+          name_posted,
+          posted_by,
+          description
         };
         this.openNotificationNewComment();
         NewNews(payload);
       }
     });
+  }
+  clickSubmit = () => {
+    // обработка коментария одиночного  дела. 
+    const { body, worker, ID, name, JobArray } = this.state;
+    let WorkerException = worker + "IAMWORKED"
+    let todoId = ID;
+    let tags = []
+    for(let i = 0;JobArray.length > i;i++){
+      if(JobArray[i].user[25] == "A"){
+        tags.push(JobArray[i].user.slice(0, -9))
+      }
+      if(JobArray[i].user[25] == undefined){
+        tags.push(JobArray[i].user)
+      }
+    }
+    
+    let comment = JSON.stringify({ body, worker, todoId, name })
+    NewComent(comment).then(data => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        this.forceUpdate();
+        
+      
+        let worker_by = tags.map((user, index) => {
+          return {
+            user: user,
+          };
+        })
+        let link =  `/job/` + todoId
+            
+        let name_posted = isAuthenticated().direct.name 
+        let posted_by = isAuthenticated().direct._id
+        let description = body
+       
+        let eventNews = "Новый коментарий";
+        let payload = {
+          tags,
+          link,
+          worker_by,
+          eventNews,
+          name_posted,
+          posted_by,
+          description
+        };
+        this.openNotificationNewComment();
+
+        NewNews(payload);
+      }
+    });
   };
   clickSubmitOneJob = () => {
-  
-    const { ID, tags } = this.state;
-    // let todoId = ID;
-    // let comment = JSON.stringify({ body, worker, todoId, name });
-    // NewComent(comment).then(data => {
-    //   if (data.error) {
-    //     console.log(data.error);
-    //   } else {
-    //     this.forceUpdate();
-      
-    //     let tagsArray = tags;
-    //     // let arr = new Array()
-    //     let arr = [];
-    //     for (let i = 0; i < tagsArray.length; i++) {
-    //       if (tagsArray[i]._id != worker) {
-    //         arr.push(tagsArray[i]._id);
-    //       }
-    //     }
+  // TODO Генерация новости
+    const { ID, tags,postedBy,name,TodoTitel } = this.state;
+    let description 
+    description = TodoTitel
+ 
+    let status = "Выполнено" 
+    let expireAt = new Date()
+    let payload = {
+      status,
+      expireAt
+    }
+    TodoChangeComandList(ID,payload).then(data =>{
+      if(data.error){
 
-    //     let worker_by = worker;
-    //     let link = ID;
-    //     let tags = arr;
-    //     let event = "новый коментарий";
-    //     let payload = {
-    //       tags,
-    //       link,
-    //       worker_by,
-    //       event
-    //     };
-    //     this.openNotificationNewComment();
-    //     NewNews(payload);
-      // }
-    // });
+      }else{
+        this.forceUpdate()
+        let link = ID
+        let posted_by  =  isAuthenticated().direct._id
+        let name_posted = isAuthenticated().direct.name
+        let worker_by = {user:postedBy}
+        let eventNews = status
+        let payload = {
+          worker_by,
+          eventNews,
+          link,
+          name_posted,
+          posted_by,
+          description
+        }
+        console.log(200)
+        NewNews(payload)
+      }
+    })
   };
   deleteConfirmed = comment => {
     let answer = window.confirm("Точно?");
@@ -289,12 +379,6 @@ export default class Job extends Component {
       this.deleteComment(comment);
     }
   };
-  
-  // handleChange = date => {
-  //   this.setState({
-  //     startDate: date
-  //   });
-  // };
   deleteComment = comment => {
     const { todo, worker } = this.state;
     DeleteComment(comment).then(data => {
@@ -344,36 +428,7 @@ export default class Job extends Component {
   handleCancel = () => {
     this.setState({ visible: false });
   };
-  openNotification() {
-    notification.open({
-      message: "Коментарий удален",
-      icon: <Icon type="smile" style={{ color: "#108ee9" }} />
-    });
-  }
-  openNotificationNewDate() {
-    notification.open({
-      message: "Новая дата выставлена",
-      icon: <Icon type="smile" style={{ color: "#108ee9" }} />
-    });
-  }
-  openNotificationNewStatus() {
-    notification.open({
-      message: "Статус дела изменен",
-      icon: <Icon type="smile" style={{ color: "#108ee9" }} />
-    });
-  }
-  openNotificationNewComment() {
-    notification.open({
-      message: "Новый коментарий создан",
-      icon: <Icon type="smile" style={{ color: "#108ee9" }} />
-    });
-  }
-  openNotificationError() {
-    notification.open({
-      message: "Ой что то пошло не так, мне жаль",
-      icon: <Icon type="frown" style={{ color: "#108ee9" }} />
-    });
-  }
+
   clickSetStatusCompleteJobWorker = () => {
     let { JobArray, worker, ID, todo } = this.state;
 
@@ -424,6 +479,8 @@ export default class Job extends Component {
         action: actionArray[index]
       };
     });
+
+    
     news = El3;
     JobArray = LastArray;
     let status = "Требуется уточнение";
@@ -436,10 +493,10 @@ export default class Job extends Component {
       } else {
         this.forceUpdate();
 
-        let link = ID;
-        let event = "вам пришло новое дело";
+        let link = window.location.href;
+        let eventNews = "вам пришло новое дело";
         let payload = {
-          event,
+          eventNews,
           link,
           news
         };
@@ -449,7 +506,36 @@ export default class Job extends Component {
       }
     });
   };
-
+  openNotification() {
+    notification.open({
+      message: "Коментарий удален",
+      icon: <Icon type="smile" style={{ color: "#108ee9" }} />
+    });
+  }
+  openNotificationNewDate() {
+    notification.open({
+      message: "Новая дата выставлена",
+      icon: <Icon type="smile" style={{ color: "#108ee9" }} />
+    });
+  }
+  openNotificationNewStatus() {
+    notification.open({
+      message: "Статус дела изменен",
+      icon: <Icon type="smile" style={{ color: "#108ee9" }} />
+    });
+  }
+  openNotificationNewComment() {
+    notification.open({
+      message: "Новый коментарий создан",
+      icon: <Icon type="smile" style={{ color: "#108ee9" }} />
+    });
+  }
+  openNotificationError() {
+    notification.open({
+      message: "Ой что то пошло не так, мне жаль",
+      icon: <Icon type="frown" style={{ color: "#108ee9" }} />
+    });
+  }
   content = (JobArray, worker) => (
     <form>
       <div className="form-group">
@@ -459,7 +545,6 @@ export default class Job extends Component {
             <div className="TodoListOneJob" style={{ padding: "10px" }}>
               <div>
                 <>
-                  {console.log(job.user[25])}
                   {job.user[25] != "A" ? (
                     <>
                       <>
@@ -605,8 +690,8 @@ export default class Job extends Component {
                               </Link>
                               <h5>{comment.body}</h5>
                               <h5 class="text-muted">{comment.name}</h5>
-                              <Moment class="text-muted">
-                                {comment.created}
+                              <Moment  locale="ru" format="D MMM YYYY">
+                                {comment.created }
                               </Moment>
                             </Tooltip>
                           </Comment>
@@ -712,7 +797,7 @@ export default class Job extends Component {
                     {comments.map((comment, i) => (
                       <>
                         <Card style={{ width: "55em" }}>
-                          <Comment key={i}>
+                          <Comment style={{wordBreak:"break-all"}} key={i}>
                             <Tooltip>
                               <Link to={`/user/${comment.worker}`}>
                                 <img
@@ -727,7 +812,7 @@ export default class Job extends Component {
                               </Link>
                               <h5>{comment.body}</h5>
                               <h5 className="text-muted">{comment.name}</h5>
-                              <Moment  style={{ color: "#FEFEFE" }} format="D MMM YYYY">
+                              <Moment  locale="ru" format="D MMM YYYY">
                                 {comment.created}
                               </Moment>
                             </Tooltip>
@@ -749,6 +834,7 @@ export default class Job extends Component {
                     ))}
                   </div>
                   <>
+                  
                     <div style={{ padding: "5px" }}></div>
                     <div class="form-group col-sm-8 ">
                       <label for="exampleFormControlTextarea1">
@@ -762,12 +848,25 @@ export default class Job extends Component {
                         rows="3"
                       ></textarea>
                       <div style={{ padding: "10px" }}>
+                      {comand == true ? (
+                        <>
                         <Button
                           onClick={this.clickSubmit}
                           className="btn btn-primary"
                         >
                           Отправить
                         </Button>
+                        </>
+                      ):(
+                  <>
+                  <Button
+                          onClick={this.clickSubmitComentOneJob}
+                          className="btn btn-primary"
+                        >
+                          Отправить
+                        </Button>
+                  </>
+                      )}
                       </div>
                     </div>
                   </>

@@ -3,6 +3,7 @@ import { MyHistoryComplete } from "../Api/Http.js";
 import { isAuthenticated } from "../Api/Auth";
 import { Button, Rate, Card, Icon, notification, Anchor } from "antd";
 import Moment from "react-moment";
+import 'moment/locale/ru';
 
 export default class MyDealHistory extends Component {
   constructor() {
@@ -37,7 +38,18 @@ export default class MyDealHistory extends Component {
     return (
       <div className="postisitonRelativeSmeni">
         <Anchor style={{ backgroundColor: "#f0f2f5" }}>
-          {page > 1 ? (
+          {(page > 1 &&  page.length > 50) ?(
+             <>
+             <Button
+               onClick={() => this.loadLess(1)}
+               className="ButtonPaginate"
+               icon="left"
+             ></Button>
+           </>
+          ):(
+            ""
+          )}
+          {/* {page > 1 ? (
             <>
               <Button
                 onClick={() => this.loadLess(1)}
@@ -47,7 +59,7 @@ export default class MyDealHistory extends Component {
             </>
           ) : (
             ""
-          )}
+          )} */}
           {history.length ? (
             <>
               <Button
@@ -69,7 +81,7 @@ export default class MyDealHistory extends Component {
                 <Card className="deal-purpur">
                   <div style={{ color: "#FEFEFE" }}>{oneDeal.price}</div>
                   <div style={{ color: "#FEFEFE" }}>{oneDeal.name}</div>
-                  <Moment style={{ color: "#FEFEFE" }} format="D MMM YYYY">
+                  <Moment style={{ color: "#FEFEFE" }} locale="ru" format="D MMM YYYY">
                     {oneDeal.Date}
                   </Moment>
                   <div style={{ padding: "5px" }}>

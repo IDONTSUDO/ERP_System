@@ -74,13 +74,22 @@ export default class Company extends Component {
               <>
                 <div className=""></div>
                 <Card size="small" title={user.role}>
+                  {user.avatar === true ?(
+                   <img
+                   className="card-img-top"
+                   src={`http://localhost:8080/user/photo/${user._id}?`}
+                   alt={user.name}
+                   style={{ height: "50px", width: "50px" }}
+                   
+                 />    
+                  ):(      
                   <img
-                    className="card-img-top"
-                    src={`http://localhost:8080/user/photo/${user._id}?`}
-                    onError={i => (i.target.src = `${DefaultProfile}`)}
-                    alt={user.name}
-                    style={{ height: "50px", width: "50px" }}
-                  />
+                  className="card-img-top"
+                  src={`${DefaultProfile}`}
+                  style={{ height: "50px", width: "50px" }}
+                />          
+                  )}
+
 
                   <h5 className="card-title">{user.name}</h5>
                   <p className="card-text">{user.email}</p>

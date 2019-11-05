@@ -8,6 +8,8 @@ import Profile from '../User/Profile.jsx'
 import Company from '../User/Company.jsx'
 import News from '../User/News.jsx'
 import MyStatistic from '../User/MyStatistic.jsx'
+import PersonalizationUser from '../User/PersonalizationUser.jsx'
+import Security from '../User/Security.jsx'
 
 import AgentProfile from '../contr-agent/AgentProfile.jsx'
 import NewAgent from '../contr-agent/NewAngent.jsx'
@@ -26,6 +28,7 @@ import NewDeal from '../Deal/NewDeal.jsx'
 import DealHistory from '../Deal/DealHistory.jsx'
 import MyDealHistory from '../Deal/MyDealHistory.jsx'
 
+
 import CompanyStatistic from '../statistic/CompanyStatistic.jsx'
 const MainRouter = () => (
     <div>
@@ -38,6 +41,9 @@ const MainRouter = () => (
             <PrivateRoute exact path="/statistic/:userId" component={MyStatistic} />
             <PrivateRoute exact path="/company" component={Company} />
             <PrivateRoute exact path="/create/work" component={Work} />
+            {/*<PrivateRoute exact path="/edit/color/:userId" component={PersonalizationUser} /> */}
+            <PrivateRoute exact path="/security/:userId" component={Security} />
+            
             <PrivateRoute exact path="/new/worker" component={NewWorker} />
             <PrivateRoute exact path="/user/edit/:userId" component={EditProfile} />
             <PrivateRoute exact path="/user/work/:userId" component={MyWork} />

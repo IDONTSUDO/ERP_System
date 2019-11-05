@@ -1,27 +1,27 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
 import { Redirect, Link } from "react-router-dom";
-import { notification, Icon } from "antd";
+import { notification, Icon,Spin } from "antd";
 import { read } from "../Api/Http";
 import DefaultProfile from "../Assets/default.png";
-
+import Moment from "react-moment";
 class Profile extends Component {
   constructor() {
     super();
     this.state = {
-      user: {},
-
+      user: [],
+      open: true,
       error: ""
     };
   }
   init = userId => {
-    const token = isAuthenticated().token;
-    read(userId, token).then(data => {
+    read(userId).then(data => {
       if (data.error) {
         this.openNotificationError();
       } else {
         this.setState({ user: data });
       }
+      this.setState({open: false})
     });
   };
 
@@ -41,21 +41,22 @@ class Profile extends Component {
     });
   }
   render() {
-    const { redirectToSignin, user } = this.state;
+    const { redirectToSignin, user,open } = this.state;
+    console.log(typeof user)
     const photoUrl = user._id
-      ? `http://localhost:8080/user/photo/${user._id}?${new Date().getTime()}`
-      : DefaultProfile;
+    const avatarBolean = user.avatar
+      
     return (
       <div className="postisitonRelativeSmeni">
-        <div className="">
-          <div class="">
-            <div class=""></div>
-          </div>
-          <div className=""></div>
+        {open ? (
+          <><Spin size="large"/></>
+        ):(
+          <>
+           <div className="">
           <h2 className="">Профиль сотрудника </h2>
           <div className="">
             <div className="">
-              <img
+            <img
                 style={{ height: "200px", width: "auto" }}
                 className="img-thumbnail"
                 onError={i => (i.target.src = `${DefaultProfile}`)}
@@ -68,14 +69,16 @@ class Profile extends Component {
                 <p>Дата рождения: {user.Date_of_Birth}</p>
                 <p>Телефон: {user.phone}</p>
                 <p>Email: {user.email}</p>
+                <Moment  locale="ru" format="D MMM YYYY">
+                  {user.created}
+                </Moment>
 
-                <p>
-                  Последний визит: {`${new Date(user.created).toDateString()}`}
-                </p>
               </div>
             </div>
           </div>
         </div>
+          </>
+        )}
       </div>
     );
   }

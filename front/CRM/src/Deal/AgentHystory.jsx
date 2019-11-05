@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { AllAgentHistory } from "../Api/Http.js";
-import {  Rate, Card } from "antd";
+import { Rate, Card } from "antd";
 import Moment from "react-moment";
 import dateFormat from "dateformat";
 class AgentHistory extends Component {
@@ -15,7 +15,6 @@ class AgentHistory extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
-        console.log(data);
         this.setState({
           agentHistoryRes: data
         });
@@ -35,26 +34,33 @@ class AgentHistory extends Component {
 
     return (
       <div className="postisitonRelativeSmeni">
-        <div>
-          {agentHistoryRes.map((agentHistoryOne, i) => (
-            <>
-              <div>
-                <Card  className="deal-purpur">
-                  <div style={{ color: "#FEFEFE" }}>{agentHistoryOne.name}</div>
-                  <div style={{ color: "#FEFEFE" }}>{agentHistoryOne.item}</div>
-                  <Moment
-                    filter={toUpperCaseFilter}
-                    style={{ color: "#FEFEFE" }}
-                  >
-                    {agentHistoryOne.Date}
-                  </Moment>
-                  <div style={{ padding: "10px" }}>
-                    <Rate disabled defaultValue={agentHistoryOne.rate} />
-                  </div>
-                </Card>
-              </div>
-            </>
-          ))}
+        <div className="container">
+          <div className="row">
+            {agentHistoryRes.map((agentHistoryOne, i) => (
+              <>
+                <div>
+                  <Card className="deal-purpur">
+                    <div style={{ color: "#FEFEFE" }}>
+                      {agentHistoryOne.name}
+                    </div>
+                    <div style={{ color: "#FEFEFE" }}>
+                      {agentHistoryOne.item}
+                    </div>
+                    <Moment
+                      style={{ color: "#FEFEFE" }}
+                      locale="ru"
+                      format="D MMM YYYY"
+                    >
+                      {agentHistoryOne.Date}
+                    </Moment>
+                    <div style={{ padding: "10px" }}>
+                      <Rate disabled defaultValue={agentHistoryOne.rate} />
+                    </div>
+                  </Card>
+                </div>
+              </>
+            ))}
+          </div>
         </div>
       </div>
     );

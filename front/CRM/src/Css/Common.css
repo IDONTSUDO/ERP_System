@@ -6,10 +6,10 @@
     top: 39em;
     border-radius: .25rem;
     width: 2000px;
-    color: #0c5460;
+    color: #000000;
     background-color: #d1ecf1;
 }
-.postisitonRelativeSmeni{
+.postisitonRelativeSmeni{   
     left:15em;
     top: 2em;
     bottom: 20em;
@@ -17,9 +17,9 @@
     display: flex; 
 }
 .alert-warning-yellow {
-    color: #856404;
-    background-color: #fff3cd;
-    border-color: #ffeeba;
+    color: #00000094;
+    background-color: #98e73175;
+    border-color: #0f0b0fc7;
 }
 .fade.show-yellow {
     opacity: 1;
@@ -37,7 +37,7 @@
 }
 .Link{
     color:#000000
-
+    
 }
 .tabel{
     padding:1000px
@@ -71,7 +71,7 @@
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #495057;
+    color: #0b67c2;
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #ced4da;
@@ -308,4 +308,61 @@
 }
 .todo-text-status-green{
     background-color:  #20ac9977;
+}
+.mainMenu{
+    position:fixed
+}
+.alert-alert-info{
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    width: 100vh;
+    color: #000000;
+    background-color: #6905ec8e;
+}
+.ComandTodoBorder{
+    background: rgba(255, 255, 255, 0.513); /* Цвет фона */
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+    padding: 10px;
+}
+.SoloTodoBorder{
+    background: rgba(240, 240, 240, 0.644); /* Цвет фона */
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+    padding: 10px;
+}
+.alert-new-comment{
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    width: 100vh;
+    color: #000000;
+    background-color: #ffbc057e;
+}
+.alert-complete-status{
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    width: 100vh;
+    color: #000000;
+    background-color: #09caecb7;
+}
+.security{
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    width: 100vh;
+    color: #000000;
+    background-color: #c22323b0;
+}
+.shadow-test{
+    padding: 5px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }

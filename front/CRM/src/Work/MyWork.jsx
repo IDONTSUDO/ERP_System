@@ -14,13 +14,17 @@ export default class MyWork extends Component {
       user: "",
       comand: [],
       userID: "",
-      open: true
+      open: true,
+      todo_midle:""
     };
   }
   componentDidMount() {
     const userId = this.props.match.params.userId;
     this.setState({ user: userId });
     this.init(userId);
+    let todo = isAuthenticated().direct.todo_middle
+    this.setState({todo_midle:todo})
+    let userll = isAuthenticated().direct._id;
   }
 
   init = async userId => {
@@ -125,6 +129,8 @@ export default class MyWork extends Component {
   };
   render() {
     const { todos, userID, comand, open } = this.state;
+    let todo = isAuthenticated().direct.todo_middle
+    console.log(todo)
     return (
       <div className="postisitonRelativeSmeni">
         <div>
@@ -168,7 +174,7 @@ export default class MyWork extends Component {
                             {todoOne.user == userID ? (
                               <>
                                 <div>
-                                  <div style={{ color:"#fff5f5"}}>{todoOne.date}</div>
+                                  <div >{todoOne.date}</div>
                                 </div>
                               </>
                             ) : (
