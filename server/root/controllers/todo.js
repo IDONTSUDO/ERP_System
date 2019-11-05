@@ -5,7 +5,7 @@ const formidable = require('formidable')
 const fs = require('fs')
 const _ = require('lodash')
 const dateFormat = require('dateformat')
-
+const  moment = require('moment')
 exports.TodoById = async (req, res, next, id) => {
 
     await TODO.findById(id)
@@ -40,12 +40,12 @@ exports.SOSotodo = (req, res) => {
 
 }
 exports.myTodoItsDay = async (req, res, next) => {
-    let time_now = Date.now()
-    let time = dateFormat(time_now, "dddd, mmmm, yyyy")
+    
+    let time = moment().locale("ru").format("LL")
+    
 
-
-
-    await TODO.find({ $and: [{ "time": { $eq: `${time}` } }, { tags: `${req.worker._id}` }] })
+    TODO.find({ $and: [{ "time": { $eq: `${time}` } },
+     { tags: `${req.worker._id}` }] })
 
         .exec((err, todos) => {
             if (err) {
@@ -53,8 +53,26 @@ exports.myTodoItsDay = async (req, res, next) => {
                     error: err
                 })
             }
-            console.log(todos)
             res.json({ todos })
+        })
+
+
+
+}
+exports.myTodoItsDayQuality = async (req, res, next) => {
+    
+    let time = moment().locale("ru").format("LL")
+
+
+    TODO.count({ $and: [{ "time": { $eq: `${time}` } }, { tags: `${req.worker._id}` }] })
+
+        .exec((err, todos) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            res.json(todos)
         })
 
 
@@ -63,7 +81,7 @@ exports.myTodoItsDay = async (req, res, next) => {
 exports.myTODO = async (req, res) => {
 
 
-    await TODO.find({ tags: `${req.worker._id}` })
+    TODO.find({ tags: `${req.worker._id}` })
 
         .exec((err, todos) => {
             if (err) {
@@ -77,19 +95,38 @@ exports.myTODO = async (req, res) => {
 }
 exports.MyComandTodo = async (req, res) => {
 
-    await TODO.find({ $and: [{ "time": { $eq: `${time}` } }, { tags: `${req.worker._id}` }] })
+    
+    let time = moment().locale("ru").format("LL")
+    TODO.find(  { JobArray: { $elemMatch: { user: `${req.body.userId}`, date:`${time}`} } })
         .exec((err, posts) => {
             if (err) {
                 return res.status(400).json({
                     error: err
                 })
             }
+          
+            res.json(posts)
+        })
+}
+exports.MyComandTodoQuality = async (req, res) => {
+
+    
+    let time = moment().locale("ru").format("LL")
+    TODO.count({ JobArray: { $elemMatch: { user: `${req.body.userId + "IAMWORKED"}`, date:`${time}`} } })
+    
+        .exec((err, posts) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+          
             res.json(posts)
         })
 }
 exports.MyTodoAwesome = async (req, res) => {
 
-    await TODO.find({ tags: req.worker._id })
+    TODO.find({ tags: req.worker._id })
         .exec((err, posts) => {
             if (err) {
                 return res.status(400).json({
@@ -112,7 +149,18 @@ exports.NewTodoUserAwesome = async (req, res) => {
     })
 
 }
+exports.NewTodoUserAwesomeNews = async (req, res,next) => {
+    
+    const todo = new TODO(req.body)
+    todo.postedBy = req.worker
 
+    todo.save().then(result => {
+        req.body.link + result._id
+        req.newsLink = '/job/' + result._id
+        next()
+    })
+
+}
 exports.TodoChange = async (req, res) => {
     console.log(req.body.payload|| req.body )
     let todo = req.todo;
@@ -135,8 +183,8 @@ exports.TodoChange = async (req, res) => {
 }
 exports.NewUserNews = async (req, res) => {
 
-    await WORKER.findByIdAndUpdate(req.body.workerId, { $push: { news: req.body.todoId } }, { new: true }).exec(
-        (err, result) => {
+    WORKER.findByIdAndUpdate(req.body.workerId, { $push: { news: req.body.todoId } }, { new: true })
+    .exec((err, result) => {
             if (err) {
                 return res.status(400).json({
                     error: err
@@ -162,7 +210,7 @@ exports.NewComents = async (req, res) => {
 exports.FindComments = async (req, res) => {
 
 
-    await COMMENTS.find({ todoId: req.body.todoId })
+    COMMENTS.find({ todoId: req.body.todoId })
         .exec((err, posts) => {
             if (err) {
                 return res.status(400).json({

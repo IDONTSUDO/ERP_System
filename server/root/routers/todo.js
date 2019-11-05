@@ -13,7 +13,9 @@ const {
     ComentById,
     myTodoItsDay,
     GetcomandTodo,
-    MyComandTodo
+    MyComandTodo,
+    MyComandTodoQuality,
+    myTodoItsDayQuality
 } = require("../controllers/todo.js")
 const { requireSignin } = require("../middleware/middleware.js")
 const { workerById, workerSelectId } = require("../controllers/Company")
@@ -23,7 +25,9 @@ const router = express.Router({ mergeParams: true });
 router.get('/todo/:todoid', requireSignin, GetTodo)
 router.get('/my/todo/soso/:workerSelectId', requireSignin, myTODO)
 router.get('/today/todo/:workerSelectId', requireSignin, myTodoItsDay)
-
+router.get('/today/todo/qulity/:workerSelectId',  myTodoItsDayQuality)
+// myTodoItsDayQuality
+router.post('/get/comand/todo/time/quality/',  MyComandTodoQuality)
 router.post('/get/comand/todo/time/', requireSignin, MyComandTodo)
 router.post('/get/comand/todo/', requireSignin, GetcomandTodo)
 router.post('/get/todo/coments/', requireSignin, FindComments)

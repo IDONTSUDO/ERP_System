@@ -2,9 +2,10 @@ const _ = require('lodash')
 const fs = require('fs')
 const formidable = require("formidable")
 const Worker = require('../database/Company')
-
+const UserSecurity = require('../database/Security')
+const UserStatistic = require('../database/UserStatistic')
 exports.workerSelectId = async (req, res, next, id) => {
-    await Worker.findById(id).select(" _id ")
+    Worker.findById(id).select(" _id ")
         .exec((err, worker) => {
             if (err || !worker) {
                 return res.status(400).json({
@@ -17,7 +18,7 @@ exports.workerSelectId = async (req, res, next, id) => {
 }
 
 exports.workerById = async (req, res, next, id) => {
-    await Worker.findById(id)
+    Worker.findById(id)
         .exec((err, worker) => {
             if (err || !worker) {
                 return res.status(400).json({
@@ -29,14 +30,29 @@ exports.workerById = async (req, res, next, id) => {
             next()
         })
 }
-exports.Newworker = async (req, res) => {
+exports.Newworker = async (req, res,next) => {
     const workerExists = await Worker.findOne({ email: req.body.email })
     if (workerExists) return res.status(403).json({
         error: "Email is taken"
     })
     const worker = await new Worker(req.body)
-    await worker.save()
-    res.status(200).json({ message: "Worker create!" })
+    worker.save().then((worker) => {
+      req.worker = worker._id
+      next()
+    })
+    .catch(err => console.log(err))
+}
+exports.WorkerStatisticTabel  = async (req, res, next) => {
+   
+     const statistic = new UserStatistic()
+     statistic.Userby = req.worker
+
+     statistic.save().then(result => {
+        res.status(200).json({
+            "result": "создано!"
+        })
+    })
+
 }
 exports.workerBlock = async (req, res) => {
     res.status(200)
@@ -54,10 +70,10 @@ exports.workerDelete = async (req, res) => {
 }
 exports.workerEdit = async (req, res, next) => {
     let form = new formidable.IncomingForm()
-
     form.keepExtensions = true;
-    await form.parse(req, (err, fields, files) => {
+    form.parse(req, (err, fields, files) => {
         if (err) {
+          
             return res.status(400).json({
                 error: "Photo could not be uploaded"
             });
@@ -68,20 +84,20 @@ exports.workerEdit = async (req, res, next) => {
         worker = _.extend(worker, fields)
 
         worker.updated = Date.now()
-
-
+        worker.avatar = true
         if (files.photo) {
             worker.photo.data = fs.readFileSync(files.photo.path)
             worker.photo.contentType = files.photo.type
         }
 
         worker.save((err, result) => {
+           
             if (err) {
                 return res.status(400).json({
                     error: err
                 })
             }
-            res.json({ worker })
+            res.json({ result })
         })
     })
 }
@@ -89,7 +105,7 @@ exports.workerGet = async (req, res) => {
     return res.json(req.worker)
 }
 exports.workerAll = async (req, res) => {
-    const worker = await Worker.find().select(" _id name")
+    const worker = await Worker.find().select(" _id name avatar")
         .then((worker) => {
             res.status(200).json(worker)
         })
@@ -132,7 +148,7 @@ exports.ListworkerAll = async (req, res) => {
             totalItems = count;
             return Worker.find()
                 .skip((currentPage - 1) * perPage)
-                .select('_id name')
+                .select('_id name avatar')
                 .limit(perPage)
             
         })

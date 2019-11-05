@@ -4,38 +4,83 @@ const crypto = require("crypto")
 const { ObjectId } = mongoose.Schema;
 
 const workerSchema = new mongoose.Schema({
-    name: {
+    name: { //@params Имя 
         type: String,
         required: true
     },
-    Date_of_Birth: {
+    Date_of_Birth: { //@params дата рождения
         type: String,
     },
-    email: {
-        type: String,
-        required: true
-    },
-    hashed_password: {
+    email: { //@params емэил
         type: String,
         required: true
     },
-    salt: String,
-    created: {
-        type: Date,
+    hashed_password: { //@params хэш пароля
+        type: String,
+        required: true
+    },
+    salt: String, //@params соль пороля
+    created: { //@params когда создан
+        type: Date, 
         default: Date.now
     },
-    updated: Date,
-    photo: {
+    updated: Date,//@params дата когда он последний раз производил, изменения в профиле
+    photo: { //@params
         data: Buffer,
         contentType: String
     },
-    role: {
+    role: { //@params роль юзера в системе
         type: String,
         required: true
     },
-    phone: {
+    phone: {//@params номер телефона
         type: String,
-    }
+    },
+    avatar:{//@params вообще нужно реакт слишком быстр, и типо по этому значения смотрю нужно ли делать запрос. Костыль больших масштабов. Но делать нечего.
+        type:Boolean, 
+        default:false
+    },
+    todo_avesome:{//@params
+        type:String,
+        default:"#f72d2dc9"
+    },
+    todo_middle:{//@params
+        type:String,
+        default:"#fff30fc0"
+    },
+    todo_not_very_important:{ //@params отвечает за цвета на фронте.
+        type:String,
+        default:"#15b11ac4"
+    },
+    todo_avesome_text:{
+        type:String,
+        default:"#ffffff"
+    },
+    todo_middle_text:{
+        type:String,
+        default:"#000000"
+    },
+    todo_not_very_important_text:{
+        type:String,
+        default:"#ffffff"
+    },
+    todo_avesome_shadow:{
+        type:String,
+        default:"#ec26269d"
+    },
+    todo_middle_shadow:{
+        type:String,
+        default:"#fff30f86"
+    },
+    todo_not_very_important_shadow:{
+        type:String,
+        default:"#8ed61398"
+    },
+    logged_in:{
+        type:Boolean,
+        default:false
+    }//отвечает за первую авторизацию сначала создается как false, при авторизации оно меняется на true. Нужно для безопасности.
+
 })
 
 workerSchema
@@ -72,3 +117,5 @@ workerSchema.methods = {
 };
 
 module.exports = mongoose.model("Worker", workerSchema)
+
+

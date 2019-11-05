@@ -27,7 +27,7 @@ const todoSchema = new mongoose.Schema({
     tags: [{
         type: Object
     }],
-    postedBy: {
+    posted_by: {
         type: ObjectId,
         ref: "User"
     },

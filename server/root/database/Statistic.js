@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const { ObjectId } = mongoose.Schema
-const WorkerStatisticSchema = new mongoose.Schema({
+const WorkerStatisticAllSchema = new mongoose.Schema({
     worker_quality: {//юзеров всего
         type: Number,
         default: 0
@@ -26,4 +26,4 @@ const WorkerStatisticSchema = new mongoose.Schema({
         default: 0
     }
 })
-module.exports = mongoose.model("WorkerStatistic", WorkerStatisticSchema)
+module.exports = mongoose.model("WorkerStatisticAll", WorkerStatisticAllSchema)

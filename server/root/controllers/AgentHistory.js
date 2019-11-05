@@ -3,7 +3,7 @@ const CommentHistory = require('../database/AgentComment.js')
 const _ = require('lodash')
 
 exports.HistoryById = async (req, res, next, id) => {
-    await History.findById(id)
+    History.findById(id)
         .exec((err, history) => {
             if (err || !history) {
                 return res.status(400).json({
@@ -30,7 +30,7 @@ exports.NewHistory = async (req, res) => {
 
     await history.save().then(result => {
         res.status(200).json({
-            "История": "создана!"
+            "result": "История созданаё!"
         })
     })
 
@@ -49,8 +49,7 @@ exports.changeHistory = async (req, res) => {
 
     history = _.extend(history, req.body)
     let ChangeHis = new History(history)
-    console.log(ChangeHis)
-    await ChangeHis.save((err, result) => {
+    ChangeHis.save((err, result) => {
 
         if (err) {
             console.log(err)
@@ -95,6 +94,7 @@ exports.myHistoryBeginer = async (req, res) => {
             res.json(history)
         })
 }
+
 exports.myHistoryComplete = async (req, res) => {
 
     let userId = req.body.userId

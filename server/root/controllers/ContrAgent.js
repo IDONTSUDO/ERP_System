@@ -107,7 +107,7 @@ exports.DeleteManagerForAgent = async (req, res) => {
     );
 }
 exports.ManageAddAgentA = async (req, res) => {
-    await ContrAgent.findByIdAndUpdate(req.body.agentId, { $push: { tags: req.body.workerId } }, { new: true }).exec(
+    ContrAgent.findByIdAndUpdate(req.body.agentId, { $push: { tags: req.body.workerId } }, { new: true }).exec(
         (err, result) => {
             if (err) {
                 return res.status(400).json({
@@ -124,7 +124,7 @@ exports.NewAgent = async (req, res) => {
     const agent = new ContrAgent(req.body)
     agent.postedBy = req.worker
 
-    await agent.save().then(result => {
+    agent.save().then(result => {
         res.status(200).json({
             result
         })
