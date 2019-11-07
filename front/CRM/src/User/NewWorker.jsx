@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { NewPeopel } from "../Api/Http";
-import DatePicker from "react-datepicker";
-import { Icon, notification, Select } from "antd";
+import { Icon, notification, Select,Button,DatePicker } from "antd";
 import { isAuthenticated } from "../Api/Auth";
 const { Option } = Select;
 
@@ -15,7 +14,7 @@ class NewWorker extends Component {
       role: "",
       password: "",
       error: "",
-      Date_of_Birth: "",
+      Date_of_Birth:Date.now(),
       phone: ""
     };
   }
@@ -112,6 +111,9 @@ class NewWorker extends Component {
     }
     return true;
   };
+  onChangeworkerDate = (date, dateString) => {
+    this.setState({ Date_of_Birth: date });
+  };
   openNotificationError() {
     notification.open({
       message: "Ой что то пошло не так, мне жаль",
@@ -183,12 +185,12 @@ class NewWorker extends Component {
               />
             </div>
             <div className="form-group">
-              <label className="text-muted">Дата рождения</label>
               <div style={{ padding: "10px" }}></div>
               <DatePicker
-                className="input"
-                selected={this.state.startDate}
-                onChange={this.handleChangeDate}
+                placeholder={"Дата рождения"}
+                showToday={false}
+                selected={this.state.Date_of_Birth}
+                onChange={this.onChangeworkerDate}
               />
             </div>
             <div className="form-group">
@@ -206,12 +208,11 @@ class NewWorker extends Component {
                 <Option value="Логист">Логист</Option>
               </Select>
             </div>
-            <button
+            <Button
               onClick={this.clickSubmit}
-              className="btn btn-raised btn-primary"
             >
               Отправить
-            </button>
+            </Button>
           </form>
         </div>
         {error.length > 2 ? this.openNotificationErrorValidation() : ""}

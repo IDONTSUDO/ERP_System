@@ -73,6 +73,7 @@ export default class Company extends Component {
             {worker.map((user, i) => (
               <>
                 <div className=""></div>
+              
                 <Card size="small" title={user.role}>
                   {user.avatar === true ?(
                    <img
@@ -99,29 +100,33 @@ export default class Company extends Component {
                   </Button>
                   <div style={{ padding: "5px" }}></div>
                   <>
-                    {/* {isAuthenticated().direct.role === "Директор" ? ( */}
+                    {isAuthenticated().direct.role === "Директор" ? (
                     <Button
                       type="danger"
                       onClick={userId => this.handleClick(user._id, userId)}
                     >
                       Удалить Пользователя
                     </Button>
-                    {/* ):("")} */}
+                    ):("")} 
                   </>
                 </Card>
+                
               </>
             ))}
           </div>
+          <div style={{padding: "10px" }} >
+            
+          </div>
           {worker.length ? (
-            <Button className="ButtonPosition" onClick={() => this.loadMore(1)}>
-              Вперед ({page + 1})
+            <Button style={{padding: "5px" }} className="ButtonPosition" onClick={() => this.loadMore(1)}>
+              Вперед 
             </Button>
           ) : (
             ""
           )}
           {page > 1 ? (
-            <Button className="ButtonPosition" onClick={() => this.loadLess(1)}>
-              Назад ({this.state.page - 1})
+            <Button style={{padding: "5px" }} className="ButtonPosition" onClick={() => this.loadLess(1)}>
+              Назад 
             </Button>
           ) : (
             ""

@@ -23,9 +23,8 @@ export default class TodayWork extends Component {
     }
     
     init = user =>{
-
-        let TodoArray = [];
-        const token = isAuthenticated().token  
+        console.log(user)
+        let TodoArray = [];  
         TodayWorkHTTP(user)
             .then(data =>{
                 if(data.error){
@@ -52,20 +51,8 @@ export default class TodayWork extends Component {
             })
     }
     returnSort = () => {
-        const {userId} = this.state
-        const token = isAuthenticated().token  
-        TodayWorkHTTP(userId)
-            .then(data =>{
-                if(data.error){
-                    this.setState({redirectToSignin: true})
-                }else{             
-                    
-                    Object.keys(data)
-                    this.setState({todos: data.todos})
-                }
-            }).catch(data =>{
-                console.log(data)
-            })
+        const user = this.props.match.params.userId
+        this.init(user)
     }
     yellowSort = ()=>{
       
@@ -149,7 +136,7 @@ export default class TodayWork extends Component {
                                 <>
                                 {todoOne.user == userID + "IAMWORKED" ? (
                                   <>
-                                   <div>
+                                   <div style={{ color: "#ffffff" }}>
                                    {todoOne.date}
                                   </div>
                                   </>
@@ -159,7 +146,7 @@ export default class TodayWork extends Component {
                                 </>
                               ))}
                                   {tod.status === "в работе"  ? (
-                                    <div style={{color:"#f0f2f5"}}>
+                                    <div style={{ color: "#ffffff" }}>
                                       {tod.status}
                                     </div>
                                   ) : (
@@ -315,7 +302,7 @@ export default class TodayWork extends Component {
                                 <h3 style={{ color: "#ffffff" }}>{tod.title}</h3>
                               </Link>
                               {tod.status === "в работе" ? (
-                                <div>
+                                <div style={{ color: "#ffffff" }}>
                                   {tod.status}
                                 </div>
                               ) : (
@@ -340,13 +327,13 @@ export default class TodayWork extends Component {
                                 <h3 style={{ color: "#ffffff" }}>{tod.title}</h3>
                               </Link>
                               {tod.status === "в работе" ? (
-                                <div>
+                                <div style={{ color: "#ffffff" }}>
                                   {tod.status}
                                 </div>
                               ) : (
                                 ""
                               )}
-                              <div style={{ color: "#fff5f5" }}>{tod.time}</div>
+                              <div style={{ color: "#ffffff" }}>{tod.time}</div>
                             </Card>
                           </div>
                         </>
@@ -383,7 +370,7 @@ export default class TodayWork extends Component {
                                 <h3 style={{ color: "#ffffff" }}>{tod.title}</h3>
                               </Link>
                               {tod.status === "в работе" ? (
-                                <div className="todo-text-status-green">
+                                <div style={{ color: "#ffffff" }} >
                                   {tod.status}
                                 </div>
                               ) : (

@@ -1,14 +1,13 @@
 import { Layout, Menu, Breadcrumb, Icon, Badge, Anchor } from "antd";
-import React, { Component } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { isAuthenticated, signout } from "../Api/Auth";
 import {
   MyTodoComandQuality,
   MyTodoTodyQuality,
   MyNewsQuality
 } from "../Api/Http.js";
-import styled from "styled-components";
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -18,23 +17,23 @@ class MenuMain extends React.Component {
     window_width: "",
     getComandTodo: Number,
     SoloTodoToday: Number,
-    NotReadNews: Number
+    NotReadNews: Number,
+    role: String
   };
 
   onCollapse = collapsed => {
     this.setState({ collapsed });
   };
   componentDidMount() {
-    console.log(isAuthenticated());
     if (isAuthenticated() == false) {
       return false;
     } else {
       var userId = isAuthenticated().direct._id;
-
+      var userRole = isAuthenticated().direct.role;
       MyTodoComandQuality(userId).then(data => {
         if (data.error) {
         } else {
-          this.setState({ getComandTodo: data });
+          this.setState({ getComandTodo: data, role: userRole });
           MyTodoTodyQuality(userId).then(data => {
             if (data.error) {
             } else {
@@ -54,8 +53,7 @@ class MenuMain extends React.Component {
     this.setState({ window_width: window.innerHeight });
   }
   render() {
-    const { window_width, SoloTodoToday } = this.state;
-    console.log(this.state.getComandTodo[0] + this.state.SoloTodoToday[0]);
+    const { window_width, SoloTodoToday, role } = this.state;
     return (
       <>
         {window_width > "20" ? (
@@ -134,9 +132,6 @@ class MenuMain extends React.Component {
                                   ""
                                 )}
                               </span>
-
-                              {/* <Badge count={this.state.getComandTodo + this.state.c}  style={{ backgroundColor: '#52c41a'}} /> */}
-                              {}
                             </>
                           }
                         >
@@ -165,54 +160,60 @@ class MenuMain extends React.Component {
                             </Link>
                           </Menu.Item>
                         </SubMenu>
-                        <SubMenu
-                          key="sub6"
-                          title={
-                            <span>
-                              <Icon type="dollar" />
-                              <span>Сделка</span>
-                              {this.state.NotReadNews > 0 ? (
+                        {["Директор", "Управляющий", "Менеджер"].includes(
+                          role
+                        ) ? (
+                          <SubMenu
+                            key="sub6"
+                            title={
+                              <span>
+                                <Icon type="dollar" />
+                                <span>Сделка</span>
+                                {this.state.NotReadNews > 0 ? (
+                                  <Badge
+                                    style={{ padding: "0px" }}
+                                    status="processing"
+                                  />
+                                ) : (
+                                  ""
+                                )}
+                              </span>
+                            }
+                          >
+                            <Menu.Item key="13">
+                              <Link
+                                to={`/new/deal/${isAuthenticated().direct._id}`}
+                              >
+                                <span>Новая сделка</span>{" "}
+                              </Link>
+                            </Menu.Item>
+                            <Menu.Item key="14">
+                              <Link
+                                to={`/my/deal/${isAuthenticated().direct._id}`}
+                              >
+                                <span>История сделок</span>{" "}
                                 <Badge
-                                  style={{ padding: "0px" }}
-                                  status="processing"
+                                  count={
+                                    this.state.getComandTodo +
+                                    this.state.SoloTodoToday
+                                  }
+                                  style={{ backgroundColor: "#52c41a" }}
                                 />
-                              ) : (
-                                ""
-                              )}
-                            </span>
-                          }
-                        >
-                          <Menu.Item key="13">
-                            <Link
-                              to={`/new/deal/${isAuthenticated().direct._id}`}
-                            >
-                              <span>Новая сделка</span>{" "}
-                            </Link>
-                          </Menu.Item>
-                          <Menu.Item key="14">
-                            <Link
-                              to={`/my/deal/${isAuthenticated().direct._id}`}
-                            >
-                              <span>История сделок</span>{" "}
-                              <Badge
-                                count={
-                                  this.state.getComandTodo +
-                                  this.state.SoloTodoToday
-                                }
-                                style={{ backgroundColor: "#52c41a" }}
-                              />
-                            </Link>
-                          </Menu.Item>
-                          <Menu.Item key="15">
-                            <Link
-                              to={`/my/deal/history/${
-                                isAuthenticated().direct._id
-                              }`}
-                            >
-                              <span>Завершенные сделки</span>
-                            </Link>
-                          </Menu.Item>
-                        </SubMenu>
+                              </Link>
+                            </Menu.Item>
+                            <Menu.Item key="15">
+                              <Link
+                                to={`/my/deal/history/${
+                                  isAuthenticated().direct._id
+                                }`}
+                              >
+                                <span>Завершенные сделки</span>
+                              </Link>
+                            </Menu.Item>
+                          </SubMenu>
+                        ) : (
+                          ""
+                        )}
                         <SubMenu
                           key="sub2"
                           title={
@@ -232,11 +233,18 @@ class MenuMain extends React.Component {
                               <span>Статистика</span>
                             </Link>
                           </Menu.Item>
-                          <Menu.Item key="11">
-                            <Link to={`/new/worker`}>
-                              <span>Новый работник</span>
-                            </Link>
-                          </Menu.Item>
+
+                          {["Директор", "Управляющий", "Бухгалтер"].includes(
+                            role
+                          ) ? (
+                            <Menu.Item key="11">
+                              <Link to={`/new/worker`}>
+                                <span>Новый работник</span>
+                              </Link>
+                            </Menu.Item>
+                          ) : (
+                            ""
+                          )}
                         </SubMenu>
                         <SubMenu
                           key="sub3"
@@ -268,7 +276,10 @@ class MenuMain extends React.Component {
                             </Link>
                           </Menu.Item>
                         </SubMenu>
-                        <SubMenu
+                        {["Директор", "Управляющий", "Менеджер","Бухгалтер"].includes(
+                            role
+                          ) ?(
+                          <SubMenu
                           key="sub5"
                           title={
                             <span>
@@ -277,12 +288,15 @@ class MenuMain extends React.Component {
                             </span>
                           }
                         >
-                          <Menu.Item key="7">
+                          {["Директор", "Управляющий", "Бухгалтер"].includes(
+                            role
+                          ) ?(
+                            <Menu.Item key="7">
                             <Link to={`/all/agent`}>
                               <span>Все контр-агенты</span>
                             </Link>
                           </Menu.Item>
-
+                          ):("")}
                           <Menu.Item key="8">
                             <Link
                               to={`/my/agent/${isAuthenticated().direct._id}`}
@@ -290,12 +304,19 @@ class MenuMain extends React.Component {
                               <span>Мои контр агенты</span>
                             </Link>
                           </Menu.Item>
-                          <Menu.Item key="12">
-                            <Link to="/new/agent">
-                              <span>Создать нового </span>
-                            </Link>
-                          </Menu.Item>
+                          {["Директор", "Управляющий", "Бухгалтер"].includes(
+                            role
+                          ) ? (
+                            <Menu.Item key="12">
+                              <Link to="/new/agent">
+                                <span>Создать нового </span>
+                              </Link>
+                            </Menu.Item>
+                          ) : (
+                            ""
+                          )}
                         </SubMenu>
+                          ):("")}
                       </Menu>
                     </Sider>
                   </Layout>
@@ -315,3 +336,6 @@ class MenuMain extends React.Component {
 export default MenuMain;
 // <PrivateRoute exact path="/new/deal/:agentId" component={NewDeal}/>
 // <PrivateRoute exact path="/deal/history/:userId" component={DealHistory}/>
+// "Директор""Управляющий""Менеджер" "Бухгалтер" "Кладовщик" "Логист"
+
+// {['Директор', 'Управляющий' , 'Менеджер'].includes(role) ? () : ("")}

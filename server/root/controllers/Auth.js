@@ -61,7 +61,7 @@ exports.signin = (req, res, next) => {
             todo_not_very_important_shadow,
             logged_in } = direct
         req.userId = _id
-
+        console.log(logged_in)
         res.json({
             token, direct: {
                 _id, name, email, role, todo_avesome,
@@ -76,7 +76,10 @@ exports.signin = (req, res, next) => {
         if (logged_in == true) {
             return next()
         } else {
-            Direct.findOneAndUpdate(direct._id, { $set: { logged_in: true } }).then((err, result) => { return })
+            direct.logged_in = true
+
+            direct.save().then((err, result) => { return
+            console.log(result) })
         }
     })
 }

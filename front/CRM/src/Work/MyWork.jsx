@@ -249,7 +249,7 @@ export default class MyWork extends Component {
                             <Card className="todo-green" key={i}>
                             <Badge style={{ backgroundColor: '#15b11a', color: '#000000', boxShadow: '0 0 0 1px #000000 inset' }} count={tod.JobArray.length}></Badge>
                               <Link to={`/job/${tod._id}`}>
-                                <h3 >
+                                <h3>
                                   {tod.title}
                                 </h3>
                               </Link>
@@ -267,7 +267,7 @@ export default class MyWork extends Component {
                             </>
                           ))}
                               {tod.status === "в работе" ? (
-                                <div>
+                                <div style={{ color: "#fff5f5" }}>
                                   {tod.status}
                                 </div>
                               ) : (
@@ -305,7 +305,7 @@ export default class MyWork extends Component {
                           ) : (
                             ""
                           )}
-                          <div style={{ color: "#fff5f5" }}>{tod.time}</div>
+                          <div style={{ color: "#ffffff" }}>{tod.time}</div>
                         </Card>
                       </div>
                     </>
@@ -344,7 +344,7 @@ export default class MyWork extends Component {
                             <h3 style={{ color: "#ffffff" }}>{tod.title}</h3>
                           </Link>
                           {tod.status === "в работе" ? (
-                            <div>
+                            <div style={{ color: "#ffffff" }}> 
                               {tod.status}
                             </div>
                           ) : (
@@ -412,7 +412,7 @@ export default class MyWork extends Component {
                             <h3 style={{ color: "#ffffff" }}>{tod.title}</h3>
                           </Link>
                           {tod.status === "в работе" ? (
-                            <div className="todo-text-status-green">
+                            <div style={{ color: "#ffffff" }}>
                               {tod.status}
                             </div>
                           ) : (

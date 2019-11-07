@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
 import { read, update, updateUser } from "../Api/Http";
-import { notification, Icon,Spin } from "antd";
+import { notification, Icon, Spin } from "antd";
 import DefaultProfile from "../Assets/default.png";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "antd";
 class EditProfile extends Component {
   constructor() {
@@ -23,7 +23,6 @@ class EditProfile extends Component {
   }
 
   init = userId => {
-   
     read(userId).then(data => {
       if (data.error) {
         this.setState({ redirectToProfile: true });
@@ -34,70 +33,79 @@ class EditProfile extends Component {
           email: data.email,
           error: "",
           about: data.about,
-          open:false
+          open: false
         });
       }
     });
   };
-    componentDidMount(){
-        this.userData = new FormData()
-        const userId = this.props.match.params.userId
-        this.init(userId)
-
-    }
-    // isValid функция валидации берет данные из стейта и валидирует
-    isValid = () =>{
-      const {name, email, password, fileSize } = this.state
-      if(fileSize > 100000){
-          this.setState({error: "File size should be less than 100 kb", loading: false})
-          return false
-      }
-      if(name.length == 0){
-          this.setState({error: "Name is requred", loading: false})
-          return false
-      }
-      if(!/^\w+([\.-]?\w+)*@\w([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) { 
-          this.setState({error: "Email is not valid", loading: false})
-          return false
-      }
-      if(password.length <= 1){
-          this.setState({error: "password is requred" , loading: false})
-          return false
-      }
-      return true
+  componentDidMount() {
+    this.userData = new FormData();
+    const userId = this.props.match.params.userId;
+    this.init(userId);
   }
-    handleChange = name => event => {
-        const value = name === "photo" ? event.target.files[0] : event.target.value
-        const fileSize = name === "photo" ? event.target.files[0].size : 0
-        this.userData.set(name, value)
-        this.setState({ [name]: value, fileSize })
+  // isValid функция валидации берет данные из стейта и валидирует
+  isValid = () => {
+    const { name, email, password } = this.state;
+    if (name.length === 0) {
+      this.setState({
+        error: "Имя является обязательным параметром",
+        loading: false
+      });
+      return false;
     }
-    clickSubmit =  event =>{
-        event.preventDefault()
+    if (!/^\w+([\.-]?\w+)*@\w([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      this.setState({ error: "Email  не валиден", loading: false });
+      return false;
+    }
+    if (password.length <= 1) {
+      this.setState({ error: "пароль обязателен", loading: false });
+      return false;
+    }
+    return true;
+  };
+  handleChange = name => event => {
+    const value = name === "photo" ? event.target.files[0] : event.target.value;
+    const fileSize = name === "photo" ? event.target.files[0].size : 0;
+    this.userData.set(name, value);
+    this.setState({ [name]: value, fileSize });
+  };
+  clickSubmit = event => {
+    event.preventDefault();
+    this.setState({ open: true });
+    if (this.isValid()) {
+      const userId = this.props.match.params.userId;
 
-        this.setState({loading: true })
-
-        if(this.isValid()){
-            
-
-            const userId = this.props.match.params.userId
-        
-            update(userId, this.userData).then(data => {
-            if (data.error){ 
-                this.setState({ error: data.error })
-            }
-                else 
-                updateUser(data, () =>{
-                    this.setState({
-                        name: data.name,
-                        redirectToProfile: true
-                })
-                    
-            })
-        })
+      update(userId, this.userData).then(data => {
+        if (data.error) {
+          this.openNotificationError();
+        } else {
+          this.setState({
+            name: data.result.name,
+            email: data.result.email,
+            error: "",
+            open: false,
+            password: ""
+          });
+          this.openNotificationEditProile();
+          updateUser(data, () => {
+            this.setState({
+              name: data.name
+            });
+          });
         }
-        //console.log(user)
+      });
+    } else {
+      this.setState({ open: false });
     }
+  };
+  openNotificationErrorValid = () => {
+    let {error} = this.state
+    notification.open({
+      message: `${error}`,
+      icon: <Icon type="frown" style={{ color: "#108ee9" }} />
+    });
+    this.setState({error:""})
+  };
   openNotificationError() {
     notification.open({
       message: "Ой что то пошло не так, мне жаль",
@@ -115,10 +123,10 @@ class EditProfile extends Component {
       <div>
         <label className="text-muted">Ваше фото</label>
         <input
-                    onChange={this.handleChange("photo")}
-                    type="file"
-                    accept="image/*"
-                    className="form-control"
+          onChange={this.handleChange("photo")}
+          type="file"
+          accept="image/*"
+          className="form-control"
         />
       </div>
       <div>
@@ -153,7 +161,16 @@ class EditProfile extends Component {
     </form>
   );
   render() {
-    const { id, password, name, email, error, loading, about,open } = this.state;
+    const {
+      id,
+      password,
+      name,
+      email,
+      error,
+      loading,
+      about,
+      open
+    } = this.state;
 
     const photoUrl = id
       ? `${
@@ -163,37 +180,33 @@ class EditProfile extends Component {
 
     return (
       <div className="postisitonRelativeSmeni">
-        {open ? (
-          <><Spin size="large"/></>
-        ):(
+        {error.length > 0 ?(<>
+        {this.openNotificationErrorValid()}
+        </>):("")}
+        {this.state.open ? (
           <>
-           <div className="container">
-          <h2> Редактирование профиля</h2>
-          <div
-            className="alert alert-danger"
-            style={{ display: error ? "" : "none" }}
-          >
-            {error}
-          </div>
-          {loading ? (
-            <div className="jumbotron text-center">
-              <h2>Загрузка...</h2>
+            <Spin size="large" />
+          </>
+        ) : (
+          <>
+            <div className="container">
+              <h2> Редактирование профиля</h2>
+              {this.SignUpForm(name, email, password, about)}
+              <div style={{ padding: "10px" }}>
+                <img
+                  style={{ height: "200px", width: "auto" }}
+                  onError={i => (i.target.src = `${DefaultProfile}`)}
+                  src={`http://localhost:8080/user/photo/${id}?`}
+                  onerror={DefaultProfile}
+                  alt={name}
+                />
+              </div>
+              {/* <Link style={{ padding: "5px" }} to={`/edit/color/${id}`}>
+                <Button>Цветовой профиль</Button>
+              </Link> */}
             </div>
-          ) : (
-            ""
-          )}
-          {this.SignUpForm(name, email, password, about)}
-          <div style={{ padding: "10px" }}>
-          <img
-            style={{ height: "200px", width: "auto" }}
-            onError={i => (i.target.src = `${DefaultProfile}`)}
-            src={`http://localhost:8080/user/photo/${id}?`} onerror= {DefaultProfile} alt={name}
-          />
-          </div>
-            <Link style={{ padding:"5px"}} to={`/edit/color/${id}`}><Button>Цветовой профиль</Button></Link>
-        </div>
-       
-        {/* ${id} */}
+
+            {/* ${id} */}
           </>
         )}
       </div>
