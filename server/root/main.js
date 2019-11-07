@@ -19,13 +19,14 @@ mongoose.connection.on('error', err => {
 })
 mongoose.set('debug', true)
 const DirectAuthRoutes = require("./routers/Auth")
-const DirectCompanyhRoutes = require("./routers/Company.js")
+const DirectCompanyhRoutes = require("./routers/Company")
 //COMMON
 const CommonTodoRoutes = require("./routers/todo")
 const StatisticRouter = require("./routers/Statistic")
 const NewsRouter = require("./routers/News")
 const AgentRouter = require("./routers/ContAgent")
-const NewHistory = require("./routers/AgentHistory.js")
+const NewHistory = require("./routers/AgentHistory")
+const PriceUsers = require("./routers/Priced")
 app.use(cookieParser())
 app.use(morgan("dev"))
 app.use(bodyParser.json())
@@ -40,7 +41,7 @@ app.use("/", NewsRouter)
 app.use("/", AgentRouter)
 app.use("/", NewHistory)
 app.use("/", CommonTodoRoutes)
-
+app.use("/", PriceUsers)
 // static
 
 

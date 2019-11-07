@@ -18,6 +18,7 @@ exports.signup = async (req, res, next) => {
     if (directExists) return res.status(403).json({
         error: "Email is taken"
     })
+
     const direct = await new Direct(req.body)
     await direct.save().exec(result => {
         res.status(200).json({
@@ -25,7 +26,6 @@ exports.signup = async (req, res, next) => {
         })
 
     })
-
     // TODO: обратотчик для стистики пользователя
 }
 exports.signin = (req, res, next) => {

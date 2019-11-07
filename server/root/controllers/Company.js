@@ -4,6 +4,8 @@ const formidable = require("formidable")
 const Worker = require('../database/Company')
 const UserSecurity = require('../database/Security')
 const UserStatistic = require('../database/UserStatistic')
+const ManagePriced = require('../database/ManagePrice')
+
 exports.workerSelectId = async (req, res, next, id) => {
     Worker.findById(id).select(" _id ")
         .exec((err, worker) => {
@@ -30,24 +32,25 @@ exports.workerById = async (req, res, next, id) => {
             next()
         })
 }
-exports.Newworker = async (req, res,next) => {
+exports.Newworker = async (req, res, next) => {
     const workerExists = await Worker.findOne({ email: req.body.email })
     if (workerExists) return res.status(403).json({
         error: "Email is taken"
     })
     const worker = await new Worker(req.body)
     worker.save().then((worker) => {
-      req.worker = worker._id
-      next()
+        req.worker = worker._id
+        { { ["Директор", "Управляющий", "Менеджер"].includes(worker.role) ? ManagePriced.create({ userBy: worker._id }, function (err, small) { if (err) return handleError(err) }) : {} } }
+        next()
     })
-    .catch(err => console.log(err))
+        .catch(err => console.log(err))
 }
-exports.WorkerStatisticTabel  = async (req, res, next) => {
-   
-     const statistic = new UserStatistic()
-     statistic.Userby = req.worker
+exports.WorkerStatisticTabel = async (req, res, next) => {
 
-     statistic.save().then(result => {
+    const statistic = new UserStatistic()
+    statistic.Userby = req.worker
+
+    statistic.save().then(result => {
         res.status(200).json({
             "result": "создано!"
         })
@@ -73,7 +76,7 @@ exports.workerEdit = async (req, res, next) => {
     form.keepExtensions = true;
     form.parse(req, (err, fields, files) => {
         if (err) {
-          
+
             return res.status(400).json({
                 error: "Photo could not be uploaded"
             });
@@ -91,7 +94,7 @@ exports.workerEdit = async (req, res, next) => {
         }
 
         worker.save((err, result) => {
-           
+
             if (err) {
                 return res.status(400).json({
                     error: err
@@ -150,7 +153,7 @@ exports.ListworkerAll = async (req, res) => {
                 .skip((currentPage - 1) * perPage)
                 .select('_id name avatar')
                 .limit(perPage)
-            
+
         })
         .then(data => {
             res.status(200).json(data)

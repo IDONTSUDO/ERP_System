@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import ReactTags from "react-tag-autocomplete";
-import { GetAgentProfile, list, AddManageForAgent } from "../Api/Http";
-import { Button, Descriptions, Icon, notification } from "antd";
+import { GetAgentProfile, list, AddManageForAgent,PricedAtManage  } from "../Api/Http";
+import { Button, Descriptions, Icon, notification,Tabs } from "antd";
 import { isAuthenticated } from "../Api/Auth";
+import {Link} from "react-router-dom"
+const { TabPane } = Tabs;
+
 export default class AgentProfile extends Component {
   constructor() {
     super();
@@ -113,7 +116,8 @@ export default class AgentProfile extends Component {
           any: data.any,
           legal_address: data.legal_address,
           actual_address: data.actual_address,
-          payment_account: data.payment_account
+          payment_account: data.payment_account,
+          result:[]
         });
       }
     });
@@ -125,6 +129,7 @@ export default class AgentProfile extends Component {
       }
     });
   }
+
   openNotificationError() {
     notification.open({
       message: "Ой что то пошло не так, мне жаль",
@@ -151,7 +156,8 @@ export default class AgentProfile extends Component {
       any,
       legal_address,
       actual_address,
-      payment_account
+      payment_account,
+      id
     } = this.state;
     return (
       <div>
@@ -170,9 +176,19 @@ export default class AgentProfile extends Component {
                 {general_director}
               </Descriptions.Item>
             </Descriptions>
-            ,
-            <div className="Tags">
+            {/* <Tabs defaultActiveKey="2">
+    <TabPane
+      tab={
+        <span>
+        <h6>Закрепеленные работники</h6>
+         
+        </span>
+      }
+      key="1"
+    > */}
+      <div className="Tags">
               <ReactTags
+                placeholder={"Добавте менеджера"}
                 tags={this.state.tags}
                 suggestions={worker}
                 handleDelete={this.handleDelete.bind(this)}
@@ -181,9 +197,24 @@ export default class AgentProfile extends Component {
             </div>
             <div style={{ padding: "5px" }}></div>
             <Button onClick={this.clickSubmit}>Назначить</Button>
+    {/* </TabPane> */}
+    {/* <TabPane
+      tab={
+        <span>
+            <h6>Доля от %</h6>
+        </span>
+      }
+      key="2"
+    >
+
+    </TabPane> */}
+  {/* </Tabs> */}
+
+            
           </div>
         </div>
       </div>
     );
   }
 }
+

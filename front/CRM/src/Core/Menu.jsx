@@ -68,7 +68,6 @@ class MenuMain extends React.Component {
                     <Sider
                       collapsible
                       collapsed={this.state.collapsed}
-                      onCollapse={this.onCollapse}
                     >
                       <div className="logo" />
                       <Menu
@@ -192,13 +191,13 @@ class MenuMain extends React.Component {
                                 to={`/my/deal/${isAuthenticated().direct._id}`}
                               >
                                 <span>История сделок</span>{" "}
-                                <Badge
+                                {/* <Badge
                                   count={
                                     this.state.getComandTodo +
                                     this.state.SoloTodoToday
                                   }
                                   style={{ backgroundColor: "#52c41a" }}
-                                />
+                                /> */}
                               </Link>
                             </Menu.Item>
                             <Menu.Item key="15">
