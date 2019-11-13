@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
 import { UserSecurityList } from "../Api/Http.js";
+import Error from "../Error/Error.jsx"
 import Moment from "react-moment";
 import "moment/locale/ru";
 
@@ -9,13 +10,15 @@ export default class Security extends Component {
     super();
     this.state = {
       user: "",
-      security: []
+      security: [],
+      error:false
     };
   }
   init = userId => {
     UserSecurityList(userId).then(data => {
       if (data.error) {
-        console.log(data.error);
+        console.log(data.error)
+        this.setState({ error: true})
       } else {
         this.setState({ security: data });
       }
@@ -27,9 +30,10 @@ export default class Security extends Component {
     this.init(userId);
   }
   render() {
-    let { security } = this.state;
+    let { security,error } = this.state;
     return (
       <div className="postisitonRelativeSmeni">
+        {error ?(<Error/>):(null)}                
         <div className="container">
           <div className="row">
             {security.map((one, i) => (

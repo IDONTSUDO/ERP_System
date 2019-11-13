@@ -5,6 +5,8 @@ import { notification, Icon, Spin } from "antd";
 import DefaultProfile from "../Assets/default.png";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
+import Error from "../Error/Error.jsx"
+
 class EditProfile extends Component {
   constructor() {
     super();
@@ -181,7 +183,7 @@ class EditProfile extends Component {
     return (
       <div className="postisitonRelativeSmeni">
         {error.length > 0 ?(<>
-        {this.openNotificationErrorValid()}
+          <Error/>
         </>):("")}
         {this.state.open ? (
           <>

@@ -108,7 +108,7 @@ exports.workerGet = async (req, res) => {
     return res.json(req.worker)
 }
 exports.workerAll = async (req, res) => {
-    const worker = await Worker.find().select(" _id name avatar")
+    const worker = await Worker.find().select(" _id name avatar role")
         .then((worker) => {
             res.status(200).json(worker)
         })
@@ -144,14 +144,14 @@ exports.ListworkerAll = async (req, res) => {
     const perPage = 24
     var totalItems
 
-    const company = await Worker.find()
+    const company = Worker.find()
 
         .countDocuments()
         .then(count => {
             totalItems = count;
             return Worker.find()
                 .skip((currentPage - 1) * perPage)
-                .select('_id name avatar')
+                .select('_id name avatar role')
                 .limit(perPage)
 
         })
@@ -164,13 +164,13 @@ exports.ListworkerAll = async (req, res) => {
 
 exports.searchWorker = async (req, res) => {
     let searchItemCollection = req.body.search
-    await Worker.find({ searchItemCollection: new RegExp(req.body.item, 'i') })
+    Worker.find({ searchItemCollection: new RegExp(req.body.item, 'i') })
         .then(worker => res.json(worker))
         .catch(e => console.error(e))
 }
 exports.WokerToManagerRole = async (req, res) => {
     let FindQuery = 'Менеджер'
-    await Worker.find({ role: `${FindQuery}` })
+    Worker.find({ role: `${FindQuery}` })
         .select(" _id name ")
         .exec((err, user) => {
             if (err) {

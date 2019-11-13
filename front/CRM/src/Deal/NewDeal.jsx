@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { MyAgentList, NewDealHistory } from "../Api/Http.js";
 import { Button, notification, Icon, Select } from "antd";
+import Error from "../Error/Error.jsx"
 
 const { Option } = Select;
 

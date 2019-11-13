@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import DefaultProfile from "../Assets/default.png";
 import { Spin } from "antd";
 import { Button, BackTop, Card, Badge } from "antd";
+import Error from "../Error/Error.jsx"
+
 export default class MyWork extends Component {
   constructor() {
     super();

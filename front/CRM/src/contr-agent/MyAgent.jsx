@@ -12,6 +12,7 @@ import {
   notification
 } from "antd";
 import { Link } from "react-router-dom";
+import Error from "../Error/Error.jsx"
 
 const pStyle = {
   fontSize: 16,
@@ -178,6 +179,7 @@ export default class MyAgent extends Component {
       icon: <Icon type="smile" style={{ color: "#108ee9" }} />
     });
   }
+  // TODO: почтовый адрес
   render() {
     let {
       id,

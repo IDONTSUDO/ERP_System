@@ -700,7 +700,7 @@ export const UserSecurityList = (userId) => {
         })
         .catch(err => console.log(err))
 } 
-export const PricedAtManage = (userId,AgentId) => {
+export const PricedAtManage = (AgentId) => {
 
     return fetch(`${process.env.REACT_APP_API_URL}/agent/user/price`, {
         method: "POST",
@@ -708,7 +708,7 @@ export const PricedAtManage = (userId,AgentId) => {
             Accept: "application/json", "Content-Type": "application/json",
             Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ userId,AgentId })
+        body: JSON.stringify({AgentId})
 
     })
         .then(responce => {
@@ -716,3 +716,35 @@ export const PricedAtManage = (userId,AgentId) => {
         })
         .catch(err => console.log(err))
 } 
+export const NewPricedAtAgent = (userBy,agentId,percent)=> {
+    
+    return fetch(`${process.env.REACT_APP_API_URL}/new/agent/price/at/manage`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ userBy,agentId,percent })
+
+    })
+        .then(responce => {
+            return responce.json()
+        })
+        .catch(err => console.log(err))
+}
+export const DeleteManageAtAgent = (payload)=> {
+    
+    return fetch(`${process.env.REACT_APP_API_URL}/manage/delete/price/at/manage`, {
+        method: "DELETE",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ payload })
+
+    })
+        .then(responce => {
+            return responce.json()
+        })
+        .catch(err => console.log(err))
+}

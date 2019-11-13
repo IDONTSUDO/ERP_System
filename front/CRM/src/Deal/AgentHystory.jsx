@@ -3,6 +3,8 @@ import { AllAgentHistory } from "../Api/Http.js";
 import { Rate, Card } from "antd";
 import Moment from "react-moment";
 import dateFormat from "dateformat";
+import Error from "../Error/Error.jsx"
+
 class AgentHistory extends Component {
   constructor() {
     super();

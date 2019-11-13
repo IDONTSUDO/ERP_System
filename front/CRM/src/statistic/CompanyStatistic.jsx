@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import {listStatisticCompany} from "../Api/Http"
 import {Statistic,Icon} from 'antd'
+import Error from "../Error/Error.jsx"
 
 class CompanyStatistic extends Component {
     constructor(){

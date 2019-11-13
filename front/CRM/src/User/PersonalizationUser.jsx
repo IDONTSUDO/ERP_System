@@ -3,6 +3,8 @@ import reactCSS from 'reactcss'
 import { SketchPicker } from 'react-color'
 import { Card, Button } from "antd";
 import { updateUser, isAuthenticated } from "../Api/Auth";
+import Error from "../Error/Error.jsx"
+
 export default class PersonalizationUser extends Component {
   constructor() {
     super();

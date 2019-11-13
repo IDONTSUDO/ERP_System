@@ -22,9 +22,11 @@ class Work extends React.Component {
     super(props);
 
     this.state = {
-      newEvent: "",
+      newEvent: "", 
+      // это нужно для формирования новостей
       startDate: new Date(),
       tags: [],
+      //это список юзеров
       worker: [],
       title: "",
       description: "",
@@ -33,6 +35,7 @@ class Work extends React.Component {
       importance: "",
       visible: false,
       error: "",
+      // это то что должен сделать работник
       workerJob0: "",
       workerJob1: "",
       workerJob2: "",
@@ -44,6 +47,7 @@ class Work extends React.Component {
       workerJob8: "",
       workerJob9: "",
       workerJob10: "",
+      // эти даннные отвечают, за выбранное время для работника.
       workerTime0: "",
       workerTime1: "",
       workerTime2: "",
@@ -68,10 +72,9 @@ class Work extends React.Component {
   }
   /*
   И вот здесь ты скажешь мне  это полный костыль,
-  а я тебе скажу ебаный реакт не умеет динамически. 
-  Делать импорт, и динамически ставить валуе из стейта.
-  Я не знаю, сколько часов просидел над этим компонентом в наджде что я сделаю, 
-  его нормальным. Но не пошло, быть может тебе улыбнется удача.
+  а я тебе отвечу увы компоненты антд дизайна наложили на меня некоторые ограничения
+  и по этому мне пришлось писать спагети  код. Я конечно мог, сделать свою реализацию и не прибегать к ним.
+  Но писать велосипеды это слишком весело.
   */
   showModal = () => {
     this.setState({
@@ -97,6 +100,7 @@ class Work extends React.Component {
     this.setState({ error: "" });
     this.setState({ [name]: event.target.value });
   };
+  // эта функция валидирует создание одиночного дела
   isValid = () => {
     const { tags, title, description } = this.state;
     if (title.length === 0) {

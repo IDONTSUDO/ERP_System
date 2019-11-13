@@ -29,6 +29,7 @@ import { isAuthenticated } from "../Api/Auth";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import "moment/locale/ru";
+import Error from "../Error/Error.jsx"
 
 export default class DealHistory extends Component {
   constructor() {

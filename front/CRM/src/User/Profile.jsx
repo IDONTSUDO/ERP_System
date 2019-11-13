@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
 import { Redirect, Link } from "react-router-dom";
-import { notification, Icon,Spin } from "antd";
+import { Spin } from "antd";
 import { read } from "../Api/Http";
 import DefaultProfile from "../Assets/default.png";
+import Error from "../Error/Error.jsx"
+
 import Moment from "react-moment";
 class Profile extends Component {
   constructor() {
@@ -11,13 +13,14 @@ class Profile extends Component {
     this.state = {
       user: [],
       open: true,
-      error: ""
+      error: false
     };
   }
   init = userId => {
     read(userId).then(data => {
       if (data.error) {
-        this.openNotificationError();
+        console.log(data.error)
+        this.setState({error:true})
       } else {
         this.setState({ user: data });
       }
@@ -34,14 +37,9 @@ class Profile extends Component {
     const userId = props.match.params.userId;
     this.init(userId);
   }
-  openNotificationError() {
-    notification.open({
-      message: "Ой что то пошло не так, мне жаль",
-      icon: <Icon type="frown" style={{ color: "#108ee9" }} />
-    });
-  }
+
   render() {
-    const { redirectToSignin, user,open } = this.state;
+    const { redirectToSignin, user,open,error } = this.state;
     console.log(typeof user)
     const photoUrl = user._id
         ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` 
@@ -50,6 +48,7 @@ class Profile extends Component {
       
     return (
       <div className="postisitonRelativeSmeni">
+        {error ?(<Error/>):(null)}
         {open ? (
           <><Spin size="large"/></>
         ):(

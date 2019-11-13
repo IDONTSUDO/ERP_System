@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { NewPeopel } from "../Api/Http";
 import { Icon, notification, Select,Button,DatePicker } from "antd";
 import { isAuthenticated } from "../Api/Auth";
+
 const { Option } = Select;
 
 class NewWorker extends Component {
@@ -73,8 +74,7 @@ class NewWorker extends Component {
         role,
         Date_of_Birth
       };
-      const token = isAuthenticated().token;
-      NewPeopel(user, token).then(data => {
+      NewPeopel(user).then(data => {
         if (data.error) {
           this.openNotificationError();
         } else this.openNotificationNewWorker();
@@ -135,7 +135,7 @@ class NewWorker extends Component {
   }
 
   handleChange = value => {
-    if (value != undefined) {
+    if (value !== undefined) {
       this.clickSetStatusCompleteJob(value);
     } else {
       return;

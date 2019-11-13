@@ -30,7 +30,6 @@ import DefaultProfile from "../Assets/default.png";
 import ReactMarkdown from "react-markdown";
 import Moment from "react-moment";
 import "moment/locale/ru";
-
 import { Link } from "react-router-dom";
 
 const { Option } = Select;
@@ -39,6 +38,7 @@ export default class Job extends Component {
   constructor() {
     super();
     this.state = {
+      message:"",
       name: "",
       todo: [],
       redirectToSignin: false,
@@ -130,18 +130,7 @@ export default class Job extends Component {
         this.forceUpdate();
 
         TodoChangeExperienseAtHTTP(expireAt, todoId);
-        // let worker_by = worker;
-        // let link = `/job/`+ID;
-        // let eventNews = "Новый статус";
-        // let payload = {
-        //   link,
-        //   worker_by,
-        //   eventNews,
-        //   tags
-        // };
         this.openNotificationNewStatus();
-
-        // NewNews(payload);
       }
     });
   };
@@ -206,24 +195,30 @@ export default class Job extends Component {
         console.log(data.error);
       } else {
         this.forceUpdate();
-
+        // здесь сложная фича, приготовления финального массива
         let arr = [];
+        // массив для  первой сортировки
         for (let i = 0; i < tags.length; i++) {
           if (tags[i]._id != worker) {
             arr.push(tags[i]._id);
           }
         }
+        // и так берем всех юзеров участвующих в деле, и исключаем от туда автора коментария
         let fynalyArray = tags.filter().filter(el => el != userID);
+        
         let worker_by = fynalyArray.map((user, index) => {
           return {
             user: user
           };
+          // [{user: userId },{user: userId},{user: userId }] по итогу получается такая структура
         });
+      
         let link = `/job/` + ID;
 
         let posted_by = isAuthenticated().direct._id;
         let name_posted = isAuthenticated().direct.name;
         let eventNews = "Новый коментарий";
+        // это инфа для формирования новости
         let payload = {
           link,
           worker_by,
@@ -231,13 +226,13 @@ export default class Job extends Component {
           name_posted,
           posted_by
         };
-
         NewNews(payload);
       }
     });
   };
   clickSubmitComentOneJob = () => {
-    // функция для коментариев дела которое не переходит от пользователя к пользователю
+    // функция для коментариев дела которое не переходит от пользователя к пользователю, 
+    // это можно было сделать по другому. Но это были бы макороны похлеще.
     const { body, worker, ID, todoTitel, tags, postedBy, name } = this.state;
     let todoId = ID;
     let comment = JSON.stringify({ body, worker, todoId, name });
@@ -478,6 +473,7 @@ export default class Job extends Component {
     TodoChangeComandList(todoId, payload).then(data => {
       if (data.error) {
         console.log(data.error);
+        this.setState({error:true})
       } else {
         this.forceUpdate();
 
@@ -568,7 +564,7 @@ export default class Job extends Component {
   );
   render() {
     const {
-      redirectToSignin,
+      message,
       todo,
       comments,
       body,
@@ -589,17 +585,9 @@ export default class Job extends Component {
       </svg>
     );
     const HeartIcon = props => <Icon component={HeartSvg} {...props} />;
-
-    /* TODO: 
-    1.Сделать исключение на запрос по созданию новостей.
-     Если пользователь 1 и он является. Создателем дела.
-     
-    2.Сделать фильтрцию массива что бы новость о коментарии не прилетала
-    тому кто запостил 
-    */
-
     return (
       <div className="postisitonRelativeSmeni">
+        {message.length !== 0 ?(null):(<>{this.openNotification()}</>)}
         {comand ? (
           <>
             <div className="container">

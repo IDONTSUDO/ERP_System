@@ -4,6 +4,7 @@ import { isAuthenticated } from "../Api/Auth";
 import { Button, Rate, Card, Icon, notification, Anchor } from "antd";
 import Moment from "react-moment";
 import 'moment/locale/ru';
+import Error from "../Error/Error.jsx"
 
 export default class MyDealHistory extends Component {
   constructor() {

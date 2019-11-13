@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
 import { NewContrAgent } from "../Api/Http";
 import { notification, Icon } from "antd";
+import Error from "../Error/Error.jsx"
+
 export default class NewAgent extends Component {
   constructor() {
     super();

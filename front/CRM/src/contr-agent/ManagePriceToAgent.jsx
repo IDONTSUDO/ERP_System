@@ -3,6 +3,8 @@ import { Link, Route } from "react-router-dom";
 import { GetAgentProfile } from "../Api/Http";
 import { notification,Icon,Table } from "antd";
 import { isAuthenticated } from "../Api/Auth";
+import Error from "../Error/Error.jsx"
+
 export default class AllAgent extends Component {
   constructor() {
     super();

@@ -4,10 +4,10 @@ const PriceManageAtAgentSchema = new mongoose.Schema({
         type: String
     },
     UserBy: {
-        type: String
+        type: Object
     },
     price: {
-        type: String
+        type: Number
     }
 })
 module.exports = mongoose.model("PriceManageAtAgent", PriceManageAtAgentSchema)
