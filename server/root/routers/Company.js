@@ -13,7 +13,8 @@ const {
     searchWorker,
     Listworker,
     WokerToManagerRole,
-    WorkerStatisticTabel } = require('../controllers/Company.js')
+    WorkerStatisticTabel,
+    wokerEditDeviceData } = require('../controllers/Company.js')
 
 const { requireSignin } = require("../middleware/middleware.js")
 
@@ -27,11 +28,11 @@ router.get('/all/worker/list', requireSignin, ListworkerAll)
 router.get('/user/photo/:workerById', workerPhoto)
 router.get('/all/financy', requireSignin, workerFinancyAll)
 
-
+router.post('/worker/manager/', requireSignin, WokerToManagerRole)
 router.post('/new/worker/', requireSignin, Newworker,WorkerStatisticTabel)
 router.post('/test/search/', searchWorker)
 router.post('/block/worker/:workerById', requireSignin, workerBlock)
-router.post('/worker/manager/', requireSignin, WokerToManagerRole)
+router.post('/edit/device/', wokerEditDeviceData)
 
 
 router.delete('/delete/worker/:workerById', requireSignin, workerDelete)

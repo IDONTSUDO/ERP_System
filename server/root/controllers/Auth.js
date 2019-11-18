@@ -59,12 +59,13 @@ exports.signin = (req, res, next) => {
             todo_avesome_shadow,
             todo_middle_shadow,
             todo_not_very_important_shadow,
-            logged_in } = direct
+            logged_in,
+            device } = direct
         req.userId = _id
         console.log(logged_in)
         res.json({
             token, direct: {
-                _id, name, email, role, todo_avesome,
+                _id, name, email, role,device, todo_avesome,
                 todo_middle, todo_not_very_important,
                 todo_avesome_text, todo_middle_text, 
                 todo_not_very_important_text, todo_avesome_shadow,

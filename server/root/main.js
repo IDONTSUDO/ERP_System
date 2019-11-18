@@ -20,20 +20,20 @@ mongoose.connection.on('error', err => {
 mongoose.set('debug', true)
 const DirectAuthRoutes = require("./routers/Auth")
 const DirectCompanyhRoutes = require("./routers/Company")
-//COMMON
 const CommonTodoRoutes = require("./routers/todo")
 const StatisticRouter = require("./routers/Statistic")
 const NewsRouter = require("./routers/News")
 const AgentRouter = require("./routers/ContAgent")
 const NewHistory = require("./routers/AgentHistory")
 const PriceUsers = require("./routers/Priced")
+const PushNotifications = require("./routers/push")
 app.use(cookieParser())
 app.use(morgan("dev"))
 app.use(bodyParser.json())
 app.use(expressValidator())
 app.use(cors())
 
-// ROUTERS DIRECT
+app.use("/", PushNotifications)
 app.use("/", StatisticRouter)
 app.use("/", DirectAuthRoutes)
 app.use("/", DirectCompanyhRoutes)
@@ -42,7 +42,6 @@ app.use("/", AgentRouter)
 app.use("/", NewHistory)
 app.use("/", CommonTodoRoutes)
 app.use("/", PriceUsers)
-// static
 
 
 app.get('/docs', (req, res) => {

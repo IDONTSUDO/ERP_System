@@ -71,6 +71,21 @@ exports.workerDelete = async (req, res) => {
         res.json({ message: "Worker delete!" })
     })
 }
+exports.wokerEditDeviceData = async (req, res) =>{
+    console.log(200)
+    console.log(req.body)
+    Worker.findByIdAndUpdate(req.body.userId, { $push: { device: req.body.keys } }, { new: true }).exec(
+        (err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            } else {
+                res.json(result);
+            }
+        }
+    );
+}
 exports.workerEdit = async (req, res, next) => {
     let form = new formidable.IncomingForm()
     form.keepExtensions = true;
