@@ -1,0 +1,46 @@
+{
+  "name": "nodeapi",
+  "version": "1.0.0",
+  "description": "A node js api",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon main.js",
+    "start-dev-debug": "NODE_ENV=dev  node --inspect ./app.js"
+  },
+  "author": "IDONTSUDO",
+  "license": "WTFP",
+  "engines": {
+    "node": "8.2.1",
+    "npm": "6.x"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.3",
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
+    "dateformat": "^3.0.3",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "express-jwt": "^5.3.1",
+    "express-useragent": "^1.0.13",
+    "express-validator": "^5.3.1",
+    "formidable": "^1.2.1",
+    "gridfs-stream": "^1.1.1",
+    "ipware": "^2.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.11",
+    "mocha": "^6.1.4",
+    "moment": "^2.24.0",
+    "mongoose": "^5.5.11",
+    "morgan": "^1.9.1",
+    "node-html-parser": "^1.1.16",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.5",
+    "soket.io": "0.0.1-security",
+    "uuid": "^3.3.2",
+    "web-push": "^3.4.1"
+  },
+  "devDependencies": {
+    "supertest": "^4.0.2"
+  }
+}
