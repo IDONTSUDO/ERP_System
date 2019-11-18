@@ -14,7 +14,8 @@ const {
     Listworker,
     WokerToManagerRole,
     WorkerStatisticTabel,
-    wokerEditDeviceData } = require('../controllers/Company.js')
+    wokerEditDeviceData,
+    wokerEditDeviceDataDelete } = require('../controllers/Company.js')
 
 const { requireSignin } = require("../middleware/middleware.js")
 
@@ -33,6 +34,7 @@ router.post('/new/worker/', requireSignin, Newworker,WorkerStatisticTabel)
 router.post('/test/search/', searchWorker)
 router.post('/block/worker/:workerById', requireSignin, workerBlock)
 router.post('/edit/device/', wokerEditDeviceData)
+router.post('/delete/device/', wokerEditDeviceDataDelete)
 
 
 router.delete('/delete/worker/:workerById', requireSignin, workerDelete)

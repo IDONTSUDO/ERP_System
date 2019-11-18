@@ -72,9 +72,22 @@ exports.workerDelete = async (req, res) => {
     })
 }
 exports.wokerEditDeviceData = async (req, res) =>{
-    console.log(200)
-    console.log(req.body)
+
     Worker.findByIdAndUpdate(req.body.userId, { $push: { device: req.body.keys } }, { new: true }).exec(
+        (err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            } else {
+                res.json(result);
+            }
+        }
+    );
+}
+exports.wokerEditDeviceDataDelete = async (req, res) =>{
+
+    Worker.findByIdAndUpdate(req.body.userId, { $pull: { device: req.body.keys } }, { new: true }).exec(
         (err, result) => {
             if (err) {
                 return res.status(400).json({
