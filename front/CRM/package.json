@@ -35,6 +35,7 @@
     "babel-preset-react-app": "^9.0.1",
     "camelcase": "^5.2.0",
     "case-sensitive-paths-webpack-plugin": "2.2.0",
+    "cra-append-sw": "^2.6.1",
     "css-loader": "2.1.1",
     "dateformat": "^3.0.3",
     "dotenv": "6.2.0",

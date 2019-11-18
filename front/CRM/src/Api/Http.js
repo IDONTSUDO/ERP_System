@@ -103,7 +103,7 @@ export const updateUser = (user, next) => {
     if (typeof window !== "undefined") {
         if (localStorage.getItem("jwt")) {
             let auth = JSON.parse(localStorage.getItem("jwt"))
-            auth.user = user
+            auth.direct = user
             localStorage.setItem("jwt", JSON.stringify(auth))
             next()
             return console.log("NNO      ERRORs")
@@ -747,4 +747,21 @@ export const DeleteManageAtAgent = (payload)=> {
             return responce.json()
         })
         .catch(err => console.log(err))
+}
+export const SetUserData = keys => {
+
+    let userId = isAuthenticated().direct._id
+   
+    return fetch(`${process.env.REACT_APP_API_URL}/edit/device/`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, keys})
+      }).then(responce => {
+        return responce.json()
+    })
+    .catch(err => console.log(err))
+
 }

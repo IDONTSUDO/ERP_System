@@ -33,7 +33,7 @@ class Signin extends Component{
             }else{
                 authencate(data, () =>{
                     this.setState({redirectToRefer: true})
-                    //TODO:ITS VERY FAST HACK 
+                    
                     window.location.reload();
                 })
             }

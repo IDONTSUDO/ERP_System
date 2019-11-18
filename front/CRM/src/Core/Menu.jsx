@@ -2,6 +2,7 @@ import { Layout, Menu, Breadcrumb, Icon, Badge, Anchor } from "antd";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Link } from "react-router-dom";
+import MobileMenu from "./MobileMenu.jsx"
 import { isAuthenticated, signout } from "../Api/Auth";
 import {
   MyTodoComandQuality,
@@ -30,7 +31,7 @@ class MenuMain extends React.Component {
     } else {
       var userId = isAuthenticated().direct._id;
       var userRole = isAuthenticated().direct.role;
-      MyTodoComandQuality(userId).then(data => {
+        MyTodoComandQuality(userId).then(data => {
         if (data.error) {
         } else {
           this.setState({ getComandTodo: data, role: userRole });
@@ -38,13 +39,6 @@ class MenuMain extends React.Component {
             if (data.error) {
             } else {
               this.setState({ SoloTodoToday: data });
-              // MyNewsQuality(userId).then(data=>{
-              //   if(data.error){
-
-              //   }else{
-              //     this.setState({NotReadNews:data})
-              //   }
-              // })
             }
           });
         }
@@ -324,7 +318,7 @@ class MenuMain extends React.Component {
             )}
           </>
         ) : (
-          ""
+         null
         )}
         {!isAuthenticated() && <></>}
       </>
