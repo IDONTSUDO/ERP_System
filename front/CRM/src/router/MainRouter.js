@@ -10,6 +10,8 @@ import News from '../User/News.jsx'
 import MyStatistic from '../User/MyStatistic.jsx'
 import PersonalizationUser from '../User/PersonalizationUser.jsx'
 import Security from '../User/Security.jsx'
+import DeviececEdit from '../User/DeviececEdit.jsx'
+
 
 import AgentProfile from '../contr-agent/AgentProfile.jsx'
 import NewAgent from '../contr-agent/NewAngent.jsx'
@@ -43,7 +45,10 @@ const MainRouter = () => (
             <PrivateRoute exact path="/create/work" component={Work} />
             {/*<PrivateRoute exact path="/edit/color/:userId" component={PersonalizationUser} /> */}
             <PrivateRoute exact path="/security/:userId" component={Security} />
-            
+            <PrivateRoute exact path="/device" component={DeviececEdit}/>
+
+
+
             <PrivateRoute exact path="/new/worker" component={NewWorker} />
             <PrivateRoute exact path="/user/edit/:userId" component={EditProfile} />
             <PrivateRoute exact path="/user/work/:userId" component={MyWork} />

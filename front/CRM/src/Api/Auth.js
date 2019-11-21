@@ -13,6 +13,31 @@ export const signin = user => {
         })
         .catch(err => console.log(err))
 }
+export const signout = (next) => {
+    let token =  isAuthenticated().token
+    return fetch(`${process.env.REACT_APP_API_URL}/signout`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json", "Content-Type": "application/json",
+        },
+        method: "GET"
+
+    })
+        .then(response => {
+            serviceWorker.unregister(); 
+            if (typeof window !== "undefined") localStorage.removeItem("subscribe")
+            if (typeof window !== "undefined") localStorage.removeItem("jwt")
+            window.location.reload()
+        })
+        .catch(err => console.log(err))
+        
+}
+
+export const Subscribe = (subscribe, next) => {
+    if (typeof window !== "undefined") {
+        localStorage.setItem("subscribe", JSON.stringify(subscribe))
+    }
+}
 export const authencate = (jwt, next) => {
     if (typeof window !== "undefined") {
         localStorage.setItem("jwt", JSON.stringify(jwt))
@@ -20,30 +45,12 @@ export const authencate = (jwt, next) => {
     }
 }
 
-export const signout = (next) => {
-
-    if (typeof window !== "undefined") localStorage.removeItem("jwt")
-    window.location.reload()
-    deleteDevice()
-    serviceWorker.unregister(); 
-    next()
-    return fetch(`${process.env.REACT_APP_API_URL}/signout`, {
-        method: "GET"
-    })
-        .then(response => {
-            console.log('signout', response)
-            return response.json()
-        })
-        .catch(err => console.log(err))
-        
-}
-
-export const isDevice = () =>{
+export const IsSubscriber = () =>{
     if (typeof window == "undefined") {
         return false
     }
-    if (localStorage.getItem("device")) {
-        return JSON.parse(localStorage.getItem("device"))
+    if (localStorage.getItem("subscribe")) {
+        return JSON.parse(localStorage.getItem("subscribe"))
     } else {
         return false
     }
@@ -58,13 +65,21 @@ export const isAuthenticated = () => {
         return false
     }
 }
-function deleteDevice(next){
-    if (typeof window !== "undefined"){
-        let key =  isDevice()
+export const deleteDevice = () =>{
+    console.log(200)
+    let id =  isAuthenticated().direct._id
+    let token =  isAuthenticated().token
+    return fetch(`${process.env.REACT_APP_API_URL}/get/ip/data`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ id })
 
-        console.log(key)
-        next()
-    }
-      
- 
+    })
+        .then(responce => {
+            return console.log(responce.json())
+        })
+        .catch(err => console.log(err))
 }

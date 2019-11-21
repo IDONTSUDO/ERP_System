@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
-import { UserSecurityList } from "../Api/Http.js";
-import Error from "../Error/Error.jsx"
+import { UserSecurityList, GetIpData } from "../Api/Http.js";
+import Error from "../Error/Error.jsx";
 import Moment from "react-moment";
-import "moment/locale/ru";
+import { Popover, Button,Icon } from "antd";
+
+import platform from "platform";
 
 export default class Security extends Component {
   constructor() {
@@ -11,14 +13,20 @@ export default class Security extends Component {
     this.state = {
       user: "",
       security: [],
-      error:false
+      error: false,
+      name: "",
+      os_architecture: "",
+      os_family: "",
+      city: "",
+      country: "",
+      timezone: ""
     };
   }
   init = userId => {
     UserSecurityList(userId).then(data => {
       if (data.error) {
-        console.log(data.error)
-        this.setState({ error: true})
+        console.log(data.error);
+        this.setState({ error: true });
       } else {
         this.setState({ security: data });
       }
@@ -29,27 +37,113 @@ export default class Security extends Component {
     this.setState({ user: userId });
     this.init(userId);
   }
+  userDeviceInfo(security_data) {
+    console.log(security_data);
+    var info = platform.parse(security_data);
+    this.setState({
+      name: info.name,
+      os_architecture: info.os.architecture,
+      os_family: info.os.family
+    });
+  }
+  geoIplocation(ip) {
+    console.log(ip);
+    let ipFixture = "207.97.227.239";
+    GetIpData(ip).then(data => {
+      if (data === null) {
+        return false;
+      } else {
+        this.setState({
+          city: data.city,
+          country: data.country,
+          timezone: data.timezone
+        });
+      }
+    });
+  }
   render() {
-    let { security,error } = this.state;
+    let {
+      security,
+      error,
+      name,
+      os_architecture,
+      os_family,
+      city,
+      country,
+      timezone
+    } = this.state;
+    // geoip.lookup(one.user_ip)
     return (
       <div className="postisitonRelativeSmeni">
-        {error ?(<Error/>):(null)}                
+        {error ? <Error /> : null}
         <div className="container">
           <div className="row">
-            {security.map((one, i) => (
-              <>
-                <div style={{ padding: "5px" }}>
-                  Время
-                  <Moment locale="ru" fromNow style={{ padding: "5px" }}>
-                    {one.date}
-                  </Moment>
-                </div>
-                <div style={{ padding: "5px" }}>
-                  Информация о системе:{one.user_security_data}
-                </div>
-                <div style={{ padding: "5px" }}> IP: {one.user_ip}</div>
-              </>
-            ))}
+            <div className="mb-4">
+              {security.map((one, i) => (
+                <>
+                  {" "}
+                  <div style={{ padding: "5px" }}>
+                    <Popover
+                      placement="bottom"
+                      title={<div>Информация о подключении</div>}
+                      content={
+                        <>
+                          <div> С браузера: {name}</div>
+                          <div>
+                            {" "}
+                            Операционная система:{os_family} {os_architecture}{" "}
+                          </div>
+                          <Popover
+                            placement="bottom"
+                            content={
+                              <>
+                                <div>Город: {city}</div>
+                                <div>Страна: {country}</div>
+                                <div>ТаймЗона: {timezone}</div>
+                              </>
+                            }
+                            title={<div>Информация об IP.</div>}
+                          >
+                            <div
+                              onClick={ip =>
+                                this.geoIplocation(one.user_ip, ip)
+                              }
+                            >
+                              IP точки авторизации: {one.user_ip}
+                            </div>
+                          </Popover>
+                        </>
+                      }
+                      trigger="click"
+                    >
+                      <div
+                        onClick={security_data =>
+                          this.userDeviceInfo(
+                            one.user_security_data,
+                            security_data
+                          )
+                        }
+                      >
+                        {
+                          <h5 style={{ padding: "5px" }}>
+                            Авторизация
+                            <Moment 
+                            format="YYYY/MM/DD"
+                              locale="ru"
+                              style={{ padding: "5px" }}
+                            >
+                              {one.date}
+                              
+                            </Moment>
+                            <Icon theme="twoTone" twoToneColor="#eb2f96"  style={{ fontSize: '32px' }} type="api" />
+                          </h5>
+                        }
+                      </div>
+                    </Popover>
+                  </div>
+                </>
+              ))}
+            </div>
           </div>
         </div>
       </div>

@@ -150,13 +150,14 @@ exports.NewTodoUserAwesome = async (req, res) => {
 
 }
 exports.NewTodoUserAwesomeNews = async (req, res,next) => {
-    
+    let users = req.body.worker_by
     const todo = new TODO(req.body)
     todo.postedBy = req.worker
 
     todo.save().then(result => {
         req.body.link + result._id
         req.newsLink = '/job/' + result._id
+        req.newsUser = users
         next()
     })
 

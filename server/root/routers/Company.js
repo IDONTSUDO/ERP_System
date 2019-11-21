@@ -15,7 +15,8 @@ const {
     WokerToManagerRole,
     WorkerStatisticTabel,
     wokerEditDeviceData,
-    wokerEditDeviceDataDelete } = require('../controllers/Company.js')
+    wokerEditDeviceDataDelete,
+    getIpGeolocatedData } = require('../controllers/Company.js')
 
 const { requireSignin } = require("../middleware/middleware.js")
 
@@ -35,7 +36,7 @@ router.post('/test/search/', searchWorker)
 router.post('/block/worker/:workerById', requireSignin, workerBlock)
 router.post('/edit/device/', wokerEditDeviceData)
 router.post('/delete/device/', wokerEditDeviceDataDelete)
-
+router.post('/get/ip/data',getIpGeolocatedData )
 
 router.delete('/delete/worker/:workerById', requireSignin, workerDelete)
 

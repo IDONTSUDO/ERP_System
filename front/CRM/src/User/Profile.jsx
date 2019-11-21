@@ -4,8 +4,8 @@ import { Redirect, Link } from "react-router-dom";
 import { Spin } from "antd";
 import { read } from "../Api/Http";
 import DefaultProfile from "../Assets/default.png";
-import Error from "../Error/Error.jsx"
-
+import Error from "../Error/Error.jsx";
+import {Button} from "antd";
 import Moment from "react-moment";
 class Profile extends Component {
   constructor() {
@@ -72,7 +72,15 @@ class Profile extends Component {
                 <Moment  locale="ru" format="D MMM YYYY">
                   {user.created}
                 </Moment>
-
+                {isAuthenticated().direct._id === user._id ? (
+                  <>
+                  <div style={{ padding: "5px" }}>
+                  <Button><Link to={`/security/${user._id}`}>История безопаности</Link></Button>
+                  <div style={{ padding: "5px" }}></div>
+                  <Button ><Link to={`/device`}>Подключенные девайсы</Link></Button>
+                  </div>
+                  </>
+                ):(null)}
               </div>
             </div>
           </div>

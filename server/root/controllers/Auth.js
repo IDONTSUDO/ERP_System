@@ -117,11 +117,15 @@ exports.securityWrite = async (req, res, next) => {
     security.user_ip = req.ip
     security.save()
 }
+
 exports.securityFind = async (req, res, next) => {
     let userId = req.userId
     let worker_by = { user: userId }
 
     let securityData = req.header('User-Agent')
+
+
+
     UserSecurity.findOne({ UserBy: userId.toString() }, { user_security_data: securityData }).then((result) => {
         if (result === null) {
             let userIdstring = userId.toString()
@@ -143,8 +147,3 @@ exports.securityFind = async (req, res, next) => {
     })
         .catch(err => console.log(err))
 }
-exports.signout = async (req, res) => {
-    res.clearCookie("t")
-    return res.json({ message: "Sign Out Complite" })
-}
-

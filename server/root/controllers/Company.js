@@ -5,6 +5,8 @@ const Worker = require('../database/Company')
 const UserSecurity = require('../database/Security')
 const UserStatistic = require('../database/UserStatistic')
 const ManagePriced = require('../database/ManagePrice')
+const Subscriber = require('../database/Subscriber')
+const geoip = require('geoip-lite');
 
 exports.workerSelectId = async (req, res, next, id) => {
     Worker.findById(id).select(" _id ")
@@ -51,11 +53,15 @@ exports.WorkerStatisticTabel = async (req, res, next) => {
     statistic.Userby = req.worker
 
     statistic.save().then(result => {
+
+    })
+    const subsc = new Subscriber()
+    subsc.userBy = req.worker
+    subsc.save().then(result => {
         res.status(200).json({
             "result": "создано!"
         })
     })
-
 }
 exports.workerBlock = async (req, res) => {
     res.status(200)
@@ -71,7 +77,7 @@ exports.workerDelete = async (req, res) => {
         res.json({ message: "Worker delete!" })
     })
 }
-exports.wokerEditDeviceData = async (req, res) =>{
+exports.wokerEditDeviceData = async (req, res) => {
 
     Worker.findByIdAndUpdate(req.body.userId, { $push: { device: req.body.keys } }, { new: true }).exec(
         (err, result) => {
@@ -85,7 +91,7 @@ exports.wokerEditDeviceData = async (req, res) =>{
         }
     );
 }
-exports.wokerEditDeviceDataDelete = async (req, res) =>{
+exports.wokerEditDeviceDataDelete = async (req, res) => {
 
     Worker.findByIdAndUpdate(req.body.userId, { $pull: { device: req.body.keys } }, { new: true }).exec(
         (err, result) => {
@@ -209,4 +215,9 @@ exports.WokerToManagerRole = async (req, res) => {
 
             res.json({ user })
         })
+}
+exports.getIpGeolocatedData = async (req, res) => {
+    let ip = req.body.ip
+    let geo = geoip.lookup(ip);
+    res.status(200).json(geo)
 }

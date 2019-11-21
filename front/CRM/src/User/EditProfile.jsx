@@ -203,14 +203,14 @@ class EditProfile extends Component {
                   alt={name}
                 />
               </div>
-              {/* <Link style={{ padding: "5px" }} to={`/edit/color/${id}`}>
-                <Button>Цветовой профиль</Button>
-              </Link> */}
+             
+              
             </div>
-
-            {/* ${id} */}
+            
           </>
+          
         )}
+        
       </div>
     );
   }

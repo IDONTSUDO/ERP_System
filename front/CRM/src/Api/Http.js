@@ -103,7 +103,7 @@ export const updateUser = (user, next) => {
     if (typeof window !== "undefined") {
         if (localStorage.getItem("jwt")) {
             let auth = JSON.parse(localStorage.getItem("jwt"))
-            auth.direct = user
+            auth.user = user
             localStorage.setItem("jwt", JSON.stringify(auth))
             next()
             return console.log("NNO      ERRORs")
@@ -699,7 +699,7 @@ export const UserSecurityList = (userId) => {
             return responce.json()
         })
         .catch(err => console.log(err))
-} 
+}
 export const PricedAtManage = (AgentId) => {
 
     return fetch(`${process.env.REACT_APP_API_URL}/agent/user/price`, {
@@ -708,23 +708,7 @@ export const PricedAtManage = (AgentId) => {
             Accept: "application/json", "Content-Type": "application/json",
             Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({AgentId})
-
-    })
-        .then(responce => {
-            return responce.json()
-        })
-        .catch(err => console.log(err))
-} 
-export const NewPricedAtAgent = (userBy,agentId,percent)=> {
-    
-    return fetch(`${process.env.REACT_APP_API_URL}/new/agent/price/at/manage`, {
-        method: "POST",
-        headers: {
-            Accept: "application/json", "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ userBy,agentId,percent })
+        body: JSON.stringify({ AgentId })
 
     })
         .then(responce => {
@@ -732,8 +716,24 @@ export const NewPricedAtAgent = (userBy,agentId,percent)=> {
         })
         .catch(err => console.log(err))
 }
-export const DeleteManageAtAgent = (payload)=> {
-    
+export const NewPricedAtAgent = (userBy, agentId, percent) => {
+
+    return fetch(`${process.env.REACT_APP_API_URL}/new/agent/price/at/manage`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ userBy, agentId, percent })
+
+    })
+        .then(responce => {
+            return responce.json()
+        })
+        .catch(err => console.log(err))
+}
+export const DeleteManageAtAgent = (payload) => {
+
     return fetch(`${process.env.REACT_APP_API_URL}/manage/delete/price/at/manage`, {
         method: "DELETE",
         headers: {
@@ -748,20 +748,50 @@ export const DeleteManageAtAgent = (payload)=> {
         })
         .catch(err => console.log(err))
 }
-export const SetUserData = keys => {
 
-    let userId = isAuthenticated().direct._id
-   
-    return fetch(`${process.env.REACT_APP_API_URL}/edit/device/`, {
+export const MyDevice = (userBy) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/my/device/`, {
         method: "POST",
         headers: {
             Accept: "application/json", "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({userId, keys})
-      }).then(responce => {
-        return responce.json()
-    })
-    .catch(err => console.log(err))
+        body: JSON.stringify({ userBy })
 
+    })
+        .then(responce => {
+            return responce.json()
+        })
+        .catch(err => console.log(err))
 }
+export const GetIpData = (ip) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/get/ip/data`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ ip })
+
+    })
+        .then(responce => {
+            return responce.json()
+        })
+        .catch(err => console.log(err))
+}
+export const DeleteDevice = (device) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/delete/device/`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({_id: device })
+
+    })
+        .then(responce => {
+            return responce.json()
+        })
+        .catch(err => console.log(err))
+}
+

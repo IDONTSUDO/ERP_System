@@ -29,7 +29,7 @@ import DatePicker from "react-datepicker";
 import DefaultProfile from "../Assets/default.png";
 import ReactMarkdown from "react-markdown";
 import Moment from "react-moment";
-import "moment/locale/ru";
+
 import { Link } from "react-router-dom";
 
 const { Option } = Select;
@@ -587,7 +587,7 @@ export default class Job extends Component {
     const HeartIcon = props => <Icon component={HeartSvg} {...props} />;
     return (
       <div className="postisitonRelativeSmeni">
-        {message.length !== 0 ?(null):(<>{this.openNotification()}</>)}
+        {message.length !== 1 ?(null):(<>{this.openNotification()}</>)}
         {comand ? (
           <>
             <div className="container">

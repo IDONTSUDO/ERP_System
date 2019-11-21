@@ -15,41 +15,43 @@ exports.NewsId = async (req, res, next, id) => {
             next()
         })
 }
-exports.newNews = async (req, res) => {
-  
+exports.newNews = async (req, res, next) => {
     const news = new NEWS(req.body)
     await news.save().then(result => {
         res.status(200).json({
             "result": "created"
         })
+        console.log(result)
+        next()
     })
 }
 
-exports.NewTodoo = async (req, res,next) => {
+exports.NewTodoo = async (req, res, next) => {
     const todo = new TODO(req.body)
     todo.postedBy = req.worker
-    
+
     todo.save().then(result => {
-        req. result._id
-        
+        req.result._id
+
         next()
     })
 
     const news = new NEWS(req.body)
     news.save().then(result => {
-    req.new = result._id
-    next()
+        req.new = result._id
+        next()
     })
 }
-exports.SetNews = async (req, res, next) =>{
+exports.SetNews = async (req, res, next) => {
     // req.newsLink
-  const news = new NEWS(req.body)
-  news.link = req.newsLink
-  await news.save().then(result => {
-      res.status(200).json({
-          "result": "created"
-      })
-  })
+    const news = new NEWS(req.body)
+    news.link = req.newsLink
+    await news.save().then(result => {
+        res.status(200).json({
+            "result": "created"
+        })
+    })
+    next()
 }
 exports.NewsDelete = async (req, res) => {
     let news = req.news;
@@ -66,7 +68,7 @@ exports.NewsDelete = async (req, res) => {
 }
 exports.readNews = async (req, res) => {
     let worker = req.body.id
-    NEWS.find(  { worker_by: { $elemMatch: { user: worker } } })
+    NEWS.find({ worker_by: { $elemMatch: { user: worker } } })
         .exec((err, news) => {
             if (err) {
                 return res.status(400).json({
@@ -79,7 +81,7 @@ exports.readNews = async (req, res) => {
         })
 }
 exports.readNewsQuality = async (req, res) => {
-   
+
     let worker = req.body.userId
     NEWS.count({ worker_by: worker })
         .exec((err, news) => {

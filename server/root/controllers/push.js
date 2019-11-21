@@ -1,47 +1,149 @@
+
+const q = require('q');
 const webpush = require('web-push')
+const Subscription = require("../database/Subscriber")
+require("dotenv").config()
+
 webpush.setVapidDetails(process.env.WEB_PUSH_CONTACT, process.env.PUBLIC_VAPID_KEY, process.env.PRIVATE_VAPID_KEY)
 
-
-exports.PushUsers = (req,res) =>{
-  var subscription = req.body
-  console.log(subscription.keys.auth)
-  console.log(subscription)
- 
-
-  const payload = JSON.stringify({
-    title: 'Оно работает',
-    body: 'Ура',
+exports.CheckBrowserForSubscription = async(req,res,next) =>{
+  let  userAgent =  req.header('User-Agent')
+  let UserId = req.body.userId
+  console.log(UserId)
+  Subscription.find({UserAgent:userAgent,userBy:UserId}).exec((err, result) =>{
+    if(result[0] == undefined){
+       return next()
+    }else{
+      return false
+    }
   })
-  let resultkey = subscription.keys.p256dh
-  webpush.sendNotification(subscription, payload)
-  .then(result => console.log())
-  .catch(e => console.log(e.stack))
+} 
+
+
+exports.PushUsers = async (req, res) => {
+ 
+  // UserAgent
+  var subscription = req.body.subscription
   
-  console.log("itsresult", resultkey)
-  res.status(200).json(resultkey)
+  let ModelSubsc = new Subscription()
+  ModelSubsc.userBy = req.body.userId
+  ModelSubsc.endpoint = subscription.endpoint
+  ModelSubsc.keys = subscription.keys
+  ModelSubsc.UserAgent =  req.header('User-Agent')
+  ModelSubsc.save(req.body).then(data => {
+    console.log(data)
+  })
+
+  res.status(200)
 }
 
-exports.UserFindPushData = () =>{
+exports.UserFindPushData = () => {
   const subscription = req.body
-  
+
   console.log(subscription.keys.p256dh)
 }
-exports.UserAddPushData = (req,res) =>{
-  const payload = JSON.stringify({
-    title: 'Оно работает',
-    body: 'СуКА ЗАРАБОТАЙЫ',
-  })
-  const subscription = {
-    endpoint: 'https://fcm.googleapis.com/fcm/send/cO5s8y8iJ14:APA91bHKbvbC1aUyR2Aws4fKNq2U2T4_HmqCtMYOs-tfwWnImHu_jMWSZ--qjOMLXfYrImWe-qZ3NFSwwgCt72iNPNCe08ECB5WsTWD4TXh5__abV0RKA_WECJnpbx0qSeH7eDF0l3vc',
-    keys: {
-      p256dh: 'BGOCbIOaf4BG_xT1syGlx92uD34u8-YzcR8djnQaZHA2ugSR8II-CIcC9Gmzjtlf6TF0UlIvN0o8CMadDBHWD0E',
-      auth: 'MNiHLgmgZfSMoHijsnfV7g'
-    }
-  };
-  webPush.sendNotification(subscription, payload)
-  .then(encryptionDetails => {
-    console.log(encryptionDetails)
-  })
-  .catch(err => console.log(err))
+exports.UserAddPushData = (req, res) => {
   return res.status(200)
+}
+exports.MyPushingDevice = async (req, res) => {
+  let userBy = req.body
+  Subscription.find(userBy).exec((err, result) => {
+    if (err) {
+      return res.status(400).json({
+        error: err
+      })
+    }
+
+    res.json(result)
+
+  })
+}
+exports.NewPushingNotifycation = async (req, res) => {
+  let Users =  req.newsUser
+  const payload = {
+    title: "CRM",
+    message: "Для вас новое дело",
+    url: req.newsLink,
+    ttl:  process.env.TTL_PUSH,
+    data:"Для вас новое дело",
+    tag: "Для вас новое дело"
+  };
+  for(let i = 0;Users.length > i; i++){
+    Subscription.find({userBy:Users[i].user}, (err, subscriptions) => {
+      if (err) {
+        res.status(500).json({
+          error: 'Technical error occurred'
+        });
+      } else {
+        let parallelSubscriptionCalls = subscriptions.map((subscription) => {
+          return new Promise((resolve, reject) => {
+            const pushSubscription = {
+              endpoint: subscription.endpoint,
+              keys: {
+                p256dh: subscription.keys.p256dh,
+                auth: subscription.keys.auth
+              }
+            };
+  
+            const pushPayload = JSON.stringify(payload);
+           
+            const pushOptions = {
+              vapidDetails: {
+                subject: 'http://example.com',
+                privateKey: process.env.PRIVATE_VAPID_KEY,
+                publicKey: process.env.PUBLIC_VAPID_KEY
+              },
+              TTL: payload.ttl,
+              headers: {}
+            };
+            webpush.sendNotification(
+              pushSubscription,
+              pushPayload,
+              pushOptions
+            ).then((value) => {
+              
+              resolve({
+                status: true,
+                endpoint: subscription.endpoint,
+                data: value
+              });
+            }).catch((err) => {
+              
+              reject({
+                status: false,
+                endpoint: subscription.endpoint,
+                data: err
+              });
+            });
+          });
+        });
+        q.allSettled(parallelSubscriptionCalls).then((pushResults) => {
+          return 
+        });
+      }
+    });
+  }
+}
+exports.DeleteDevice = async (req, res) => {
+  let id = req.body
+  Subscription.findByIdAndRemove(id).exec ((err, result) =>{
+    if(err){
+      console.log(err)
+    }else{
+      return res.status(200).json(result)
+    }
+  })
+}
+exports.DeleteDeviceByDuringExit = async (req, res,next) => {
+
+  let  userAgent =  req.header('User-Agent')
+  let UserId =  req.auth
+  Subscription.findOneAndRemove({UserAgent:userAgent,userBy:UserId}).exec ((err, result) =>{
+    if(err){
+      return  res.json(404).json({ message: err })
+
+    }else{
+       return  res.status(200).json({ message: "Sign Out Complite" })
+    }
+  })
 }

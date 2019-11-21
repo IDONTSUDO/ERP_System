@@ -18,72 +18,58 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 function sendSubscription(subscription) {
-  // let userDevice = isAuthenticated.direct.device
-  // console.log(userDevice)
+
 
   let userId = isAuthenticated().direct._id;
+  let payload = { userId, subscription}
   return fetch(`${process.env.REACT_APP_API_URL}/push/user/`, {
     method: 'POST',
-    body: JSON.stringify(subscription),
     headers: {
-      'Content-Type': 'application/json'
-    }
-  }).then(response => response.json())
-    .then(result => ValidateUserKeys(result))
-
+      Accept: "application/json", "Content-Type": "application/json",
+    
+    },
+    body: JSON.stringify(payload),
+  }).then(responce => {
+    return responce.json()
+})
+.catch(err => console.log(err))
 }
-
-
-function ValidateUserKeys(keys) {
-  console.log(keys)
-
-  let userDevice = isAuthenticated().direct.device
-  localStorage.device = keys
-
-  {userDevice.includes(
-    keys
-  ) ?
-    console.log(true)
-    : 
-    SetUserData(keys).then(data => {
-      updateUser(data)})}
-  
-}
-
 export function subscribeUser() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then(function (registration) {
-
-      if (!registration.pushManager) {
-        console.log('Push manager unavailable.')
-        return
-      }
-
-      registration.pushManager.getSubscription().then(function (existedSubscription) {
-        if (existedSubscription === null) {
-          console.log('No subscription detected, make a request.')
-          registration.pushManager.subscribe({
-            applicationServerKey: convertedVapidKey,
-            userVisibleOnly: true,
-          }).then(function (newSubscription) {
-            console.log(newSubscription)
-
-            sendSubscription(newSubscription)
-          }).catch(function (e) {
-            if (Notification.permission !== 'granted') {
-              console.log('Permission was not granted.')
-            } else {
-              console.error('An error ocurred during the subscription process.', e)
-            }
-          })
-        } else {
-          console.log('Existed subscription detected.')
-          sendSubscription(existedSubscription)
+  if(isAuthenticated()){
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then(function (registration) {
+  
+        if (!registration.pushManager) {
+          console.log('Push manager unavailable.')
+          return
         }
+  
+        registration.pushManager.getSubscription().then(function (existedSubscription) {
+          if (existedSubscription === null) {
+            console.log('No subscription detected, make a request.')
+            registration.pushManager.subscribe({
+              applicationServerKey: convertedVapidKey,
+              userVisibleOnly: true,
+            }).then(function (newSubscription) {
+              console.log(newSubscription)
+  
+              sendSubscription(newSubscription)
+            }).catch(function (e) {
+              if (Notification.permission !== 'granted') {
+                console.log('Permission was not granted.')
+              } else {
+                console.error('An error ocurred during the subscription process.', e)
+              }
+            })
+          } else {
+            console.log('Existed subscription detected.')
+            sendSubscription(existedSubscription)
+          }
+        })
       })
-    })
-      .catch(function (e) {
-        console.error('An error ocurred during Service Worker registration.', e)
-      })
+        .catch(function (e) {
+          console.error('An error ocurred during Service Worker registration.', e)
+        })
+    } 
   }
 }

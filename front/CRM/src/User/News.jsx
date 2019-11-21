@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import Error from "../Error/Error.jsx";
 
-import "moment/locale/ru";
+
 export default class News extends Component {
   constructor() {
     super();

@@ -409,3 +409,11 @@
 }
 .ButtonPosition{
 }
+.strokeEditDevice{
+    color:#fff;
+    padding:10px;
+    background-color:#108ee9;
+    -webkit-box-shadow: 14px 17px 52px -6px rgba(0,0,0,0.75);
+    -moz-box-shadow: 14px 17px 52px -6px rgba(0,0,0,0.75);
+    box-shadow: 14px 17px 52px -6px rgba(0,0,0,0.75);
+}

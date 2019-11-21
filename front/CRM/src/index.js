@@ -2,13 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {subscribeUser} from './Push/subscription.js' 
 import App from './App';
+import "moment/locale/ru";
+
 import * as serviceWorker from './Push/serviceWorker';
 
-import { isAuthenticated} from "./Api/Auth"
+import { isAuthenticated,Subscribe,IsSubscriber } from "./Api/Auth"
 ReactDOM.render(<App />, document.getElementById('root'));
 
-if(isAuthenticated()){
-    subscribeUser()
+if(IsSubscriber()){
+    console.log("Subcribe")
+}else{
+    if(isAuthenticated()){
+        subscribeUser()
+        serviceWorker.register();
+        let subscribe = true
+        Subscribe(subscribe)
+    }
+    
 }
-serviceWorker.register();
+
 

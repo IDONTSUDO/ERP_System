@@ -7,26 +7,30 @@ exports.jwtTokenUserId = async (req, res, next) => {
     let head = req.headers
     if (head.authorization === undefined) {
         return res.status(400).json({ message: 'A you Russia hacker?' })
+    }else{
+        var token = head.authorization.replace('Bearer ', '')
+
+        let j = jwt.decode(token)
+    
+        req.auth = j._id
+        
+        return next()
     }
-    var token = head.authorization.replace('Bearer ', '')
-
-    let j = jwt.decode(token)
-
-    req.auth = j._id
-    next()
+    
 }
 exports.jwtTokenUserRole = async (req, res, next) => {
 
     let head = req.headers
     if (head.authorization === undefined) {
         return res.status(400).json({ message: 'A you Russia hacker?' })
+    }else{
+        var token = head.authorization.replace('Bearer ', '')
+        let j = jwt.decode(token)
+    
+        req.auth = j.role
+        console.log(200)
+        return next()
     }
-    var token = head.authorization.replace('Bearer ', '')
-    let j = jwt.decode(token)
-
-    req.auth = j.role
-
-    next()
 }
 
 exports.requireSignin = expressJwt({
