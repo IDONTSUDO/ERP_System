@@ -21,7 +21,6 @@ exports.newNews = async (req, res, next) => {
         res.status(200).json({
             "result": "created"
         })
-        console.log(result)
         next()
     })
 }

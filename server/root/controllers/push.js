@@ -19,7 +19,147 @@ exports.CheckBrowserForSubscription = async(req,res,next) =>{
   })
 } 
 
+exports.NewPushToObjectWorker  = async (req, res) =>{
+  console.log(req.body)
+  let reqPayload = req.body.payload
 
+  let Users = reqPayload.tags
+  console.log(Users)
+  const payload = {
+    title: "CRM",
+    message: "Для вас новое дело",
+    url: req.newsLink,
+    ttl:  process.env.TTL_PUSH,
+    data:"Для вас новое дело",
+    tag: "Для вас новое дело"
+  };
+  for(let i = 0;Users.length > i; i++){
+    Subscription.find({userBy:Users[i]}, (err, subscriptions) => {
+      if (err) {
+        res.status(500).json({
+          error: 'Technical error occurred'
+        });
+      } else {
+        let parallelSubscriptionCalls = subscriptions.map((subscription) => {
+          return new Promise((resolve, reject) => {
+            const pushSubscription = {
+              endpoint: subscription.endpoint,
+              keys: {
+                p256dh: subscription.keys.p256dh,
+                auth: subscription.keys.auth
+              }
+            };
+  
+            const pushPayload = JSON.stringify(payload);
+           
+            const pushOptions = {
+              vapidDetails: {
+                subject: 'http://example.com',
+                privateKey: process.env.PRIVATE_VAPID_KEY,
+                publicKey: process.env.PUBLIC_VAPID_KEY
+              },
+              TTL: payload.ttl,
+              headers: {}
+            };
+            webpush.sendNotification(
+              pushSubscription,
+              pushPayload,
+              pushOptions
+            ).then((value) => {
+              
+              resolve({
+                status: true,
+                endpoint: subscription.endpoint,
+                data: value
+              });
+            }).catch((err) => {
+              
+              reject({
+                status: false,
+                endpoint: subscription.endpoint,
+                data: err
+              });
+            });
+          });
+        });
+        q.allSettled(parallelSubscriptionCalls).then((pushResults) => {
+          return 
+        });
+      }
+    });
+  }
+}
+
+exports.NewPushToSetStatus  = async (req, res) =>{
+  let reqPayload = req.body.payload
+  let user = reqPayload.worker_by
+  let MessageToReq = reqPayload.eventNews
+
+
+
+  const payload = {
+    title: "CRM",
+    message: MessageToReq,
+    url: "/news",
+    ttl:  process.env.TTL_PUSH,
+    data:MessageToReq,
+    tag: MessageToReq
+  };
+ 
+    Subscription.find({userBy:user}, (err, subscriptions) => {
+      if (err) {
+        res.status(500).json({
+          error: 'Technical error occurred'
+        });
+      } else {
+        let parallelSubscriptionCalls = subscriptions.map((subscription) => {
+          return new Promise((resolve, reject) => {
+            const pushSubscription = {
+              endpoint: subscription.endpoint,
+              keys: {
+                p256dh: subscription.keys.p256dh,
+                auth: subscription.keys.auth
+              }
+            };
+  
+            const pushPayload = JSON.stringify(payload);
+           
+            const pushOptions = {
+              vapidDetails: {
+                subject: 'http://example.com',
+                privateKey: process.env.PRIVATE_VAPID_KEY,
+                publicKey: process.env.PUBLIC_VAPID_KEY
+              },
+              TTL: payload.ttl,
+              headers: {}
+            };
+            webpush.sendNotification(
+              pushSubscription,
+              pushPayload,
+              pushOptions
+            ).then((value) => {
+              
+              resolve({
+                status: true,
+                endpoint: subscription.endpoint,
+                data: value
+              });
+            }).catch((err) => {
+              
+              reject({
+                status: false,
+                endpoint: subscription.endpoint,
+                data: err
+              });
+            });
+          });
+        });
+        q.allSettled(parallelSubscriptionCalls).then((pushResults) => {
+          return 
+        });
+      }
+    });
+}
 exports.PushUsers = async (req, res) => {
  
   // UserAgent

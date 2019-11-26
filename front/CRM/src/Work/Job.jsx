@@ -4,7 +4,8 @@ import {
   readComentList,
   NewComent,
   DeleteComment,
-  NewNews,
+  NewNewsToComment,
+  NewNewToSetStatusJob,
   SetStatusJob,
   TodoChangeExperienseAtHTTP,
   TodoUpTime,
@@ -130,6 +131,28 @@ export default class Job extends Component {
         this.forceUpdate();
 
         TodoChangeExperienseAtHTTP(expireAt, todoId);
+        // NewNewToSetStatusJob
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         this.openNotificationNewStatus();
       }
     });
@@ -157,8 +180,26 @@ export default class Job extends Component {
           eventNews
         };
         this.openNotificationNewStatus();
+        
 
-        NewNews(payload);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        console.log(200)
+        NewNewToSetStatusJob(payload);
       }
     });
   };
@@ -226,7 +267,29 @@ export default class Job extends Component {
           name_posted,
           posted_by
         };
-        NewNews(payload);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        NewNewsToComment(payload);
       }
     });
   };
@@ -268,7 +331,19 @@ export default class Job extends Component {
           description
         };
         this.openNotificationNewComment();
-        NewNews(payload);
+
+
+
+
+
+
+
+
+
+
+
+
+        NewNewsToComment(payload);
       }
     });
   };
@@ -320,7 +395,28 @@ export default class Job extends Component {
         };
         this.openNotificationNewComment();
 
-        NewNews(payload);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        NewNewsToComment(payload);
       }
     });
   };
@@ -353,7 +449,7 @@ export default class Job extends Component {
           posted_by,
           description
         };
-        NewNews(payload);
+        NewNewsToComment(payload);
       }
     });
   };
@@ -486,7 +582,7 @@ export default class Job extends Component {
         };
         this.openNotificationNewStatus();
 
-        NewNews(payload);
+        NewNewsToComment(payload);
       }
     });
   };

@@ -44,13 +44,14 @@ class MenuMain extends React.Component {
         }
       });
     }
-    this.setState({ window_width: window.innerHeight });
+    this.setState({ window_width: window.innerWidth });
   }
   render() {
     const { window_width, SoloTodoToday, role } = this.state;
+    console.log(window_width)
     return (
       <>
-        {window_width > "20" ? (
+        {window_width > "768" ? (
           <>
             {isAuthenticated() && (
               <Anchor affix={false}>
@@ -318,8 +319,9 @@ class MenuMain extends React.Component {
             )}
           </>
         ) : (
-         null
-        )}
+          // <MobileMenu/>     
+          null
+             )}
         {!isAuthenticated() && <></>}
       </>
     );

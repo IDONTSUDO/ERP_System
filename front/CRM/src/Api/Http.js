@@ -795,3 +795,35 @@ export const DeleteDevice = (device) => {
         .catch(err => console.log(err))
 }
 
+export  const NewNewsToComment = (payload) =>{
+    
+    return fetch(`${process.env.REACT_APP_API_URL}/new/news/coments`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({payload})
+
+    })
+        .then(responce => {
+            return responce.json()
+        })
+        .catch(err => console.log(err))
+} 
+export const NewNewToSetStatusJob = (payload) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/new/news/set/status `, {
+        method: "POST",
+        headers: {
+            Accept: "application/json", "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({payload})
+
+    })
+        .then(responce => {
+            return responce.json()
+        })
+        .catch(err => console.log(err))
+}
+

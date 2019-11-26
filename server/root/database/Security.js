@@ -14,7 +14,8 @@ const SecuritySchema = new mongoose.Schema({
   date:{
     type:Date,
     default:Date.now()
-  }// date
+  },
+  createdAt: { type: Date, expires: '129600m', default: Date.now }
 })
 
 module.exports = mongoose.model("Security", SecuritySchema)

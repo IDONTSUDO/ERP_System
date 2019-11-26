@@ -28,25 +28,66 @@
     color: #000000;
     background-color: #d1ecf1;
 }
-
-@media screen and (min-width: 100px) {
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
     .postisitonRelativeSmeni{  
-     
-        left:9em;
-        top: 2em;
-        bottom: 20em;
-        position: absolute;
-        display: flex; 
-    }
-}
-@media screen and (min-width: 100px) {
-    /* .postisitonRelativeSmeni{  
         display: flex;
         align-items: center;
         justify-content: center;
         padding:1em 6em 0.1em;
-    } */
+    }
 }
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .postisitonRelativeSmeni{  
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding:1em 6em 0.1em;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .postisitonRelativeSmeni{  
+        left:9em;
+        top: 2em;
+        /* bottom: 20em; */
+        position: absolute;
+        display: flex;
+    }
+}
+
+/* flex-row-reverse */
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .postisitonRelativeSmeni{  
+        left:9em;
+        top: 2em;
+        /* bottom: 20em; */
+        position: absolute;
+        display: flex;
+    }
+}
+
+
+@media screen and (min-width: 500px) {
+    .postisitonRelativeSmeni{  
+        left:9em;
+        top: 2em;
+        /* bottom: 20em; */
+        position: absolute;
+        display: flex;
+    }
+}
+
+
 
 .alert-warning-yellow {
     color: #00000094;
@@ -416,4 +457,16 @@
     -webkit-box-shadow: 14px 17px 52px -6px rgba(0,0,0,0.75);
     -moz-box-shadow: 14px 17px 52px -6px rgba(0,0,0,0.75);
     box-shadow: 14px 17px 52px -6px rgba(0,0,0,0.75);
+}
+.IconMobile{
+   
+    align-items: center;
+    justify-content: center;
+    
+}
+.Mobile_menu_row{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding:1em 6em 0.1em;
 }

@@ -38,7 +38,6 @@ const MainRouter = () => (
         <Switch>
             <Route exact path="/signin" component={Signin} />
             <PrivateRoute exact path="/news" component={News} />
-            <PrivateRoute exact path="/news" component={News} />
             <PrivateRoute exact path="/user/:userId" component={Profile} />
             <PrivateRoute exact path="/statistic/:userId" component={MyStatistic} />
             <PrivateRoute exact path="/company" component={Company} />
