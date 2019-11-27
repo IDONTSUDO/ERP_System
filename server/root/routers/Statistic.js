@@ -22,7 +22,6 @@ router.post('/new/complete/seil/all/', requireSignin, NewCompleteSeilAll)
 router.post('/new/complete/seil/qauality/', requireSignin, NewCompleteSeil)
 router.post('/new/todo/qauality/', requireSignin, NewTODOQuality)
 
-
 router.delete('/delete/qauality/user/statistic', requireSignin, DeleteUserQuality)
 
 

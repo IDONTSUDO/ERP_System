@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const { ObjectId } = mongoose.Schema
 const UserOneStatistic = new mongoose.Schema({
     user_created_todo: {//юзеров всего
         type: Number,

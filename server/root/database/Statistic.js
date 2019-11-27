@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const { ObjectId } = mongoose.Schema
 const WorkerStatisticAllSchema = new mongoose.Schema({
     worker_quality: {//юзеров всего
         type: Number,

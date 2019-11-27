@@ -1,7 +1,7 @@
 const ContrAgent = require('../database/ContrAgent')
 const _ = require('lodash')
 exports.agentId = async (req, res, next, id) => {
-    await ContrAgent.findById(id)
+    ContrAgent.findById(id)
         .exec((err, agent) => {
             if (err || !agent) {
                 return res.status(400).json({
@@ -14,8 +14,7 @@ exports.agentId = async (req, res, next, id) => {
 }
 exports.getMyListAgent = async (req, res) => {
 
-    await ContrAgent.find({ tags: { $elemMatch: { "_id": `${req.body.workerId}` } } })
-
+    ContrAgent.find({ tags: { $elemMatch: { "_id": `${req.body.workerId}` } } })
         .exec((err, agent) => {
             if (err) {
                 return res.status(400).json({
@@ -27,11 +26,10 @@ exports.getMyListAgent = async (req, res) => {
         })
 }
 exports.getAgentProfile = async (req, res) => {
-    await res.status(200).json(req.agent)
+    res.status(200).json(req.agent)
 }
 exports.SearchAgent = async (req, res) => {
-
-    await ContrAgent.find({ name: new RegExp(req.body.item, 'i') })
+     ContrAgent.find({ name: new RegExp(req.body.item, 'i') })
         .select("_id name")
         .then(result => res.json(result))
         .catch(e => console.error(e))
@@ -94,7 +92,7 @@ exports.ManageAddAgent = async (req, res) => {
     })
 }
 exports.DeleteManagerForAgent = async (req, res) => {
-    await ContrAgent.findByIdAndUpdate(req.body.agentId, { $pull: { tags: req.body.workerId } }, { new: true }).exec(
+    ContrAgent.findByIdAndUpdate(req.body.agentId, { $pull: { tags: req.body.workerId } }, { new: true }).exec(
         (err, result) => {
             if (err) {
                 return res.status(400).json({

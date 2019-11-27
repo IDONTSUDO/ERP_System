@@ -9,11 +9,11 @@ const {
     DeleteManagerForAgent,
     ManageAddAgent,
     NewAgent } = require("../controllers/ContrAgent")
-    const { 
-        workerById
-    } = require("../controllers/Company")
-const router = express.Router({mergeParams: true});
+const { workerById } = require("../controllers/Company")
 const {requireSignin} = require("../middleware/middleware.js")
+
+const router = express.Router({mergeParams: true});
+
 
 router.get('/agent/list',requireSignin, AllAgent )
 router.get('/agent/:agentId',requireSignin,  getAgentProfile)
@@ -30,4 +30,6 @@ router.put('/change/agent/:agentId',requireSignin,  ChangeAgent)
 
 router.param('workerById',workerById)
 router.param('agentId', agentId)
+
+
 module.exports = router

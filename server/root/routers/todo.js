@@ -26,7 +26,7 @@ router.get('/todo/:todoid', requireSignin, GetTodo)
 router.get('/my/todo/soso/:workerSelectId', requireSignin, myTODO)
 router.get('/today/todo/:workerSelectId', requireSignin, myTodoItsDay)
 router.get('/today/todo/qulity/:workerSelectId',  myTodoItsDayQuality)
-// myTodoItsDayQuality
+
 router.post('/get/comand/todo/time/quality/',  MyComandTodoQuality)
 router.post('/get/comand/todo/time/', requireSignin, MyComandTodo)
 router.post('/get/comand/todo/', requireSignin, GetcomandTodo)

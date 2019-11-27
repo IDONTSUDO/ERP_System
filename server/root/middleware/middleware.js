@@ -28,7 +28,6 @@ exports.jwtTokenUserRole = async (req, res, next) => {
         let j = jwt.decode(token)
     
         req.auth = j.role
-        console.log(200)
         return next()
     }
 }

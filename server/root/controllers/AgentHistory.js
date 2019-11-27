@@ -25,8 +25,6 @@ exports.NewHistory = async (req, res) => {
 
     const history = new History(req.body)
     history.postedBy = req.body.userId
-    console.log(req.body)
-    console.log(req.userId)
 
     await history.save().then(result => {
         res.status(200).json({
@@ -49,16 +47,10 @@ exports.changeHistory = async (req, res) => {
 
     history = _.extend(history, req.body)
     let ChangeHis = new History(history)
-    ChangeHis.save((err, result) => {
-
-        if (err) {
-            console.log(err)
-            return res.status(400).json({
-                error: err
-            })
-        }
-
-        res.json(result)
+    ChangeHis.save().then(result => {
+        res.status(200).json({
+            "ok": "ok!"
+        })
     })
 }
 
@@ -66,7 +58,7 @@ exports.myHistoryActive = async (req, res) => {
     let userId = req.body.userId
     let statusSearch = "Активно"
 
-    await History.find({ $and: [{ postedBy: { $in: userId } }, { status: { $in: statusSearch } }] })
+    History.find({ $and: [{ postedBy: { $in: userId } }, { status: { $in: statusSearch } }] })
 
         .exec((err, history) => {
             if (err) {
@@ -82,7 +74,7 @@ exports.myHistoryBeginer = async (req, res) => {
     let userId = req.body.userId
     let statusSearch = "Начато"
 
-    await History.find({ $and: [{ postedBy: { $in: userId } }, { status: { $in: statusSearch } }] })
+    History.find({ $and: [{ postedBy: { $in: userId } }, { status: { $in: statusSearch } }] })
 
         .exec((err, history) => {
             if (err) {
@@ -100,7 +92,6 @@ exports.myHistoryComplete = async (req, res) => {
     let userId = req.body.userId
     let statusSearch = "Завершено"
     const currentPage = req.query.page || 1
-    console.log(req.query.page)
     const perPage = 50
     var totalItems
 

@@ -163,13 +163,13 @@ exports.NewTodoUserAwesomeNews = async (req, res,next) => {
 
 }
 exports.TodoChange = async (req, res) => {
-    console.log(req.body.payload|| req.body )
+  
     let todo = req.todo;
     todo = _.extend(todo, req.body.payload || req.body );
 
 
     todo.updated = Date.now()
-    console.log(todo)
+    
     await todo.save((err, result) => {
        
         if (err) {
@@ -210,7 +210,6 @@ exports.NewComents = async (req, res) => {
 }
 exports.FindComments = async (req, res) => {
 
-
     COMMENTS.find({ todoId: req.body.todoId })
         .exec((err, posts) => {
             if (err) {
@@ -225,7 +224,7 @@ exports.FindComments = async (req, res) => {
 exports.DeleteComent = async (req, res) => {
 
     let coment = req.coment
-    await coment.remove((err, coment) => {
+    coment.remove((err, coment) => {
         if (err) {
             return res.status(400).json({
                 error: err

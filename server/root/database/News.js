@@ -1,7 +1,4 @@
 const mongoose = require('mongoose');
-
-
-
 const NewsSchema = new mongoose.Schema({
   name_posted:{
     type:String

@@ -39,7 +39,7 @@ exports.Newworker = async (req, res, next) => {
     if (workerExists) return res.status(403).json({
         error: "Email is taken"
     })
-    const worker = await new Worker(req.body)
+    const worker =  new Worker(req.body)
     worker.save().then((worker) => {
         req.worker = worker._id
         { { ["Директор", "Управляющий", "Менеджер"].includes(worker.role) ? ManagePriced.create({ userBy: worker._id }, function (err, small) { if (err) return handleError(err) }) : {} } }
@@ -142,7 +142,7 @@ exports.workerGet = async (req, res) => {
     return res.json(req.worker)
 }
 exports.workerAll = async (req, res) => {
-    const worker = await Worker.find().select(" _id name avatar role")
+    const worker =  Worker.find().select(" _id name avatar role")
         .then((worker) => {
             res.status(200).json(worker)
         })

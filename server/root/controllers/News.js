@@ -3,7 +3,7 @@ const TODO = require('../database/UserTodo.js')
 const _ = require('lodash')
 require("dotenv").config()
 exports.NewsId = async (req, res, next, id) => {
-    await NEWS.findById(id)
+    NEWS.findById(id)
         .exec((err, news) => {
             if (err || !news) {
                 return res.status(400).json({
@@ -17,7 +17,7 @@ exports.NewsId = async (req, res, next, id) => {
 }
 exports.newNews = async (req, res, next) => {
     const news = new NEWS(req.body)
-    await news.save().then(result => {
+    news.save().then(result => {
         res.status(200).json({
             "result": "created"
         })
@@ -31,10 +31,8 @@ exports.NewTodoo = async (req, res, next) => {
 
     todo.save().then(result => {
         req.result._id
-
         next()
     })
-
     const news = new NEWS(req.body)
     news.save().then(result => {
         req.new = result._id
@@ -42,10 +40,10 @@ exports.NewTodoo = async (req, res, next) => {
     })
 }
 exports.SetNews = async (req, res, next) => {
-    // req.newsLink
+   
     const news = new NEWS(req.body)
     news.link = req.newsLink
-    await news.save().then(result => {
+    news.save().then(result => {
         res.status(200).json({
             "result": "created"
         })
@@ -110,7 +108,7 @@ exports.NewsSetDateDelete = async (req, res) => {
 
 exports.NewsKills = async (req, res, next) => {
     let NewsKill = req.news
-    await NEWS.find({ worker_by: worker })
+    NEWS.find({ worker_by: worker })
         .select(" _id")
         .exec((err, news) => {
             if (err) {

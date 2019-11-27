@@ -15,4 +15,5 @@ router.post('/user/find/device/push', UserFindPushData)
 router.post('/user/data/push', UserAddPushData)
 router.post('/my/device/', MyPushingDevice)
 router.post('/delete/device/', DeleteDevice)
+
 module.exports = router

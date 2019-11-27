@@ -3,7 +3,6 @@ const { ObjectId } = mongoose.Schema
 const contrAgentSchema = new mongoose.Schema({
     company: {
         type: String,
-
     },
     full_name: {
         type: String,

@@ -6,7 +6,6 @@ exports.ManageGetAgent = async (req, res) =>{
 exports.GetPriceByManage = async (req, res,id) =>{
   
     let agentId = req.body.AgentId
-    console.log(agentId)
     PriceManageAtAgent.find({AgentBy:agentId}).then((result,err) =>{
         if(err){
             console.log(err)
@@ -37,10 +36,11 @@ exports.NewPriceAtAgent = async (req, res) =>{
     let agentId = req.body.agentId
     let price = req.body.percent
     let priced  = new PriceManageAtAgent()
+
     priced.AgentBy = agentId
     priced.UserBy = userBy
     priced.price = price
-    console.log(priced)
+
     priced.save().then(result =>{
         res.status(200).json({
             curd: result

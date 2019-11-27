@@ -8,16 +8,16 @@ exports.NewStatisticTabel = async (req, res) => {
     await newTabel.save()
     res.status(200).json({ message: "Tabel create!" })
 }
-// worker_quality++
+
 exports.NewUserQuality = async (req, res) => {
 
-    await STATISTIC.find().select("worker_quality _id").exec((err, stat) => {
+    STATISTIC.find().select("worker_quality _id").exec((err, stat) => {
         if (err) {
             return res.status(400).json({
                 error: err
             })
         }
-        console.log(stat[0].worker_quality)
+
         let id_stat = stat[0]._id
         let worker_quality_plus = stat[0].worker_quality + 1
 
@@ -35,10 +35,10 @@ exports.NewUserQuality = async (req, res) => {
         )
     })
 }
-// create_todo++
+
 exports.NewTODOQuality = async (req, res) => {
 
-    await STATISTIC.find().select("create_todo _id").exec((err, stat) => {
+    STATISTIC.find().select("create_todo _id").exec((err, stat) => {
         if (err) {
             return res.status(400).json({
                 error: err
@@ -65,7 +65,7 @@ exports.NewTODOQuality = async (req, res) => {
 // TEST complete_todo++ 
 exports.NewCompleteTODOQuality = async (req, res) => {
 
-    await STATISTIC.find().select("complete_todo _id").exec((err, stat) => {
+    STATISTIC.find().select("complete_todo _id").exec((err, stat) => {
         if (err) {
             return res.status(400).json({
                 error: err
@@ -88,11 +88,10 @@ exports.NewCompleteTODOQuality = async (req, res) => {
         )
     })
 }
-// TEST CompleteSeil++
 
 exports.NewCompleteSeil = async (req, res) => {
 
-    await STATISTIC.find().select("CompleteSeil _id").exec((err, stat) => {
+    STATISTIC.find().select("CompleteSeil _id").exec((err, stat) => {
         if (err) {
             return res.status(400).json({
                 error: err
@@ -116,17 +115,16 @@ exports.NewCompleteSeil = async (req, res) => {
         )
     })
 }
-// TEST
-// SeilAll++
+
 exports.NewCompleteSeilAll = async (req, res) => {
 
-    await STATISTIC.find().select("SeilAll _id").exec((err, stat) => {
+    STATISTIC.find().select("SeilAll _id").exec((err, stat) => {
         if (err) {
             return res.status(400).json({
                 error: err
             })
         }
-        console.log(stat[0].SeilAll)
+    
         let id_stat = stat[0]._id
         let SeilAll_plus = stat[0].SeilAll + 1
 
@@ -144,7 +142,7 @@ exports.NewCompleteSeilAll = async (req, res) => {
         )
     })
 }
-// differenceSeil ++
+
 exports.NewCompleteSeilDiffence = async (req, res) => {
 
     await STATISTIC.find().select("differenceSeil _id").exec((err, stat) => {
@@ -153,7 +151,7 @@ exports.NewCompleteSeilDiffence = async (req, res) => {
                 error: err
             })
         }
-        console.log(stat[0].differenceSeil)
+       
         let id_stat = stat[0]._id
         let differenceSeil_plus = stat[0].differenceSeil + 1
 
@@ -204,4 +202,4 @@ exports.GetUserQuality = async (req, res) => {
         })
 }
 
-exports.Statistic
+
