@@ -57,7 +57,8 @@ class Work extends React.Component {
       workerTime6: "",
       workerTime7: "",
       workerTime8: "",
-      workerTime9: ""
+      workerTime9: "",
+      disbledSelect:true
     };
   }
   componentDidMount() {
@@ -184,15 +185,20 @@ class Work extends React.Component {
       tags = [];
       let finalyUserArray = [];
       tags = tagsArray;
-
+      
       let comand = false;
 
       let posted_by = isAuthenticated().direct._id;
       let name_posted = isAuthenticated().direct.name;
-
-      let jobNews = tags;
       let eventNews = "Назначено новое дело";
       let link = `/job/`;
+      console.log(name_posted)
+      
+      var jobNews = tags.filter(function(el) {
+        return el != posted_by;
+      });
+      console.log(jobNews)
+
       let worker_by = tags.map((user, index) => {
         return {
           user: user
@@ -249,30 +255,25 @@ class Work extends React.Component {
     }
   };
   validateDinamicJobs = (JobArray) =>{
+    let i = 0;
+
+    while(JobArray.length > i){
+    
+      if(typeof JobArray[i].date == "undefined") {
+        this.setState({
+          error: "Похоже что вы не до заполнили дело"
+        });
+        return false
+      }
+      if((typeof JobArray[i].action) == "undefined" ) {
+        this.setState({
+          error: "Похоже что вы не до заполнили дело"
+        });
+        return false
+      }
+      i++
+    }
     return true
-    // let errorsValid = "no error"
-  
-    // for(let i = 0;JobArray.length > i; i++){
-    //   console.log(i)
-    //   console.log(JobArray[i].action)
-    //   console.log(typeof(JobArray[i].date))
-    //   if(typeof(JobArray[i].date) == undefined){
-    //    console.log(200)
-    //     errorsValid = `ошибка вылидации у дела № ${i}`
-    //   }
-    //   if(typeof(JobArray[i].action) == undefined){
-    //     console.log(200)
-    //     errorsValid = `ошибка вылидации у дела № ${i}`
-    //   }
-    // }
-    // console.log(errorsValid)
-    // if(errorsValid == undefined){
-    //   return true
-    // }else{
-    //   this.setState({error:errorsValid})
-    //   this.openNotificationErrorValidationD(errorsValid)
-    //   return false
-    // }
   }
   openNotificationErrorValidationD = (errorsValid) =>{
     notification.open({
@@ -317,6 +318,8 @@ class Work extends React.Component {
     let SortOfArray = [];
     let tired = []; //массив с юзер айди
     let NoHope = [];
+    var posted_by = isAuthenticated().direct._id;
+
     timeArray.push(
       workerTime0,
       workerTime1,
@@ -345,7 +348,7 @@ class Work extends React.Component {
     for (let t = 0; timeArray.length > t; t++) {
       newTimeArray.push(timeArray[t]._d);
     }
-
+    
     var filteredTime = newTimeArray.filter(function(el) {
       return el != undefined;
     });
@@ -357,7 +360,7 @@ class Work extends React.Component {
           .format("LL")
       );
     }
-
+   
     var filtered = newArray.filter(function(el) {
       return el != "";
     });
@@ -370,6 +373,7 @@ class Work extends React.Component {
       }
     }
     let i = 0;
+   
     while (worker.length > i) {
       for (let el2 = 0; tags.length > el2; el2++) {
         if (worker[i].name === tags[el2]) {
@@ -404,8 +408,12 @@ class Work extends React.Component {
         newsFinalyArray.push(NoHope[i]);
       }
     }
+    var filteredNewsFinalyArray = newsFinalyArray.filter(function(el) {
+      return el != posted_by;
+    });
 
-    let jobNews = newsFinalyArray.map((user, index) => {
+  
+    let jobNews = filteredNewsFinalyArray.map((user, index) => {
       return {
         user: user,
         date: lastTimeArray[index],
@@ -420,10 +428,11 @@ class Work extends React.Component {
         action: filtered[index]
       };
     });
+  
     if(this.validateDinamicJobs(JobArray)){
       let comand = true;
-
-      let posted_by = isAuthenticated().direct._id;
+     
+    
       let name_posted = isAuthenticated().direct.name;
       let worker_by = jobNews;
       let eventNews = "Назначено новое дело";
@@ -444,7 +453,33 @@ class Work extends React.Component {
         if (data.error) {
           this.openNotificationError();
         } else {
+
           this.openNotificationNewWork();
+          let value = []
+          this.handleChange(value)
+          this.setState({
+            workerJob0: "",
+            workerJob1: "",
+            workerJob2: "",
+            workerJob3: "",
+            workerJob4: "",
+            workerJob5: "",
+            workerJob6: "",
+            workerJob7: "",
+            workerJob8: "",
+            workerJob9: "",
+            workerJob10: "",
+            workerTime0: "",
+            workerTime1: "",
+            workerTime2: "",
+            workerTime3: "",
+            workerTime4: "",
+            workerTime5: "",
+            workerTime6: "",
+            workerTime7: "",
+            workerTime8: "",
+            workerTime9: ""
+          })
         }
       }); 
     }
@@ -519,7 +554,8 @@ class Work extends React.Component {
       workerJob6,
       workerJob7,
       workerJob8,
-      workerJob9
+      workerJob9,
+      disbledSelect
     } = this.state;
     /*
     TODO: 
@@ -648,6 +684,7 @@ class Work extends React.Component {
                     <h3>Исполнители</h3>
                     <div className="Tags">
                       <Select
+                        // disabled={disbledSelect  ?(true):(false)}
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="Выберете исполнителей"
@@ -655,6 +692,7 @@ class Work extends React.Component {
                         optionLabelProp="label"
                         defaultActiveFirstOption={false}
                         allowClear={true}
+                        defaultValue={this.state.tags}
                       >
                         {worker.map((workerOne, i = 1) => (
                           <Option value={workerOne.name} label={workerOne.name}>
@@ -732,7 +770,7 @@ class Work extends React.Component {
                               <>
                                
                                 <DatePicker
-                                  onChange={this.onChangeworkerTime1}
+                                  onChange={this.onChangeworkerTime0}
                                   placeholder="Выберите дату"
                                 />
                               </>

@@ -39,7 +39,11 @@ export default class MyDealHistory extends Component {
     return (
       <div className="postisitonRelativeSmeni">
         <Anchor style={{ backgroundColor: "#f0f2f5" }}>
-          {(page > 1 &&  page.length > 50) ?(
+          
+        </Anchor>
+
+        <div className="container">
+        {(page > 1 &&  page.length > 50) ?(
              <>
              <Button
                onClick={() => this.loadLess(1)}
@@ -50,18 +54,7 @@ export default class MyDealHistory extends Component {
           ):(
             ""
           )}
-          {/* {page > 1 ? (
-            <>
-              <Button
-                onClick={() => this.loadLess(1)}
-                className="ButtonPaginate"
-                icon="left"
-              ></Button>
-            </>
-          ) : (
-            ""
-          )} */}
-          {history.length ? (
+          {history.length === 50? (
             <>
               <Button
                 onClick={() => this.loadMore(1)}
@@ -72,10 +65,8 @@ export default class MyDealHistory extends Component {
           ) : (
             ""
           )}
-        </Anchor>
-
-        <div className="container">
           <div className="row">
+            
             {history.map((oneDeal, i) => (
               <>
               <div className="deal-phone-green">
@@ -94,6 +85,7 @@ export default class MyDealHistory extends Component {
               </>
             ))}
           </div>
+          
         </div>
       </div>
     );
