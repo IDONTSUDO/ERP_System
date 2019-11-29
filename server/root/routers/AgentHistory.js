@@ -16,7 +16,7 @@ const {requireSignin} = require("../middleware/middleware.js")
 
 const router = express.Router({mergeParams: true});
 
-
+        
 
 
 router.get('/history/:HistoryById', requireSignin,GetHistoryOne)

@@ -10,13 +10,16 @@ const cookieParser = require('cookie-parser')
 const fs = require('fs')
 const cors = require('cors')
 
+
+
+
 dotenv.config()
 
 mongoose.connect(`mongodb://localhost/svarog-crm-system`, { useNewUrlParser: true }).then(() => console.log("DB Conected"))
 mongoose.connection.on('error', err => {
     console.log(`DB connection error: ${err.message}`)
 })
-// mongoose.set('debug', true)
+mongoose.set('debug', true)
 
 const DirectAuthRoutes = require("./routers/Auth")
 const DirectCompanyhRoutes = require("./routers/Company")
@@ -29,11 +32,11 @@ const PriceUsers = require("./routers/Priced")
 const PushNotifications = require("./routers/push")
 
 app.use(cookieParser())
-// app.use(morgan("dev"))
+app.use(morgan("dev"))
 app.use(bodyParser.json())
 app.use(expressValidator())
 app.use(cors())
-
+// 
 app.use("/", PushNotifications)
 app.use("/", StatisticRouter)
 app.use("/", DirectAuthRoutes)

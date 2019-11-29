@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon main.js",
-    "start-dev-debug": "NODE_ENV=dev  node --inspect ./app.js",
-    "test": "ava"
+    "debug": "NODE_ENV=dev  node --inspect ./main.js",
+    "opt": "0x -o main.js",
+    "prod":"pm2 start main.js"
   },
   "author": "IDONTSUDO",
   "license": "WTFP",

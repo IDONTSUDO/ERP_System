@@ -1,0 +1,55 @@
+server {
+    server_name svarog-server.ru;
+    listen *:80;
+
+    location /server {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+
+    }
+    location /app {
+        proxy_pass http://127.0.0.1:3000;
+        root /var/www;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+server {
+    server_name svarog-server.ru;
+    listen *:443 ssl;
+
+    ssl_certificate         /etc/nginx/ssl/svarog-server_ru.pem;
+    ssl_certificate_key     /etc/nginx/ssl/svarog-server_ru.pem;
+
+    location /server {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+
+    }
+    location /app {
+        proxy_pass http://127.0.0.1:3000;
+        root /var/www;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+

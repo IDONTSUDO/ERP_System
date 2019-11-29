@@ -7,11 +7,13 @@ require("dotenv").config()
 webpush.setVapidDetails(process.env.WEB_PUSH_CONTACT, process.env.PUBLIC_VAPID_KEY, process.env.PRIVATE_VAPID_KEY)
 
 exports.CheckBrowserForSubscription = async (req, res, next) => {
+  console.log(200)
   let userAgent = req.header('User-Agent')
   let UserId = req.body.userId
 
   Subscription.find({ UserAgent: userAgent, userBy: UserId }).exec((err, result) => {
-    if (result[0] == undefined) {
+    console.log(result)
+    if (result[0] == "undefined") {
       return next()
     } else {
       return false
@@ -185,7 +187,9 @@ exports.UserAddPushData = (req, res) => {
 }
 exports.MyPushingDevice = async (req, res) => {
   let userBy = req.body
+  console.log(userBy)
   Subscription.find(userBy).exec((err, result) => {
+    console.log(result)
     if (err) {
       return res.status(400).json({
         error: err
