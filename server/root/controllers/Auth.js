@@ -33,13 +33,13 @@ exports.signin = (req, res, next) => {
     Direct.findOne({ email }, (err, direct) => {
         if (err || !direct) {
             return res.status(401).json({
-                error: "User with that email not exist"
+                error: "Пользователь с таким адресом электронной почты не существует"
             })
         }
 
         if (!direct.authenticate(password)) {
             return res.status(403).json({
-                error: "Email or password do not match"
+                error: "E-mail или пароль не совпадают"
             })
         }
         const token = jwt.sign({ _id: direct._id }, process.env.JWT_SECRET)
@@ -62,7 +62,7 @@ exports.signin = (req, res, next) => {
             logged_in,
             device } = direct
         req.userId = _id
-        console.log(logged_in)
+        
         res.json({
             token, direct: {
                 _id, name, email, role,device, todo_avesome,
@@ -79,20 +79,19 @@ exports.signin = (req, res, next) => {
         } else {
             direct.logged_in = true
 
-            direct.save().then((err, result) => { return
-            console.log(result) })
+            direct.save().then((err, result) => { return })
         }
     })
 }
 exports.MySecurity = async (req, res) => {
-    console.log(290)
+ 
     let userId = req.body.userId
-    console.log(userId)
+   
     const currentPage = req.query.page || 1
 
     const perPage = 24
     var totalItems
-    console.log(290)
+   
     const security = UserSecurity.find({ UserBy: userId })
 
         .countDocuments()
