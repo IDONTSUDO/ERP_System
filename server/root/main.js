@@ -11,23 +11,6 @@ const fs = require('fs')
 const cors = require('cors')
 const {CRONTEST} = require("./cron/cron.js")
 
-const connectionString = 'mongodb://127.0.0.1/svarog-cron';
-
-exports.AgendaTest = async (req, res) =>{
-
-    const agenda = new Agenda({
-        db: {address: process.env.CONNECTION_AGENDA, collection: 'ourScheduleCollectionName'},
-        processEvery: '30 seconds'
-    })
-    agenda.on('start', job => {
-        console.log(job)
-        console.log('Job %s starting', job.attrs.name);
-    });
-    
-}
-var environment = process.env.NODE_ENV
-
-console.log(environment)
 CRONTEST()
 
 mongoose.connect(`mongodb://localhost/svarog-crm-system`, { useNewUrlParser: true }).then(() => console.log("DB Conected"))

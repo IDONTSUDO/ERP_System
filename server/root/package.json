@@ -7,7 +7,7 @@
     "dev": "nodemon main.js",
     "debug": "NODE_ENV=dev  node --inspect ./main.js",
     "opt": "0x -o main.js",
-    "prod": "pm2 start main.js"
+    "prod": "node ./ci/cd.js"
   },
   "author": "IDONTSUDO",
   "license": "WTFP",
@@ -37,8 +37,12 @@
     "mongodb": "^3.3.5",
     "mongoose": "^5.5.11",
     "morgan": "^1.9.1",
+    "node-color-log": "^2.2.0",
     "node-cron": "^2.0.3",
+    "node-ssh": "^6.0.0",
     "q": "^1.5.1",
+    "shelljs": "^0.8.3",
+    "ssh-exec": "^2.0.0",
     "uuid": "^3.3.2",
     "web-push": "^3.4.1"
   },
