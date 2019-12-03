@@ -9,26 +9,35 @@ const Subscriber = require('../database/Subscriber')
 const geoip = require('geoip-lite');
 
 exports.workerSelectId = async (req, res, next, id) => {
+    console.log(200)
     Worker.findById(id).select(" _id ")
         .exec((err, worker) => {
+            console.log(201)
             if (err || !worker) {
+                console.log(202)
                 return res.status(400).json({
                     error: "Worker not found"
                 })
             }
             req.worker = worker
+            console.log(worker)
             next()
         })
 }
 
 exports.workerById = async (req, res, next, id) => {
+    console.log(200)
     Worker.findById(id)
         .exec((err, worker) => {
+            console.log(201)
             if (err || !worker) {
+                console.log(202)
                 return res.status(400).json({
                     error: "Worker not found"
                 })
             }
+            console.log(203)
+            console.log(worker)
             req.worker = worker
 
             next()
@@ -106,11 +115,12 @@ exports.wokerEditDeviceDataDelete = async (req, res) => {
     );
 }
 exports.workerEdit = async (req, res, next) => {
+   
     let form = new formidable.IncomingForm()
+
     form.keepExtensions = true;
     form.parse(req, (err, fields, files) => {
         if (err) {
-
             return res.status(400).json({
                 error: "Photo could not be uploaded"
             });
@@ -121,20 +131,20 @@ exports.workerEdit = async (req, res, next) => {
         worker = _.extend(worker, fields)
 
         worker.updated = Date.now()
-        worker.avatar = true
+
+
         if (files.photo) {
             worker.photo.data = fs.readFileSync(files.photo.path)
             worker.photo.contentType = files.photo.type
         }
 
         worker.save((err, result) => {
-
             if (err) {
                 return res.status(400).json({
                     error: err
                 })
             }
-            res.json({ result })
+            res.json({result})
         })
     })
 }

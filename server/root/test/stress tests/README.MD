@@ -1,7 +1,8 @@
-# install 
+#### Начало работы
 
-## npm install -g artillery
+npm install -g artillery
+#### Запуск
+artillery run [file_name]
 
-# run
 
-## artillery run [file_name]
+Готово!
