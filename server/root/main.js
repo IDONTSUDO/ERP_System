@@ -3,17 +3,32 @@ const app = express()
 const port = 8080
 const mongoose = require('mongoose')
 const morgan = require('morgan')
-const dotenv = require('dotenv')
+require("dotenv").config()
 const bodyParser = require('body-parser')
 const expressValidator = require('express-validator')
 const cookieParser = require('cookie-parser')
 const fs = require('fs')
 const cors = require('cors')
+const {CRONTEST} = require("./cron/cron.js")
 
+const connectionString = 'mongodb://127.0.0.1/svarog-cron';
 
+exports.AgendaTest = async (req, res) =>{
 
+    const agenda = new Agenda({
+        db: {address: process.env.CONNECTION_AGENDA, collection: 'ourScheduleCollectionName'},
+        processEvery: '30 seconds'
+    })
+    agenda.on('start', job => {
+        console.log(job)
+        console.log('Job %s starting', job.attrs.name);
+    });
+    
+}
+var environment = process.env.NODE_ENV
 
-dotenv.config()
+console.log(environment)
+CRONTEST()
 
 mongoose.connect(`mongodb://localhost/svarog-crm-system`, { useNewUrlParser: true }).then(() => console.log("DB Conected"))
 mongoose.connection.on('error', err => {
@@ -30,6 +45,8 @@ const AgentRouter = require("./routers/ContAgent")
 const NewHistory = require("./routers/AgentHistory")
 const PriceUsers = require("./routers/Priced")
 const PushNotifications = require("./routers/push")
+// const CronTask = require("./routers/cron")
+
 
 app.use(cookieParser())
 app.use(morgan("dev"))
