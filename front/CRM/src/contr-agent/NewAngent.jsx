@@ -69,6 +69,7 @@ export default class NewAgent extends Component {
       NewContrAgent(NewAgent, user).then(data => {
         if (data.error) this.setState({ error: data.error });
         else
+        this.openNotificationAgentNew()
           this.setState({
             company: "",
             full_name: "",

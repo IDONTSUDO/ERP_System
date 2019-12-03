@@ -79,25 +79,25 @@ export default class Company extends Component {
           <div className="row">
             {worker.map((user, i) => (
               <>
-                <div className=""></div>
-
-                <Card size="small" title={<b>{user.role}</b>}>
-                  {user.avatar === true ? (
+                           <div style={{ width:"250px"}} class="card">
+            {user.avatar === true ? (
                     <img
-                      className="card-img-top"
-                      src={`http://localhost:8080/user/photo/${user._id}?`}
+                      className="img-thumbnail card-img-top"
+                      src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}?`}
                       alt={user.name}
-                      style={{ height: "50px", width: "50px" }}
+                      style={{ height: "250px", width: "250px" }}
                     />
                   ) : (
                     <img
-                      className="card-img-top"
+                      className="img-thumbnail card-img-top"
                       src={`${DefaultProfile}`}
-                      style={{ height: "50px", width: "50px" }}
+                      style={{ height: "250px", width: "250px" }}
                     />
                   )}
 
-                  <h5 className="card-title">{user.name}</h5>
+              <div class="card-body">
+                <h5 class="card-text">{user.role}</h5>
+                <div style={{wordBreak: "break-word"}} className="card-title">{user.name}</div>
                   <p className="card-text">{user.email}</p>
 
                   <Button>
@@ -117,7 +117,8 @@ export default class Company extends Component {
                       ""
                     )}
                   </>
-                </Card>
+              </div>
+            </div>
               </>
             ))}
           </div>

@@ -9,9 +9,9 @@ const expressValidator = require('express-validator')
 const cookieParser = require('cookie-parser')
 const fs = require('fs')
 const cors = require('cors')
-const {CRONTEST} = require("./cron/cron.js")
+// const {CRONTEST} = require("./cron/cron.js")
 
-CRONTEST()
+// CRONTEST()
 
 mongoose.connect(`mongodb://localhost/svarog-crm-system`, { useNewUrlParser: true }).then(() => console.log("DB Conected"))
 mongoose.connection.on('error', err => {
@@ -28,7 +28,6 @@ const AgentRouter = require("./routers/ContAgent")
 const NewHistory = require("./routers/AgentHistory")
 const PriceUsers = require("./routers/Priced")
 const PushNotifications = require("./routers/push")
-// const CronTask = require("./routers/cron")
 
 
 app.use(cookieParser())

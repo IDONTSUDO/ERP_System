@@ -3,7 +3,7 @@ import { isAuthenticated } from "../Api/Auth";
 import { read, update, updateUser } from "../Api/Http";
 import { notification, Icon, Spin } from "antd";
 import DefaultProfile from "../Assets/default.png";
-import { Link } from "react-router-dom";
+import { Link,Redirect } from "react-router-dom";
 import { Button } from "antd";
 import Error from "../Error/Error.jsx"
 
@@ -29,23 +29,26 @@ class EditProfile extends Component {
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
-        this.setState({
-          id: data._id,
-          name: data.name,
-          email: data.email,
-          error: "",
-          about: data.about,
-          open: false
-        });
+        if(data._id == userId){
+          this.setState({
+            id: data._id,
+            name: data.name,
+            email: data.email,
+            error: "",
+            about: data.about,
+            open: false
+          });
+        }else{
+          this.setState({redirectToProfile: true})
+        }
       }
     });
   };
   componentDidMount() {
+    let userId = isAuthenticated().direct._id;
     this.userData = new FormData();
-    const userId = this.props.match.params.userId;
     this.init(userId);
   }
-  // isValid функция валидации берет данные из стейта и валидирует
   isValid = () => {
     const { name, email, password } = this.state;
     if (name.length === 0) {
@@ -59,7 +62,7 @@ class EditProfile extends Component {
       this.setState({ error: "Email  не валиден", loading: false });
       return false;
     }
-    if (password.length <= 1) {
+    if (password.length <= 0) {
       this.setState({ error: "пароль обязателен", loading: false });
       return false;
     }
@@ -91,7 +94,7 @@ class EditProfile extends Component {
           this.openNotificationEditProile();
           updateUser(data, () => {
             this.setState({
-              name: data.name
+              redirectToProfile:true
             });
           });
         }
@@ -171,9 +174,12 @@ class EditProfile extends Component {
       error,
       loading,
       about,
-      open
+      open,
+      redirectToProfile
     } = this.state;
-
+    if(redirectToProfile){
+      return <Redirect to={`/user/${id}`}/>
+   }
     const photoUrl = id
       ? `${
           process.env.REACT_APP_API_URL
@@ -183,7 +189,7 @@ class EditProfile extends Component {
     return (
       <div className="postisitonRelativeSmeni">
         {error.length > 0 ?(<>
-          <Error/>
+          {this.openNotificationErrorValid()}
         </>):("")}
         {this.state.open ? (
           <>

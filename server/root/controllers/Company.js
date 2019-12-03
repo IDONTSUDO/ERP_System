@@ -9,7 +9,7 @@ const Subscriber = require('../database/Subscriber')
 const geoip = require('geoip-lite');
 
 exports.workerSelectId = async (req, res, next, id) => {
-    console.log(200)
+    
     Worker.findById(id).select(" _id ")
         .exec((err, worker) => {
             console.log(201)
@@ -26,18 +26,16 @@ exports.workerSelectId = async (req, res, next, id) => {
 }
 
 exports.workerById = async (req, res, next, id) => {
-    console.log(200)
+    
     Worker.findById(id)
         .exec((err, worker) => {
-            console.log(201)
+          
             if (err || !worker) {
-                console.log(202)
+                
                 return res.status(400).json({
                     error: "Worker not found"
                 })
             }
-            console.log(203)
-            console.log(worker)
             req.worker = worker
 
             next()

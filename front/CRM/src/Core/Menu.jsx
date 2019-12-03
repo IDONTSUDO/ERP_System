@@ -78,14 +78,7 @@ class MenuMain extends React.Component {
                                 <Icon type="fire" />
 
                                 <span>Новости</span>
-                                {this.state.NotReadNews > 0 ? (
-                                  <Badge
-                                    style={{ padding: "0px" }}
-                                    status="processing"
-                                  />
-                                ) : (
-                                  ""
-                                )}
+                        
                               </span>
                             </>
                           }
@@ -112,19 +105,7 @@ class MenuMain extends React.Component {
 
                                 <span>Дела</span>
 
-                                {this.state.SoloTodoToday > 0 ? (
-                                  <Badge
-                                    style={{ padding: "0px" }}
-                                    color="#108ee9"
-                                  />
-                                ) : (
-                                  ""
-                                )}
-                                {this.state.SoloTodoToday > 0 ? (
-                                  <Badge status="warning" />
-                                ) : (
-                                  ""
-                                )}
+                              
                               </span>
                             </>
                           }
@@ -132,13 +113,7 @@ class MenuMain extends React.Component {
                           <Menu.Item key="16">
                             <Link to={`/today/${isAuthenticated().direct._id}`}>
                               <span>Дела на сегодня</span>{" "}
-                              <Badge
-                                count={
-                                  this.state.getComandTodo +
-                                  this.state.SoloTodoToday
-                                }
-                                style={{ backgroundColor: "#52c41a" }}
-                              />{" "}
+                              
                             </Link>
                           </Menu.Item>
                           <Menu.Item key="17">
@@ -163,14 +138,8 @@ class MenuMain extends React.Component {
                               <span>
                                 <Icon type="dollar" />
                                 <span>Сделка</span>
-                                {this.state.NotReadNews > 0 ? (
-                                  <Badge
-                                    style={{ padding: "0px" }}
-                                    status="processing"
-                                  />
-                                ) : (
-                                  ""
-                                )}
+                               
+                                 
                               </span>
                             }
                           >
@@ -186,13 +155,7 @@ class MenuMain extends React.Component {
                                 to={`/my/deal/${isAuthenticated().direct._id}`}
                               >
                                 <span>История сделок</span>{" "}
-                                {/* <Badge
-                                  count={
-                                    this.state.getComandTodo +
-                                    this.state.SoloTodoToday
-                                  }
-                                  style={{ backgroundColor: "#52c41a" }}
-                                /> */}
+                                
                               </Link>
                             </Menu.Item>
                             <Menu.Item key="15">

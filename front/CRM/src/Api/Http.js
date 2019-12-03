@@ -73,7 +73,10 @@ export const update = (userId, user) => {
 
     return fetch(`${process.env.REACT_APP_API_URL}/edit/worker/${userId}`, {
         method: "PUT",
-        headers:myHeaders,
+        headers:{
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`
+        },
         body: user
     })
         .then(response => {

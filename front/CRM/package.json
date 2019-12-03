@@ -85,6 +85,7 @@
   "scripts": {
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "deploy":"node scripts/build.js && firebase deploy",
     "test": "node scripts/test.js",
     "start-sw": "http-server ./build"
   },
