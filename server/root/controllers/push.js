@@ -7,13 +7,11 @@ require("dotenv").config()
 webpush.setVapidDetails(process.env.WEB_PUSH_CONTACT, process.env.PUBLIC_VAPID_KEY, process.env.PRIVATE_VAPID_KEY)
 
 exports.CheckBrowserForSubscription = async (req, res, next) => {
-  console.log(200)
   let userAgent = req.header('User-Agent')
   let UserId = req.body.userId
 
-  Subscription.find({ UserAgent: userAgent, userBy: UserId }).exec((err, result) => {
-    console.log(result)
-    if (result[0] == "undefined") {
+  Subscription.find({ UserAgent: userAgent, userBy: UserId }).exec((err, result) => { 
+    if (result[0] === undefined) {
       return next()
     } else {
       return false
@@ -140,14 +138,14 @@ exports.NewPushToSetStatus = async (req, res) => {
             pushPayload,
             pushOptions
           ).then((value) => {
-
+            console.log(value)
             resolve({
               status: true,
               endpoint: subscription.endpoint,
               data: value
             });
           }).catch((err) => {
-
+            console.log(err)
             reject({
               status: false,
               endpoint: subscription.endpoint,
@@ -157,6 +155,7 @@ exports.NewPushToSetStatus = async (req, res) => {
         });
       });
       q.allSettled(parallelSubscriptionCalls).then((pushResults) => {
+        console.log(pushResults)
         return
       });
     }
@@ -165,8 +164,7 @@ exports.NewPushToSetStatus = async (req, res) => {
 exports.PushUsers = async (req, res) => {
 
 
-  var subscription = req.body.subscription
-
+  var subscription = req.body.subscription  
   let ModelSubsc = new Subscription()
   ModelSubsc.userBy = req.body.userId
   ModelSubsc.endpoint = subscription.endpoint
@@ -243,14 +241,14 @@ exports.NewPushingNotifycation = async (req, res) => {
               pushPayload,
               pushOptions
             ).then((value) => {
-
+                console.log(value)
               resolve({
                 status: true,
                 endpoint: subscription.endpoint,
                 data: value
               });
             }).catch((err) => {
-
+              console.log(err)
               reject({
                 status: false,
                 endpoint: subscription.endpoint,
@@ -260,7 +258,7 @@ exports.NewPushingNotifycation = async (req, res) => {
           });
         });
         q.allSettled(parallelSubscriptionCalls).then((pushResults) => {
-          return
+          return  console.log(pushResults)
         });
       }
     });

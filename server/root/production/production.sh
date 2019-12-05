@@ -33,7 +33,10 @@ npm i pm2 -g
 npm i nodemon -g
 ##serve
 npm i serve -g
- 
+#web-push
+npm install web-push -g
+
+
 #pm2 
 pm2 start main.js
 pm2 start serve -s build
@@ -66,3 +69,5 @@ sudo apt-get install ufw
 #  nginix scripts
 service nginx restart
 
+
+web-push generate-vapid-keys
