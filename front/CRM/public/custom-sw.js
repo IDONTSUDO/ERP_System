@@ -33,14 +33,3 @@ self.addEventListener('notificationclick', function (event) {
         })
     );
 });
-// message param
-// {
-//   "title": "",
-//   "message": "",
-//   "url": "",
-//   "ttl": 36000,
-//   "icon": "",
-//   "badge": "",
-//   "data":"",
-//   "tag": ""
-// }

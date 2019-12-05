@@ -192,12 +192,12 @@ class Work extends React.Component {
       let name_posted = isAuthenticated().direct.name;
       let eventNews = "Назначено новое дело";
       let link = `/job/`;
-      console.log(name_posted)
+      
       
       var jobNews = tags.filter(function(el) {
         return el != posted_by;
       });
-      console.log(jobNews)
+      
 
       let worker_by = tags.map((user, index) => {
         return {
@@ -218,8 +218,7 @@ class Work extends React.Component {
         worker_by,
         tags
       };
-      //TODO
-      // добавить валидацию
+    
       NewNewsJob(paylod).then(data => {
         if (data.error) {
           this.openNotificationError();
@@ -251,12 +250,13 @@ class Work extends React.Component {
             tags: []
           });
         this.openNotificationNewWork();
+        document.querySelector(".ant-select-selection__clear").click();
       });
     }
   };
   validateDinamicJobs = (JobArray) =>{
     let i = 0;
-
+    console.log(JobArray)
     while(JobArray.length > i){
     
       if(typeof JobArray[i].date == "undefined") {
@@ -411,7 +411,7 @@ class Work extends React.Component {
     var filteredNewsFinalyArray = newsFinalyArray.filter(function(el) {
       return el != posted_by;
     });
-
+   
   
     let jobNews = filteredNewsFinalyArray.map((user, index) => {
       return {
@@ -420,7 +420,6 @@ class Work extends React.Component {
         action: filtered[index]
       };
     });
-
     let JobArray = NoHope.map((user, index) => {
       return {
         user: user,
@@ -480,6 +479,7 @@ class Work extends React.Component {
             workerTime8: "",
             workerTime9: ""
           })
+          document.querySelector(".ant-select-selection__clear").click();
         }
       }); 
     }

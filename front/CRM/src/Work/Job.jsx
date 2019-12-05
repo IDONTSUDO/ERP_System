@@ -873,7 +873,7 @@ export default class Job extends Component {
                               <Link to={`/user/${comment.worker}`}>
                                 <img
                                   className="card-img-top"
-                                  src={`http://localhost:8080/user/photo/${comment.worker}`}
+                                  src={`${process.env.REACT_APP_API_URL}/user/photo/${comment.worker}?`}
                                   onError={i =>
                                     (i.target.src = `${DefaultProfile}`)
                                   }

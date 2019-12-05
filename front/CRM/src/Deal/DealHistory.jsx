@@ -2,21 +2,14 @@ import React, { Component } from "react";
 import {
   Modal,
   Button,
-  Comment,
-  Tooltip,
-  List,
   Spin,
   Card,
   Icon,
   Drawer,
-  Form,
-  Input,
   Rate,
-  BackTop
 } from "antd";
 import dateFormat from "dateformat";
 import {
-  MyHistoryComplete,
   MyHistoryBeginer,
   MyHistoryActive,
   OneHistoryGet,
@@ -25,10 +18,9 @@ import {
   AllAgentHistory,
   ChangeHistoryItem
 } from "../Api/Http";
-import { isAuthenticated } from "../Api/Auth";
-import { Link } from "react-router-dom";
+
 import Moment from "react-moment";
-import Error from "../Error/Error.jsx";
+
 
 export default class DealHistory extends Component {
   constructor() {
@@ -50,7 +42,6 @@ export default class DealHistory extends Component {
       status: "",
       id: "",
       Date: "",
-      postedBy: "",
 
       body: "",
       name: "",
@@ -66,7 +57,6 @@ export default class DealHistory extends Component {
       ItemOne: "",
 
       company: "",
-      name: "",
       full_name: "",
       phone: "",
       INN: "",
@@ -281,8 +271,7 @@ export default class DealHistory extends Component {
       ItemOne,
       comment,
       price,
-      rate,
-      comment
+      rate
     };
     ChangeHistoryItem(dealAcctive, payload).then(data => {
       if (data.error) {
@@ -291,7 +280,6 @@ export default class DealHistory extends Component {
         console.log(data);
       }
     });
-
     setTimeout(() => {
       this.setState({
         visibleEdit: false,
@@ -333,22 +321,13 @@ export default class DealHistory extends Component {
   };
   // set Status
   handelSetStatus = AgentId => {
-    const payload = this.state;
     ChangeHistory();
   };
-  // ChangeHistoryHelper(oneDeal){
-  //     let stastus = "Активно"
-  //     console.log(oneDeal)
-  //     // ChangeHistory(DealId).then(data =>{
-
-  //     // })
-  // }
+  
   changeHistoryEdit(DealId) {
-    // const {} this.state
     console.log(DealId);
   }
   ChangeHistoryStatusActive(DealId) {
-    console.log(DealId);
     let status = "Активно";
     ChangeHistory(DealId, status).then(data => {
       if (data.error) {
@@ -368,19 +347,12 @@ export default class DealHistory extends Component {
     });
   }
   render() {
-    const toUpperCaseFilter = d => {
-      return dateFormat(d, "fullDate");
-    };
-
     const {
-      agentByid,
+    
       price,
-      status,
-      id,
-      Date,
-      postedBy,
+
       beginer,
-      body,
+
       open,
 
       DateCrated,
@@ -408,8 +380,6 @@ export default class DealHistory extends Component {
 
       visibleEdit,
       confirmLoading,
-      ModalText,
-      comentDeal,
       rate,
 
       selected
@@ -605,7 +575,7 @@ export default class DealHistory extends Component {
                   onClose={this.onChildrenDrawerClose}
                   visible={this.state.childrenDrawer}
                 >
-                  {company != "" ? (
+                  {company !== "" ? (
                     <>
                       <div className="layer-list-agent">
                         <div>

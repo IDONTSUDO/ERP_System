@@ -47,8 +47,6 @@ export default class Security extends Component {
     });
   }
   geoIplocation(ip) {
-    console.log(ip);
-    let ipFixture = "207.97.227.239";
     GetIpData(ip).then(data => {
       if (data === null) {
         return false;
