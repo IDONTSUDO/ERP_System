@@ -72,14 +72,14 @@ export default class News extends Component {
                     <>
                       <div style={{ padding: "5px" }}>
                         <div className="alert-complete-status" key={i}>
-                          <button
+                          {/* <button
                             type="button"
                             class="close"
                             data-dismiss="alert"
                             aria-label="Close"
                           >
                             <span aria-hidden="true">&times;</span>
-                          </button>
+                          </button> */}
 
                           <h6>
                             <strong>{news.eventNews}</strong>
@@ -107,14 +107,14 @@ export default class News extends Component {
                           <Link className="link" to={`${news.link}`}>
                             <strong>{news.eventNews}</strong>
                           </Link>
-                          <button
+                          {/* <button
                             type="button"
                             class="close"
                             data-dismiss="alert"
                             aria-label="Close"
                           >
                             <span aria-hidden="true">&times;</span>
-                          </button>
+                          </button> */}
                         </div>
                       </div>
                     </>
@@ -125,14 +125,14 @@ export default class News extends Component {
                     <>
                       <div style={{ padding: "5px" }}>
                         <div className="alert-new-comment" key={i}>
-                          <button
+                          {/* <button
                             type="button"
                             class="close"
                             data-dismiss="alert"
                             aria-label="Close"
                           >
                             <span aria-hidden="true">&times;</span>
-                          </button>
+                          </button> */}
                           <div>От {news.name_posted}</div>
                           <Link className="link" to={`${news.link}`}>
                             <h6>
@@ -159,14 +159,14 @@ export default class News extends Component {
                           }
                           key={i}
                         >
-                          <button
+                          {/* <button
                             type="button"
                             class="close"
                             data-dismiss="alert"
                             aria-label="Close"
                           >
                             <span aria-hidden="true">&times;</span>
-                          </button>
+                          </button> */}
                           <Link
                             style={{ color: "black" }}
                             to={`/user/${news.posted_by}`}

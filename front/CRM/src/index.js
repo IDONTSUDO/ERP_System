@@ -9,7 +9,7 @@ import * as serviceWorker from './Push/serviceWorker';
 import { isAuthenticated,Subscribe,IsSubscriber } from "./Api/Auth"
 ReactDOM.render(<App />, document.getElementById('root'));
 
-
+serviceWorker.register();
 // подписка на сервис воркера
 if(IsSubscriber()){
     console.log("Subcribe")
@@ -17,10 +17,8 @@ if(IsSubscriber()){
     // isAuthenticated отвечает на главный вопрос, авторизован пользователь или нет?
     if(isAuthenticated()){
         subscribeUser()
-        serviceWorker.register();
+       
         let subscribe = true
         Subscribe(subscribe)
     }
 }
-
-

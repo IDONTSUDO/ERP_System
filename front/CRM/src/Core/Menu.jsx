@@ -9,6 +9,10 @@ import {
   MyTodoTodyQuality,
   MyNewsQuality
 } from "../Api/Http.js";
+
+import { testSoket } from "../Soket/soket.js" 
+
+
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -26,6 +30,9 @@ class MenuMain extends React.Component {
     this.setState({ collapsed });
   };
   componentDidMount() {
+
+
+    // testSoket()
     if (isAuthenticated() == false) {
       return false;
     } else {
@@ -51,7 +58,7 @@ class MenuMain extends React.Component {
     console.log(window_width)
     return (
       <>
-        {window_width > "768" ? (
+        {/* {window_width > "768" ? ( */}
           <>
             {isAuthenticated() && (
               <Anchor affix={false}>
@@ -88,13 +95,13 @@ class MenuMain extends React.Component {
                               <span>Новости</span>
                             </Link>
                           </Menu.Item>
-                          <Menu.Item key="10">
+                          {/* <Menu.Item key="10">
                             <Link
                               to={`/user/edit/${isAuthenticated().direct._id}`}
                             >
                               <span>Личная статистика</span>
                             </Link>
-                          </Menu.Item>
+                          </Menu.Item> */}
                         </SubMenu>
                         <SubMenu
                           key="sub4"
@@ -185,11 +192,11 @@ class MenuMain extends React.Component {
                               <span>Предприятие</span>
                             </Link>
                           </Menu.Item>
-                          <Menu.Item key="3">
+                          {/* <Menu.Item key="3">
                             <Link to={`/company/statistic`}>
                               <span>Статистика</span>
                             </Link>
-                          </Menu.Item>
+                          </Menu.Item> */}
 
                           {["Директор", "Управляющий", "Бухгалтер"].includes(
                             role
@@ -226,8 +233,8 @@ class MenuMain extends React.Component {
                           </Menu.Item>
                           <Menu.Item key="6">
                             <Link
-                              onClick={() => signout(() => "/signin")}
-                              to="/signin"
+                              onClick={() => signout(() => "/")}
+                              to="/"
                             >
                               <span>Выход</span>
                             </Link>
@@ -281,10 +288,10 @@ class MenuMain extends React.Component {
               </Anchor>
             )}
           </>
-        ) : (
-          // <MobileMenu/>     
-          null
-             )}
+        {/* ) : ( */}
+          {/* // <MobileMenu/>      */}
+          {/* null */}
+             {/* )} */}
         {!isAuthenticated() && <></>}
       </>
     );

@@ -123,7 +123,7 @@ class EditProfile extends Component {
       icon: <Icon type="smile" style={{ color: "#108ee9" }} />
     });
   }
-  SignUpForm = (name, email, password, about) => (
+  SignUpForm = (name, email, password, about,id) => (
     <form>
       <div>
         <label className="text-muted">Ваше фото</label>
@@ -163,6 +163,10 @@ class EditProfile extends Component {
       </div>
       <div style={{ padding: "10px" }}></div>
       <Button onClick={this.clickSubmit}>Обновить</Button>
+      
+     
+                 
+                
     </form>
   );
   render() {
@@ -199,8 +203,13 @@ class EditProfile extends Component {
           <>
             <div className="container">
               <h2> Редактирование профиля</h2>
-              {this.SignUpForm(name, email, password, about)}
-              <div style={{ padding: "10px" }}>
+              <div class="row">
+  <div class="col-8">{this.SignUpForm(name, email, password, about,id)}
+              </div>
+  <div class="col-4"> <div className="container"> 
+      <div className="row">
+      <>
+      <div style={{ padding: "10px" }}>
                 <img
                   style={{ height: "200px", width: "auto" }}
                   onError={i => (i.target.src = `${DefaultProfile}`)}
@@ -209,6 +218,15 @@ class EditProfile extends Component {
                   alt={name}
                 />
               </div>
+                  <div style={{ padding: "5px" }}>
+                  <Button><Link to={`/security/${id}`}>История безопаности</Link></Button>
+                  <div style={{ padding: "5px" }}></div>
+                  <Button ><Link to={`/device`}>Подключенные девайсы</Link></Button>
+                  </div>
+                  </>
+      </div></div></div>
+</div>
+              
              
               
             </div>

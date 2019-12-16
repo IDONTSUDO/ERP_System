@@ -132,27 +132,6 @@ export default class Job extends Component {
 
         TodoChangeExperienseAtHTTP(expireAt, todoId);
         // NewNewToSetStatusJob
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         this.openNotificationNewStatus();
       }
     });
@@ -948,9 +927,9 @@ export default class Job extends Component {
         {isAuthenticated().direct._id === postedBy && (
           <>
             <div classname="positionLeft">
-              <Button type="primary" onClick={this.showModal}>
+              {/* <Button type="primary" onClick={this.showModal}>
                 Редактировать
-              </Button>
+              </Button> */}
             </div>
           </>
         )}

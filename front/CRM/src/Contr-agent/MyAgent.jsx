@@ -284,10 +284,7 @@ export default class MyAgent extends Component {
               <Row></Row>
               <Row>
                 <Col span={24}>
-                  {/* <DescriptionItem
-                  title="Message"
-                  content="Make things as simple as possible but no simpler."
-                /> */}
+      
                 </Col>
               </Row>
               <Divider />
@@ -382,6 +379,10 @@ export default class MyAgent extends Component {
                   <div style={{ padding: "5px" }}>
                     <Button>
                       <Link to={`/agent/history/${id}`}>История сделок</Link>
+                    </Button>
+                    <div style={{ padding: "5px" }}></div>
+                    <Button>
+                      <Link to={`/agent/edit/${id}`}>Редактированние контр агента</Link>
                     </Button>
                   </div>
                 </Col>

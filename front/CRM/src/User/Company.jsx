@@ -5,12 +5,12 @@ import DefaultProfile from "../Assets/default.png";
 import { Link } from "react-router-dom";
 import { Button, Card } from "antd";
 import Error from "../Error/Error.jsx";
-
+// import {isOnline} from "../Soket/soket.js"
 export default class Company extends Component {
   constructor() {
     super();
     this.state = {
-      worker: [],
+      workers: [],
       page: 1,
       error: false
     };
@@ -19,7 +19,6 @@ export default class Company extends Component {
     this.LoadCompanyUser(this.state.page);
   }
   handleClick(userId) {
-  
     DeleteUser(userId).then(data => {
       if (data.error) {
         this.state({ error: true });
@@ -38,21 +37,20 @@ export default class Company extends Component {
   forceUpdate() {
     const { page } = this.state;
 
-    
     list(page).then(data => {
       if (data.error) {
         this.state({ error: true });
         console.log(data.error);
+       
       } else {
-        this.setState({ worker: data });
+        this.setState({ workers: data });
       }
     });
   }
-
   LoadCompanyUser = page => {
     list(page)
       .then(data => {
-        this.setState({ worker: data });
+        this.setState({ workers: data });
       })
       .catch(data => {
         console.log(data);
@@ -70,17 +68,17 @@ export default class Company extends Component {
   };
 
   render() {
-    const { worker, page, error } = this.state;
+    const { workers, page, error } = this.state;
 
     return (
       <div className="postisitonRelativeSmeni">
         <div style={{ padding: "5px" }}>
           {error ? <Error></Error> : null}
           <div className="row">
-            {worker.map((user, i) => (
+            {workers.map((user, i) => (
               <>
-                           <div style={{ width:"250px"}} class="card">
-            {user.avatar === true ? (
+                <div style={{ width: "250px" }} class="card">
+                  {user.avatar === true ? (
                     <img
                       className="img-thumbnail card-img-top"
                       src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}?`}
@@ -94,36 +92,41 @@ export default class Company extends Component {
                       style={{ height: "250px", width: "250px" }}
                     />
                   )}
-
-              <div class="card-body">
-                <h5 class="card-text">{user.role}</h5>
-                <div style={{wordBreak: "break-word"}} className="card-title">{user.name}</div>
-                  <p className="card-text">{user.email}</p>
-
-                  <Button>
-                    <Link to={`/user/${user._id}`}>Посмотреть профиль</Link>
-                  </Button>
                   
-                  <div style={{ padding: "5px" }}></div>
-                  <>
-                    {isAuthenticated().direct.role === "Директор" ? (
-                      <Button
-                        type="danger"
-                        onClick={userId => this.handleClick(user._id, userId)}
-                      >
-                        Удалить Пользователя
-                      </Button>
-                    ) : (
-                      ""
-                    )}
-                  </>
-              </div>
-            </div>
+                  <div class="card-body">
+                    <h5 class="card-text">{user.role}</h5>
+                    <div
+                      style={{ wordBreak: "break-word" }}
+                      className="card-title"
+                    >
+                      {user.name}
+                    </div>
+                    <p className="card-text">{user.email}</p>
+
+                    <Button>
+                      <Link to={`/user/${user._id}`}>Посмотреть профиль</Link>
+                    </Button>
+
+                    <div style={{ padding: "5px" }}></div>
+                    <>
+                      {isAuthenticated().direct.role === "Директор" ? (
+                        <Button
+                          type="danger"
+                          onClick={userId => this.handleClick(user._id, userId)}
+                        >
+                          Удалить Пользователя
+                        </Button>
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  </div>
+                </div>
               </>
             ))}
           </div>
           <div style={{ padding: "10px" }}></div>
-          {worker.length ? (
+          {workers.length ? (
             <Button
               style={{ padding: "5px" }}
               className="ButtonPosition"

@@ -47,7 +47,9 @@ export default class Security extends Component {
     });
   }
   geoIplocation(ip) {
+    console.log(ip)
     GetIpData(ip).then(data => {
+      console.log(data)
       if (data === null) {
         return false;
       } else {
