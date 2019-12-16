@@ -1,25 +1,48 @@
-const express = require('express')
-const http = require('http')
-const socketIO = require('socket.io')
+var app = require('express')();
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
 
-// our localhost port
-const port = 4001
 
-const app = express()
+let users = {};
 
-// our server instance
-const server = http.createServer(app)
+let lastUser = 0;
 
-// This creates our socket using the instance of the server
-const io = socketIO(server)
+io.on('connection', function(socket){
+    console.log('a user connected');
 
-// This is what the socket.io syntax is like, we will work this later
-io.on('connection', socket => {
-  console.log('User connected')
-  console.log(socket)
-  socket.on('disconnect', () => {
-    console.log('user disconnected')
-  })
-})
+    let id = ++lastUser;
 
-server.listen(port, () => console.log(`Listening on port ${port}`))
+    users[id] = socket;
+  
+    io.to(socket.id).emit('my id', id);
+    io.to(socket.id).emit("online users", Object.keys(users));
+
+    socket.broadcast.emit("user connected", { id: id});
+
+    socket.on('chat message', function(msg){
+
+        console.log(msg);
+
+        console.log(users[msg.id]);
+
+        if(users[msg.id] !== undefined){
+            io.to(users[msg.id].id).emit('private message', msg.text);
+        }else {
+            io.emit('chat message', msg.text);
+
+        }
+    });
+
+
+    socket.on('disconnect', function(){
+        console.log('user disconnected');
+
+        io.emit('user disconnected', id);
+
+        delete users[id];
+    });
+});
+
+http.listen(4041, function(){
+    console.log('listening on *:3000');
+});

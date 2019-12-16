@@ -43,6 +43,7 @@
     "node-ssh": "^6.0.0",
     "q": "^1.5.1",
     "shelljs": "^0.8.3",
+    "socket.io-client": "^2.3.0",
     "ssh-exec": "^2.0.0",
     "uuid": "^3.3.2",
     "web-push": "^3.4.1"

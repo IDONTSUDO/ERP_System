@@ -42,7 +42,7 @@ exports.signin = (req, res, next) => {
                 error: "E-mail или пароль не совпадают"
             })
         }
-        const token = jwt.sign({ _id: direct._id }, process.env.JWT_SECRET)
+        const token = jwt.sign({ _id: direct._id,name:direct.name }, process.env.JWT_SECRET)
 
         res.cookie("t", token, { expire: new Date() + 9999 })
         const {
