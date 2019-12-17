@@ -28,7 +28,10 @@ const contrAgentSchema = new mongoose.Schema({
     email: {
         type: String,
     },
-
+    agentGeo:{
+        type:String,
+        default:"none"
+    },
     Date: {
         type: Date,
         default: Date.now

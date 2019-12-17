@@ -7,7 +7,7 @@ const agentHistorycomentSchema = new mongoose.Schema({
         type:String
     },
     phone:{
-
+        type:String
     },
     AgentBy: {
         type: String,
