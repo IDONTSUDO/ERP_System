@@ -279,8 +279,26 @@ class MenuMain extends React.Component {
                           ) : (
                             ""
                           )}
+                          {["Директор", "Управляющий", "Бухгалтер"].includes(
+                            role
+                          ) ? (
+                            <Menu.Item key="23">
+                            <Link to="/mailing">
+                              <span>Email рассылка</span>
+                            </Link>
+                          </Menu.Item>
+                          ) : (
+                            ""
+                          )}
+
+
+                        
                         </SubMenu>
+                        
                           ):("")}
+                        
+
+                          
                       </Menu>
                     </Sider>
                   </Layout>
@@ -304,3 +322,4 @@ export default MenuMain;
 // "Директор""Управляющий""Менеджер" "Бухгалтер" "Кладовщик" "Логист"
 
 // {['Директор', 'Управляющий' , 'Менеджер'].includes(role) ? () : ("")}
+// /mailing

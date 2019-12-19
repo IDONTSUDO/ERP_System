@@ -669,3 +669,62 @@ export const NewNewToSetStatusJob = (payload) =>{
         .catch(err => console.log(err))
 }
 
+export const MailImger = () =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/images/email/all`, {
+        method: "GET",
+        headers:myHeaders,
+    })
+        .then(responce => {
+            return responce.json()
+        })
+        .catch(err => console.log(err))
+}
+export const UploadEmailImg = (file) =>{
+    const formData = new FormData();
+    formData.append("email", file);
+    
+    return fetch(`${process.env.REACT_APP_API_URL}/photos/upload`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`
+            
+        },
+
+        body: formData
+    }).then(response => {
+        console.log(response)
+            return response.json()
+    })
+    .catch(err => {
+            console.log(err)
+    })
+} 
+export const DeleteImg = (id) =>{
+
+    return fetch(`${process.env.REACT_APP_API_URL}/images/del`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+            
+        },
+        body: JSON.stringify({id})
+    }).then(response => {
+            return response.json()
+    })
+    .catch(err => {
+            console.log(err)
+    })
+} 
+export const NewSubscribeEveryDay = () =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/new/statistic/everyday`, {
+        method: "POST",
+        headers:myHeaders
+    }).then(response => {
+            return response.json()
+    })
+    .catch(err => {
+            console.log(err)
+    })
+}

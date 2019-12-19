@@ -3,6 +3,7 @@ import dateFormat from "dateformat";
 import ReactMarkdown from "react-markdown";
 import { list, NewTodo, NewNewsJob } from "../Api/Http";
 import { isAuthenticated } from "../Api/Auth";
+import {everyday} from "../helper/everyday.js" 
 import {
   Button,
   Tabs,
@@ -63,6 +64,7 @@ class Work extends React.Component {
   }
   componentDidMount() {
     this.setState({ user: isAuthenticated().direct });
+    everyday()
     list().then(data => {
       if (data.error) {
         console.log(data.error);

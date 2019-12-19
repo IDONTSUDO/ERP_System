@@ -5,6 +5,7 @@ import 'antd/dist/antd.css'
 import "react-datepicker/dist/react-datepicker.css"
 import "./Css/NewWork.css"
 import "./Css/Common.css"
+import "./Css/mail.css"
 const App = ()=>(
   <BrowserRouter>
       <MainRouter />

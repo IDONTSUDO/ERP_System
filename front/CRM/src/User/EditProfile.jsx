@@ -3,9 +3,9 @@ import { isAuthenticated } from "../Api/Auth";
 import { read, update, updateUser } from "../Api/Http";
 import { notification, Icon, Spin } from "antd";
 import DefaultProfile from "../Assets/default.png";
-import { Link,Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { Button } from "antd";
-import Error from "../Error/Error.jsx"
+import Error from "../Error/Error.jsx";
 
 class EditProfile extends Component {
   constructor() {
@@ -29,7 +29,7 @@ class EditProfile extends Component {
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
-        if(data._id == userId){
+        if (data._id == userId) {
           this.setState({
             id: data._id,
             name: data.name,
@@ -38,8 +38,8 @@ class EditProfile extends Component {
             about: data.about,
             open: false
           });
-        }else{
-          this.setState({redirectToProfile: true})
+        } else {
+          this.setState({ redirectToProfile: true });
         }
       }
     });
@@ -94,7 +94,7 @@ class EditProfile extends Component {
           this.openNotificationEditProile();
           updateUser(data, () => {
             this.setState({
-              redirectToProfile:true
+              redirectToProfile: true
             });
           });
         }
@@ -104,12 +104,12 @@ class EditProfile extends Component {
     }
   };
   openNotificationErrorValid = () => {
-    let {error} = this.state
+    let { error } = this.state;
     notification.open({
       message: `${error}`,
       icon: <Icon type="frown" style={{ color: "#108ee9" }} />
     });
-    this.setState({error:""})
+    this.setState({ error: "" });
   };
   openNotificationError() {
     notification.open({
@@ -123,16 +123,20 @@ class EditProfile extends Component {
       icon: <Icon type="smile" style={{ color: "#108ee9" }} />
     });
   }
-  SignUpForm = (name, email, password, about,id) => (
+  SignUpForm = (name, email, password, about, id) => (
     <form>
       <div>
-        <label className="text-muted">Ваше фото</label>
-        <input
-          onChange={this.handleChange("photo")}
-          type="file"
-          accept="image/*"
-          className="form-control"
-        />
+        <div style={{ padding: "5px" }}>
+        <div class="upload-btn-wrapper">
+          <button class="btn-uploaded">Выберете файл</button>
+          <input
+            onChange={this.handleChange("photo")}
+            type="file"
+            accept="image/*"
+          />
+        </div>
+        </div>
+       
       </div>
       <div>
         <label>Email</label>
@@ -163,10 +167,6 @@ class EditProfile extends Component {
       </div>
       <div style={{ padding: "10px" }}></div>
       <Button onClick={this.clickSubmit}>Обновить</Button>
-      
-     
-                 
-                
     </form>
   );
   render() {
@@ -181,9 +181,9 @@ class EditProfile extends Component {
       open,
       redirectToProfile
     } = this.state;
-    if(redirectToProfile){
-      return <Redirect to={`/user/${id}`}/>
-   }
+    if (redirectToProfile) {
+      return <Redirect to={`/user/${id}`} />;
+    }
     const photoUrl = id
       ? `${
           process.env.REACT_APP_API_URL
@@ -192,9 +192,7 @@ class EditProfile extends Component {
 
     return (
       <div className="postisitonRelativeSmeni">
-        {error.length > 0 ?(<>
-          {this.openNotificationErrorValid()}
-        </>):("")}
+        {error.length > 0 ? <>{this.openNotificationErrorValid()}</> : ""}
         {this.state.open ? (
           <>
             <Spin size="large" />
@@ -204,37 +202,42 @@ class EditProfile extends Component {
             <div className="container">
               <h2> Редактирование профиля</h2>
               <div class="row">
-  <div class="col-8">{this.SignUpForm(name, email, password, about,id)}
-              </div>
-  <div class="col-4"> <div className="container"> 
-      <div className="row">
-      <>
-      <div style={{ padding: "10px" }}>
-                <img
-                  style={{ height: "200px", width: "auto" }}
-                  onError={i => (i.target.src = `${DefaultProfile}`)}
-                  src={`http://localhost:8080/user/photo/${id}?`}
-                  onerror={DefaultProfile}
-                  alt={name}
-                />
-              </div>
-                  <div style={{ padding: "5px" }}>
-                  <Button><Link to={`/security/${id}`}>История безопаности</Link></Button>
-                  <div style={{ padding: "5px" }}></div>
-                  <Button ><Link to={`/device`}>Подключенные девайсы</Link></Button>
+                <div class="col-8">
+                  {this.SignUpForm(name, email, password, about, id)}
+                </div>
+                <div class="col-4">
+                  {" "}
+                  <div className="container">
+                    <div className="row">
+                      <>
+                        <div style={{ padding: "10px" }}>
+                          <img
+                            style={{ height: "200px", width: "auto" }}
+                            onError={i => (i.target.src = `${DefaultProfile}`)}
+                            src={`http://localhost:8080/user/photo/${id}?`}
+                            onerror={DefaultProfile}
+                            alt={name}
+                          />
+                        </div>
+                        <div style={{ padding: "5px" }}>
+                          <Button>
+                            <Link to={`/security/${id}`}>
+                              История безопаности
+                            </Link>
+                          </Button>
+                          <div style={{ padding: "5px" }}></div>
+                          <Button>
+                            <Link to={`/device`}>Подключенные девайсы</Link>
+                          </Button>
+                        </div>
+                      </>
+                    </div>
                   </div>
-                  </>
-      </div></div></div>
-</div>
-              
-             
-              
+                </div>
+              </div>
             </div>
-            
           </>
-          
         )}
-        
       </div>
     );
   }

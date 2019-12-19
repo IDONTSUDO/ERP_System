@@ -13,12 +13,12 @@ import Security from '../User/Security.jsx'
 import DeviececEdit from '../User/DeviececEdit.jsx'
 
 
-import AgentProfile from '../Contr-agent/AgentProfile.jsx.js'
-import NewAgent from '../Contr-agent/NewAngent.jsx.js'
-import MyAgent from '../Contr-agent/MyAgent.jsx.js'
-import AllAgent from '../Contr-agent/AllAgent.jsx.js'
-import ManageAgentPrice from '../Contr-agent/ManagePriceToAgent.jsx.js'
-import EditContrAgent from '../Contr-agent/EditContrAgent.jsx.js'
+import AgentProfile from '../Contr-agent/AgentProfile.jsx'
+import NewAgent from '../Contr-agent/NewAngent.jsx'
+import MyAgent from '../Contr-agent/MyAgent.jsx'
+import AllAgent from '../Contr-agent/AllAgent.jsx'
+import ManageAgentPrice from '../Contr-agent/ManagePriceToAgent.jsx'
+import EditContrAgent from '../Contr-agent/EditContrAgent.jsx'
 
 
 import Work from '../Work/NewWork.jsx'
@@ -32,7 +32,7 @@ import NewDeal from '../Deal/NewDeal.jsx'
 import DealHistory from '../Deal/DealHistory.jsx'
 import MyDealHistory from '../Deal/MyDealHistory.jsx'
 
-
+import Mail from  '../Email/Email.jsx'
 import CompanyStatistic from '../statistic/CompanyStatistic.jsx'
 const MainRouter = () => (
     <div>
@@ -70,6 +70,9 @@ const MainRouter = () => (
             <PrivateRoute exact path="/my/deal/history/:userId" component={MyDealHistory} />
             <PrivateRoute exact path="/agent/history/:agentId" component={AgentHistory} />
             <PrivateRoute exact path="/agent/edit/:agentId" component={EditContrAgent} />
+
+
+            <PrivateRoute exact path="/mailing" component={Mail} />
         </Switch>
     </div>
 )
