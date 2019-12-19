@@ -36,6 +36,7 @@ exports.workerById = async (req, res, next, id) => {
                     error: "Worker not found"
                 })
             }
+            
             req.worker = worker
 
             next()

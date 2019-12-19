@@ -9,15 +9,18 @@ const expressValidator = require('express-validator')
 const cookieParser = require('cookie-parser')
 const fs = require('fs')
 const cors = require('cors')
-// const {CRONTEST} = require("./cron/cron.js")
+const Fawn = require('fawn')
 
-// CRONTEST()
+const {CRONTEST} = require("./cron/cron.js")
+
+CRONTEST()
 
 mongoose.connect(`mongodb://localhost/svarog-crm-system`, { useNewUrlParser: true }).then(() => console.log("DB Conected"))
 mongoose.connection.on('error', err => {
     console.log(`DB connection error: ${err.message}`)
 })
 mongoose.set('debug', true)
+Fawn.init(mongoose);
 
 const DirectAuthRoutes = require("./routers/Auth")
 const DirectCompanyhRoutes = require("./routers/Company")
@@ -28,7 +31,8 @@ const AgentRouter = require("./routers/ContAgent")
 const NewHistory = require("./routers/AgentHistory")
 const PriceUsers = require("./routers/Priced")
 const PushNotifications = require("./routers/push")
-
+const Mail = require("./routers/mail.js")
+const StatisticsEveryDay = require("./routers/StatisticsEveryDay.js")
 
 app.use(cookieParser())
 app.use(morgan("dev"))
@@ -45,7 +49,8 @@ app.use("/", AgentRouter)
 app.use("/", NewHistory)
 app.use("/", CommonTodoRoutes)
 app.use("/", PriceUsers)
-
+app.use("/", Mail)
+app.use("/",StatisticsEveryDay)
 
 app.get('/docs', (req, res) => {
     fs.readFile('documentation/ApiDocs.json', (err, data) => {
@@ -58,6 +63,9 @@ app.get('/docs', (req, res) => {
         res.json(docs)
     })
 })
+
+app.use(express.static('uploads'))
+
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
         res.status(401).json({ error: "unathorized!" })

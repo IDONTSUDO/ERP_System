@@ -13,5 +13,5 @@ const SubscriberSchema = new Schema({
         default: Date.now
     }
 });
-module.exports = mongoose.model('subscribers', SubscriberSchema, 'subscribers');
+module.exports = mongoose.model('subscribers', SubscriberSchema);
 

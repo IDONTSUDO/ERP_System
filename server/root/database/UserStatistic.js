@@ -26,6 +26,9 @@ const UserOneStatistic = new mongoose.Schema({
     },
     Userby:{
         type: String
+    },
+    Days:{
+        type:Object
     }
 })
 module.exports = mongoose.model("UserOneStatistic", UserOneStatistic)

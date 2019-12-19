@@ -81,8 +81,10 @@ const workerSchema = new mongoose.Schema({
     },//отвечает за первую авторизацию сначала создается как false, при авторизации оно меняется на true. Нужно для безопасности.
     device:{
         type:Array
+    },
+    DateHistory:{
+        type:Object
     }
-
 })
 
 workerSchema
