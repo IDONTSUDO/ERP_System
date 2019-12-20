@@ -627,7 +627,7 @@ export default class Job extends Component {
               <div>
                 <p></p>
                 <div className="TodoListBorder">
-                  <ReactMarkdown source={job.action} />
+                  <div dangerouslySetInnerHTML={{ __html: job.action }} />
                 </div>
               </div>
             </div>
@@ -694,7 +694,7 @@ export default class Job extends Component {
                                   Требуется уточнение
                                 </Option>
                               </Select>
-                              <ReactMarkdown source={job.action} />
+                              <div dangerouslySetInnerHTML={{ __html: job.action }} />
                               <small class="text-muted">{job.date}</small>
                             </>
                           </>
@@ -798,7 +798,8 @@ export default class Job extends Component {
                       <div class="d-flex w-100 justify-content-between">
                         <small class="text-muted">{status}</small>
                       </div>
-                      <ReactMarkdown source={description} />
+                    
+                      <div dangerouslySetInnerHTML={{ __html: description }} />
                       <small class="text-muted"></small>
                     </a>
                     <div class="btn-group dropup">

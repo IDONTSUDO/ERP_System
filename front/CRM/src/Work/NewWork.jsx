@@ -3,7 +3,7 @@ import dateFormat from "dateformat";
 import ReactMarkdown from "react-markdown";
 import { list, NewTodo, NewNewsJob } from "../Api/Http";
 import { isAuthenticated } from "../Api/Auth";
-import {everyday} from "../helper/everyday.js" 
+import { everyday } from "../helper/everyday.js";
 import {
   Button,
   Tabs,
@@ -14,7 +14,12 @@ import {
   Select
 } from "antd";
 import moment from "moment";
+import SunEditor from "suneditor-react";
+
+import "suneditor/dist/css/suneditor.min.css";
+
 import "react-datepicker/dist/react-datepicker.css";
+
 const { Option } = Select;
 const { TabPane } = Tabs;
 
@@ -23,7 +28,7 @@ class Work extends React.Component {
     super(props);
 
     this.state = {
-      newEvent: "", 
+      newEvent: "",
       // это нужно для формирования новостей
       startDate: new Date(),
       tags: [],
@@ -59,12 +64,13 @@ class Work extends React.Component {
       workerTime7: "",
       workerTime8: "",
       workerTime9: "",
-      disbledSelect:true
+      disbledSelect: true
     };
+    this.handleActionEditor = this.handleActionEditor.bind(this);
   }
   componentDidMount() {
     this.setState({ user: isAuthenticated().direct });
-    everyday()
+    everyday();
     list().then(data => {
       if (data.error) {
         console.log(data.error);
@@ -103,6 +109,7 @@ class Work extends React.Component {
     this.setState({ error: "" });
     this.setState({ [name]: event.target.value });
   };
+
   // эта функция валидирует создание одиночного дела
   isValid = () => {
     const { tags, title, description } = this.state;
@@ -187,19 +194,17 @@ class Work extends React.Component {
       tags = [];
       let finalyUserArray = [];
       tags = tagsArray;
-      
+
       let comand = false;
 
       let posted_by = isAuthenticated().direct._id;
       let name_posted = isAuthenticated().direct.name;
       let eventNews = "Назначено новое дело";
       let link = `/job/`;
-      
-      
+
       var jobNews = tags.filter(function(el) {
         return el != posted_by;
       });
-      
 
       let worker_by = tags.map((user, index) => {
         return {
@@ -220,7 +225,7 @@ class Work extends React.Component {
         worker_by,
         tags
       };
-    
+
       NewNewsJob(paylod).then(data => {
         if (data.error) {
           this.openNotificationError();
@@ -253,36 +258,45 @@ class Work extends React.Component {
           });
         this.openNotificationNewWork();
         document.querySelector(".ant-select-selection__clear").click();
+        let elements = document.getElementsByTagName("p");
+        for (let elem of elements) {
+          console.log(elem);
+          elem.innerHTML = "";
+        }
       });
     }
   };
-  validateDinamicJobs = (JobArray) =>{
+  validateDinamicJobs = JobArray => {
     let i = 0;
-    console.log(JobArray)
-    while(JobArray.length > i){
-    
-      if(typeof JobArray[i].date == "undefined") {
+    console.log(JobArray);
+    while (JobArray.length > i) {
+      if (typeof JobArray[i].date == "undefined") {
         this.setState({
           error: "Похоже что вы не до заполнили дело"
         });
-        return false
+        return false;
       }
-      if((typeof JobArray[i].action) == "undefined" ) {
+      if (typeof JobArray[i].action == "undefined") {
         this.setState({
           error: "Похоже что вы не до заполнили дело"
         });
-        return false
+        return false;
       }
-      i++
+      i++;
     }
-    return true
-  }
-  openNotificationErrorValidationD = (errorsValid) =>{
+    return true;
+  };
+  openNotificationErrorValidationD = errorsValid => {
     notification.open({
       message: `${errorsValid}`,
       icon: <Icon type="frown" style={{ color: "#108ee9" }} />
     });
-  }
+  };
+
+  handleActionEditor = name => event => {
+    this.setState({ error: "" });
+    this.setState({ [name]: event });
+  };
   clickSubmitExtedensJob = event => {
     event.preventDefault();
     const {
@@ -350,7 +364,7 @@ class Work extends React.Component {
     for (let t = 0; timeArray.length > t; t++) {
       newTimeArray.push(timeArray[t]._d);
     }
-    
+
     var filteredTime = newTimeArray.filter(function(el) {
       return el != undefined;
     });
@@ -362,7 +376,7 @@ class Work extends React.Component {
           .format("LL")
       );
     }
-   
+
     var filtered = newArray.filter(function(el) {
       return el != "";
     });
@@ -375,7 +389,7 @@ class Work extends React.Component {
       }
     }
     let i = 0;
-   
+
     while (worker.length > i) {
       for (let el2 = 0; tags.length > el2; el2++) {
         if (worker[i].name === tags[el2]) {
@@ -413,8 +427,7 @@ class Work extends React.Component {
     var filteredNewsFinalyArray = newsFinalyArray.filter(function(el) {
       return el != posted_by;
     });
-   
-  
+
     let jobNews = filteredNewsFinalyArray.map((user, index) => {
       return {
         user: user,
@@ -429,11 +442,10 @@ class Work extends React.Component {
         action: filtered[index]
       };
     });
-  
-    if(this.validateDinamicJobs(JobArray)){
+
+    if (this.validateDinamicJobs(JobArray)) {
       let comand = true;
-     
-    
+
       let name_posted = isAuthenticated().direct.name;
       let worker_by = jobNews;
       let eventNews = "Назначено новое дело";
@@ -454,10 +466,9 @@ class Work extends React.Component {
         if (data.error) {
           this.openNotificationError();
         } else {
-
           this.openNotificationNewWork();
-          let value = []
-          this.handleChange(value)
+          let value = [];
+          this.handleChange(value);
           this.setState({
             workerJob0: "",
             workerJob1: "",
@@ -480,10 +491,10 @@ class Work extends React.Component {
             workerTime7: "",
             workerTime8: "",
             workerTime9: ""
-          })
+          });
           document.querySelector(".ant-select-selection__clear").click();
         }
-      }); 
+      });
     }
   };
   openNotificationError() {
@@ -506,40 +517,6 @@ class Work extends React.Component {
     });
     this.setState({ error: "" });
   }
-  rangeH1Text = () => {
-    let { description } = this.state;
-    var selObj = getSelection().toString();
-    let result = description.indexOf(selObj);
-    let editText =
-      description.substr(0, result) +
-      "# " +
-      description.substring([result], description.length);
-    this.setState({ description: editText });
-  };
-  rangeDinamicH1text = data => {
-    var selObj = getSelection().toString();
-    let Itsstate =  this.state[`${data}`]
-    let result = Itsstate.indexOf(selObj);
-    let editText =
-    Itsstate.substr(0, result) + "# " + Itsstate.substring([result], Itsstate.length)
-    this.setState({ [`${data}`]: editText })
-  };
-
-  rangeDinamicPinkText =  data =>{
-
-    var selObj = getSelection().toString();
-    let Itsstate =  this.state[`${data}`]
-    let result = Itsstate.indexOf(selObj);
-    let editText = Itsstate.substr(0, result) + "`" + Itsstate.substring([result], Itsstate.length) + "`";
-    this.setState({ [`${data}`]: editText });
-  }
-  textBoldDinamyc = data => {
-    let Itsstate =  this.state[`${data}`]
-    var selObj = getSelection().toString();
-    let result = Itsstate.indexOf(selObj);
-    let editText = Itsstate.substr(0, result) + "* " + Itsstate.substring([result], Itsstate.length);
-    this.setState({ [`${data}`]: editText });
-  };
   render() {
     const {
       worker,
@@ -564,6 +541,7 @@ class Work extends React.Component {
     валидация
     
     */
+
     return (
       <div className="postisitonRelativeSmeni">
         <div className="screen-reader">
@@ -595,23 +573,11 @@ class Work extends React.Component {
                       >
                         Описание
                       </label>
-                      <textarea
-                        style={{ boxSizing: "100em" }}
+                      <SunEditor
                         value={description}
-                        onChange={this.handleAction("description")}
-                        class="form-control"
-                        id="exampleFormControlTextarea1"
-                        rows="3"
-                      ></textarea>
-                      <Button  onClick={() => this.rangeDinamicH1text(`description`)}>
-                        <b>H1</b>
-                      </Button>
-                      <Button onClick={() => this.rangeDinamicPinkText(`description`)}>
-                        <b>P</b>
-                      </Button>
-                      <Button onClick={() => this.textBoldDinamyc(`description`)}>
-                        <b>*</b>
-                      </Button>
+                        onChange={this.handleActionEditor("description")}
+                        lang="ru"
+                      />
                     </div>
                   </form>
 
@@ -663,23 +629,9 @@ class Work extends React.Component {
                       </Select>
                     </div>
                   </div>
-
-                  <div></div>
                   <div style={{ padding: "50px" }} className="col-md-4">
                     <Button onClick={this.clickSubmit}>Отправить</Button>
                   </div>
-                </TabPane>
-                <TabPane tab="Посмотреть" key="2">
-                  <ReactMarkdown source={description} />
-                  <ReactMarkdown source={workerJob0} />
-                  <ReactMarkdown source={workerJob1} />
-                  <ReactMarkdown source={workerJob2} />
-                  <ReactMarkdown source={workerJob3} />
-                  <ReactMarkdown source={workerJob4} />
-                  <ReactMarkdown source={workerJob5} />
-                  <ReactMarkdown source={workerJob6} />
-                  <ReactMarkdown source={workerJob7} />
-                  <ReactMarkdown source={workerJob8} />
                 </TabPane>
                 <TabPane tab="Расширенная настройка" key="3">
                   <div className="col-md-4">
@@ -745,32 +697,23 @@ class Work extends React.Component {
                                 Описание дела №{i}
                                 <h5>{tod}</h5>
                               </label>
-                              <textarea
+                              {/* <textarea
                                 onChange={this.handleAction(`workerJob${i}`)}
                                 class="form-control"
                                 id="exampleFormControlTextarea1"
                                 rows="3"
                                 value={this.state[`workerJob${i}`]}
+                              ></textarea> */}
+                               <SunEditor
+                        value={description}
+                        onChange={this.handleActionEditor(`workerJob${i}`)}
+                        lang="ru"
+                      />
                               
-                              ></textarea>
-                               <Button
-                                  onClick={() => this.rangeDinamicH1text(`workerJob${i}`)}
-                                >
-                                  <b>H1</b>
-                                </Button>
-                                <Button onClick={() => this.rangeDinamicPinkText(`workerJob${i}`)}
-                                
-                                >
-                                  <b>P</b>
-                                </Button>
-                                <Button onClick={() => this.textBoldDinamyc(`workerJob${i}`)}>
-                                  <b>*</b>
-                                </Button>
                             </form>
                             {i == 0 ? <></> : ""}
                             {i === 0 ? (
                               <>
-                               
                                 <DatePicker
                                   onChange={this.onChangeworkerTime0}
                                   placeholder="Выберите дату"
@@ -781,7 +724,6 @@ class Work extends React.Component {
                             )}
                             {i === 1 ? (
                               <>
-                                
                                 <DatePicker
                                   onChange={this.onChangeworkerTime1}
                                   placeholder="Выберите дату"
@@ -792,8 +734,6 @@ class Work extends React.Component {
                             )}
                             {i === 2 ? (
                               <>
-                               
-                                
                                 <DatePicker
                                   onChange={this.onChangeworkerTime2}
                                   placeholder="Выберите дату"
@@ -804,7 +744,6 @@ class Work extends React.Component {
                             )}
                             {i === 3 ? (
                               <>
-                               
                                 <DatePicker
                                   onChange={this.onChangeworkerTime3}
                                   placeholder="Выберите дату"
@@ -815,7 +754,6 @@ class Work extends React.Component {
                             )}
                             {i === 4 ? (
                               <>
-                                
                                 <DatePicker
                                   onChange={this.onChangeworkerTime4}
                                   placeholder="Выберите дату"
@@ -826,7 +764,6 @@ class Work extends React.Component {
                             )}
                             {i === 5 ? (
                               <>
-                                
                                 <DatePicker
                                   onChange={this.onChangeworkerTime5}
                                   placeholder="Выберите дату"
@@ -837,7 +774,6 @@ class Work extends React.Component {
                             )}
                             {i === 6 ? (
                               <>
-                               
                                 <DatePicker
                                   onChange={this.onChangeworkerTime6}
                                   placeholder="Выберите дату"
@@ -848,7 +784,6 @@ class Work extends React.Component {
                             )}
                             {i === 7 ? (
                               <>
-                                
                                 <DatePicker
                                   onChange={this.onChangeworkerTime7}
                                   placeholder="Выберите дату"
@@ -859,7 +794,6 @@ class Work extends React.Component {
                             )}
                             {i === 8 ? (
                               <>
-                               
                                 <DatePicker
                                   onChange={this.onChangeworkerTime8}
                                   placeholder="Выберите дату"
@@ -870,7 +804,6 @@ class Work extends React.Component {
                             )}
                             {i === 9 ? (
                               <>
-                                
                                 <DatePicker
                                   onChange={this.onChangeworkerTime9}
                                   placeholder="Выберите дату"
