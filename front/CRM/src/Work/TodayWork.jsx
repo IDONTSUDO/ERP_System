@@ -131,9 +131,9 @@ export default class TodayWork extends Component {
                                 <Card className="todo-red" key={i}>
                                 <Badge count={tod.JobArray.length}></Badge>
                                   <Link to={`/job/${tod._id}`}>
-                                    <h3  style={{ color: "#ffffff" }}>
+                                    <div  className="todo-red-text">
                                       {tod.title}
-                                    </h3>
+                                    </div>
                                   
                                   </Link>
                                   {tod.JobArray.map((todoOne, i) => (
@@ -168,9 +168,9 @@ export default class TodayWork extends Component {
                                 <Card className="todo-yellow" key={i}>
                                 <Badge  style={{ backgroundColor: '#ffff00', color: '#000000', boxShadow: '0 0 0 1px #000000 inset' }} count={tod.JobArray.length}></Badge>
                                   <Link to={`/job/${tod._id}`}>
-                                    <h3>
+                                    <div className="todo-yellow-text">
                                       {tod.title}
-                                    </h3>
+                                      </div>
                                   </Link>
                                   {tod.JobArray.map((todoOne, i) => (
                                 <>
@@ -186,7 +186,7 @@ export default class TodayWork extends Component {
                                 </>
                               ))}
                                   {tod.status === "в работе" ? (
-                                    <div>
+                                    <div >
                                       {tod.status}
                                     </div>
                                   ) : (
@@ -210,15 +210,15 @@ export default class TodayWork extends Component {
                                 <Card className="todo-green" key={i}>
                                 <Badge style={{ backgroundColor: '#15b11a', color: '#000000', boxShadow: '0 0 0 1px #000000 inset' }} count={tod.JobArray.length}></Badge>
                                   <Link to={`/job/${tod._id}`}>
-                                    <h3 >
+                                    <div className="todo-green-text" >
                                       {tod.title}
-                                    </h3>
+                                    </div>
                                   </Link>
                                   {tod.JobArray.map((todoOne, i) => (
                                 <>
                                 {todoOne.user == userID + "IAMWORKED" ? (
                                   <>
-                                    <div>
+                                    <div   >
                                    {todoOne.date}
                                   </div>
                                   </>
@@ -254,7 +254,7 @@ export default class TodayWork extends Component {
                           <div className="todo-phone-red">
                             <Card className="todo-red" key={i}>
                               <Link to={`/job/${tod._id}`}>
-                                <h3 style={{ color: "#ffffff" }}>{tod.title}</h3>
+                                <div  className="todo-red-text">{tod.title}</div>
                               </Link>
                               {tod.status === "в работе" ? (
                                 <div style={{ color: "#ffffff" }}>
@@ -263,7 +263,7 @@ export default class TodayWork extends Component {
                               ) : (
                                 ""
                               )}
-                                <div>
+                                <div  style={{ color: "#ffffff" }}>
                                 {tod.time}
                                   </div>
                             </Card>
@@ -278,7 +278,7 @@ export default class TodayWork extends Component {
                           <div className="todo-phone-yellow">
                             <Card className="todo-yellow" key={i}>
                               <Link to={`/job/${tod._id}`}>
-                                <h3 style={{ color: "#141412" }}>{tod.title}</h3>
+                                <div className="todo-yellow-text">{tod.title}</div>
                               </Link>
                               {tod.status === "в работе" ? (
                                 <div>
@@ -303,16 +303,16 @@ export default class TodayWork extends Component {
                           <div className="todo-phone-green">
                             <Card className="todo-green">
                               <Link to={`/job/${tod._id}`}>
-                                <h3 style={{ color: "#ffffff" }}>{tod.title}</h3>
+                                <div className="todo-green-text">{tod.title}</div>
                               </Link>
                               {tod.status === "в работе" ? (
-                                <div style={{ color: "#ffffff" }}>
+                                <div >
                                   {tod.status}
                                 </div>
                               ) : (
                                 ""
                               )}
-                              <div style={{ color: "#ffffff" }}>{tod.time}</div>
+                              <div >{tod.time}</div>
                             </Card>
                           </div>
                         </>
@@ -351,6 +351,7 @@ export default class TodayWork extends Component {
                               <Link to={`/job/${tod._id}`}>
                                 <h3 style={{ color: "#141412" }}>{tod.title}</h3>
                               </Link>
+                              <div style={{ color: "#141412" }}>{tod.time}</div>
                               {tod.status === "в работе" ? (
                                 <div className="todo-text-status-job">
                                   {tod.status}
@@ -358,8 +359,6 @@ export default class TodayWork extends Component {
                               ) : (
                                 ""
                               )}
-    
-                              <div style={{ color: "#141412" }}>{tod.time}</div>
                             </Card>
                           </div>
                         </>
@@ -371,7 +370,7 @@ export default class TodayWork extends Component {
                           <div className="todo-phone-green">
                             <Card className="todo-comand-green">
                               <Link to={`/job/${tod._id}`}>
-                                <h3 style={{ color: "#ffffff" }}>{tod.title}</h3>
+                                <div className="todo-green-text" >{tod.title}</div>
                               </Link>
                               {tod.status === "в работе" ? (
                                 <div style={{ color: "#ffffff" }} >

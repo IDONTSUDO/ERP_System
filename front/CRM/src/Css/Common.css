@@ -563,8 +563,17 @@
   line-height: 1.5;
   color: #24292e;
 }
-.footer-bar{
-
+.todo-yellow-text{
+   font-size: 150%;
+   color: #24292e;
+}
+.todo-green-text {
+  font-size: 150%;
+  color: #24292e;
+}
+.todo-red-text{
+  font-size: 150%;
+  color: #f3f4f5;
 }
 .fotter-bar-left{
   float: left;
