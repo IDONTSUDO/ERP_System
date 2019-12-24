@@ -10,7 +10,7 @@ let curr_month = d.getMonth() + 1
 let curr_year = d.getFullYear()
 let times =  `${curr_year}-${curr_month}-${curr_date}`
 // '0 1 * * *
-  cron.schedule('* * * * *', () => {
+  cron.schedule('0 1 * * *', () => {
     StatisticsEveryDay.find({ day: times })
     .exec((err, result) => {
         if (err) {
@@ -38,6 +38,9 @@ let times =  `${curr_year}-${curr_month}-${curr_date}`
               }
         }      
     })
+  },{
+    scheduled: true,
+    timezone: "Europe/Moscow"
   })
 }
 // ,{
