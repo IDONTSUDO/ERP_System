@@ -1,9 +1,9 @@
 import React from "react";
 import dateFormat from "dateformat";
 import ReactMarkdown from "react-markdown";
-import { list, NewTodo, NewNewsJob } from "../Api/Http";
+import { list, NewTodo, NewNewsJob,NewAssignTodoToday } from "../Api/Http";
 import { isAuthenticated } from "../Api/Auth";
-import { everyday } from "../helper/everyday.js";
+import { everyday,IsEveryDaySub } from "../helper/everyday.js";
 import {
   Button,
   Tabs,
@@ -69,6 +69,8 @@ class Work extends React.Component {
     this.handleActionEditor = this.handleActionEditor.bind(this);
   }
   componentDidMount() {
+
+   
     this.setState({ user: isAuthenticated().direct });
     everyday();
     list().then(data => {
@@ -263,6 +265,8 @@ class Work extends React.Component {
           console.log(elem);
           elem.innerHTML = "";
         }
+        let sub = IsEveryDaySub()._id
+        NewAssignTodoToday(sub)
       });
     }
   };
@@ -493,6 +497,8 @@ class Work extends React.Component {
             workerTime9: ""
           });
           document.querySelector(".ant-select-selection__clear").click();
+          let sub = IsEveryDaySub()._id
+          NewAssignTodoToday(sub)
         }
       });
     }

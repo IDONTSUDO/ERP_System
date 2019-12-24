@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
 import { Redirect, Link } from "react-router-dom";
 import { Spin, Typography } from "antd";
-import { read } from "../Api/Http";
+import { read, AllStatistic } from "../Api/Http";
 import DefaultProfile from "../Assets/default.png";
 import Error from "../Error/Error.jsx";
 import { Button } from "antd";
@@ -16,16 +16,23 @@ class Profile extends Component {
     this.state = {
       user: [],
       open: true,
-      error: false
+      error: false,
+      static: []
     };
   }
   init = userId => {
     read(userId).then(data => {
       if (data.error) {
-        console.log(data.error);
         this.setState({ error: true });
       } else {
         this.setState({ user: data });
+      }
+    });
+    AllStatistic(userId).then(data => {
+      if (data.error) {
+        this.setState({ error: true });
+      } else {
+        this.setState({ static: data });
       }
       this.setState({ open: false });
     });
@@ -43,7 +50,6 @@ class Profile extends Component {
 
   render() {
     const { redirectToSignin, user, open, error } = this.state;
-    console.log(typeof user);
     const photoUrl = user._id
       ? `${process.env.REACT_APP_API_URL}/user/photo/${
           user._id
@@ -52,26 +58,14 @@ class Profile extends Component {
     const avatarBolean = user.avatar;
     var d = new Date();
     let curr_year = d.getFullYear();
-    let minimalDateYear = `${curr_year}-01-01`
-    let maximumDateYear = `${curr_year}-12-31`
+    let minimalDateYear = `${curr_year}-01-01`;
+    let maximumDateYear = `${curr_year}-12-31`;
     // let DateForCalendar = `${curr_year}-${curr_date}-${curr_month}`
     // console.log(DateForCalendar)
     // from="2017-01-01"
     // to="2017-04-30"
-    let data = [
-      {
-        day: "2017-03-30",
-        value: "Coments 123",
-        Coments: 132,
-        TODO: 1234
-      },
-      {
-        day: "2017-04-30",
-        value: "Coments 123",
-        Coments: 132,
-        TODO: 1234
-      }
-    ];
+    let data = this.state.static;
+
     return (
       <div>
         <div>
@@ -98,24 +92,15 @@ class Profile extends Component {
                             Должность: {user.role}
                           </h2>
                         </div>
-                        <div >
-                            <Text  type="secondary">
-                              {" "}
-                              {user.Date_of_Birth}
-                            </Text>
-                          </div>
-                          <div >
-                            <Text  type="secondary">
-                              {" "}
-                              {user.phone}
-                            </Text>
-                          </div>
-                          <div >
-                            <Text  type="secondary">
-                              {" "}
-                              {user.email}
-                            </Text>
-                          </div>
+                        <div>
+                          <Text type="secondary"> {user.Date_of_Birth}</Text>
+                        </div>
+                        <div>
+                          <Text type="secondary"> {user.phone}</Text>
+                        </div>
+                        <div>
+                          <Text type="secondary"> {user.email}</Text>
+                        </div>
                       </div>
                     </div>
 
@@ -136,7 +121,7 @@ class Profile extends Component {
                       </div>
                       <div style={{ width: "800px", height: "300px" }}>
                         <ResponsiveCalendar
-                          data={data}
+                          data={this.state.static}
                           from={minimalDateYear}
                           to={maximumDateYear}
                           emptyColor="#eeeeee"
@@ -145,18 +130,16 @@ class Profile extends Component {
                           yearSpacing={40}
                           monthBorderColor="#ffffff"
                           dayBorderWidth={2}
+                          dayBorderColor="#ffffff"
                           tooltip={function(e) {
                             console.log(e);
-                            return (
-                              <div>
-                                Назначено дел:<h6>{e.data.Coments}</h6>{" "}
-                                Коментариев:
-                                <h6>{e.data.Coments}</h6> Выполнено дел:
-                                <h6>{e.data.TODO}</h6>
-                              </div>
-                            );
+                            return <>
+                            {data[0].day}
+                            <h5>Назначено дел: {data[0].assigned_todo}</h5>
+                         <h5>Сделано коментариев:{data[0].comment}</h5>
+                         <h5></h5>   
+                            </>
                           }}
-                          dayBorderColor="#ffffff"
                           legends={[
                             {
                               anchor: "bottom-right",

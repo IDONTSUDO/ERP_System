@@ -9,8 +9,10 @@ import {
   SetStatusJob,
   TodoChangeExperienseAtHTTP,
   TodoUpTime,
-  TodoChangeComandList
+  TodoChangeComandList,
+  NewComentStatistic
 } from "../Api/Http";
+import {IsEveryDaySub,everyday} from "../helper/everyday.js"
 import { isAuthenticated } from "../Api/Auth";
 import {
   Comment,
@@ -60,6 +62,7 @@ export default class Job extends Component {
   }
   // life hooks
   componentDidMount() {
+    everyday()
     const todoId = this.props.match.params.todoId;
     const workerId = isAuthenticated().direct._id;
     const nameWorker = isAuthenticated().direct.name;
@@ -280,7 +283,7 @@ export default class Job extends Component {
     let comment = JSON.stringify({ body, worker, todoId, name });
 
     let userID = isAuthenticated().direct._id;
-    //
+    
     NewComent(comment).then(data => {
       if (data.error) {
         console.log(data.error);
@@ -294,7 +297,10 @@ export default class Job extends Component {
           };
         });
         let link = `/job/` + todoId;
-
+        let sub = IsEveryDaySub()._id
+        console.log("SUBSC",sub)
+        NewComentStatistic(sub)
+    
         let name_posted = isAuthenticated().direct.name;
         let posted_by = isAuthenticated().direct._id;
         let description = body;
@@ -340,9 +346,12 @@ export default class Job extends Component {
         tags.push(JobArray[i].user);
       }
     }
-   
+    let sub = IsEveryDaySub()._id
+    console.log("SUBSC",sub)
+    NewComentStatistic(sub)
 
     let comment = JSON.stringify({ body, worker, todoId, name });
+ 
     NewComent(comment).then(data => {
       if (data.error) {
         console.log(data.error);
@@ -373,28 +382,6 @@ export default class Job extends Component {
           description
         };
         this.openNotificationNewComment();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         NewNewsToComment(payload);
       }
     });

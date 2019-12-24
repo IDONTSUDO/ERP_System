@@ -11,10 +11,9 @@ const fs = require('fs')
 const cors = require('cors')
 const Fawn = require('fawn')
 
-const {CRONTEST} = require("./cron/cron.js")
+// const {CRON} = require("./cron/cron.js")
 
-CRONTEST()
-
+// CRON()
 mongoose.connect(`mongodb://localhost/svarog-crm-system`, { useNewUrlParser: true }).then(() => console.log("DB Conected"))
 mongoose.connection.on('error', err => {
     console.log(`DB connection error: ${err.message}`)
@@ -25,7 +24,6 @@ Fawn.init(mongoose);
 const DirectAuthRoutes = require("./routers/Auth")
 const DirectCompanyhRoutes = require("./routers/Company")
 const CommonTodoRoutes = require("./routers/todo")
-const StatisticRouter = require("./routers/Statistic")
 const NewsRouter = require("./routers/News")
 const AgentRouter = require("./routers/ContAgent")
 const NewHistory = require("./routers/AgentHistory")
@@ -41,7 +39,6 @@ app.use(expressValidator())
 app.use(cors())
 // 
 app.use("/", PushNotifications)
-app.use("/", StatisticRouter)
 app.use("/", DirectAuthRoutes)
 app.use("/", DirectCompanyhRoutes)
 app.use("/", NewsRouter)

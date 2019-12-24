@@ -15,9 +15,12 @@ const StatisticsEveryDayAllSchema = new mongoose.Schema({
     day: {
         type: String,
     },
+    value:{
+        type:Number,
+        default: 0
+    },
     userBy:{
         type:String
-    },
-    createdAt: { type: Date, expires: '1500m', default: Date.now }
+    }
 })
 module.exports = mongoose.model("StatisticsEveryDay", StatisticsEveryDayAllSchema)

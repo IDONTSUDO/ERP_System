@@ -27,7 +27,6 @@ export default class TodayWork extends Component {
     }
     
     init = user =>{
-        console.log(user)
         let TodoArray = [];  
         TodayWorkHTTP(user)
             .then(data =>{
@@ -64,7 +63,6 @@ export default class TodayWork extends Component {
         var YellowSortArray = []
         for (let i = 0; todos.length > i; i++) { 
           if(todos[i].importance === "Средней важности"){
-            console.log(todos[i].importance)
             YellowSortArray.push(todos[i])
           }
 

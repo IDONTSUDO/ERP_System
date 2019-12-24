@@ -1,6 +1,6 @@
 import { NewSubscribeEveryDay } from '../Api/Http.js'
 
-const IsEveryDaySub = () =>{
+export const IsEveryDaySub = () =>{
     if (typeof window == "undefined") {
         return false
     }
@@ -19,8 +19,8 @@ export const everyday = () => {
     let curr_month = d.getMonth() + 1
     let curr_year = d.getFullYear()
     let Localtime = `${curr_year}-${curr_month}-${curr_date}`
+    let sub = IsEveryDaySub()
 
-    let sub = IsEveryDaySub()  
     if (sub === null) { 
         NewSubscribeEveryDay().then(data => {            
             const {_id,day } = data

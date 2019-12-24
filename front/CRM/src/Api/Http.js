@@ -728,3 +728,53 @@ export const NewSubscribeEveryDay = () =>{
             console.log(err)
     })
 }
+export const NewAssignTodoToday = (statisticId) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/update/days/statistics/todo/assign`, {
+        method: "POST",
+        headers:myHeaders,
+        body: JSON.stringify({statisticId})
+    }).then(response => {
+            return response.json()
+    })
+    .catch(err => {
+            console.log(err)
+    })
+}
+export  const AllStatistic = (userId) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/all/statistics`, {
+        method: "POST",
+        headers:myHeaders,
+        body: JSON.stringify({userId})
+    }).then(response => {
+            return response.json()
+    })
+    .catch(err => {
+            console.log(err)
+    })
+}
+
+
+export const NewTodoCompleteStatistic = (statisticId) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/update/days/statistics/todo/complete`, {
+        method: "POST",
+        headers:myHeaders,
+        body: JSON.stringify({statisticId})
+    }).then(response => {
+            return response.json()
+    })
+    .catch(err => {
+            console.log(err)
+    })
+}
+export const NewComentStatistic = (statisticId) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/update/days/statistics/comment/result`, {
+        method: "POST",
+        headers:myHeaders,
+        body: JSON.stringify({statisticId})
+    }).then(response => {
+            return response.json()
+    })
+    .catch(err => {
+            console.log(err)
+    })
+}

@@ -27,7 +27,7 @@ const UserOneStatistic = new mongoose.Schema({
     Userby:{
         type: String
     },
-    Days:{
+    day:{
         type:Object
     }
 })
