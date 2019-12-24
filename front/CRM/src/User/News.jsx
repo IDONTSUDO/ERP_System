@@ -72,20 +72,14 @@ export default class News extends Component {
                     <>
                       <div style={{ padding: "5px" }}>
                         <div className="alert-complete-status" key={i}>
-                          {/* <button
-                            type="button"
-                            class="close"
-                            data-dismiss="alert"
-                            aria-label="Close"
-                          >
-                            <span aria-hidden="true">&times;</span>
-                          </button> */}
+                         
 
                           <h6>
                             <strong>{news.eventNews}</strong>
                           </h6>
                           <div className="">
-                            <div>Задание под названием: {news.description}</div>
+                          <div dangerouslySetInnerHTML={{ __html: news.description }} />
+
                             <div style={{ padding: "5px" }}>
                               Выполнил: {news.name_posted}
                             </div>
@@ -139,8 +133,7 @@ export default class News extends Component {
                               <strong>{news.eventNews}</strong>
                             </h6>
                           </Link>
-                          <div>{news.description}</div>
-
+                          <div dangerouslySetInnerHTML={{ __html: news.description }} />
                           <Moment fromNow>{news.dateCreated}</Moment>
                         </div>
                       </div>
@@ -183,7 +176,7 @@ export default class News extends Component {
                           {news.comand === false ? (
                             <div className="SoloTodoBorder">
                               <div>Подробности</div>
-                              <div>{news.description}</div>
+                              <div dangerouslySetInnerHTML={{ __html: news.description }} />
                               <div>{news.time}</div>
                             </div>
                           ) : (

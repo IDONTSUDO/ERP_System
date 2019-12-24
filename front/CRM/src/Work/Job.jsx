@@ -298,7 +298,6 @@ export default class Job extends Component {
         });
         let link = `/job/` + todoId;
         let sub = IsEveryDaySub()._id
-        console.log("SUBSC",sub)
         NewComentStatistic(sub)
     
         let name_posted = isAuthenticated().direct.name;
@@ -347,7 +346,6 @@ export default class Job extends Component {
       }
     }
     let sub = IsEveryDaySub()._id
-    console.log("SUBSC",sub)
     NewComentStatistic(sub)
 
     let comment = JSON.stringify({ body, worker, todoId, name });
