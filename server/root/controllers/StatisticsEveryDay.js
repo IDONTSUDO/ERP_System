@@ -57,8 +57,9 @@ exports.UpdateStatisticCommentResult = async (req, res) =>{
 
 
 exports.GetAllStatistic = async (req, res) =>{ 
-    // Statistic.find
     let userId  = req.body.userId
+    console.log(userId)
+
     Statistic.find({Userby:userId}).then(data =>{
         let result =  []
         for(dat of data[0].day){

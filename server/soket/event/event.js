@@ -19,24 +19,14 @@ exports.handleUserIsOnline = (UserId,SoketId) =>{
 }
 
 
-exports.handleJoin = (UserId,SoketId) =>{
-    redisClient.set(UserId,SoketId,function(err,reply) {
-        console.log("err",err)
-        console.log("reply",reply)
-       });
-    redisClient.get(UserId,function(err,reply) {
-        console.log(err);
-        console.log("its key",reply);
-    });
- 
-    console.log("clent join",UserId,SoketId)
-    // socket.join (`${UserId}`);
+exports.handleJoin = (io,soket,decod) =>{
+    // soket id and decoded id set redis 
+    redisClient.set(decod._id,soket.id)
+    console.log("join",soket.id,decod._id)
 }
-exports.handleLeave = (UserId,SoketId) =>{
-    console.log("client leave",UserId,SoketId)
-
-
-    redisClient.del(UserId,function(err,reply) {
+exports.handleLeave = (decod) =>{
+    console.log("leave",decod._id)
+    redisClient.del(decod._id,function(err,reply) {
         if(!err) {
          if(reply === 1) {
           console.log("Key is deleted");
@@ -44,11 +34,10 @@ exports.handleLeave = (UserId,SoketId) =>{
           console.log("Does't exists");
          }
         }
-       });
-       redisClient.get(UserId,function(err,reply) {
-        console.log(err);
-        console.log("its key",reply);
-       });
+       })
+}
+exports.UserisOnline = () =>{
+    
 }
 exports.handleMessage = () =>{
     console.log("messages")

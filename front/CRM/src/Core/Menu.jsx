@@ -32,7 +32,7 @@ class MenuMain extends React.Component {
   componentDidMount() {
 
 
-    // testSoket()
+    testSoket()
     if (isAuthenticated() == false) {
       return false;
     } else {

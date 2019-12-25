@@ -1,48 +1,36 @@
-var app = require('express')();
-var http = require('http').createServer(app);
-var io = require('socket.io')(http);
+let express = require('express')
+let app = express();
+let port = 4001
+let server = require('http').createServer(app).listen(port);
+let event = require('./event/event.js')
+
+let io = require('socket.io').listen(server);
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
 
 
-let users = {};
 
-let lastUser = 0;
 
-io.on('connection', function(socket){
-    console.log('a user connected');
+io.on('connection', function (socket) {
+    console.log("new connect")
+    // let token = socket.handshake.query.token
 
-    let id = ++lastUser;
-
-    users[id] = socket;
-  
-    io.to(socket.id).emit('my id', id);
-    io.to(socket.id).emit("online users", Object.keys(users));
-
-    socket.broadcast.emit("user connected", { id: id});
-
-    socket.on('chat message', function(msg){
-
-        console.log(msg);
-
-        console.log(users[msg.id]);
-
-        if(users[msg.id] !== undefined){
-            io.to(users[msg.id].id).emit('private message', msg.text);
-        }else {
-            io.emit('chat message', msg.text);
-
-        }
+    // let decod = jwt.decode(token)
+   
+    socket.on('conect', function (data) {
+      console.log("c")
+      
+        // event.handleJoin(io, socket, decod)
+    });    
+    socket.on('user', function (data) {
+        console.log("u")
+        // let req = data
+        // console.log("its",req)
+    })
+    socket.on('disconnect', function (data) {
+        console.log("d")
+        // event.handleLeave(decod)
     });
 
-
-    socket.on('disconnect', function(){
-        console.log('user disconnected');
-
-        io.emit('user disconnected', id);
-
-        delete users[id];
-    });
 });
 
-http.listen(4041, function(){
-    console.log('listening on *:3000');
-});
