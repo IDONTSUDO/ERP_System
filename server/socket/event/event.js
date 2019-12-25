@@ -14,27 +14,31 @@ redisClient.on('error',function() {
 
 
 
-exports.handleUserIsOnline = (UserId,SoketId) =>{
-    
+exports.handleUserIsOnline = (user,ws) =>{
+    // console.log(user)
+
+    redisClient.get(user,function(err,reply) {
+        console.log("redis exs:",reply)
+        ws.send(JSON.stringify(reply))
+       });
+       
 }
 
 
-exports.handleJoin = (io,soket,decod) =>{
-    // soket id and decoded id set redis 
-    redisClient.set(decod._id,soket.id)
-    console.log("join",soket.id,decod._id)
+exports.handleJoin = (ws,user) =>{
+    let WSid = ws.id
+    let USERid = user._id
+    console.log(USERid)
+    redisClient.set(USERid,WSid,function(err,reply) {
+        console.log(reply);
+       });
 }
-exports.handleLeave = (decod) =>{
-    console.log("leave",decod._id)
-    redisClient.del(decod._id,function(err,reply) {
-        if(!err) {
-         if(reply === 1) {
-          console.log("Key is deleted");
-         } else {
-          console.log("Does't exists");
-         }
-        }
-       })
+exports.handleLeave = (ws,user) =>{
+    let WSid = ws.id
+    let USERid = user._id
+    redisClient.del(USERid,WSid,function(err,reply) {
+       console.log("redis:",reply)
+    })
 }
 exports.UserisOnline = () =>{
     

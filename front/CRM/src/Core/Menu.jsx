@@ -10,7 +10,7 @@ import {
   MyNewsQuality
 } from "../Api/Http.js";
 
-import { testSoket } from "../Soket/soket.js" 
+import { testSoket } from "../WsSocket/ws-socket.js" 
 
 
 const { Header, Content, Footer, Sider } = Layout;
