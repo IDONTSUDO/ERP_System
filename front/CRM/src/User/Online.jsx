@@ -23,9 +23,7 @@ export default class Online extends Component {
     //   this.stata.status === "null"
         return (
             <div>
-               {this.state.status === "null" ? (<>Ofline</>):(<>Online</>)}
-                <div>21321</div>
-               
+               {this.state.status === "null" ? (<div className="user-ofline"></div>):(<div className="user-online"></div>)}  
             </div>
         )
     }

@@ -585,3 +585,17 @@
 code{
   color: #fff;
 }
+.user-online{
+  width: 10px;
+  height: 10px;
+  border: 2px solid rgb(142, 250, 19);
+  border-radius: 50%;
+  background:rgb(142, 250, 19);
+}
+.user-ofline{
+  width: 10px;
+  height: 10px;
+  border: 2px solid red;
+  border-radius: 50%;
+  background: red;
+}

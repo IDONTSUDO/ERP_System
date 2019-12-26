@@ -101,14 +101,7 @@ export default class News extends Component {
                           <Link className="link" to={`${news.link}`}>
                             <strong>{news.eventNews}</strong>
                           </Link>
-                          {/* <button
-                            type="button"
-                            class="close"
-                            data-dismiss="alert"
-                            aria-label="Close"
-                          >
-                            <span aria-hidden="true">&times;</span>
-                          </button> */}
+                      
                         </div>
                       </div>
                     </>

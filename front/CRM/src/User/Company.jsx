@@ -5,6 +5,7 @@ import DefaultProfile from "../Assets/default.png";
 import { Link } from "react-router-dom";
 import { Button, Card } from "antd";
 import Error from "../Error/Error.jsx";
+import Online from "./Online.jsx"
 // import {isOnline} from "../Soket/soket.js"
 export default class Company extends Component {
   constructor() {
@@ -92,7 +93,7 @@ export default class Company extends Component {
                       style={{ height: "250px", width: "250px" }}
                     />
                   )}
-                  
+              
                   <div class="card-body">
                     <h5 class="card-text">{user.role}</h5>
                     <div
@@ -100,6 +101,7 @@ export default class Company extends Component {
                       className="card-title"
                     >
                       {user.name}
+                      <Online  user={user._id}/>
                     </div>
                     <p className="card-text">{user.email}</p>
 
