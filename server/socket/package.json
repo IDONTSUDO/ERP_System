@@ -23,11 +23,12 @@
     "socketio-jwt": "^4.5.0",
     "ssh-exec": "^2.0.0",
     "uuid": "^3.3.3",
-    "uuidv4": "^6.0.0"
+    "uuidv4": "^6.0.0",
+    "zeromq": "^6.0.0-beta.6"
   },
   "devDependencies": {},
   "scripts": {
-   "dev": "nodemon main.js",
+    "dev": "nodemon main.js",
     "debug": "NODE_ENV=dev  node --inspect ./main.js",
     "opt": "0x -o main.js"
   },

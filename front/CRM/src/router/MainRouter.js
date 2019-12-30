@@ -34,6 +34,10 @@ import MyDealHistory from '../Deal/MyDealHistory.jsx'
 
 import Mail from  '../Email/Email.jsx'
 import CompanyStatistic from '../statistic/CompanyStatistic.jsx'
+
+import MessageList from '../Messages/MessageList.jsx'
+
+
 const MainRouter = () => (
     <div>
         <MenuMain />
@@ -70,8 +74,7 @@ const MainRouter = () => (
             <PrivateRoute exact path="/my/deal/history/:userId" component={MyDealHistory} />
             <PrivateRoute exact path="/agent/history/:agentId" component={AgentHistory} />
             <PrivateRoute exact path="/agent/edit/:agentId" component={EditContrAgent} />
-
-
+            <PrivateRoute exact path="/message" component={MessageList} />
             <PrivateRoute exact path="/mailing" component={Mail} />
         </Switch>
     </div>

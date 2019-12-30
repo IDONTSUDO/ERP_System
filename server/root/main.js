@@ -10,17 +10,17 @@ const cookieParser = require('cookie-parser')
 const fs = require('fs')
 const cors = require('cors')
 const Fawn = require('fawn')
-
+const PUBLISHER = require('./socket/publisher.js')
 // const {CRON} = require("./cron/cron.js")
 
 // CRON()
-mongoose.connect(`mongodb://localhost/svarog-crm-system`, { useNewUrlParser: true }).then(() => console.log("DB Conected"))
+mongoose.connect(`mongodb://localhost/svarog-crm-system`,{ useUnifiedTopology: true,  useNewUrlParser: true,  useCreateIndex :  true ,  }).then(() => console.log("DB Conected"))
 mongoose.connection.on('error', err => {
     console.log(`DB connection error: ${err.message}`)
 })
 mongoose.set('debug', true)
 Fawn.init(mongoose);
-
+// PUBLISHER
 const DirectAuthRoutes = require("./routers/Auth")
 const DirectCompanyhRoutes = require("./routers/Company")
 const CommonTodoRoutes = require("./routers/todo")
@@ -31,6 +31,10 @@ const PriceUsers = require("./routers/Priced")
 const PushNotifications = require("./routers/push")
 const Mail = require("./routers/mail.js")
 const StatisticsEveryDay = require("./routers/StatisticsEveryDay.js")
+const Messages = require("./routers/Message.js")
+
+
+
 
 app.use(cookieParser())
 app.use(morgan("dev"))
@@ -48,6 +52,9 @@ app.use("/", CommonTodoRoutes)
 app.use("/", PriceUsers)
 app.use("/", Mail)
 app.use("/",StatisticsEveryDay)
+app.use("/",Messages)
+
+
 
 app.get('/docs', (req, res) => {
     fs.readFile('documentation/ApiDocs.json', (err, data) => {

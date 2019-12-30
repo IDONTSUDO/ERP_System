@@ -599,3 +599,6 @@ code{
   border-radius: 50%;
   background: red;
 }
+.message-list{
+  background-color: #fff;
+}

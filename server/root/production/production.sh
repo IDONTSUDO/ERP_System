@@ -35,7 +35,8 @@ npm i nodemon -g
 npm i serve -g
 #web-push
 npm install web-push -g
-
+#mongo-hacker 
+npm install -g mongo-hacker
 
 #pm2 
 pm2 start main.js

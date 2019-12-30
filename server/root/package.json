@@ -40,6 +40,7 @@
     "moment": "^2.24.0",
     "mongodb": "^3.3.5",
     "mongoose": "^5.5.11",
+    "mongoose-autopopulate": "^0.10.0",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
     "node-color-log": "^2.2.0",
@@ -52,7 +53,8 @@
     "socket.io-client": "^2.3.0",
     "ssh-exec": "^2.0.0",
     "uuid": "^3.3.2",
-    "web-push": "^3.4.1"
+    "web-push": "^3.4.1",
+    "zeromq": "^6.0.0-beta.6"
   },
   "devDependencies": {
     "ava": "^2.4.0",

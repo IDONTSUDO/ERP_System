@@ -1,20 +1,16 @@
-const express = require('express')
-const enableWs = require('express-ws')
+let express = require('express');
+let expressWs = require('express-ws')
+
+let expressWsApp = expressWs(express());
 const jwt = require("jsonwebtoken")
 const event = require("./event/event.js")
+const SUBSCRIPTION = require('./socket/subscription.js')
+
 let port = 4041
-const app = express()
-enableWs(app)
-
-const mongoose = require('mongoose')
-
-mongoose.connect(`mongodb://localhost/svarog-crm-socket`, { useNewUrlParser: true }).then(() => console.log("DB Conected"))
-mongoose.connection.on('error', err => {
-    console.log(`DB connection error: ${err.message}`)
-})
-mongoose.set('debug', true)
+let app = expressWsApp.app;
 
 
+var aWss = expressWsApp.getWss('/a');
 app.ws('/online', (ws, req) => {
     // console.log(ws)
     ws.id = req.headers['sec-websocket-key'];
@@ -25,16 +21,17 @@ app.ws('/online', (ws, req) => {
 
 
     let user = jwt.decode(ws.jwt)
-    
+    ws.user = user._id
 
 
 
     ws.on('message', msg => {
-        console.log(msg)
         event.handleJoin(ws,user)
     })
+    ws.on('cloud', msg => {
+        console.log("Clooud")
+    })
     ws.on('close', msg => {
-        console.log(msg)
        event.handleLeave(ws,user)
     })
 })
@@ -44,6 +41,10 @@ app.ws('/user', (ws, req) => {
         event.handleUserIsOnline(data.user,ws)
     })
 })
-
+app.ws('/messages',(ws,req) =>{
+  
+})
 
 app.listen(port, () => console.log(`Server listening on port ws:localhost:${port}!`))
+
+module.exports.clients = aWss.clients

@@ -10,7 +10,7 @@ import {
   MyNewsQuality
 } from "../Api/Http.js";
 
-import { testSoket } from "../Soket/soket.js" 
+import { testSoket } from "../WsSocket/ws-socket.js" 
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -32,7 +32,7 @@ class MenuMain extends React.Component {
   componentDidMount() {
 
 
-    // testSoket()
+    testSoket()
     if (isAuthenticated() == false) {
       return false;
     } else {
@@ -296,9 +296,24 @@ class MenuMain extends React.Component {
                         </SubMenu>
                         
                           ):("")}
-                        
-
-                          
+                           <SubMenu
+                          key="sub9"
+                          title={
+                            <>
+                              <span>
+                              <Icon type="message" />
+                                <span>Сообщения</span>
+                              </span>
+                            </>
+                          }
+                        >
+                          <Menu.Item key="22">
+                            <Link to="/message">
+                              <span>Сообщения</span>
+                            </Link>
+                          </Menu.Item>
+                       
+                        </SubMenu>                          
                       </Menu>
                     </Sider>
                   </Layout>

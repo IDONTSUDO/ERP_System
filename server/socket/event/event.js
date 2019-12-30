@@ -40,23 +40,11 @@ exports.handleLeave = (ws,user) =>{
        console.log("redis:",reply)
     })
 }
-exports.UserisOnline = () =>{
-    
-}
-exports.handleMessage = () =>{
-    console.log("messages")
-}
-exports.handleGetChatrooms = () =>{
-    console.log("get chat rooms")
-}
-exports.handleGetAvailableUsers = () =>{
-    console.log("get  users")
 
-}
-exports.handleRegister = () =>{
-    console.log("client register")
 
+
+exports.HandelUsers = (ws) =>{
 }
-exports.handleDisconnect = () =>{
-    console.log("client disconect")
+exports.UserIsLeave = (ws) =>{
+
 }
