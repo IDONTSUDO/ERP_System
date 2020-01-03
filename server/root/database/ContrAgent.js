@@ -36,6 +36,18 @@ const contrAgentSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    region:{//регион РФ
+        type:String,
+        default:"none"
+    },
+    specialications:{ //специализация
+        type:String,
+        default:"none"
+    },
+    tech:{ //техника 
+        type:String,
+        default:"none"
+    },
     tags: [{
         type: Object
     }],
