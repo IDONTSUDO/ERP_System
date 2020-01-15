@@ -595,6 +595,7 @@ class Work extends React.Component {
                         Описание
                       </label>
                       <SunEditor
+                        style="text-editor-style"
                         value={description}
                         onChange={this.handleActionEditor("description")}
                         lang="ru"

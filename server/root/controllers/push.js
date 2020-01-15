@@ -174,7 +174,7 @@ exports.PushUsers = async (req, res) => {
     console.log(data)
   })
 
-  res.status(200)
+  return res.status(200)
 }
 
 exports.UserFindPushData = () => {
@@ -200,6 +200,7 @@ exports.MyPushingDevice = async (req, res) => {
 }
 exports.NewPushingNotifycation = async (req, res) => {
   let Users = req.newsUser
+  console.log("New PUSH NOTIFICATION")
   const payload = {
     title: "CRM",
     message: "Для вас новое дело",
@@ -230,8 +231,8 @@ exports.NewPushingNotifycation = async (req, res) => {
             const pushOptions = {
               vapidDetails: {
                 subject: 'http://example.com',
-                privateKey: process.env.PRIVATE_VAPID_KEY,
-                publicKey: process.env.PUBLIC_VAPID_KEY
+                privateKey: `${process.env.PRIVATE_VAPID_KEY}`,
+                publicKey: `${process.env.PUBLIC_VAPID_KEY}`
               },
               TTL: payload.ttl,
               headers: {}

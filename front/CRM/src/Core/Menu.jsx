@@ -59,7 +59,7 @@ class MenuMain extends React.Component {
     console.log(window_width)
     return (
       <>
-        {/* {window_width > "768" ? ( */}
+         {window_width > "768" ? ( 
           <>
             {isAuthenticated() && (
               <Anchor affix={false}>
@@ -328,10 +328,10 @@ class MenuMain extends React.Component {
               </Anchor>
             )}
           </>
-        {/* ) : ( */}
-          {/* // <MobileMenu/>      */}
-          {/* null */}
-             {/* )} */}
+         ) : ( 
+        //  <MobileMenu/>
+        null    
+         )} 
         {!isAuthenticated() && <></>}
       </>
     );

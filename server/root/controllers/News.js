@@ -16,10 +16,11 @@ exports.NewsId = async (req, res, next, id) => {
         })
 }
 exports.newNews = async (req, res, next) => {
-   
+//    dateCreated
     let payload = req.body.payload
     console.log(payload)
     const news = new NEWS(payload)
+    news.dateCreated = Date.now()
     news.save().then(result => {
         res.status(200).json({
             "result": "created"

@@ -46,6 +46,10 @@
     justify-content: center;
     padding: 1em 6em 0.1em;
   }
+  .text-editor-style{
+    width: 100px;
+    height:100px;
+  }
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
