@@ -66,16 +66,18 @@ exports.ChanelNew = async (req, res,next) =>{
 exports.ChanelDelete = async (req, res) =>{
 
 }
-exports.newMessage = async (req, res) =>{
+exports.newMessage = async (req, res, next) =>{
     const message = new Message(req.body)
 
     message.save().then(result => {
         res.status(200).json({
             result
         })
+        req.messageData  = result
+        return next()
     })
 }
-exports.EditMessage = async (req, res) =>{
+exports.EditMessage = async (req, res,next) =>{
    let msg = req.message
 
    msg = _.extend(msg, req.body)
@@ -90,13 +92,18 @@ exports.EditMessage = async (req, res) =>{
        }
 
        res.json(result)
+
+       req.messageData  = result
+       return next()
    })
 }
 
-exports.DeleteMessage = async (req, res) =>{
+exports.DeleteMessage = async (req, res,next) =>{
    let msg = req.message
-    msg.remove().then( data=>{
-        return res.status(200).json(data)
+    msg.remove().then( result=>{
+         res.status(200).json(result)
+         req.messageData  = result
+         return next()
     })
 }
 exports.ChanelGetDialog = async (req, res) =>{

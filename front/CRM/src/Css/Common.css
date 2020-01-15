@@ -433,6 +433,16 @@
   color: #000000;
   background-color: #09caecb7;
 }
+.alert-redirect-todo {
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  width: 100vh;
+  color: #000000;
+  background-color: #ec09a0b7;
+}
 .security {
   position: relative;
   padding: 0.75rem 1.25rem;
@@ -601,4 +611,7 @@ code{
 }
 .message-list{
   background-color: #fff;
+}
+.main-assigned-todo-list{
+ 
 }

@@ -5,7 +5,7 @@ const formidable = require('formidable')
 const fs = require('fs')
 const _ = require('lodash')
 const dateFormat = require('dateformat')
-const  moment = require('moment')
+const moment = require('moment')
 exports.TodoById = async (req, res, next, id) => {
 
     await TODO.findById(id)
@@ -40,12 +40,14 @@ exports.SOSotodo = (req, res) => {
 
 }
 exports.myTodoItsDay = async (req, res, next) => {
-    
-    let time = moment().locale("ru").format("LL")
-    
 
-    TODO.find({ $and: [{ "time": { $eq: `${time}` } },
-     { tags: `${req.worker._id}` }] })
+    let time = moment().locale("ru").format("LL")
+
+
+    TODO.find({
+        $and: [{ "time": { $eq: `${time}` } },
+        { tags: `${req.worker._id}` }]
+    })
 
         .exec((err, todos) => {
             if (err) {
@@ -60,7 +62,7 @@ exports.myTodoItsDay = async (req, res, next) => {
 
 }
 exports.myTodoItsDayQuality = async (req, res, next) => {
-    
+
     let time = moment().locale("ru").format("LL")
 
 
@@ -95,32 +97,32 @@ exports.myTODO = async (req, res) => {
 }
 exports.MyComandTodo = async (req, res) => {
 
-    
+
     let time = moment().locale("ru").format("LL")
-    TODO.find(  { JobArray: { $elemMatch: { user: `${req.body.userId}`, date:`${time}`} } })
+    TODO.find({ JobArray: { $elemMatch: { user: `${req.body.userId}`, date: `${time}` } } })
         .exec((err, posts) => {
             if (err) {
                 return res.status(400).json({
                     error: err
                 })
             }
-          
+
             res.json(posts)
         })
 }
 exports.MyComandTodoQuality = async (req, res) => {
 
-    
+
     let time = moment().locale("ru").format("LL")
-    TODO.count({ JobArray: { $elemMatch: { user: `${req.body.userId + "IAMWORKED"}`, date:`${time}`} } })
-    
+    TODO.count({ JobArray: { $elemMatch: { user: `${req.body.userId + "IAMWORKED"}`, date: `${time}` } } })
+
         .exec((err, posts) => {
             if (err) {
                 return res.status(400).json({
                     error: err
                 })
             }
-          
+
             res.json(posts)
         })
 }
@@ -149,11 +151,18 @@ exports.NewTodoUserAwesome = async (req, res) => {
     })
 
 }
-exports.NewTodoUserAwesomeNews = async (req, res,next) => {
+exports.NewTodoUserAwesomeNews = async (req, res, next) => {
+    console.log(req.body)
+
+   
     let users = req.body.worker_by
     const todo = new TODO(req.body)
     todo.postedBy = req.worker
-
+    if(req.body.status === "Выполнено"){
+        todo.expireAt = Date.now()
+    }
+    console.log(todo)
+    
     todo.save().then(result => {
         req.body.link + result._id
         req.newsLink = '/job/' + result._id
@@ -163,15 +172,15 @@ exports.NewTodoUserAwesomeNews = async (req, res,next) => {
 
 }
 exports.TodoChange = async (req, res) => {
-  
+
     let todo = req.todo;
-    todo = _.extend(todo, req.body.payload || req.body );
+    todo = _.extend(todo, req.body.payload || req.body);
 
 
     todo.updated = Date.now()
-    
+
     await todo.save((err, result) => {
-       
+
         if (err) {
             return res.status(400).json({
                 error: err
@@ -185,7 +194,7 @@ exports.TodoChange = async (req, res) => {
 exports.NewUserNews = async (req, res) => {
 
     WORKER.findByIdAndUpdate(req.body.workerId, { $push: { news: req.body.todoId } }, { new: true })
-    .exec((err, result) => {
+        .exec((err, result) => {
             if (err) {
                 return res.status(400).json({
                     error: err
@@ -194,7 +203,7 @@ exports.NewUserNews = async (req, res) => {
                 res.json(result)
             }
         }
-    )
+        )
 }
 exports.GetTodo = async (req, res) => {
 
@@ -247,4 +256,43 @@ exports.GetcomandTodo = async (req, res) => {
             }
             res.json({ result })
         })
+}
+exports.AssignedTask = async (req, res) => {
+
+    let userId = req.body.userId
+    const currentPage = req.query.page || 1
+
+    const perPage = 100
+    var totalItems
+
+    const company = TODO.find({ posted_by: userId })
+
+        .countDocuments()
+        .then(count => {
+            totalItems = count;
+            return TODO.find()
+                .skip((currentPage - 1) * perPage)
+                .select("names_workers_list")
+                .limit(perPage)
+
+        })
+        .then(data => {
+            res.status(200).json(data)
+        })
+        .catch(err => console.log(err))
+
+}
+exports.AssiggnedTaskUserBy = async (req, res) => {
+
+    let { userBy, userId } = req.body.payload
+
+
+    TODO.find({ $and: [{ posted_by: userId }, { names_workers_list: userBy }] }).exec((err, result) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+        res.json(result)
+    })
 }

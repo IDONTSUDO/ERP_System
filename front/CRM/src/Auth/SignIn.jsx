@@ -28,6 +28,8 @@ class Signin extends Component{
         }
        
         signin(user).then(data => {
+            console.log(data)
+            
             if (data.error){
                 this.setState({error:data.error, loading: false})
             }else{

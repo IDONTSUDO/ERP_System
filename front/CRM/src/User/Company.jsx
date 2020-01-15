@@ -3,7 +3,7 @@ import { list, DeleteUser } from "../Api/Http";
 import { isAuthenticated } from "../Api/Auth";
 import DefaultProfile from "../Assets/default.png";
 import { Link } from "react-router-dom";
-import { Button, Card } from "antd";
+import { Button } from "antd";
 import Error from "../Error/Error.jsx";
 import Online from "./Online.jsx"
 // import {isOnline} from "../Soket/soket.js"
@@ -101,7 +101,7 @@ export default class Company extends Component {
                       className="card-title"
                     >
                       {user.name}
-                      <Online  user={user._id}/>
+                      {/* <Online  user={user._id}/> */}
                     </div>
                     <p className="card-text">{user.email}</p>
 

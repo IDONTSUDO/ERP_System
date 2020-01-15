@@ -80,7 +80,7 @@ export default class EditContrAgent extends Component {
           <>
          
 
-          {item.value == agentGeo  ? (
+          {item.value === agentGeo  ? (
  <path
  key={id}
  id={`${item.code}`}

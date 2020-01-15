@@ -15,7 +15,9 @@ const {
     GetcomandTodo,
     MyComandTodo,
     MyComandTodoQuality,
-    myTodoItsDayQuality
+    myTodoItsDayQuality,
+    AssignedTask,
+    AssiggnedTaskUserBy
 } = require("../controllers/todo.js")
 const { requireSignin } = require("../middleware/middleware.js")
 const { workerById, workerSelectId } = require("../controllers/Company")
@@ -27,6 +29,10 @@ router.get('/my/todo/soso/:workerSelectId', requireSignin, myTODO)
 router.get('/today/todo/:workerSelectId', requireSignin, myTodoItsDay)
 router.get('/today/todo/qulity/:workerSelectId',  myTodoItsDayQuality)
 
+
+
+router.post('/assigned/task/userby',AssiggnedTaskUserBy)
+router.post('/get/assigned/todo', AssignedTask)
 router.post('/get/comand/todo/time/quality/',  MyComandTodoQuality)
 router.post('/get/comand/todo/time/', requireSignin, MyComandTodo)
 router.post('/get/comand/todo/', requireSignin, GetcomandTodo)
@@ -35,12 +41,9 @@ router.post('/new/todo/so-so/:workerById', requireSignin, SOSotodo)
 router.post('/new/todo/awesome/:workerSelectId', requireSignin, NewTodoUserAwesome)
 router.post('/comment/todo/', requireSignin, NewComents)
 router.post('/delete/comment/:comentById', requireSignin, DeleteComent)
-
-
-router.put('/user/news/', requireSignin, NewUserNews)
-
 router.post('/todo/change/:todoid', requireSignin, TodoChange)
 
+router.put('/user/news/', requireSignin, NewUserNews)
 
 router.param('comentById', ComentById)
 router.param('workerSelectId', workerSelectId)

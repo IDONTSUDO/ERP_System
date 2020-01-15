@@ -8,6 +8,7 @@ import Error from "../Error/Error.jsx";
 import { Button } from "antd";
 import Moment from "react-moment";
 import { ResponsiveCalendar } from "@nivo/calendar";
+import Online from "./Online.jsx"
 const { Text } = Typography;
 
 class Profile extends Component {
@@ -29,8 +30,8 @@ class Profile extends Component {
       }
     });
     AllStatistic(userId).then(data => {
-      if (data.error) {
-        this.setState({ error: true });
+      if (typeof data !== "array") {
+        this.setState({ static: [] });
       } else {
         this.setState({ static: data });
       }
@@ -86,6 +87,7 @@ class Profile extends Component {
                           onError={i => (i.target.src = `${DefaultProfile}`)}
                           src={photoUrl}
                         />
+                        {/* <Online  user={user._id}/> */}
                         <div style={{ padding: "5px" }}>
                           <h1>Имя: {user.name}</h1>
                           <h2 style={{ backgroundColor: "#fcff38" }}>

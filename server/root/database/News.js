@@ -32,7 +32,8 @@ const NewsSchema = new mongoose.Schema({
   },//полезная информация
   dateCreated: {
     type: Date,
-    default: Date.now()
+    default: Date.now(),
+    index: { expires: '43200m' },
   },//дата создания
   date:{
    type:Date 

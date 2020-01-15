@@ -1,9 +1,7 @@
 import React from "react";
-import dateFormat from "dateformat";
-import ReactMarkdown from "react-markdown";
-import { list, NewTodo, NewNewsJob,NewAssignTodoToday } from "../Api/Http";
+import { list, NewTodo, NewNewsJob, NewAssignTodoToday } from "../Api/Http";
 import { isAuthenticated } from "../Api/Auth";
-import { everyday,IsEveryDaySub } from "../helper/everyday.js";
+import { everyday, IsEveryDaySub } from "../helper/everyday.js";
 import {
   Button,
   Tabs,
@@ -69,8 +67,6 @@ class Work extends React.Component {
     this.handleActionEditor = this.handleActionEditor.bind(this);
   }
   componentDidMount() {
-
-   
     this.setState({ user: isAuthenticated().direct });
     everyday();
     list().then(data => {
@@ -114,9 +110,13 @@ class Work extends React.Component {
 
   // эта функция валидирует создание одиночного дела
   isValid = () => {
-    const { tags, title, description } = this.state;
+    const { tags, title, description, importance } = this.state;
     if (title.length === 0) {
       this.setState({ error: "Заголовок является обязательным" });
+      return false;
+    }
+    if (importance.length === 0) {
+      this.setState({ error: "Выберете важность дела" });
       return false;
     }
     if (tags.length === 0) {
@@ -182,7 +182,12 @@ class Work extends React.Component {
         worker
       } = this.state;
 
+
       let tagsArray = [];
+      let names_workers_list = tags
+      
+      
+    
       for (let index = 0; tags.length > index; index++) {
         for (let index1 = 0; worker.length > index1; index1++) {
           if (worker[index1].name === tags[index]) {
@@ -190,6 +195,8 @@ class Work extends React.Component {
           }
         }
       }
+      
+
       let time = moment(startDate)
         .locale("ru")
         .format("LL");
@@ -198,17 +205,18 @@ class Work extends React.Component {
       tags = tagsArray;
 
       let comand = false;
-
+      // tags
+     
       let posted_by = isAuthenticated().direct._id;
       let name_posted = isAuthenticated().direct.name;
       let eventNews = "Назначено новое дело";
       let link = `/job/`;
 
-      var jobNews = tags.filter(function(el) {
+      var worker_job_news = tags.filter(function(el) {
         return el != posted_by;
       });
 
-      let worker_by = tags.map((user, index) => {
+      let worker_by = worker_job_news.map((user, index) => {
         return {
           user: user
         };
@@ -221,11 +229,11 @@ class Work extends React.Component {
         comand,
         importance,
         title,
-        jobNews,
         description,
         time,
         worker_by,
-        tags
+        tags,
+        names_workers_list
       };
 
       NewNewsJob(paylod).then(data => {
@@ -262,17 +270,26 @@ class Work extends React.Component {
         document.querySelector(".ant-select-selection__clear").click();
         let elements = document.getElementsByTagName("p");
         for (let elem of elements) {
-          console.log(elem);
           elem.innerHTML = "";
         }
-        let sub = IsEveryDaySub()._id
-        NewAssignTodoToday(sub)
+        let sub = IsEveryDaySub()._id;
+        NewAssignTodoToday(sub);
       });
     }
   };
   validateDinamicJobs = JobArray => {
+    let { importance, title } = this.state;
+    if (title.length === 0) {
+      this.setState({ error: "Заголовок является обязательным" });
+      return false;
+    }
+    if (importance.length === 0) {
+      this.setState({ error: "Похоже что вы не до заполнили дело" });
+      return false;
+    }
+
     let i = 0;
-    console.log(JobArray);
+
     while (JobArray.length > i) {
       if (typeof JobArray[i].date == "undefined") {
         this.setState({
@@ -365,6 +382,8 @@ class Work extends React.Component {
       workerJob8,
       workerJob9
     );
+    
+    
     for (let t = 0; timeArray.length > t; t++) {
       newTimeArray.push(timeArray[t]._d);
     }
@@ -454,7 +473,9 @@ class Work extends React.Component {
       let worker_by = jobNews;
       let eventNews = "Назначено новое дело";
       let link = `${process.env.REACT_APP_API_NEWS_JOB}`;
+      let names_workers_list = tags
       let paylod = {
+        names_workers_list,
         link,
         worker_by,
         eventNews,
@@ -497,8 +518,8 @@ class Work extends React.Component {
             workerTime9: ""
           });
           document.querySelector(".ant-select-selection__clear").click();
-          let sub = IsEveryDaySub()._id
-          NewAssignTodoToday(sub)
+          let sub = IsEveryDaySub()._id;
+          NewAssignTodoToday(sub);
         }
       });
     }
@@ -542,12 +563,6 @@ class Work extends React.Component {
       workerJob9,
       disbledSelect
     } = this.state;
-    /*
-    TODO: 
-    валидация
-    
-    */
-
     return (
       <div className="postisitonRelativeSmeni">
         <div className="screen-reader">
@@ -710,12 +725,13 @@ class Work extends React.Component {
                                 rows="3"
                                 value={this.state[`workerJob${i}`]}
                               ></textarea> */}
-                               <SunEditor
-                        value={description}
-                        onChange={this.handleActionEditor(`workerJob${i}`)}
-                        lang="ru"
-                      />
-                              
+                              <SunEditor
+                                value={description}
+                                onChange={this.handleActionEditor(
+                                  `workerJob${i}`
+                                )}
+                                lang="ru"
+                              />
                             </form>
                             {i == 0 ? <></> : ""}
                             {i === 0 ? (

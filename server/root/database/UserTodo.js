@@ -40,6 +40,10 @@ const todoSchema = new mongoose.Schema({
     },
     comand: {
         type: Boolean
+    },
+    names_workers_list:{
+        type:Array
     }
 })
+
 module.exports = mongoose.model("TODO", todoSchema)

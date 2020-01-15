@@ -10,7 +10,7 @@ import {
   MyNewsQuality
 } from "../Api/Http.js";
 
-import { testSoket } from "../WsSocket/ws-socket.js" 
+import { isOnline } from "../WsSocket/ws-socket.js" 
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -32,10 +32,11 @@ class MenuMain extends React.Component {
   componentDidMount() {
 
 
-    testSoket()
+   
     if (isAuthenticated() == false) {
       return false;
     } else {
+      isOnline()
       var userId = isAuthenticated().direct._id;
       var userRole = isAuthenticated().direct.role;
         MyTodoComandQuality(userId).then(data => {
@@ -130,11 +131,17 @@ class MenuMain extends React.Component {
                               <span>Мои дела</span>
                             </Link>
                           </Menu.Item>
+                          <Menu.Item key="20">
+                            <Link to={`/my/assign/task/${isAuthenticated().direct._id}`}>
+                              <span>Назначеные дела</span>
+                            </Link>
+                          </Menu.Item>
                           <Menu.Item key="18">
                             <Link to="/create/work">
                               <span>Новое дело</span>
                             </Link>
                           </Menu.Item>
+                          
                         </SubMenu>
                         {["Директор", "Управляющий", "Менеджер"].includes(
                           role
@@ -279,7 +286,7 @@ class MenuMain extends React.Component {
                           ) : (
                             ""
                           )}
-                          {["Директор", "Управляющий", "Бухгалтер"].includes(
+                          {/* {["Директор", "Управляющий", "Бухгалтер"].includes(
                             role
                           ) ? (
                             <Menu.Item key="23">
@@ -289,14 +296,14 @@ class MenuMain extends React.Component {
                           </Menu.Item>
                           ) : (
                             ""
-                          )}
+                          )} */}
 
 
                         
                         </SubMenu>
                         
                           ):("")}
-                           <SubMenu
+                           {/* <SubMenu
                           key="sub9"
                           title={
                             <>
@@ -313,7 +320,7 @@ class MenuMain extends React.Component {
                             </Link>
                           </Menu.Item>
                        
-                        </SubMenu>                          
+                        </SubMenu>                           */}
                       </Menu>
                     </Sider>
                   </Layout>

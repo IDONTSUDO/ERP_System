@@ -91,6 +91,25 @@ export default class News extends Component {
                   ) : (
                     ""
                   )}
+                   {news.eventNews === "вам пришло новое дело" ? (
+                    <>
+                      <div style={{ padding: "5px" }}>
+                        <div className="alert-redirect-todo" key={i}>
+                         
+
+                          <h6>
+                            <strong>{news.eventNews}</strong>
+                          </h6>
+                          <div className="">
+                          <div dangerouslySetInnerHTML={{ __html: news.description }} />
+                          </div>
+                          <Moment  fromNow>{news.dateCreated}</Moment>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    ""
+                  )}
                   {news.eventNews === "Новый статус" ? (
                     <>
                       <div style={{ padding: "5px" }}>

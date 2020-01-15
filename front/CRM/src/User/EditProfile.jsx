@@ -5,7 +5,6 @@ import { notification, Icon, Spin } from "antd";
 import DefaultProfile from "../Assets/default.png";
 import { Link, Redirect } from "react-router-dom";
 import { Button } from "antd";
-import Error from "../Error/Error.jsx";
 
 class EditProfile extends Component {
   constructor() {
@@ -29,7 +28,7 @@ class EditProfile extends Component {
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
-        if (data._id == userId) {
+        if (data._id === userId) {
           this.setState({
             id: data._id,
             name: data.name,
@@ -62,7 +61,7 @@ class EditProfile extends Component {
       this.setState({ error: "Email  не валиден", loading: false });
       return false;
     }
-    if (password.length <= 0) {
+    if (password.length === 0) {
       this.setState({ error: "пароль обязателен", loading: false });
       return false;
     }
@@ -85,8 +84,8 @@ class EditProfile extends Component {
           this.openNotificationError();
         } else {
           this.setState({
-            name: data.result.name,
-            email: data.result.email,
+            name: data.direct.name,
+            email: data.direct.email,
             error: "",
             open: false,
             password: ""

@@ -31,9 +31,11 @@ import AgentHistory from '../Deal/AgentHystory.jsx'
 import NewDeal from '../Deal/NewDeal.jsx'
 import DealHistory from '../Deal/DealHistory.jsx'
 import MyDealHistory from '../Deal/MyDealHistory.jsx'
+import AssignedTask from '../Work/AssignedTask.jsx'
+import TodoAssignUserBy from '../Work/TodoAssignUserBy.jsx'
 
-import Mail from  '../Email/Email.jsx'
-import CompanyStatistic from '../statistic/CompanyStatistic.jsx'
+import Mail from '../Email/Email.jsx'
+import CompanyStatistic from '../Statistic/CompanyStatistic.jsx'
 
 import MessageList from '../Messages/MessageList.jsx'
 
@@ -50,7 +52,7 @@ const MainRouter = () => (
             <PrivateRoute exact path="/create/work" component={Work} />
             {/*<PrivateRoute exact path="/edit/color/:userId" component={PersonalizationUser} /> */}
             <PrivateRoute exact path="/security/:userId" component={Security} />
-            <PrivateRoute exact path="/device" component={DeviececEdit}/>
+            <PrivateRoute exact path="/device" component={DeviececEdit} />
 
 
 
@@ -67,8 +69,9 @@ const MainRouter = () => (
             <PrivateRoute exact path="/agent/priced/:agentId" component={ManageAgentPrice} />
 
 
-
+            <PrivateRoute exact path="/todo/assign/user/:userBy" component={TodoAssignUserBy} />
             <PrivateRoute exact path="/new/deal/:userId" component={NewDeal} />
+            <PrivateRoute exact path="/my/assign/task/:userId" component={AssignedTask} />
             <PrivateRoute exact path="/my/deal/:userId" component={DealHistory} />
             <PrivateRoute exact path="/company/statistic" component={CompanyStatistic} />
             <PrivateRoute exact path="/my/deal/history/:userId" component={MyDealHistory} />

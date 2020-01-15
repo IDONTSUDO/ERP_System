@@ -13,14 +13,11 @@ run()
 
 
 module.exports.PUBLISHER = run 
-   
-exports.NewMessageSendWebSocketServer = async (req) => {
-    
-}
+
 exports.NewDialogSendWebSocketServer = async (req) => {
    let data =  req.dilogData 
    let message = "ND"
-   //message = Новый диалог
+   //New Dialog
     let payload = {
       data,
       message
@@ -29,3 +26,39 @@ exports.NewDialogSendWebSocketServer = async (req) => {
 
 }
 
+exports.EditMessageSendWebSocketServer = async (req) => {
+  let message = "EM"
+  let data =  req.messageData 
+   // Edit Message
+  let payload = {
+    data,
+    message
+  } 
+ sock.send(JSON.stringify(payload)) 
+ 
+}
+exports.DeleteMessageSendWebSocketServer = async (req) => {
+  let message = "DM"
+   // Delete Message
+  let data =  req.messageData 
+  console.log(data)
+  let payload = {
+    data,
+    message
+  } 
+ sock.send(JSON.stringify(payload)) 
+ 
+}
+
+exports.NewMessageSendWebSocketServer = async (req) => {
+  let message = "NM"
+    // New Message
+
+  let data =  req.messageData 
+  let payload = {
+    data,
+    message
+  } 
+ sock.send(JSON.stringify(payload)) 
+
+}

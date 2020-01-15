@@ -14,7 +14,13 @@ export default class Email extends Component {
       visible: false,
       file: null,
       img_edit_mode:false,
-      imgDefault:"http://gallery.mailchimp.com/27aac8a65e64c994c4416d6b8/images/body_placeholder_650px.png"
+      imgDefault:"http://gallery.mailchimp.com/27aac8a65e64c994c4416d6b8/images/body_placeholder_650px.png",
+      textHeader1: "Разработка вашего шаблона",
+      textHeader2:"Стилизация вашего контентa",
+      textMessage1: "Настройте свой шаблон, нажав на вкладки редактора стилей вверху. Установите ваши шрифты, цвета и стили. После того, как настройка вашего стиля полностью завершена, вы можете нажать здесь, в этой области, удалить текст и начать добавлять свой собственный потрясающий контент.",
+      textMessage2:"После ввода содержимого выделите текст, который хотите стилизовать, и выберите параметры, заданные в редакторе стилей, в раскрывающемся списке «стили». Хотите избавиться от стиля текста, но не можете это сделать? Просто используйте кнопку «удалить форматирование», чтобы удалить текст любого форматирования и сбросить ваш стиль.",
+      textItalic1:"Сделайте вашу электронную почту легко читаемой",
+      textItalic2:"Создать красивую электронную почту просто"
     };
   }
   componentDidMount() {
@@ -36,15 +42,20 @@ export default class Email extends Component {
     });
   }
   handleClick = (id) => {
-  
    let url = "http://localhost:8080/" +id
    this.setState({imgDefault:url})
   }
   switchChange = (checked) =>{
       this.setState({img_edit_mode:checked})
   }
+  handleChange = name => event => {
+    console.log(200)
+    this.setState({ error: "" });
+    this.setState({ [name]: event.target.value });
+  };
+
   render() {
-    let { images, errors,img_edit_mode } = this.state;
+    let { images, errors,img_edit_mode,  textHeader1,textMessage1,textMessage2,textHeader2,textItalic1,textItalic2,imgDefault } = this.state;
     return (
       <div>
         {errors ? (
@@ -169,17 +180,12 @@ export default class Email extends Component {
                                   id="templateBody"
                                 >
                                   <tr>
-                                    <td valign="top" class="bodyContent" contenteditable="true">
-                                      <h1 contenteditable="true">Designing Your Template</h1>
+                                    <td  onChange={this.handleChange("textMessage1")} valign="top" class="bodyContent" contenteditable="true">
+                                      <h1 contenteditable="true"  onChange={this.handleChange("textHeader1")}           value={textHeader1}>{textHeader1}</h1>
                                       <h3 contenteditable="true">
-                                        Creating a good-looking email is simple
-                                      </h3>
-                                      Customize your template by clicking on the
-                                      style editor tabs up above. Set your
-                                      fonts, colors, and styles. After setting
-                                      your styling is all done you can click
-                                      here in this area, delete the text, and
-                                      start adding your own awesome content.
+                                      {/* textMessage1,textHeader2,textItalic1,textItalic2  */}
+                                   </h3>
+                                     {textMessage1}
                                     </td>
                                   </tr>
                                   <tr>
@@ -191,29 +197,16 @@ export default class Email extends Component {
                                       }}
                                     >
                                       <img
-                                        src={this.state.imgDefault}
+                                        src={imgDefault}
                                         id="bodyImage"
                                       />
                                     </td>
                                   </tr>
                                   <tr>
-                                    <td valign="top" class="bodyContent">
-                                      <h2>Styling Your Content</h2>
-                                      <h4>Make your email easy to read</h4>
-                                      After you enter your content, highlight
-                                      the text you want to style and select the
-                                      options you set in the style editor in the
-                                      "<em>styles</em>" drop down box. Want to{" "}
-                                      <a
-                                        href="http://www.mailchimp.com/kb/article/im-using-the-style-designer-and-i-cant-get-my-formatting-to-change"
-                                        target="_blank"
-                                      >
-                                        get rid of styling on a bit of text
-                                      </a>
-                                      , but having trouble doing it? Just use
-                                      the "<em>remove formatting</em>" button to
-                                      strip the text of any formatting and reset
-                                      your style.
+                                    <td valign="top" class="bodyContent" contenteditable="true">
+                                      <h2 contenteditable="true"  onChange={this.handleChange("textHeader2")}>{textHeader2}</h2>
+                                      <h4 contenteditable="true" onChange={this.handleChange("textMessage2")}>{textMessage2}</h4><em>styles</em>" drop down box. Want to{" "}
+                                      {textMessage2}
                                     </td>
                                   </tr>
                                 </table>
@@ -235,13 +228,8 @@ export default class Email extends Component {
                                       class="footerContent"
                                       style={{ paddingTop: "0" }}
                                     >
-                                      
                                       <br />
-                                      *|IFNOT:ARCHIVE_PAGE|*
-                                      *|LIST:DESCRIPTION|*
-                                      <br />
-                                      <br />
-                                      <strong>Our mailing address is:</strong>
+                                      <strong>svarog.robot@gmail.com</strong>
                                       <br />
                                     </td>
                                   </tr>
@@ -252,13 +240,9 @@ export default class Email extends Component {
                                       style={{ paddingTop: "0" }}
                                     >
                                       <a href="*|UNSUB|*">
-                                        unsubscribe from this list
+                                       Отписаться от рассылок
                                       </a>
-                                      &nbsp;&nbsp;&nbsp;
-                                      <a href="*|UPDATE_PROFILE|*">
-                                        update subscription preferences
-                                      </a>
-                                      &nbsp;
+                                      
                                     </td>
                                   </tr>
                                 </table>

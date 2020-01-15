@@ -1,59 +1,35 @@
 import React, { Component } from "react";
+import Error from "../Error/Error.jsx";
+import {Button,  Card, Spin, Badge} from "antd"
+import {Link} from "react-router-dom"
 import { isAuthenticated } from "../Api/Auth";
-import { readMyTodo, MyTodoGetComandWorked } from "../Api/Http";
-import { Link } from "react-router-dom";
-import { Spin } from "antd";
-import { Button,  Card, Badge } from "antd";
-
-export default class MyWork extends Component {
+import { AssignedTodoUserBy } from "../Api/Http.js";
+class TodoAssignUserBy extends Component {
   constructor() {
     super();
     this.state = {
       todos: [],
-      redirectToSignin: "",
-      user: "",
-      comand: [],
-      userID: "",
-      open: true,
-      todo_midle: ""
+      open:true,
+      error: false
     };
   }
   componentDidMount() {
-    const userId = this.props.match.params.userId;
-    this.setState({ user: userId });
-    this.init(userId);
-    let todo = isAuthenticated().direct.todo_middle;
-    this.setState({ todo_midle: todo });
+    const userBy = this.props.match.params.userBy;
+    let userId = isAuthenticated().direct._id;
+   
+    let payload = {
+      userId,
+      userBy
+    };
+    this.init(payload)
   }
-
-  init = async userId => {
-    let TodoArray = [];
-
-    readMyTodo(userId).then(data => {
+  init = async payload => {
+    AssignedTodoUserBy(payload).then(data => {
+      console.log(data);
       if (data.error) {
-        this.setState({ redirectToSignin: true });
+        this.setState({ error: true });
       } else {
-        Object.keys(data);
-
-        for (let i = 0; data.todos.length > i; i++) {
-          TodoArray.push(data.todos[i]);
-        }
-        let userfindString;
-
-        userfindString = userId + "IAMWORKED";
-
-        this.setState({ userID: userfindString });
-        MyTodoGetComandWorked(userfindString).then(data => {
-          if (data.error) {
-            console.log(data.error);
-          } else {
-            for (let i = 0; data.result.length > i; i++) {
-              TodoArray.push(data.result[i]);
-            }
-            this.setState({ todos: TodoArray });
-            this.setState({ open: false });
-          }
-        });
+        this.setState({ todos: data,open:false });
       }
     });
   };
@@ -95,9 +71,8 @@ export default class MyWork extends Component {
     this.setState({ todos: RedSortArray });
   };
   render() {
-    const { todos, userID, comand, open } = this.state;
-    let todo = isAuthenticated().direct.todo_middle;
-    console.log(todo);
+   
+    const { todos, userID, open } = this.state;
     return (
       <div className="postisitonRelativeSmeni">
       <div>
@@ -321,73 +296,7 @@ export default class MyWork extends Component {
                 )}
               </>
             ))}
-            {comand.map((tod, i) => (
-              <>
-                {tod.importance === "Очень важное" ? (
-                  <>
-                    <div className="todo-phone-red">
-                      <Card className="todo-comand-red" key={i}>
-                        <Link to={`/job/${tod._id}`}>
-                          <h3 style={{ color: "#ffffff" }}>{tod.title}</h3>
-                        </Link>
-                        {tod.status === "в работе" ? (
-                          <div style={{ color: "#ffffff" }}>
-                            {tod.status}
-                          </div>
-                        ) : (
-                          ""
-                        )}
-                        <div style={{ color: "#ffffff" }}>{tod.time}</div>
-                      </Card>
-                    </div>
-                  </>
-                ) : (
-                  ""
-                )}
-                {tod.importance === "Средней важности" ? (
-                  <>
-                    <div className="todo-phone-yellow">
-                      <Card className="todo-comand-yellow" key={i}>
-                        <Link to={`/job/${tod._id}`}>
-                          <h3 style={{ color: "#141412" }}>{tod.title}</h3>
-                        </Link>
-                        <div style={{ color: "#141412" }}>{tod.time}</div>
-                        {tod.status === "в работе" ? (
-                          <div className="todo-text-status-job">
-                            {tod.status}
-                          </div>
-                        ) : (
-                          ""
-                        )}
-                      </Card>
-                    </div>
-                  </>
-                ) : (
-                  ""
-                )}
-                {tod.importance === "Не очень важное" ? (
-                  <>
-                    <div className="todo-phone-green">
-                      <Card className="todo-comand-green">
-                        <Link to={`/job/${tod._id}`}>
-                          <div className="todo-green-text" >{tod.title}</div>
-                        </Link>
-                        {tod.status === "в работе" ? (
-                          <div style={{ color: "#ffffff" }} >
-                            {tod.status}
-                          </div>
-                        ) : (
-                          ""
-                        )}
-                        <div style={{ color: "#ffffff" }}>{tod.time}</div>
-                      </Card>
-                    </div>
-                  </>
-                ) : (
-                  ""
-                )}
-              </>
-            ))}
+          
             </>
           )}
               
@@ -396,6 +305,10 @@ export default class MyWork extends Component {
         </ul>
       </div>
     </div>
+    
+    
     );
   }
 }
+
+export default TodoAssignUserBy;

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {subscribeUser} from './Push/subscription.js' 
 import App from './App';
 import "moment/locale/ru";
-
+// import {TestSocket} from './WsSocket/ws-socket.js'
 import * as serviceWorker from './Push/serviceWorker';
 
 import { isAuthenticated,Subscribe,IsSubscriber } from "./Api/Auth"
@@ -11,6 +11,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 serviceWorker.register();
 // подписка на сервис воркера
+// TestSocket()
 if(IsSubscriber()){
     console.log("Subcribe")
 }else{

@@ -130,20 +130,33 @@ exports.workerEdit = async (req, res, next) => {
         worker = _.extend(worker, fields)
 
         worker.updated = Date.now()
-
+    
+        
 
         if (files.photo) {
             worker.photo.data = fs.readFileSync(files.photo.path)
             worker.photo.contentType = files.photo.type
+            worker.avatar = true
+             
         }
 
-        worker.save((err, result) => {
+        worker.save((err, direct) => {
             if (err) {
                 return res.status(400).json({
                     error: err
                 })
             }
-            res.json({result})
+            direct.photo = undefined
+            direct.hashed_password = undefined
+            direct.avatar = undefined
+            direct.created = undefined
+            direct.device = undefined
+            direct.logged_in = undefined
+            direct.phone = undefined
+            direct.salt = undefined
+            direct.updated = undefined
+            direct.Date_of_Birth = undefined
+            res.json({direct})
         })
     })
 }
