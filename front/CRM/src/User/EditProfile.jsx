@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
 import { read, update, updateUser } from "../Api/Http";
-import { notification, Icon, Spin } from "antd";
+import { notification, Icon, Spin,DatePicker } from "antd";
 import DefaultProfile from "../Assets/default.png";
 import { Link, Redirect } from "react-router-dom";
 import { Button } from "antd";
+
+
 
 class EditProfile extends Component {
   constructor() {
@@ -19,6 +21,8 @@ class EditProfile extends Component {
       fileSize: 0,
       loading: false,
       about: "",
+      phone:"",
+      Date_of_Birth:"",
       open: true
     };
   }
@@ -67,6 +71,9 @@ class EditProfile extends Component {
     }
     return true;
   };
+  onChange = (date, dateString)=> {
+    this.setState({Date_of_Birth:dateString})
+  }
   handleChange = name => event => {
     const value = name === "photo" ? event.target.files[0] : event.target.value;
     const fileSize = name === "photo" ? event.target.files[0].size : 0;
@@ -78,7 +85,8 @@ class EditProfile extends Component {
     this.setState({ open: true });
     if (this.isValid()) {
       const userId = this.props.match.params.userId;
-
+      let {Date_of_Birth } =this.state
+      this.userData.set("Date_of_Birth",Date_of_Birth)
       update(userId, this.userData).then(data => {
         if (data.error) {
           this.openNotificationError();
@@ -122,7 +130,7 @@ class EditProfile extends Component {
       icon: <Icon type="smile" style={{ color: "#108ee9" }} />
     });
   }
-  SignUpForm = (name, email, password, about, id) => (
+  SignUpForm = (name, email, password,phone,Date_of_Birth, about, id) => (
     <form>
       <div>
         <div style={{ padding: "5px" }}>
@@ -156,6 +164,21 @@ class EditProfile extends Component {
         />
       </div>
       <div>
+        <label>Номер телефона</label>
+        <input
+          className="form-control"
+          onChange={this.handleChange("phone")}
+          type="number"
+          value={phone}
+        />
+      </div>
+      <div>
+        <label>Дата рождения    </label>
+        <div>
+        <DatePicker  placeholder="Дата рождения" size="large"  onChange={this.onChange} />
+        </div>
+      </div>
+      <div>
         <label className="text-muted">Имя</label>
         <input
           className="form-control"
@@ -178,7 +201,9 @@ class EditProfile extends Component {
       loading,
       about,
       open,
-      redirectToProfile
+      redirectToProfile,
+      phone,
+      Date_of_Birth
     } = this.state;
     if (redirectToProfile) {
       return <Redirect to={`/user/${id}`} />;
@@ -202,7 +227,7 @@ class EditProfile extends Component {
               <h2> Редактирование профиля</h2>
               <div class="row">
                 <div class="col-8">
-                  {this.SignUpForm(name, email, password, about, id)}
+                  {this.SignUpForm(name, email, password,phone,Date_of_Birth, about, id)}
                 </div>
                 <div class="col-4">
                   {" "}

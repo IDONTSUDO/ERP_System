@@ -126,7 +126,8 @@ exports.workerEdit = async (req, res, next) => {
         }
 
         let worker = req.worker
-
+        console.log(fields)
+        
         worker = _.extend(worker, fields)
 
         worker.updated = Date.now()

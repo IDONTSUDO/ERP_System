@@ -70,7 +70,7 @@ export const read = (userId) => {
         })
 }
 export const update = (userId, user) => {
-
+    console.log(user)
     return fetch(`${process.env.REACT_APP_API_URL}/edit/worker/${userId}`, {
         method: "PUT",
         headers: {
