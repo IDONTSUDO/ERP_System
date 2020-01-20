@@ -613,23 +613,22 @@ let eventNews = "Выполнено"
       return <Redirect to={`/user/work/${isAuthenticated().direct._id}`} />;
     }
     return (
-      <div className="postisitonRelativeSmeni">
+      <div className="todo-list-main-selector">
         {message.length !== 1 ? null : <>{this.openNotification()}</>}
         {comand ? (
           <>
-            <div className="container">
-              <div class="row">
-                <div class="col-md-4">
-                  <Card style={{ width: "55em" }}>
+            <div className="">
+              <div class="">
+                <div class="">
+                  <Card className="card-job-style" >
                     <a>
-                      <div class="d-flex w-100 justify-content-between">
-                      
+                      <div class="">
+                      {/* d-flex w-100 justify-content-between */}
                         <small class="text-muted">{todo.status}</small>
                       </div>
                     </a>
                     <div class="btn-group dropup"></div>
                     <div style={{ padding: "10px" }}> </div>
-
                     {JobArray.map((job, i) => (
                       <>
                         {/* когда дело командное  */}
@@ -674,12 +673,12 @@ let eventNews = "Выполнено"
 
               <hr style={{ width: "35em" }} />
 
-              <div className="container">
-                <div class="row">
+              <div className="">
+                <div class="">
                   <div>
                     {comments.map((comment, i) => (
                       <>
-                        <Card style={{ width: "55em" }}>
+                        <Card className="card-job-style">
                           <Comment key={i}>
                             <Tooltip>
                               <Link to={`/user/${comment.worker}`}>
@@ -717,6 +716,7 @@ let eventNews = "Выполнено"
                     ))}
                   </div>
                   <>
+                  <div className=""></div>
                     <div style={{ padding: "5px" }}></div>
                     <div class="form-group col-sm-8 ">
                       <label for="exampleFormControlTextarea1">
@@ -745,10 +745,10 @@ let eventNews = "Выполнено"
           </>
         ) : (
           <>
-            <div className="container">
-              <div class="row">
-                <div class="col-md-4">
-                  <Card style={{ width: "55em" }}>
+            <div className="">
+              <div class="">
+                <div class="">
+                  <Card  className="card-job-style">
                     <a>
                       <div class="d-flex w-100 justify-content-between">
                         <small class="text-muted">{status}</small>
@@ -805,14 +805,14 @@ let eventNews = "Выполнено"
                   </Card>
                 </div>
               </div>
-              <hr style={{ width: "35em" }} />
+              <hr className="hr_job_list"  />
 
-              <div className="container">
-                <div class="row">
+              <div className="">
+                <div class="">
                   <div>
                     {comments.map((comment, i) => (
                       <>
-                        <Card style={{ width: "55em" }}>
+                        <Card className="card-job-style">
                           <Comment style={{ wordBreak: "break-all" }} key={i}>
                             <Tooltip>
                               <Link to={`/user/${comment.worker}`}>

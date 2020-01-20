@@ -568,8 +568,8 @@ class Work extends React.Component {
         <div className="screen-reader">
           <div className="container">
             <div className="row">
-              <Tabs defaultActiveKey="1" style={{ width: "75em" }}>
-                <TabPane tab="Редактировать" key="1">
+              <Tabs defaultActiveKey="1" className="new_jobs_list" >
+                <TabPane tab="Одиночное" key="1">
                   <form className="col-md-6">
                     <div>
                       <label
@@ -655,7 +655,7 @@ class Work extends React.Component {
                     <Button onClick={this.clickSubmit}>Отправить</Button>
                   </div>
                 </TabPane>
-                <TabPane tab="Расширенная настройка" key="3">
+                <TabPane tab="Командное" key="3">
                   <div className="col-md-4">
                     <h3>Исполнители</h3>
                     <div className="Tags">

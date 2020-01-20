@@ -102,7 +102,8 @@ export default class MyWork extends Component {
       <div className="postisitonRelativeSmeni">
       <div>
         <ul>
-          <div className="container">
+         
+            <div className="container">
             <Button
               onClick={this.returnSort}
               className="square-return"
@@ -116,6 +117,10 @@ export default class MyWork extends Component {
               className="square-green"
             ></Button>
             <Button onClick={this.redSort} className="square-red"></Button>
+            </div>
+        
+         
+          <div className="container">
             <div className="row">
             {open ? (
             <Spin size="large" />

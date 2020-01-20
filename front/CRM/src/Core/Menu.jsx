@@ -96,13 +96,6 @@ class MenuMain extends React.Component {
                               <span>Новости</span>
                             </Link>
                           </Menu.Item>
-                          {/* <Menu.Item key="10">
-                            <Link
-                              to={`/user/edit/${isAuthenticated().direct._id}`}
-                            >
-                              <span>Личная статистика</span>
-                            </Link>
-                          </Menu.Item> */}
                         </SubMenu>
                         <SubMenu
                           key="sub4"
@@ -330,7 +323,8 @@ class MenuMain extends React.Component {
           </>
          ) : ( 
         //  <MobileMenu/>
-        null    
+
+        <MobileMenu/>    
          )} 
         {!isAuthenticated() && <></>}
       </>
@@ -339,9 +333,4 @@ class MenuMain extends React.Component {
 }
 
 export default MenuMain;
-// <PrivateRoute exact path="/new/deal/:agentId" component={NewDeal}/>
-// <PrivateRoute exact path="/deal/history/:userId" component={DealHistory}/>
-// "Директор""Управляющий""Менеджер" "Бухгалтер" "Кладовщик" "Логист"
 
-// {['Директор', 'Управляющий' , 'Менеджер'].includes(role) ? () : ("")}
-// /mailing

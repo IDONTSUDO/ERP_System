@@ -215,7 +215,7 @@ class EditProfile extends Component {
       : DefaultProfile;
 
     return (
-      <div className="postisitonRelativeSmeni">
+      <div className="edit_profile_main">
         {error.length > 0 ? <>{this.openNotificationErrorValid()}</> : ""}
         {this.state.open ? (
           <>
@@ -224,18 +224,20 @@ class EditProfile extends Component {
         ) : (
           <>
             <div className="container">
-              <h2> Редактирование профиля</h2>
               <div class="row">
+             
                 <div class="col-8">
+                <h2 className="dSnone"> Редактирование профиля</h2>
                   {this.SignUpForm(name, email, password,phone,Date_of_Birth, about, id)}
                 </div>
                 <div class="col-4">
                   {" "}
-                  <div className="container">
-                    <div className="row">
+                  {/* <div className="container">
+                    <div className="row"> */}
                       <>
                         <div style={{ padding: "10px" }}>
                           <img
+                            className="dSnone"
                             style={{ height: "200px", width: "auto" }}
                             onError={i => (i.target.src = `${DefaultProfile}`)}
                             src={`http://localhost:8080/user/photo/${id}?`}
@@ -243,20 +245,20 @@ class EditProfile extends Component {
                             alt={name}
                           />
                         </div>
-                        <div style={{ padding: "5px" }}>
-                          <Button>
+                        <div className="dSnone" style={{ padding: "5px" }}>
+                          <Button className="dSnone">
                             <Link to={`/security/${id}`}>
                               История безопаности
                             </Link>
-                          </Button>
-                          <div style={{ padding: "5px" }}></div>
+                          </Button >
+                          <div className="dSnone" style={{ padding: "5px" }}></div>
                           <Button>
-                            <Link to={`/device`}>Подключенные девайсы</Link>
+                            <Link  to={`/device`}>Подключенные девайсы</Link>
                           </Button>
                         </div>
                       </>
-                    </div>
-                  </div>
+                    {/* </div>
+                  </div> */}
                 </div>
               </div>
             </div>

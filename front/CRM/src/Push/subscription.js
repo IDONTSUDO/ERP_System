@@ -1,7 +1,7 @@
 import { isAuthenticated } from "../Api/Auth";
 import { SetUserData,updateUser } from "../Api/Http"
-const convertedVapidKey = urlBase64ToUint8Array(process.env.REACT_APP_PUBLIC_VAPID_KEY)
-
+const convertedVapidKey = urlBase64ToUint8Array("BOsln7UjMYWw-aKVTZ-Y7ytReTUJ7prHf7ABdn3brCg2VCtWJZKESwUa1pE0aLUAI8bYJMv_Hvlwyn4yA133U00")
+// `${process.env.REACT_APP_PUBLIC_VAPID_KEY}`
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - base64String.length % 4) % 4)
   // eslint-disable-next-line

@@ -1,24 +1,25 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {subscribeUser} from './Push/subscription.js' 
+import { subscribeUser } from './Push/subscription.js'
 import App from './App';
 import "moment/locale/ru";
 // import {TestSocket} from './WsSocket/ws-socket.js'
 import * as serviceWorker from './Push/serviceWorker';
 
-import { isAuthenticated,Subscribe,IsSubscriber } from "./Api/Auth"
+import { isAuthenticated, Subscribe, IsSubscriber } from "./Api/Auth"
 ReactDOM.render(<App />, document.getElementById('root'));
 
 serviceWorker.register();
 // подписка на сервис воркера
 // TestSocket()
-if(IsSubscriber()){
+if (IsSubscriber()) {
     console.log("Subcribe")
-}else{
+} else {
     // isAuthenticated отвечает на главный вопрос, авторизован пользователь или нет?
-    if(isAuthenticated()){
+    if (isAuthenticated()) {
         subscribeUser()
-       
+
         let subscribe = true
         Subscribe(subscribe)
     }

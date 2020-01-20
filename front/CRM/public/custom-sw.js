@@ -1,35 +1,35 @@
-let notificationUrl = '';
-//notification registered feature for getting update automatically from server api
-self.addEventListener('push', function (event) {
+// let notificationUrl = '';
+// //notification registered feature for getting update automatically from server api
+// self.addEventListener('push', function (event) {
 
-    let _data = event.data ? JSON.parse(event.data.text()) : {};
-    notificationUrl = _data.url;
+//     let _data = event.data ? JSON.parse(event.data.text()) : {};
+//     notificationUrl = _data.url;
   
-    event.waitUntil(
+//     event.waitUntil(
       
-        self.registration.showNotification(_data.title, {
-            body: _data.message,
-            icon: _data.icon,
-            tag: _data.tag,
-            image: _data.icon,
-            requireInteraction:true
-        }),
-        console.log(_data.icon)
-    );
-});
+//         self.registration.showNotification(_data.title, {
+//             body: _data.message,
+//             icon: _data.icon,
+//             tag: _data.tag,
+//             image: _data.icon,
+//             requireInteraction:true
+//         }),
+//         console.log(_data.icon)
+//     );
+// });
 
-//notification url redirect event click
-self.addEventListener('notificationclick', function (event) {
-    event.notification.close();
+// //notification url redirect event click
+// self.addEventListener('notificationclick', function (event) {
+//     event.notification.close();
 
-    event.waitUntil(
-        clients.matchAll({
-            type: "window"
-        })
-        .then(function (clientList) {
-            if (clients.openWindow) {
-                return clients.openWindow(notificationUrl);
-            }
-        })
-    );
-});
+//     event.waitUntil(
+//         clients.matchAll({
+//             type: "window"
+//         })
+//         .then(function (clientList) {
+//             if (clients.openWindow) {
+//                 return clients.openWindow(notificationUrl);
+//             }
+//         })
+//     );
+// });

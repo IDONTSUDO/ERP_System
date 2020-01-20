@@ -145,9 +145,10 @@ class NewWorker extends Component {
     const { name, email, password, error, phone } = this.state;
     return (
       <div className="postisitonRelativeSmeni">
+          
         <div className="container">
-          <h2 className="mt-5 mb-5">Новый пользователь</h2>
           <form>
+          <h2>Новый пользователь</h2>
             <div className="form-group">
               <label className="text-muted">Полное имя</label>
               <input
