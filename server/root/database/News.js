@@ -6,6 +6,9 @@ const NewsSchema = new mongoose.Schema({
   jobNews:{
     type:Array
   },
+  descriptionArray: {
+    type:Array
+  },
   time:{
     type:String
   },
@@ -13,7 +16,7 @@ const NewsSchema = new mongoose.Schema({
     type: String,
   },//тип события
   comand:{
-  type: Boolean 
+    type: Boolean 
   },
   worker_by_solo_task: {
     type: Array

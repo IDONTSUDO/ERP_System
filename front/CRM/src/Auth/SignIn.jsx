@@ -48,7 +48,7 @@ class Signin extends Component {
       <>
         {isAuthenticated() ? null : (
           <div className="container">
-            <h2 className="mt-5 mb-5">Авторизация</h2>
+            <div className="row">
             <div
               className="alert alert-danger"
               style={{ display: error ? "" : "none" }}
@@ -60,10 +60,10 @@ class Signin extends Component {
                 <Spin size="large" />
               </div>
             ) : (
-              ""
+              null
             )}
-
             <form>
+            <h2 className="">Авторизация</h2>
               <div className="form-group">
                 <label className="text-muted">Email</label>
                 <input
@@ -89,6 +89,7 @@ class Signin extends Component {
                 Отправить
               </button>
             </form>
+            </div>
           </div>
         )}
       </>

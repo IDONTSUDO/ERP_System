@@ -17,7 +17,8 @@ const {
     MyComandTodoQuality,
     myTodoItsDayQuality,
     AssignedTask,
-    AssiggnedTaskUserBy
+    AssiggnedTaskUserBy,
+    DeletedTodo
 } = require("../controllers/todo.js")
 const { requireSignin } = require("../middleware/middleware.js")
 const { workerById, workerSelectId } = require("../controllers/Company")
@@ -44,7 +45,7 @@ router.post('/delete/comment/:comentById', requireSignin, DeleteComent)
 router.post('/todo/change/:todoid', requireSignin, TodoChange)
 
 router.put('/user/news/', requireSignin, NewUserNews)
-
+router.delete('/delete/todo/:todoid', requireSignin,DeletedTodo)
 router.param('comentById', ComentById)
 router.param('workerSelectId', workerSelectId)
 router.param('workerById', workerById)

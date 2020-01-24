@@ -39,7 +39,7 @@ import CompanyStatistic from '../Statistic/CompanyStatistic.jsx'
 
 import MessageList from '../Messages/MessageList.jsx'
 
-
+import EditorJob  from "../Work/EditorJob.jsx"
 const MainRouter = () => (
     <div>
         <MenuMain />
@@ -68,7 +68,7 @@ const MainRouter = () => (
             <PrivateRoute exact path="/agent/:agentId" component={AgentProfile} />
             <PrivateRoute exact path="/agent/priced/:agentId" component={ManageAgentPrice} />
 
-
+            <PrivateRoute exact path="/edit/job/:jobid" component={EditorJob} />
             <PrivateRoute exact path="/todo/assign/user/:userBy" component={TodoAssignUserBy} />
             <PrivateRoute exact path="/new/deal/:userId" component={NewDeal} />
             <PrivateRoute exact path="/my/assign/task/:userId" component={AssignedTask} />

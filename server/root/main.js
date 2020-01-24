@@ -11,9 +11,10 @@ const fs = require('fs')
 const cors = require('cors')
 const Fawn = require('fawn')
 const PUBLISHER = require('./socket/publisher.js')
-// const {CRON} = require("./cron/cron.js")
+const {CRON,CRON_USER_TODO} = require("./cron/cron.js")
 
-// CRON()
+CRON_USER_TODO()
+CRON()
 mongoose.connect(`mongodb://localhost/svarog-crm-system`,{ useUnifiedTopology: true,  useNewUrlParser: true,  useCreateIndex :  true ,  }).then(() => console.log("DB Conected"))
 mongoose.connection.on('error', err => {
     console.log(`DB connection error: ${err.message}`)

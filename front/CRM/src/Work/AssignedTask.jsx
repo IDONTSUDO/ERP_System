@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Error from "../Error/Error.jsx";
-import {Link} from "react-router-dom";
-import { Icon,Button,Card } from "antd";
+import { Link } from "react-router-dom";
+import { Icon, Button, Card } from "antd";
 import { MyAssignedTodo } from "../Api/Http.js";
 class AssignedTask extends Component {
   constructor() {
@@ -43,17 +43,25 @@ class AssignedTask extends Component {
         <div className="container">
           {error ? <Error /> : null}
           <div className="row">
-          
             <div className="col">
-            {Object.keys(assigned).map(obj => (
-              <div className="">
-              
-            <Card  style={{padding: "5px" }}>
-              <h6> {obj} <b>Количество дел:</b> {assigned[obj]} <Icon type="book" theme="twoTone" twoToneColor="#52c41a" /></h6>
-              <Button ><Link to={`/todo/assign/user/${obj}`}>Посмотреть</Link></Button>
-              </Card>
-              </div>
-            ))}
+              {Object.keys(assigned).map(obj => (
+                <div className="">
+                  <Card style={{ padding: "5px" }}>
+                    <h6>
+                      {" "}
+                      {obj} <b>Количество дел:</b> {assigned[obj]}{" "}
+                      <Icon
+                        type="book"
+                        theme="twoTone"
+                        twoToneColor="#52c41a"
+                      />
+                    </h6>
+                    <Button>
+                      <Link to={`/todo/assign/user/${obj}`}>Посмотреть</Link>
+                    </Button>
+                  </Card>
+                </div>
+              ))}
             </div>
           </div>
         </div>

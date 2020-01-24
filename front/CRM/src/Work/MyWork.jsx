@@ -103,7 +103,7 @@ export default class MyWork extends Component {
       <div>
         <ul>
          
-            <div className="container">
+            <div className="container_button_job">
             <Button
               onClick={this.returnSort}
               className="square-return"
@@ -132,7 +132,7 @@ export default class MyWork extends Component {
                   <>
                     {tod.importance === "Очень важное" ? (
                       <>
-                        <div className="todo-phone-red">
+                        <div className="card-job-modile-style  todo-phone-red">
                           <Card className="todo-red" key={i}>
                           <Badge count={tod.JobArray.length}></Badge>
                             <Link to={`/job/${tod._id}`}>
@@ -169,7 +169,7 @@ export default class MyWork extends Component {
                     )}
                     {tod.importance === "Средней важности" ? (
                       <>
-                                               <div className="todo-phone-yellow">
+                                               <div className="card-job-modile-style  todo-phone-yellow">
                           <Card className="todo-yellow" key={i}>
                           <Badge  style={{ backgroundColor: '#ffff00', color: '#000000', boxShadow: '0 0 0 1px #000000 inset' }} count={tod.JobArray.length}></Badge>
                             <Link to={`/job/${tod._id}`}>
@@ -211,7 +211,7 @@ export default class MyWork extends Component {
                         <>
                           {tod.JobArray.map((todoOne, i) => (
                             <>
-                               <div className="todo-phone-green">
+                               <div className="card-job-modile-style  todo-phone-green">
                           <Card className="todo-green" key={i}>
                           <Badge style={{ backgroundColor: '#15b11a', color: '#000000', boxShadow: '0 0 0 1px #000000 inset' }} count={tod.JobArray.length}></Badge>
                             <Link to={`/job/${tod._id}`}>
@@ -256,7 +256,7 @@ export default class MyWork extends Component {
                 {tod.importance === "Очень важное" &&
                 tod.comand === false ? (
                   <>
-                    <div className="todo-phone-red">
+                    <div className="card-job-modile-style  todo-phone-red">
                       <Card className="todo-red" key={i}>
                         <Link to={`/job/${tod._id}`}>
                           <div  className="todo-red-text">{tod.title}</div>
@@ -280,7 +280,7 @@ export default class MyWork extends Component {
                 {tod.importance === "Средней важности" &&
                 tod.comand == false ? (
                   <>
-                    <div className="todo-phone-yellow">
+                    <div className="card-job-modile-style  todo-phone-yellow">
                       <Card className="todo-yellow" key={i}>
                         <Link to={`/job/${tod._id}`}>
                           <div className="todo-yellow-text">{tod.title}</div>
@@ -305,7 +305,7 @@ export default class MyWork extends Component {
                 {tod.importance === "Не очень важное" &&
                 tod.comand === false ? (
                   <>
-                    <div className="todo-phone-green">
+                    <div className="card-job-modile-style  todo-phone-green">
                       <Card className="todo-green">
                         <Link to={`/job/${tod._id}`}>
                           <div className="todo-green-text">{tod.title}</div>
@@ -330,7 +330,7 @@ export default class MyWork extends Component {
               <>
                 {tod.importance === "Очень важное" ? (
                   <>
-                    <div className="todo-phone-red">
+                    <div className="card-job-modile-style  todo-phone-red">
                       <Card className="todo-comand-red" key={i}>
                         <Link to={`/job/${tod._id}`}>
                           <h3 style={{ color: "#ffffff" }}>{tod.title}</h3>
@@ -351,7 +351,7 @@ export default class MyWork extends Component {
                 )}
                 {tod.importance === "Средней важности" ? (
                   <>
-                    <div className="todo-phone-yellow">
+                    <div className="card-job-modile-style  todo-phone-yellow">
                       <Card className="todo-comand-yellow" key={i}>
                         <Link to={`/job/${tod._id}`}>
                           <h3 style={{ color: "#141412" }}>{tod.title}</h3>
@@ -372,7 +372,7 @@ export default class MyWork extends Component {
                 )}
                 {tod.importance === "Не очень важное" ? (
                   <>
-                    <div className="todo-phone-green">
+                    <div className="card-job-modile-style  todo-phone-green">
                       <Card className="todo-comand-green">
                         <Link to={`/job/${tod._id}`}>
                           <div className="todo-green-text" >{tod.title}</div>

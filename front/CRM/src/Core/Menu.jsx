@@ -2,7 +2,7 @@ import { Layout, Menu, Breadcrumb, Icon, Badge, Anchor } from "antd";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Link } from "react-router-dom";
-import MobileMenu from "./MobileMenu.jsx"
+import MobileMenu from "./MobileMenu.jsx";
 import { isAuthenticated, signout } from "../Api/Auth";
 import {
   MyTodoComandQuality,
@@ -10,9 +10,7 @@ import {
   MyNewsQuality
 } from "../Api/Http.js";
 
-import { isOnline } from "../WsSocket/ws-socket.js" 
-
-
+import { isOnline } from "../WsSocket/ws-socket.js";
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -30,16 +28,13 @@ class MenuMain extends React.Component {
     this.setState({ collapsed });
   };
   componentDidMount() {
-
-
-   
     if (isAuthenticated() == false) {
       return false;
     } else {
-      isOnline()
+      isOnline();
       var userId = isAuthenticated().direct._id;
       var userRole = isAuthenticated().direct.role;
-        MyTodoComandQuality(userId).then(data => {
+      MyTodoComandQuality(userId).then(data => {
         if (data.error) {
         } else {
           this.setState({ getComandTodo: data, role: userRole });
@@ -56,10 +51,10 @@ class MenuMain extends React.Component {
   }
   render() {
     const { window_width, SoloTodoToday, role } = this.state;
-    console.log(window_width)
+    console.log(window_width);
     return (
       <>
-         {window_width > "768" ? ( 
+        {window_width > "665" ? (
           <>
             {isAuthenticated() && (
               <Anchor affix={false}>
@@ -68,10 +63,7 @@ class MenuMain extends React.Component {
                   style={{ display: "flex", minHeight: "100em" }}
                 >
                   <Layout style={{ minHeight: "100em" }}>
-                    <Sider
-                      collapsible
-                      collapsed={this.state.collapsed}
-                    >
+                    <Sider collapsible collapsed={this.state.collapsed}>
                       <div className="logo" />
                       <Menu
                         theme="dark"
@@ -86,7 +78,6 @@ class MenuMain extends React.Component {
                                 <Icon type="fire" />
 
                                 <span>Новости</span>
-                        
                               </span>
                             </>
                           }
@@ -105,8 +96,6 @@ class MenuMain extends React.Component {
                                 <Icon type="clock-circle" />
 
                                 <span>Дела</span>
-
-                              
                               </span>
                             </>
                           }
@@ -114,7 +103,6 @@ class MenuMain extends React.Component {
                           <Menu.Item key="16">
                             <Link to={`/today/${isAuthenticated().direct._id}`}>
                               <span>Дела на сегодня</span>{" "}
-                              
                             </Link>
                           </Menu.Item>
                           <Menu.Item key="17">
@@ -125,7 +113,11 @@ class MenuMain extends React.Component {
                             </Link>
                           </Menu.Item>
                           <Menu.Item key="20">
-                            <Link to={`/my/assign/task/${isAuthenticated().direct._id}`}>
+                            <Link
+                              to={`/my/assign/task/${
+                                isAuthenticated().direct._id
+                              }`}
+                            >
                               <span>Назначеные дела</span>
                             </Link>
                           </Menu.Item>
@@ -134,7 +126,6 @@ class MenuMain extends React.Component {
                               <span>Новое дело</span>
                             </Link>
                           </Menu.Item>
-                          
                         </SubMenu>
                         {["Директор", "Управляющий", "Менеджер"].includes(
                           role
@@ -145,8 +136,6 @@ class MenuMain extends React.Component {
                               <span>
                                 <Icon type="dollar" />
                                 <span>Сделка</span>
-                               
-                                 
                               </span>
                             }
                           >
@@ -162,7 +151,6 @@ class MenuMain extends React.Component {
                                 to={`/my/deal/${isAuthenticated().direct._id}`}
                               >
                                 <span>История сделок</span>{" "}
-                                
                               </Link>
                             </Menu.Item>
                             <Menu.Item key="15">
@@ -232,54 +220,56 @@ class MenuMain extends React.Component {
                             </Link>
                           </Menu.Item>
                           <Menu.Item key="6">
-                            <Link
-                              onClick={() => signout(() => "/")}
-                              to="/"
-                            >
+                            <Link onClick={() => signout(() => "/")} to="/">
                               <span>Выход</span>
                             </Link>
                           </Menu.Item>
                         </SubMenu>
-                        {["Директор", "Управляющий", "Менеджер","Бухгалтер"].includes(
-                            role
-                          ) ?(
+                        {[
+                          "Директор",
+                          "Управляющий",
+                          "Менеджер",
+                          "Бухгалтер"
+                        ].includes(role) ? (
                           <SubMenu
-                          key="sub5"
-                          title={
-                            <span>
-                              <Icon type="rocket" />
-                              <span>Контр Агенты</span>
-                            </span>
-                          }
-                        >
-                          {["Директор", "Управляющий", "Бухгалтер"].includes(
-                            role
-                          ) ?(
-                            <Menu.Item key="7">
-                            <Link to={`/all/agent`}>
-                              <span>Все контр-агенты</span>
-                            </Link>
-                          </Menu.Item>
-                          ):("")}
-                          <Menu.Item key="8">
-                            <Link
-                              to={`/my/agent/${isAuthenticated().direct._id}`}
-                            >
-                              <span>Мои контр агенты</span>
-                            </Link>
-                          </Menu.Item>
-                          {["Директор", "Управляющий", "Бухгалтер"].includes(
-                            role
-                          ) ? (
-                            <Menu.Item key="12">
-                              <Link to="/new/agent">
-                                <span>Создать нового </span>
+                            key="sub5"
+                            title={
+                              <span>
+                                <Icon type="rocket" />
+                                <span>Контр Агенты</span>
+                              </span>
+                            }
+                          >
+                            {["Директор", "Управляющий", "Бухгалтер"].includes(
+                              role
+                            ) ? (
+                              <Menu.Item key="7">
+                                <Link to={`/all/agent`}>
+                                  <span>Все контр-агенты</span>
+                                </Link>
+                              </Menu.Item>
+                            ) : (
+                              ""
+                            )}
+                            <Menu.Item key="8">
+                              <Link
+                                to={`/my/agent/${isAuthenticated().direct._id}`}
+                              >
+                                <span>Мои контр агенты</span>
                               </Link>
                             </Menu.Item>
-                          ) : (
-                            ""
-                          )}
-                          {/* {["Директор", "Управляющий", "Бухгалтер"].includes(
+                            {["Директор", "Управляющий", "Бухгалтер"].includes(
+                              role
+                            ) ? (
+                              <Menu.Item key="12">
+                                <Link to="/new/agent">
+                                  <span>Создать нового </span>
+                                </Link>
+                              </Menu.Item>
+                            ) : (
+                              ""
+                            )}
+                            {/* {["Директор", "Управляющий", "Бухгалтер"].includes(
                             role
                           ) ? (
                             <Menu.Item key="23">
@@ -290,13 +280,11 @@ class MenuMain extends React.Component {
                           ) : (
                             ""
                           )} */}
-
-
-                        
-                        </SubMenu>
-                        
-                          ):("")}
-                           {/* <SubMenu
+                          </SubMenu>
+                        ) : (
+                          ""
+                        )}
+                        {/* <SubMenu
                           key="sub9"
                           title={
                             <>
@@ -321,11 +309,10 @@ class MenuMain extends React.Component {
               </Anchor>
             )}
           </>
-         ) : ( 
-        //  <MobileMenu/>
-
-        <MobileMenu/>    
-         )} 
+        ) : (
+          <MobileMenu />
+          
+        )}
         {!isAuthenticated() && <></>}
       </>
     );
@@ -333,4 +320,6 @@ class MenuMain extends React.Component {
 }
 
 export default MenuMain;
+
+
 

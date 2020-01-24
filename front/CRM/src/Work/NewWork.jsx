@@ -12,9 +12,10 @@ import {
   Select
 } from "antd";
 import moment from "moment";
-import SunEditor from "suneditor-react";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // ES6
 
-import "suneditor/dist/css/suneditor.min.css";
+// import "suneditor/dist/css/suneditor.min.css";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -132,6 +133,7 @@ class Work extends React.Component {
     return true;
   };
   onChangeworkerTime0 = (date, dateString) => {
+    console.log(date,dateString)
     this.setState({ workerTime0: date });
   };
   onChangeworkerTime1 = (date, dateString) => {
@@ -544,6 +546,8 @@ class Work extends React.Component {
     });
     this.setState({ error: "" });
   }
+
+
   render() {
     const {
       worker,
@@ -563,6 +567,9 @@ class Work extends React.Component {
       workerJob9,
       disbledSelect
     } = this.state;
+    function handleScroll(event){
+      console.log(event); //Get the scroll event
+    }
     return (
       <div className="postisitonRelativeSmeni">
         <div className="screen-reader">
@@ -570,7 +577,7 @@ class Work extends React.Component {
             <div className="row">
               <Tabs defaultActiveKey="1" className="new_jobs_list" >
                 <TabPane tab="Одиночное" key="1">
-                  <form className="col-md-6">
+                  <form>
                     <div>
                       <label
                         className="text-muted"
@@ -581,9 +588,9 @@ class Work extends React.Component {
                       <input
                         value={title}
                         onChange={this.handleAction("title")}
-                        type="email"
+                        type="text"
                         class="form-control"
-                        id="exampleFormControlInput1"
+                       
                       />
                     </div>
 
@@ -594,11 +601,9 @@ class Work extends React.Component {
                       >
                         Описание
                       </label>
-                      <SunEditor
-                        style="text-editor-style"
-                        value={description}
+                      <ReactQuill
                         onChange={this.handleActionEditor("description")}
-                        lang="ru"
+        
                       />
                     </div>
                   </form>
@@ -661,6 +666,7 @@ class Work extends React.Component {
                     <div className="Tags">
                       <Select
                         // disabled={disbledSelect  ?(true):(false)}
+                        autoFocus={true}
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="Выберете исполнителей"
@@ -678,7 +684,7 @@ class Work extends React.Component {
                           </Option>
                         ))}
                       </Select>
-                      ,
+                      
                     </div>
                   </div>
                   <h1 style={{ padding: "0.5em" }}></h1>
@@ -726,12 +732,10 @@ class Work extends React.Component {
                                 rows="3"
                                 value={this.state[`workerJob${i}`]}
                               ></textarea> */}
-                              <SunEditor
-                                value={description}
+                              <ReactQuill
                                 onChange={this.handleActionEditor(
                                   `workerJob${i}`
                                 )}
-                                lang="ru"
                               />
                             </form>
                             {i == 0 ? <></> : ""}

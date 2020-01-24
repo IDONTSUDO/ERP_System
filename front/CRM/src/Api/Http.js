@@ -817,3 +817,26 @@ export const AssignedTodoUserBy = (payload) => {
             console.log(err)
         })
 }
+export const UpdateDaysTodoComplete = (payload)=>{
+    return fetch(`${process.env.REACT_APP_API_URL}/update/days/statistics/todo/complete`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({ payload })
+    }).then(response => {
+        return response.json()
+    })
+        .catch(err => {
+            console.log(err)
+        })
+}
+export const DeleteTodo = (TodoId) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/delete/todo/${TodoId}`, {
+        method: "DELETE",
+        headers: myHeaders
+    }).then(response => {
+        return response.json()
+    })
+        .catch(err => {
+            console.log(err)
+        })
+}

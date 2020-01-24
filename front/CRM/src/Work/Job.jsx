@@ -10,7 +10,9 @@ import {
   TodoChangeExperienseAtHTTP,
   TodoUpTime,
   TodoChangeComandList,
-  NewComentStatistic
+  NewComentStatistic,
+  UpdateDaysTodoComplete,
+  UpdateCommentStatistic
 } from "../Api/Http";
 import { IsEveryDaySub, everyday } from "../helper/everyday.js";
 import { isAuthenticated } from "../Api/Auth";
@@ -127,9 +129,9 @@ export default class Job extends Component {
     let worker_by = [];
     if (userId != postedBy) {
       // worker_by.push(postedBy);
-      worker_by = {user:postedBy}
+      worker_by = { user: postedBy };
     }
-let eventNews = "Выполнено"
+    let eventNews = "Выполнено";
     let payload = {
       eventNews,
       status,
@@ -326,10 +328,7 @@ let eventNews = "Выполнено"
             user: user
           };
         });
-        console.log(fynalyArray);
-        // let worker_by = []
-        // fynalyArray.push()
-        console.log(worker_by);
+      
 
         let eventNews = "Новый коментарий";
         let payload = {
@@ -376,6 +375,9 @@ let eventNews = "Выполнено"
           description
         };
         NewNewsToComment(payload);
+        let sub = IsEveryDaySub()._id;
+
+        UpdateDaysTodoComplete(sub);
         this.setState({ redirectToProfile: true });
       }
     });
@@ -434,9 +436,38 @@ let eventNews = "Выполнено"
   handleCancel = () => {
     this.setState({ visible: false });
   };
-
+  SetStatusCompleteComandWork = () => {
+    const { ID, postedBy } = this.state;
+    let userId = isAuthenticated().direct._id;
+    const todoId = ID;
+    let expireAt = new Date();
+    let status = "Выполнено";
+    let tags = "";
+    let worker_by = [];
+    if (userId != postedBy) {
+      worker_by = { user: postedBy };
+    }
+    let eventNews = "Выполнено";
+    let payload = {
+      eventNews,
+      status,
+      todoId,
+      worker_by,
+      expireAt
+    };
+    SetStatusJob(payload, todoId).then(data => {
+      if (data.err) {
+        console.log(data.err);
+      } else {
+        this.setState({ redirectToProfile: true });
+      }
+    });
+  };
   clickSetStatusCompleteJobWorker = () => {
     let { JobArray, ID } = this.state;
+    let sub = IsEveryDaySub()._id;
+
+    UpdateDaysTodoComplete(sub);
 
     const todoId = ID;
 
@@ -458,24 +489,28 @@ let eventNews = "Выполнено"
     let el1;
     let El3;
     let str2 = 0;
+  
     while (usersArray.length > str2) {
       if (usersArray[str2] !== userId + "IAMWORKED") {
         UsersLsatArray.push(usersArray[str2]);
       }
       if (usersArray[str2] === userId + "IAMWORKED") {
         str1 = str2;
+       
         if (usersArray[str1 + 1] !== undefined) {
           el1 = usersArray[str2].slice(0, -9);
           UsersLsatArray.push(el1);
           UsersLsatArray.push(usersArray[str1 + 1] + "IAMWORKED");
           El3 = usersArray[str1 + 1];
         } else {
+          this.SetStatusCompleteComandWork();
           // this.clickSetStatusCompleteJob();
-          console.log("ДЕЛО ЧОТО ТАМ БЛА АБЛА")
+          console.log("ДАККАК ЖЕ ТЫ ЗАЕБАЛ ХУЙНЯ СОБАЧЬЯ СКОЛЬКО МОЖНО БЛЯТь");
         }
       }
       str2++;
     }
+
     var filteredTime = UsersLsatArray.filter(function(el) {
       return el !== El3;
     });
@@ -487,10 +522,10 @@ let eventNews = "Выполнено"
         action: actionArray[index]
       };
     });
-
+    // ДЕЛО ЧОТО ТАМ БЛА АБЛА"
     // news = El3;
     // console.log(news)
-    worker_by = {user:El3}
+    worker_by = { user: El3 };
 
     // worker_by.push(El3);
 
@@ -502,7 +537,6 @@ let eventNews = "Выполнено"
     };
     TodoChangeComandList(todoId, payload).then(data => {
       if (data.error) {
-        console.log(data.error);
         this.setState({ error: true });
       } else {
         this.forceUpdate();
@@ -607,23 +641,28 @@ let eventNews = "Выполнено"
       comand,
       JobArray,
       description,
-      redirectToProfile
+      redirectToProfile,
+      ID
     } = this.state;
     if (redirectToProfile) {
       return <Redirect to={`/user/work/${isAuthenticated().direct._id}`} />;
     }
+
     return (
       <div className="todo-list-main-selector">
-        {message.length !== 1 ? null : <>{this.openNotification()}</>}
         {comand ? (
           <>
             <div className="">
               <div class="">
                 <div class="">
-                  <Card className="card-job-style" >
+                  <Card className="card-job-style">
                     <a>
                       <div class="">
-                      {/* d-flex w-100 justify-content-between */}
+                        {isAuthenticated().direct._id === postedBy ? (
+                          <Link to={`/edit/job/${ID}`}>
+                            <Icon  theme="twoTone" twoToneColor="#eb2f96"  type="edit" />
+                          </Link>
+                        ) : null}
                         <small class="text-muted">{todo.status}</small>
                       </div>
                     </a>
@@ -671,7 +710,7 @@ let eventNews = "Выполнено"
                 </div>
               </div>
 
-              <hr style={{ width: "35em" }} />
+              <hr className="main_position_job_container" />
 
               <div className="">
                 <div class="">
@@ -716,7 +755,7 @@ let eventNews = "Выполнено"
                     ))}
                   </div>
                   <>
-                  <div className=""></div>
+                    <div className=""></div>
                     <div style={{ padding: "5px" }}></div>
                     <div class="form-group col-sm-8 ">
                       <label for="exampleFormControlTextarea1">
@@ -748,8 +787,13 @@ let eventNews = "Выполнено"
             <div className="">
               <div class="">
                 <div class="">
-                  <Card  className="card-job-style">
+                  <Card className="card-job-style">
                     <a>
+                    {isAuthenticated().direct._id === postedBy ? (
+                          <Link to={`/edit/job/${ID}`}>
+                            <Icon  theme="twoTone" twoToneColor="#eb2f96"  type="edit" />
+                          </Link>
+                        ) : null}
                       <div class="d-flex w-100 justify-content-between">
                         <small class="text-muted">{status}</small>
                       </div>
@@ -793,19 +837,19 @@ let eventNews = "Выполнено"
                       <div>
                         Дело от:
                         <Link to={`/user/${postedBy}`}>
-                        <img
-                          className="card-img-top"
-                          src={`http://localhost:8080/user/photo/${postedBy}?`}
-                          onError={i => (i.target.src = `${DefaultProfile}`)}
-                          style={{ height: "5em", width: "5em" }}
-                        />
+                          <img
+                            className="card-img-top"
+                            src={`http://localhost:8080/user/photo/${postedBy}?`}
+                            onError={i => (i.target.src = `${DefaultProfile}`)}
+                            style={{ height: "5em", width: "5em" }}
+                          />
                         </Link>
                       </div>
                     </div>
                   </Card>
                 </div>
               </div>
-              <hr className="hr_job_list"  />
+              <hr className="hr_job_list" />
 
               <div className="">
                 <div class="">
@@ -890,27 +934,7 @@ let eventNews = "Выполнено"
             </div>
           </>
         )}
-        {isAuthenticated().direct._id === postedBy && (
-          <>
-            <div classname="positionLeft"></div>
-          </>
-        )}
-
         <div></div>
-        <Modal
-          visible={visible}
-          title="Редактировать дело"
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-        >
-          <DatePicker
-            className="form-control"
-            selected={this.state.startDate}
-            onChange={this.handleChange}
-          />
-          <Button onClick={this.NewDate}>Новая дата</Button>
-          <Button onClick={this.DeleteTodo}>Удалить досрочно</Button>
-        </Modal>
       </div>
     );
   }

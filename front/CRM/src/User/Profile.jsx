@@ -5,16 +5,13 @@ import { Spin, Typography } from "antd";
 import { read, AllStatistic } from "../Api/Http";
 import DefaultProfile from "../Assets/default.png";
 
-
 import Error from "../Error/Error.jsx";
 import { Button } from "antd";
 import Moment from "react-moment";
 import { ResponsiveCalendar } from "@nivo/calendar";
-import Online from "./Online.jsx"
-
+import Online from "./Online.jsx";
 
 const { Text } = Typography;
-
 
 class Profile extends Component {
   constructor() {
@@ -23,7 +20,8 @@ class Profile extends Component {
       user: [],
       open: true,
       error: false,
-      static: []
+      static: [],
+      browserCalendar:false
     };
   }
   init = userId => {
@@ -43,10 +41,39 @@ class Profile extends Component {
       this.setState({ open: false });
     });
   };
-
+  initNotCalendar = userId => {
+    read(userId).then(data => {
+      if (data.error) {
+        this.setState({ error: true });
+      } else {
+        this.setState({ user: data });
+      }
+      this.setState({ open: false });
+    });
+  }
   componentDidMount() {
     const userId = this.props.match.params.userId;
-    this.init(userId);
+
+    let browsingID = isAuthenticated().direct._id;
+    let browsingRole = isAuthenticated().direct.role;
+    const array1 = [1, 2, 3];
+
+    console.log(array1.includes(2));
+    // expected output: true
+
+    const rolesBrowser = ["Директор", "Управляющий"];
+
+    if (rolesBrowser.includes(browsingRole)){
+      this.setState({browserCalendar:true})
+      this.init(userId);
+    }
+    else if(browsingID === userId){
+      this.setState({browserCalendar:true})
+      this.init(userId);
+    }else{
+      this.initNotCalendar(userId)
+    }
+   
   }
 
   componentWillReceiveProps(props) {
@@ -55,7 +82,13 @@ class Profile extends Component {
   }
 
   render() {
-    const { redirectToSignin, user, open, error } = this.state;
+    const {
+      redirectToSignin,
+      user,
+      open,
+      error,
+      browserCalendar
+    } = this.state;
     const photoUrl = user._id
       ? `${process.env.REACT_APP_API_URL}/user/photo/${
           user._id
@@ -79,8 +112,8 @@ class Profile extends Component {
             </>
           ) : (
             <>
-              <div className="container">
-                <div className="postisitonRelativeSmeni">
+              <div className="postisitonRelativeSmeni">
+                <div className="container">
                   <div class="row">
                     <div class="mb-4">
                       <div className="avatar">
@@ -107,11 +140,12 @@ class Profile extends Component {
                         </div>
                       </div>
                     </div>
-                    <div className="profile_statistic" id="footer">
+                    {browserCalendar ? (
+                      <>
+                       <div className="profile_statistic" id="footer">
                       <div className="footer-bar">
                         <div className="dSnone fotter-bar-left">
                           <Text code style={{ color: "#fff" }}>
-                            {" "}
                             Всего назначено дел за год:{" "}
                           </Text>
                         </div>
@@ -124,7 +158,7 @@ class Profile extends Component {
                       </div>
                       <div className="dSnone profile_statistic_chart">
                         <ResponsiveCalendar
-                        className="dSnone"
+                          className="dSnone"
                           data={this.state.static}
                           from={minimalDateYear}
                           to={maximumDateYear}
@@ -137,12 +171,18 @@ class Profile extends Component {
                           dayBorderColor="#ffffff"
                           tooltip={function(e) {
                             console.log(e);
-                            return <>
-                            {data[0].day}
-                            <h5 className="dSnone">Назначено дел: {data[0].assigned_todo}</h5>
-                         <h5 className="dSnone">Сделано коментариев:{data[0].comment}</h5>
-                         <h5></h5>   
-                            </>
+                            return (
+                              <>
+                                {data[0].day}
+                                <h5 className="dSnone">
+                                  Назначено дел: {data[0].assigned_todo}
+                                </h5>
+                                <h5 className="dSnone">
+                                  Сделано коментариев:{data[0].comment}
+                                </h5>
+                                <h5></h5>
+                              </>
+                            );
                           }}
                           legends={[
                             {
@@ -159,6 +199,8 @@ class Profile extends Component {
                         />
                       </div>
                     </div>
+                      </>
+                    ):(null)}
                   </div>
                 </div>
               </div>

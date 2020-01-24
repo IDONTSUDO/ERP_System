@@ -54,13 +54,32 @@ export default class News extends Component {
             <div style={{ padding: "20px" }}>
               {newsList.map((news, i) => (
                 <>
+                {news.eventNews === "Не выполененое дело" ? (
+                    <>
+                      <div  className="news-width  security">
+                        <div>{news.descriptionArray.map((user,i) =>(
+                          <div className="user-list">
+                          {user}
+                          </div>
+                        ))} </div>
+                        <div>Не выполененое дело</div>
+                        <Link to={`/job/${news.link}`}>
+                          <h5 style={{ color: "black" }}>
+                            Посмотреть дело *
+                          </h5>
+                        </Link>
+                      </div>
+                    </>
+                  ) : (
+                    ""
+                  )}
                   {news.eventNews === "warning" ? (
                     <>
-                      <div className="security">
+                      <div  className="news-width  security">
                         <div>{news.description}</div>
                         <Link to={`/security/${userID}`}>
                           <h5 style={{ color: "black" }}>
-                            Посмотреть историю посещений
+                            Посмотреть историю посещений *
                           </h5>
                         </Link>
                       </div>
@@ -71,7 +90,7 @@ export default class News extends Component {
                   {news.eventNews === "Выполнено" ? (
                     <>
                       <div style={{ padding: "5px" }}>
-                        <div className="alert-complete-status" key={i}>
+                        <div className="news-width news_width alert-complete-status" key={i}>
                          
 
                           <h6>
@@ -93,8 +112,8 @@ export default class News extends Component {
                   )}
                    {news.eventNews === "вам пришло новое дело" ? (
                     <>
-                      <div style={{ padding: "5px" }}>
-                        <div className="alert-redirect-todo" key={i}>
+                      <div  style={{ padding: "5px" }}>
+                        <div className="news-width news_width alert-redirect-todo" key={i}>
                          
 
                           <h6>
@@ -114,11 +133,11 @@ export default class News extends Component {
                     <>
                       <div style={{ padding: "5px" }}>
                         <div
-                          className="alert-warning-yellow fade.show-yellow alert-dismissible-yellow alert-yellow"
+                          className="news_width alert-warning-yellow fade.show-yellow alert-dismissible-yellow alert-yellow"
                           key={i}
                         >
                           <Link className="link" to={`${news.link}`}>
-                            <strong>{news.eventNews}</strong>
+                            <strong>{news.eventNews} *</strong>
                           </Link>
                       
                         </div>
@@ -130,7 +149,7 @@ export default class News extends Component {
                   {news.eventNews === "Новый коментарий" ? (
                     <>
                       <div style={{ padding: "5px" }}>
-                        <div className="alert-new-comment" key={i}>
+                        <div className="news_width alert-new-comment" key={i}>
                           {/* <button
                             type="button"
                             class="close"
@@ -142,7 +161,7 @@ export default class News extends Component {
                           <div>От {news.name_posted}</div>
                           <Link className="link" to={`${news.link}`}>
                             <h6>
-                              <strong>{news.eventNews}</strong>
+                              <strong>{news.eventNews} *</strong>
                             </h6>
                           </Link>
                           <div dangerouslySetInnerHTML={{ __html: news.description }} />
@@ -159,8 +178,8 @@ export default class News extends Component {
                         <div
                           className={
                             news.comand === true
-                              ? "alert-alert-info"
-                              : "alert-warning-yellow fade.show-yellow alert-dismissible-yellow alert-yellow"
+                              ? "news_width alert-alert-info"
+                              : "news_width alert-warning-yellow fade.show-yellow alert-dismissible-yellow alert-yellow"
                           }
                           key={i}
                         >
@@ -177,16 +196,16 @@ export default class News extends Component {
                             to={`/user/${news.posted_by}`}
                           >
                             <div style={{ padding: "5px" }}>
-                              от {news.name_posted}
+                              от {news.name_posted} *
                             </div>
                           </Link>
                           <Link className="link" to={`${news.link}`}>
                             <h6>
-                              <strong>{news.eventNews}</strong>
+                              <strong>{news.eventNews} *</strong>
                             </h6>
                           </Link>
                           {news.comand === false ? (
-                            <div className="SoloTodoBorder">
+                            <div className="news_width SoloTodoBorder">
                               <div>Подробности</div>
                               <div dangerouslySetInnerHTML={{ __html: news.description }} />
                               <div>{news.time}</div>
@@ -203,7 +222,7 @@ export default class News extends Component {
                                     <>
                                       <Badge status="red" text="Командное" />
                                       <div
-                                        className="ComandTodoBorder"
+                                        className="news_width ComandTodoBorder"
                                         style={{ wordBreak: "break-all" }}
                                       >
                                         <div>Подробности</div>

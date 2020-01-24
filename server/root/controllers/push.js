@@ -200,7 +200,6 @@ exports.MyPushingDevice = async (req, res) => {
 }
 exports.NewPushingNotifycation = async (req, res) => {
   let Users = req.newsUser
-  console.log("New PUSH NOTIFICATION")
   const payload = {
     title: "CRM",
     message: "Для вас новое дело",
@@ -242,7 +241,9 @@ exports.NewPushingNotifycation = async (req, res) => {
               pushPayload,
               pushOptions
             ).then((value) => {
-                console.log(value)
+                console.log("itsvalue", value)
+
+              
               resolve({
                 status: true,
                 endpoint: subscription.endpoint,
@@ -259,7 +260,7 @@ exports.NewPushingNotifycation = async (req, res) => {
           });
         });
         q.allSettled(parallelSubscriptionCalls).then((pushResults) => {
-          return  console.log(pushResults)
+          return  console.log("its result", pushResults)
         });
       }
     });

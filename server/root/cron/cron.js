@@ -1,7 +1,10 @@
 const cron = require('node-cron');
 const Todo = require('../database/UserTodo')
+const News = require('../database/News')
+
 const StatisticsEveryDay = require('../database/StatisticsEveryDay')
 const UserStatistic = require('../database/UserStatistic.js')
+const moment = require('moment')
 
 module.exports.CRON = function () {
 let d = new Date();
@@ -43,21 +46,54 @@ let times =  `${curr_year}-${curr_month}-${curr_date}`
     timezone: "Europe/Moscow"
   })
 }
+
+
+
+module.exports.CRON_USER_TODO = function () {
+  let timeFind = moment().locale("ru").format("LL")
+
+    cron.schedule('* * * * *', () => {
+      Todo.find({ time: timeFind,comand:false })
+      .exec((err, result) => {
+          if (err) {
+              return console.log(err)
+          }
+          if(result[0] === undefined){
+            return
+          }else{
+            let eventNews = "Не выполененое дело"
+            let descriptionArray = result[0].names_workers_list
+            let link  = result[0]._id
+        
+            let worker_by = []
+            worker_by.push({user:`${result[0].posted_by}`})
+            let payload = {
+                  eventNews,
+                  descriptionArray,
+                  link,
+                  worker_by
+            }
+            // payload.worker_by = `${worker_by}`
+            console.log(payload)
+            const news = new News(payload)
+            news.dateCreated = Date.now()
+            news.save().then(result => {
+                return
+             })
+          }
+      })
+    })
+  }
+  
 // ,{
 //   scheduled: true,
 //   timezone: "Europe/Moscow"
 // }
 
-//   cron.schedule('*/1 * * * *', () => {
-//     Todo.find({ time: timeFind,comand:false })
-//     .exec((err, result) => {
-//         if (err) {
-//             return res.status(400).json({
-//                 error: err
-//             })
-//         }
-//         console.log(result)
-//         console.log(result[0].posted_by)
-//         console.log(result[0].tags)
-//     })
-//   })
+  // cron.schedule('*/1 * * * *', () => {
+   
+  // // })
+  // ,{
+  //   scheduled: true,
+  //   timezone: "Europe/Moscow"
+  // }

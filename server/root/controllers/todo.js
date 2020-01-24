@@ -174,11 +174,12 @@ exports.NewTodoUserAwesomeNews = async (req, res, next) => {
 exports.TodoChange = async (req, res) => {
 
     let todo = req.todo;
+    console.log(req.body.payload)
     todo = _.extend(todo, req.body.payload || req.body);
 
 
     todo.updated = Date.now()
-
+    console.log(todo)
     await todo.save((err, result) => {
 
         if (err) {
@@ -295,4 +296,16 @@ exports.AssiggnedTaskUserBy = async (req, res) => {
         }
         res.json(result)
     })
+}
+exports.DeletedTodo= async (req, res) => {
+    let todo = req.todo 
+    todo.remove((err, result) =>{
+        if(err){
+            return res.status(400).json({
+                err: err
+            })
+        }
+        res.json({ message: "User delete!"})
+    })
+
 }
