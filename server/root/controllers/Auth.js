@@ -8,6 +8,7 @@ const UserDevice = require('../database/Devises')
 //для создания записей  юзер агентами, и айпи входа в систему
 const UserSecurity = require('../database/Security')
 const UserNews = require('../database/News')
+const { uuid } = require('uuidv4');
 
 const jwt = require("jsonwebtoken")
 
@@ -58,6 +59,7 @@ exports.signin = (req, res, next) => {
                 error: "E-mail или пароль не совпадают"
             })
         }
+        let session = uuid()
         const token = jwt.sign({ _id: direct._id,name:direct.name }, process.env.JWT_SECRET)
 
         res.cookie("t", token, { expire: new Date() + 9999 })
@@ -78,8 +80,9 @@ exports.signin = (req, res, next) => {
             logged_in,
             device } = direct
         req.userId = _id
-        
+        req.session = session
         res.json({
+            session,
             token, direct: {
                 _id, name, email, role,device, todo_avesome,
                 todo_middle, todo_not_very_important,
@@ -131,6 +134,7 @@ exports.securityWrite = async (req, res, next) => {
     security.UserBy = userId.toString()
     security.user_ip = req.ip
     security.save()
+    next()
 }
 
 exports.securityFind = async (req, res, next) => {

@@ -9,16 +9,11 @@ redisClient.on('error',function() {
     console.log("Error in Redis");
 });
 
-
-
-exports.handelUserSecurity = (req) =>{
-    let user = req.worker
-    let data = `${user}SECURITY`
-    console.log(typeof user)
-    console.log(typeof data)
-    redisClient.set(data,function(err,reply) {
-        console.log("redis exs:",err)
-        console.log("redis set key:",reply)
-       });
-       
+exports.NewSession = async (req) =>{
+//    let session =  req.session
+//    let UserId = req.
+//    console.log(session)
+  
+//    redisClient.set(session,session,redis.print)
+    return
 }
