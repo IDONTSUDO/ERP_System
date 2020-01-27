@@ -21,7 +21,7 @@ class Profile extends Component {
       open: true,
       error: false,
       static: [],
-      browserCalendar:false
+      browserCalendar: false
     };
   }
   init = userId => {
@@ -33,9 +33,7 @@ class Profile extends Component {
       }
     });
     AllStatistic(userId).then(data => {
-      if (typeof data !== "array") {
-        this.setState({ static: [] });
-      } else {
+      if (data != undefined) {
         this.setState({ static: data });
       }
       this.setState({ open: false });
@@ -50,30 +48,23 @@ class Profile extends Component {
       }
       this.setState({ open: false });
     });
-  }
+  };
   componentDidMount() {
     const userId = this.props.match.params.userId;
 
     let browsingID = isAuthenticated().direct._id;
     let browsingRole = isAuthenticated().direct.role;
-    const array1 = [1, 2, 3];
-
-    console.log(array1.includes(2));
-    // expected output: true
-
     const rolesBrowser = ["Директор", "Управляющий"];
 
-    if (rolesBrowser.includes(browsingRole)){
-      this.setState({browserCalendar:true})
+    if (rolesBrowser.includes(browsingRole)) {
+      this.setState({ browserCalendar: true });
       this.init(userId);
-    }
-    else if(browsingID === userId){
-      this.setState({browserCalendar:true})
+    } else if (browsingID === userId) {
+      this.setState({ browserCalendar: true });
       this.init(userId);
-    }else{
-      this.initNotCalendar(userId)
+    } else {
+      this.initNotCalendar(userId);
     }
-   
   }
 
   componentWillReceiveProps(props) {
@@ -82,13 +73,7 @@ class Profile extends Component {
   }
 
   render() {
-    const {
-      redirectToSignin,
-      user,
-      open,
-      error,
-      browserCalendar
-    } = this.state;
+    const { redirectToSignin, user, open, error, browserCalendar } = this.state;
     const photoUrl = user._id
       ? `${process.env.REACT_APP_API_URL}/user/photo/${
           user._id
@@ -99,7 +84,6 @@ class Profile extends Component {
     let curr_year = d.getFullYear();
     let minimalDateYear = `${curr_year}-01-01`;
     let maximumDateYear = `${curr_year}-12-31`;
-
     let data = this.state.static;
 
     return (
@@ -142,65 +126,63 @@ class Profile extends Component {
                     </div>
                     {browserCalendar ? (
                       <>
-                       <div className="profile_statistic" id="footer">
-                      <div className="footer-bar">
-                        <div className="dSnone fotter-bar-left">
-                          <Text code style={{ color: "#fff" }}>
-                            Всего назначено дел за год:{" "}
-                          </Text>
+                        <div className="profile_statistic" id="footer">
+                          <div className="footer-bar"></div>
+                          <div className="dSnone profile_statistic_chart">
+                            <ResponsiveCalendar
+                              className="dSnone"
+                              data={data}
+                              from={minimalDateYear}
+                              to={maximumDateYear}
+                              emptyColor="#eeeeee"
+                              colors={[
+                                "#61cdbb",
+                                "#97e3d5",
+                                "#e8c1a0",
+                                "#f47560"
+                              ]}
+                              margin={{
+                                top: 40,
+                                right: 40,
+                                bottom: 40,
+                                left: 40
+                              }}
+                              yearSpacing={40}
+                              monthBorderColor="#ffffff"
+                              dayBorderWidth={2}
+                              dayBorderColor="#ffffff"
+                              tooltip={function(e) {
+                                console.log(e);
+                                return (
+                                  <>
+                                    {data[0].day}
+                                    <h5 className="dSnone">
+                                      Назначено дел: {data[0].assigned_todo}
+                                    </h5>
+                                    <h5 className="dSnone">
+                                      Сделано коментариев:{data[0].comment}
+                                    </h5>
+                                    <h5></h5>
+                                  </>
+                                );
+                              }}
+                              legends={[
+                                {
+                                  anchor: "bottom-right",
+                                  direction: "row",
+                                  translateY: 36,
+                                  itemCount: 4,
+                                  itemWidth: 42,
+                                  itemHeight: 36,
+                                  itemsSpacing: 14,
+                                  itemDirection: "right-to-left"
+                                }
+                              ]}
+                            />
+                          </div>
                         </div>
-                        <div className="dSnone fotter-bar-left">
-                          <Text code> Всего назначено дел за год: </Text>
-                        </div>
-                        <div className="dSnone fotter-bar-left">
-                          <Text code> Всего назначено дел за год:</Text>
-                        </div>
-                      </div>
-                      <div className="dSnone profile_statistic_chart">
-                        <ResponsiveCalendar
-                          className="dSnone"
-                          data={this.state.static}
-                          from={minimalDateYear}
-                          to={maximumDateYear}
-                          emptyColor="#eeeeee"
-                          colors={["#61cdbb", "#97e3d5", "#e8c1a0", "#f47560"]}
-                          margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
-                          yearSpacing={40}
-                          monthBorderColor="#ffffff"
-                          dayBorderWidth={2}
-                          dayBorderColor="#ffffff"
-                          tooltip={function(e) {
-                            console.log(e);
-                            return (
-                              <>
-                                {data[0].day}
-                                <h5 className="dSnone">
-                                  Назначено дел: {data[0].assigned_todo}
-                                </h5>
-                                <h5 className="dSnone">
-                                  Сделано коментариев:{data[0].comment}
-                                </h5>
-                                <h5></h5>
-                              </>
-                            );
-                          }}
-                          legends={[
-                            {
-                              anchor: "bottom-right",
-                              direction: "row",
-                              translateY: 36,
-                              itemCount: 4,
-                              itemWidth: 42,
-                              itemHeight: 36,
-                              itemsSpacing: 14,
-                              itemDirection: "right-to-left"
-                            }
-                          ]}
-                        />
-                      </div>
-                    </div>
                       </>
-                    ):(null)}
+                    ) : null}
                   </div>
                 </div>
               </div>

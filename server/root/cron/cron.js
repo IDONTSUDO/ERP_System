@@ -7,19 +7,16 @@ const UserStatistic = require('../database/UserStatistic.js')
 const moment = require('moment')
 
 function CRON_STATISTIC() {
-
-  let d = new Date();
-  let curr_date = d.getDate()
-  let curr_month = d.getMonth() + 1
-  let curr_year = d.getFullYear()
-  let times = `${curr_year}-${curr_month}-${curr_date}`
+  var dateTime = new Date();
+  dateTime = moment(dateTime).format("YYYY-MM-DD");
+  // 0 1 * * *
   cron.schedule('0 1 * * *', () => {
-    StatisticsEveryDay.find({ day: times })
+    StatisticsEveryDay.find({ day: dateTime })
       .exec((err, result) => {
         if (err) {
           console.log("err", err)
         } else {
-
+         
           for (let value of result) {
             UserStatistic.findOneAndUpdate({ Userby: value.userBy }, { $push: { day: value }, }, function (error, success) {
               if (error) {
@@ -39,12 +36,12 @@ function CRON_STATISTIC() {
           }
         }
       })
-  }, {
-      scheduled: true,
-      timezone: "Europe/Moscow"
-    })
+  })
 }
-
+// , {
+//   scheduled: true,
+//   timezone: "Europe/Moscow"
+// }
 
 
 function CRON_USER_TODO() {
@@ -71,8 +68,8 @@ function CRON_USER_TODO() {
             link,
             worker_by
           }
-          // payload.worker_by = `${worker_by}`
-          console.log(payload)
+  
+        
           const news = new News(payload)
           news.dateCreated = Date.now()
           news.save().then(result => {
