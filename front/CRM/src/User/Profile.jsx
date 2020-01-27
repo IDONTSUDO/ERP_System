@@ -159,6 +159,9 @@ class Profile extends Component {
                                     <h5 className="dSnone">
                                       Назначено дел: {data[0].assigned_todo}
                                     </h5>
+                                    <h5>
+                                      Выполеннено дел: {data[0].todo_complete}
+                                    </h5>
                                     <h5 className="dSnone">
                                       Сделано коментариев:{data[0].comment}
                                     </h5>

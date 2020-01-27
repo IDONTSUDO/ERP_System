@@ -9,7 +9,6 @@ const moment = require('moment')
 function CRON_STATISTIC() {
   var dateTime = new Date();
   dateTime = moment(dateTime).format("YYYY-MM-DD");
-  // 0 1 * * *
   cron.schedule('0 1 * * *', () => {
     StatisticsEveryDay.find({ day: dateTime })
       .exec((err, result) => {
