@@ -152,7 +152,6 @@ class Profile extends Component {
                               dayBorderWidth={2}
                               dayBorderColor="#ffffff"
                               tooltip={function(e) {
-                                console.log(e);
                                 return (
                                   <>
                                     {data[0].day}

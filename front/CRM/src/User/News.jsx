@@ -98,10 +98,11 @@ export default class News extends Component {
                           </h6>
                           <div className="">
                           <div dangerouslySetInnerHTML={{ __html: news.description }} />
-
+                            <Link to={`/user/${news.link_posted}`}>
                             <div style={{ padding: "5px" }}>
-                              Выполнил: {news.name_posted}
+                              Выполнил: {news.name_posted} *
                             </div>
+                            </Link>
                           </div>
                           <Moment fromNow>{news.dateCreated}</Moment>
                         </div>

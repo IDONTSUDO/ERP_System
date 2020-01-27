@@ -447,6 +447,7 @@ export default class Job extends Component {
     if (userId != postedBy) {
       worker_by = { user: postedBy };
     }
+ 
     let eventNews = "Выполнено";
     let payload = {
       eventNews,
@@ -455,16 +456,17 @@ export default class Job extends Component {
       worker_by,
       expireAt
     };
-    SetStatusJob(payload, todoId).then(data => {
-      if (data.err) {
-        console.log(data.err);
-      } else {
-        this.setState({ redirectToProfile: true });
-      }
-    });
+    console.log(payload)    
+   // SetStatusJob(payload, todoId).then(data => {
+    //   if (data.err) {
+    //     console.log(data.err);
+    //   } else {
+    //     this.setState({ redirectToProfile: true });
+    //   }
+    // });
   };
   clickSetStatusCompleteJobWorker = () => {
-    let { JobArray, ID } = this.state;
+    let { JobArray, ID,postedBy } = this.state;
     let sub = IsEveryDaySub()._id;
 
     UpdateDaysTodoComplete(sub);
@@ -489,7 +491,7 @@ export default class Job extends Component {
     let el1;
     let El3;
     let str2 = 0;
-  
+    let ComandDealComplete = false
     while (usersArray.length > str2) {
       if (usersArray[str2] !== userId + "IAMWORKED") {
         UsersLsatArray.push(usersArray[str2]);
@@ -503,8 +505,9 @@ export default class Job extends Component {
           UsersLsatArray.push(usersArray[str1 + 1] + "IAMWORKED");
           El3 = usersArray[str1 + 1];
         } else {
-          this.SetStatusCompleteComandWork();
+          // this.SetStatusCompleteComandWork();
           // this.clickSetStatusCompleteJob();
+          ComandDealComplete = true
           console.log("ДАККАК ЖЕ ТЫ ЗАЕБАЛ ХУЙНЯ СОБАЧЬЯ СКОЛЬКО МОЖНО БЛЯТь");
         }
       }
@@ -535,25 +538,53 @@ export default class Job extends Component {
     let payload = {
       JobArray
     };
-    TodoChangeComandList(todoId, payload).then(data => {
-      if (data.error) {
-        this.setState({ error: true });
-      } else {
-        this.forceUpdate();
-
-        let link = window.location.href;
-        let eventNews = "вам пришло новое дело";
-        let payloads = {
-          eventNews,
-          link,
-          news,
-          worker_by
-        };
-        this.openNotificationNewStatus();
-
-        NewNewsToComment(payloads);
-      }
-    });
+    if(ComandDealComplete === true){
+      console.log('todo complete')
+      worker_by = null;
+      worker_by = { user: postedBy}
+      TodoChangeComandList(todoId, payload).then(data => {
+        if (data.error) {
+          this.setState({ error: true });
+        } else {
+          this.forceUpdate();
+          let name_posted = isAuthenticated().direct.name;
+          let link_posted = isAuthenticated().direct._id;
+          let link = window.location.href;
+          let eventNews = "Выполнено";
+          let payloads = {
+            eventNews,
+            link,
+            news,
+            worker_by,
+            name_posted,
+            link_posted
+          };
+          this.openNotificationNewStatus();
+          NewNewsToComment(payloads);
+        }
+      });
+ 
+    }else{
+      console.log('todo next')
+      TodoChangeComandList(todoId, payload).then(data => {
+        if (data.error) {
+          this.setState({ error: true });
+        } else {
+          this.forceUpdate();
+          let link = window.location.href;
+          let eventNews = "вам пришло новое дело";
+          let payloads = {
+            eventNews,
+            link,
+            news,
+            worker_by
+          };
+          this.openNotificationNewStatus();
+  
+          NewNewsToComment(payloads);
+        }
+      });
+    }
   };
   openNotification() {
     notification.open({
@@ -834,17 +865,7 @@ export default class Job extends Component {
                       >
                         <Button type="dashed">Посмотреть дело </Button>
                       </Popover>
-                      <div>
-                        Дело от:
-                        <Link to={`/user/${postedBy}`}>
-                          <img
-                            className="card-img-top"
-                            src={`http://localhost:8080/user/photo/${postedBy}?`}
-                            onError={i => (i.target.src = `${DefaultProfile}`)}
-                            style={{ height: "5em", width: "5em" }}
-                          />
-                        </Link>
-                      </div>
+
                     </div>
                   </Card>
                 </div>

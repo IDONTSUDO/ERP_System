@@ -27,6 +27,9 @@ const NewsSchema = new mongoose.Schema({
   posted_by: {
     type: String
   },//от кого пришло
+  link_posted:{
+    type:String
+  },
   link: {
     type: String
   },//линк на событие
