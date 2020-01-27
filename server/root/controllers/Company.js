@@ -60,15 +60,15 @@ exports.WorkerStatisticTabel = async (req, res, next) => {
     const statistic = new UserStatistic()
     statistic.Userby = req.worker
 
-    statistic.save().then(result => {
+    statistic.save().then(result => {})
 
-    })
     const subsc = new Subscriber()
     subsc.userBy = req.worker
     subsc.save().then(result => {
         res.status(200).json({
             "result": "создано!"
         })
+        next()
     })
 }
 exports.workerBlock = async (req, res) => {

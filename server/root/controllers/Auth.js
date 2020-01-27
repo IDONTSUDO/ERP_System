@@ -10,6 +10,12 @@ const UserSecurity = require('../database/Security')
 const UserNews = require('../database/News')
 
 const jwt = require("jsonwebtoken")
+
+
+
+
+
+
 require("dotenv").config()
 
 
@@ -34,8 +40,10 @@ exports.NewStatisticByUser = async (req, res,next) =>{
     let Userby =  req.userId 
     let userInitStatistic =  new UserStatistic()
     userInitStatistic.Userby
-    await  userInitStatistic.save().exec( console.log(result))
+    await  userInitStatistic.save().exec(next())
 }
+
+
 exports.signin = (req, res, next) => {
     const { email, password } = req.body
     Direct.findOne({ email }, (err, direct) => {

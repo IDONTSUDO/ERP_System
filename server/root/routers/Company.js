@@ -17,7 +17,6 @@ const {
     wokerEditDeviceData,
     wokerEditDeviceDataDelete,
     getIpGeolocatedData } = require('../controllers/Company.js')
-
 const { requireSignin } = require("../middleware/middleware.js")
 
 const router = express.Router({ mergeParams: true });
