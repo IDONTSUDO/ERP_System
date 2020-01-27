@@ -49,6 +49,7 @@
     "node-ssh": "^6.0.0",
     "nodemailer": "^6.4.2",
     "q": "^1.5.1",
+    "redis": "^2.8.0",
     "shelljs": "^0.8.3",
     "socket.io-client": "^2.3.0",
     "ssh-exec": "^2.0.0",

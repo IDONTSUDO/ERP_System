@@ -21,12 +21,20 @@ exports.signup = async (req, res, next) => {
 
     const direct = await new Direct(req.body)
     await direct.save().exec(result => {
+        console.log(result._id)
         res.status(200).json({
             "result": "complete-user-registr"
         })
+        req.userId = result._id
+        next()
 
     })
-    // TODO: обратотчик для стистики пользователя
+}
+exports.NewStatisticByUser = async (req, res,next) =>{
+    let Userby =  req.userId 
+    let userInitStatistic =  new UserStatistic()
+    userInitStatistic.Userby
+    await  userInitStatistic.save().exec( console.log(result))
 }
 exports.signin = (req, res, next) => {
     const { email, password } = req.body

@@ -35,6 +35,9 @@ const todoSchema = new mongoose.Schema({
         type: Date,
         index: { expires: '5m' },
     },
+    name_posted:{
+        type:String
+    },
     importance: {
         type: String
     },
