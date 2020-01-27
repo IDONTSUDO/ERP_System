@@ -559,6 +559,7 @@ export default class Job extends Component {
             name_posted,
             link_posted
           };
+          this.setState({redirectToProfile:true})
           this.openNotificationNewStatus();
           NewNewsToComment(payloads);
         }
@@ -579,8 +580,9 @@ export default class Job extends Component {
             news,
             worker_by
           };
+          this.setState({redirectToProfile: true})
           this.openNotificationNewStatus();
-  
+
           NewNewsToComment(payloads);
         }
       });
