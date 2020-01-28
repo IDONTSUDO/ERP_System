@@ -80,9 +80,8 @@ exports.signin = (req, res, next) => {
             logged_in,
             device } = direct
         req.userId = _id
-        req.session = session
+        // req.session = session
         res.json({
-            session,
             token, direct: {
                 _id, name, email, role,device, todo_avesome,
                 todo_middle, todo_not_very_important,

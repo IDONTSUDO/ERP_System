@@ -261,7 +261,10 @@ exports.GetcomandTodo = async (req, res) => {
 exports.AssignedTask = async (req, res) => {
 
     let userId = req.body.userId
+    console.log("its req body",req.body)
     const currentPage = req.query.page || 1
+   
+    console.log("ITS USER ID",userId)
 
     const perPage = 100
     var totalItems
@@ -271,7 +274,7 @@ exports.AssignedTask = async (req, res) => {
         .countDocuments()
         .then(count => {
             totalItems = count;
-            return TODO.find()
+            return TODO.find({ posted_by: userId })
                 .skip((currentPage - 1) * perPage)
                 .select("names_workers_list")
                 .limit(perPage)
@@ -286,12 +289,12 @@ exports.AssignedTask = async (req, res) => {
 exports.AssiggnedTaskUserBy = async (req, res) => {
 
     let { userBy, userId } = req.body.payload
-
-
+    console.log("its user USERID",userId)
+    console.log("its user find",userBy)
     TODO.find({ $and: [{ posted_by: userId }, { names_workers_list: userBy }] }).exec((err, result) => {
         if (err) {
             return res.status(400).json({
-                error: err
+                err: err
             })
         }
         res.json(result)
