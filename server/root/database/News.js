@@ -21,6 +21,9 @@ const NewsSchema = new mongoose.Schema({
   worker_by_solo_task: {
     type: Array
   },
+  NewsTO:{
+    type:String
+  },
   worker_by: {
     type: Array
   },//кому

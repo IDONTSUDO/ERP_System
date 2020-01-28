@@ -16,20 +16,36 @@ exports.NewsId = async (req, res, next, id) => {
         })
 }
 exports.newNews = async (req, res, next) => {
-//    dateCreated
+    //    dateCreated
     let payload = req.body.payload
-    console.log(payload)
-    const news = new NEWS(payload)
-    news.dateCreated = Date.now()
-    news.save().then(result => {
-        res.status(200).json({
-            "result": "created"
+    let users = payload.worker_by 
+    let NewsTO = ""
+    
+    if(users.length === undefined){
+        const news = new NEWS(payload)
+        news.NewsTO =  users.user
+        news.dateCreated = Date.now()
+        news.save().then(result => {
+           
         })
-       
+    }else{
+        for (let i = 0; i < users.length; i++) {
+            console.log(users[i])
+            const news = new NEWS(payload)
+            news.NewsTO = users[i].user
+            news.dateCreated = Date.now()
+            news.save().then(result => {
+              
+            })
+        }
+    }
+    res.status(200).json({
+        "result": "created"
     })
 }
 
 exports.NewTodoo = async (req, res, next) => {
+    console.log("NEW TODO")
     const todo = new TODO(req.body)
     todo.postedBy = req.worker
 
@@ -38,6 +54,7 @@ exports.NewTodoo = async (req, res, next) => {
         next()
     })
     const news = new NEWS(req.body)
+    console.log("PAYLOAD TO NEW TODO", news)
     news.save().then(result => {
         req.new = result._id
         next()
@@ -45,13 +62,16 @@ exports.NewTodoo = async (req, res, next) => {
 }
 exports.SetNews = async (req, res, next) => {
    
-    const news = new NEWS(req.body)
-    news.link = req.newsLink
-    news.save().then(result => {
-        res.status(200).json({
-            "result": "created"
-        })
-    })
+    console.log("NEWS LIST")
+    let users = req.newsUser
+
+    for (let i = 0; users.length > i; i++) {
+        const news = new NEWS(req.body)
+        news.link = req.newsLink
+        news.NewsTO = users[i].user
+        news.save().then(result => { console.log("NEWS LIST"),console.log(result)})
+    }
+    res.status(200).json({ "result": "created" })
     next()
 }
 exports.NewsDelete = async (req, res) => {
@@ -69,7 +89,8 @@ exports.NewsDelete = async (req, res) => {
 }
 exports.readNews = async (req, res) => {
     let worker = req.body.id
-    NEWS.find({ worker_by: { $elemMatch: { user: worker } } })
+    console.log(worker)
+    NEWS.find({ NewsTO: worker  })
         .exec((err, news) => {
             if (err) {
                 return res.status(400).json({

@@ -241,7 +241,7 @@ exports.NewPushingNotifycation = async (req, res) => {
               pushPayload,
               pushOptions
             ).then((value) => {
-                console.log("itsvalue", value)
+               
 
               
               resolve({
@@ -250,7 +250,7 @@ exports.NewPushingNotifycation = async (req, res) => {
                 data: value
               });
             }).catch((err) => {
-              console.log(err)
+             
               reject({
                 status: false,
                 endpoint: subscription.endpoint,
@@ -259,9 +259,7 @@ exports.NewPushingNotifycation = async (req, res) => {
             });
           });
         });
-        q.allSettled(parallelSubscriptionCalls).then((pushResults) => {
-          return  console.log("its result", pushResults)
-        });
+        q.allSettled(parallelSubscriptionCalls).then((pushResults) => {});
       }
     });
   }

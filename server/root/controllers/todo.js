@@ -152,7 +152,7 @@ exports.NewTodoUserAwesome = async (req, res) => {
 
 }
 exports.NewTodoUserAwesomeNews = async (req, res, next) => {
-    console.log(req.body)
+ 
 
    
     let users = req.body.worker_by
@@ -161,8 +161,6 @@ exports.NewTodoUserAwesomeNews = async (req, res, next) => {
     if(req.body.status === "Выполнено"){
         todo.expireAt = Date.now()
     }
-    console.log(todo)
-    
     todo.save().then(result => {
         req.body.link + result._id
         req.newsLink = '/job/' + result._id
