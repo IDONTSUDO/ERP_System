@@ -33,6 +33,7 @@ class Profile extends Component {
       }
     });
     AllStatistic(userId).then(data => {
+      let total_installment = 0
       if (data != undefined) {
         this.setState({ static: data });
       }

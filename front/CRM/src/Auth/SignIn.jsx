@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { signin, authencate, isAuthenticated } from "../Api/Auth";
-import { Spin } from "antd";
+import { Spin, Alert,Button } from "antd";
 
 class Signin extends Component {
   constructor() {
@@ -49,46 +49,46 @@ class Signin extends Component {
         {isAuthenticated() ? null : (
           <div className="container">
             <div className="row">
-            <div
-              className="alert alert-danger"
-              style={{ display: error ? "" : "none" }}
-            >
-              {error}
-            </div>
-            {loading ? (
-              <div className="jumbotron text-center">
-                <Spin size="large" />
-              </div>
-            ) : (
-              null
-            )}
-            <form>
-            <h2 className="">Авторизация</h2>
-              <div className="form-group">
-                <label className="text-muted">Email</label>
-                <input
-                  onChange={this.handleChange("email")}
-                  type="email"
-                  className="form-control"
-                  value={email}
-                />
-              </div>
-              <div className="form-group">
-                <label className="text-muted">Пароль</label>
-                <input
-                  onChange={this.handleChange("password")}
-                  type="password"
-                  className="form-control"
-                  value={password}
-                />
-              </div>
-              <button
-                onClick={this.clickSubmit}
-                className="btn btn-raised btn-primary"
-              >
-                Отправить
-              </button>
-            </form>
+              <form>
+                {loading ? (
+                  <>
+                    <Spin size="large" />
+                  </>
+                ) : null}
+                <h2 className="">Авторизация</h2>
+                <div className="form-group">
+                  <Alert
+                  style={{ display: error ? "" : "none" }}
+                    message="Ошибка авторизации"
+                    description={error}
+                    type="error"
+                    
+                  />
+                  <label className="text-muted">Email</label>
+                  <input
+                    onChange={this.handleChange("email")}
+                    type="email"
+                    className="form-control"
+                    value={email}
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="text-muted">Пароль</label>
+                  <input
+                    onChange={this.handleChange("password")}
+                    type="password"
+                    className="form-control"
+                    value={password}
+                  />
+                </div>
+                <Button
+                  onClick={this.clickSubmit}
+                  type="primary"
+                  ghost
+                >
+                  Отправить
+                </Button>
+              </form>
             </div>
           </div>
         )}

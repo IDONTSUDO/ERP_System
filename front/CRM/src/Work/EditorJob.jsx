@@ -40,7 +40,8 @@ export default class EditorJob extends Component {
       time: String,
       redirectTo: false,
       title: String,
-      todoId: String
+      todoId: String,
+      LonelyTodoTime: String,
     };
     this.handleActionEditor = this.handleActionEditor.bind(this);
   }
@@ -163,8 +164,7 @@ export default class EditorJob extends Component {
     });
   };
   handelChangeSoloWork = () => {
-    let { todoId, title, tags,names_workers_list } = this.state;
-
+    let { todoId, title, tags,names_workers_list,LonelyTodoTime } = this.state;
     let UsersArray = document.querySelectorAll(
       ".ant-select-selection__choice__content"
     );
@@ -176,7 +176,6 @@ export default class EditorJob extends Component {
     let re = /<div class="ql-editor" data-gramm="false" contenteditable="true">/gi;
     // UserAction.outerHTML.replace(re, "");
     UsersArray.forEach(function(user) {
-      console.log(user.innerHTML)
       ActionArray.push(user.innerHTML);
     });
     UserActions.forEach(function(act) {
@@ -186,7 +185,9 @@ export default class EditorJob extends Component {
     for(let i =0; i < tags.length; i++){
       validatedObject.push({[names_workers_list[i]]:tags[i]})
     }
-
+    if(LonelyTodoTime === undefined){
+      console.log(200)
+    }
     let payload = {
       description,
       title
@@ -201,7 +202,11 @@ export default class EditorJob extends Component {
   
   };
   handelDateChange = (date, dateString) => {
-    console.log(date, dateString);
+    // console.log(date, dateString);
+    let time = moment(date)
+    .locale("ru")
+    .format("LL");
+    this.setState({LonelyTodoTime:time})
   };
   init = todoId => {
     soloJob(todoId).then(data => {
@@ -327,16 +332,18 @@ export default class EditorJob extends Component {
       let date = moment(current, "LL", "ru");
       return (
         <>
+        <div className="hr_job_list">
+
+       
           <div className="editor_job_team_background">
             <div className="jobs_timers" style={{ padding: "5px" }}>
               {JobArray[obj].date}
             </div>
-            {/* dateRender */}
-            {/*  dateRender={curent =>{ return (<> {current}</>)} } */}
-            <DatePicker defaultValue={date} />
-            {/* moment(JobArray[obj].date, "LL", "ru") */}
+         
+            <DatePicker disabled={true} defaultValue={date} />
+           
             <Icon
-              // onClick={this.handleClickDeleted(``)}
+             
               onClick={userId =>
                 this.handleClickEditedLonelyJob(`${JobArray[obj].user}`, userId)
               }
@@ -351,6 +358,7 @@ export default class EditorJob extends Component {
             <ReactQuill value={JobArray[obj].action} id={`workerAction${i}`} />
           </div>
           <div></div>
+          </div>
         </>
       );
     });
@@ -368,7 +376,7 @@ export default class EditorJob extends Component {
       <>
         <div className="container">
           <div className="row">
-            <div className="col-md-4">
+            <div className="hr_job_list">
               <label>
                 Заголовок
                 <input
@@ -381,7 +389,7 @@ export default class EditorJob extends Component {
               <div className="new_jobs_list">
                 <ReactQuill value={description} />
               </div>
-              <DatePicker defaultValue={date} />
+              <DatePicker  disabled={true} onChange={this.handelDateChange} defaultValue={date} />
               <Select
                 mode="multiple"
                 style={{ width: "100%" }}

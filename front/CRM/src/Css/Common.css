@@ -1,6 +1,13 @@
 .sun-editor .se-toolbar.se-toolbar-sticky {
   position: absolute;
 }
+.ant-select-selection--multiple{
+  width:250px;
+  max-width: 500px;
+}
+.Tags{
+  width:100%;
+}
 .editor_job_team_background{
   border-color: #c0e8e3;
   border-style: solid; /* Стиль границы */
@@ -167,6 +174,7 @@
     /* width: 55em */
   }
   .hr_job_list {
+    width: 35em;  
   }
   .new_jobs_list {
   }
@@ -301,7 +309,7 @@
     display: flex;
   }
   .hr_job_list {
-    width: 35em;
+    width: 55em;  
   }
   .new_jobs_list {
     width: 75em;
@@ -356,6 +364,9 @@
 /* flex-row-reverse */
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
+  .hr_job_list {
+    width: 55em;  
+  }
   .postisitonRelativeSmeni {
     left: 9em;
     top: 2em;
@@ -1042,7 +1053,7 @@ nav {
 #menu {
   position: absolute;
   width: 25em;
-  height: auto;
+  height: 50em;
   box-shadow: 0 0 10px #85888c;
   margin: -50px 0 0 -50px;
   padding: 50px;

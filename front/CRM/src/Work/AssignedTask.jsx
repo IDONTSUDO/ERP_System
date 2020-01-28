@@ -26,7 +26,6 @@ class AssignedTask extends Component {
             data[obj].names_workers_list.map(i => arrayUsers.push(i))
           );
         }
-        // var arr = [1, 3, 4, 1, 1, 3, 4, 5];
         var result = {};
         arrayUsers.forEach(function(a) {
           if (result[a] != undefined) ++result[a];

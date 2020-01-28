@@ -58,7 +58,8 @@ export default class Job extends Component {
       JobArray: [],
       description: "",
       todoTitel: "",
-      redirectToProfile: false
+      redirectToProfile: false,
+      name_posted:""
     };
   }
   // life hooks
@@ -106,7 +107,8 @@ export default class Job extends Component {
           comand: data.comand,
           description: data.description,
           postedBy: data.posted_by,
-          TodoTitel: data.title
+          TodoTitel: data.title,
+          name_posted:data.name_posted
         });
       }
     });
@@ -365,16 +367,20 @@ export default class Job extends Component {
         let posted_by = isAuthenticated().direct._id;
         let name_posted = isAuthenticated().direct.name;
         let worker_by = { user: postedBy };
-        let eventNews = status;
-        let payload = {
-          worker_by,
-          eventNews,
-          link,
-          name_posted,
-          posted_by,
-          description
-        };
-        NewNewsToComment(payload);
+        if(postedBy === posted_by){
+          return null
+        }else{
+          let eventNews = status;
+          let payload = {
+            worker_by,
+            eventNews,
+            link,
+            name_posted,
+            posted_by,
+            description
+          };
+          NewNewsToComment(payload);
+        }
         let sub = IsEveryDaySub()._id;
 
         UpdateDaysTodoComplete(sub);
@@ -551,13 +557,16 @@ export default class Job extends Component {
           let link_posted = isAuthenticated().direct._id;
           let link = window.location.href;
           let eventNews = "Выполнено";
+          let expireAt = new Date();
+
           let payloads = {
             eventNews,
             link,
             news,
             worker_by,
             name_posted,
-            link_posted
+            link_posted,
+            expireAt
           };
           this.setState({redirectToProfile:true})
           this.openNotificationNewStatus();
@@ -675,7 +684,8 @@ export default class Job extends Component {
       JobArray,
       description,
       redirectToProfile,
-      ID
+      ID,
+      name_posted
     } = this.state;
     if (redirectToProfile) {
       return <Redirect to={`/user/work/${isAuthenticated().direct._id}`} />;
@@ -696,6 +706,7 @@ export default class Job extends Component {
                             <Icon  theme="twoTone" twoToneColor="#eb2f96"  type="edit" />
                           </Link>
                         ) : null}
+                        <Link to={`/user/${postedBy}`}><small class="text-muted">От {todo.name_posted} *</small></Link>
                         <small class="text-muted">{todo.status}</small>
                       </div>
                     </a>
@@ -827,6 +838,7 @@ export default class Job extends Component {
                             <Icon  theme="twoTone" twoToneColor="#eb2f96"  type="edit" />
                           </Link>
                         ) : null}
+                         <Link to={`/user/${postedBy}`}><small class="text-muted">От {this.state.name_posted} *</small></Link>
                       <div class="d-flex w-100 justify-content-between">
                         <small class="text-muted">{status}</small>
                       </div>
@@ -853,7 +865,7 @@ export default class Job extends Component {
                             <Link to={`/user/${tod}`}>
                               <img
                                 className="card-img-top"
-                                src={`http://localhost:8080/user/photo/${tod}?`}
+                                src={`${process.env.REACT_APP_API_URL}/user/photo/${tod}?`}
                                 onError={i =>
                                   (i.target.src = `${DefaultProfile}`)
                                 }
@@ -873,7 +885,6 @@ export default class Job extends Component {
                 </div>
               </div>
               <hr className="hr_job_list" />
-
               <div className="">
                 <div class="">
                   <div>

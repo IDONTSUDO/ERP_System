@@ -98,8 +98,8 @@ export default class News extends Component {
                           </h6>
                           <div className="">
                           <div dangerouslySetInnerHTML={{ __html: news.description }} />
-                            <Link to={`/user/${news.link_posted}`}>
-                            <div style={{ padding: "5px" }}>
+                            <Link to={`/user/${news.posted_by}`}>
+                            <div  style={{ padding: "5px",color:"black" }}>
                               Выполнил: {news.name_posted} *
                             </div>
                             </Link>
@@ -229,7 +229,9 @@ export default class News extends Component {
                                         <div>Подробности</div>
 
                                         <div style={{ padding: "5px" }}>
-                                          {news.action}
+
+                                        <div dangerouslySetInnerHTML={{ __html: news.action}} />
+                                        
                                         </div>
                                         <div style={{ padding: "5px" }}>
                                           {news.date}

@@ -639,7 +639,7 @@ class Work extends React.Component {
                     <div className="Tags">
                       <Select
                         mode="multiple"
-                        style={{ width: "100%" }}
+                        style={{ width: "max-content" }}
                         placeholder="Выберете исполнителей"
                         onChange={this.handleChange}
                         optionLabelProp="label"
@@ -656,7 +656,8 @@ class Work extends React.Component {
                       </Select>
                     </div>
                   </div>
-                  <div style={{ padding: "50px" }} className="col-md-4">
+                  {/* style={{ padding: "50px" }} */}
+                  <div  className="col-md-4">
                     <Button onClick={this.clickSubmit}>Отправить</Button>
                   </div>
                 </TabPane>
@@ -668,7 +669,7 @@ class Work extends React.Component {
                         // disabled={disbledSelect  ?(true):(false)}
                         autoFocus={true}
                         mode="multiple"
-                        style={{ width: "100%" }}
+                        style={{ width: "max-content" }}
                         placeholder="Выберете исполнителей"
                         onChange={this.handleChange}
                         optionLabelProp="label"
