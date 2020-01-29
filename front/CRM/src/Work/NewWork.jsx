@@ -13,9 +13,7 @@ import {
 } from "antd";
 import moment from "moment";
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // ES6
-
-// import "suneditor/dist/css/suneditor.min.css";
+import 'react-quill/dist/quill.snow.css'; 
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -477,6 +475,7 @@ class Work extends React.Component {
       let link = `${process.env.REACT_APP_API_NEWS_JOB}`;
       let names_workers_list = tags
       let paylod = {
+        
         names_workers_list,
         link,
         worker_by,

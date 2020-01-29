@@ -252,7 +252,7 @@ export default class Job extends Component {
   clickSubmitComentOneJob = () => {
     // функция для коментариев дела которое не переходит от пользователя к пользователю,
     // это можно было сделать по другому. Но это были бы макороны похлеще.
-    const { body, worker, ID, tags, name } = this.state;
+    const { body, worker, ID, tags, name,postedBy } = this.state;
     let todoId = ID;
     let comment = JSON.stringify({ body, worker, todoId, name });
 
@@ -264,7 +264,7 @@ export default class Job extends Component {
       } else {
         this.forceUpdate();
         let finalyUser = [];
-
+        finalyUser.push(postedBy)
         finalyUser = tags.filter(el => el !== userID); //валидируем, что бы в массиве не было юзер айди того кто отправляет коменатрий
         let worker_by = finalyUser.map((user, index) => {
           return {
@@ -297,9 +297,10 @@ export default class Job extends Component {
   };
   clickSubmit = () => {
     // обработка коментария одиночного  дела.
-    const { body, worker, ID, name, JobArray } = this.state;
+    const { body, worker, ID, name, JobArray,postedBy } = this.state;
     let todoId = ID;
     let tags = [];
+    tags.push(postedBy)
     for (let i = 0; JobArray.length > i; i++) {
       if (JobArray[i].user[25] === "A") {
         tags.push(JobArray[i].user.slice(0, -9));
@@ -706,7 +707,7 @@ export default class Job extends Component {
                             <Icon  theme="twoTone" twoToneColor="#eb2f96"  type="edit" />
                           </Link>
                         ) : null}
-                        <Link to={`/user/${postedBy}`}><small class="text-muted">От {todo.name_posted} *</small></Link>
+                        <Link to={`/user/${postedBy}`}><small class="text-muted">От {name_posted} *</small></Link>
                         <small class="text-muted">{todo.status}</small>
                       </div>
                     </a>

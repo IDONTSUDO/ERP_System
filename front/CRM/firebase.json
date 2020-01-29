@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "svarog-crm",
+    "site": "crm-svarog",
     "public": "build",
     "ignore": [
       "firebase.json",

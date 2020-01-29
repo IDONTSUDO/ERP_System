@@ -16,7 +16,7 @@ class TodoAssignUserBy extends Component {
   componentDidMount() {
     const userBy = this.props.match.params.userBy;
     let userId = isAuthenticated().direct._id;
-
+  
     let payload = {
       userId,
       userBy

@@ -16,7 +16,7 @@ class AssignedTask extends Component {
     this.init(userId);
   }
   init = userId => {
-    MyAssignedTodo().then(data => {
+    MyAssignedTodo(userId).then(data => {
       if (data.error) {
         this.setState({ error: true });
       } else {
@@ -45,7 +45,7 @@ class AssignedTask extends Component {
             <div className="col">
               {Object.keys(assigned).map(obj => (
                 <div className="">
-                  <Card style={{ padding: "5px" }}>
+                  <Card className="hr_job_list" style={{ padding: "5px" }}>
                     <h6>
                       {" "}
                       {obj} <b>Количество дел:</b> {assigned[obj]}{" "}
