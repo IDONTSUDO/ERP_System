@@ -316,6 +316,7 @@ export default class MyAgent extends Component {
                     content={<a>{legal_address}</a>}
                   />
                 </Col>
+                  
                 <Col span={12}>
                   <DescriptionItem
                     title="Полное имя компании"

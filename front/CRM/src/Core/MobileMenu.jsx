@@ -91,7 +91,7 @@ class MobileMenu extends Component {
                   ) : null}
 
                   <Link onClick={this.closedMenu} to={`/company`}>
-                    <h5 className="text-white ">Компания</h5>
+                    <h5 className="text-white bg-dark">Компания</h5>
                   </Link>
                   {["Директор", "Управляющий", "Бухгалтер"].includes(role) ? (
                     <>

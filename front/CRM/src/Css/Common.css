@@ -902,6 +902,7 @@
   font-size: 14px;
   line-height: 1.5;
   color: #24292e;
+  max-width:300px;
 }
 .todo-yellow-text {
   font-size: 150%;
@@ -1110,4 +1111,8 @@ nav {
 }
 .editor_job_lonely{
   /* left:20px; */
+}
+.name_user{
+  word-break: break-word;
+  max-width:300px;
 }

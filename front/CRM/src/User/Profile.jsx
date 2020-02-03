@@ -109,7 +109,7 @@ class Profile extends Component {
                         />
                         {/* <Online  user={user._id}/> */}
                         <div style={{ padding: "5px" }}>
-                          <h1>Имя: {user.name}</h1>
+                          <h1 className="name_user">Имя: {user.name}</h1>
                           <h2 style={{ backgroundColor: "#fcff38" }}>
                             Должность: {user.role}
                           </h2>

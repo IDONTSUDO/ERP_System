@@ -6,10 +6,14 @@ import App from './App';
 import "moment/locale/ru";
 // import {TestSocket} from './WsSocket/ws-socket.js'
 import * as serviceWorker from './Push/serviceWorker';
-
+// import {P/rovider} from "react-redux"
+// import { configureStore } from "./Redux/Store.js"
 import { isAuthenticated, Subscribe, IsSubscriber } from "./Api/Auth"
-ReactDOM.render(<App />, document.getElementById('root'));
 
+
+
+ReactDOM.render( <App/>, document.getElementById('root'));
+// <Provider store={configureStore()}></Provider>
 serviceWorker.register();
 // подписка на сервис воркера
 // TestSocket()

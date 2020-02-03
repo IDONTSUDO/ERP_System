@@ -31,21 +31,23 @@ class MenuMain extends React.Component {
     if (isAuthenticated() == false) {
       return false;
     } else {
-      isOnline();
+      // isOnline();
       var userId = isAuthenticated().direct._id;
       var userRole = isAuthenticated().direct.role;
-      MyTodoComandQuality(userId).then(data => {
-        if (data.error) {
-        } else {
-          this.setState({ getComandTodo: data, role: userRole });
-          MyTodoTodyQuality(userId).then(data => {
-            if (data.error) {
-            } else {
-              this.setState({ SoloTodoToday: data });
-            }
-          });
-        }
-      });
+      this.setState({role:userRole})
+      
+      // MyTodoComandQuality(userId).then(data => {
+      //   if (data.error) {
+      //   } else {
+      //     this.setState({ getComandTodo: data, role: userRole });
+      //     MyTodoTodyQuality(userId).then(data => {
+      //       if (data.error) {
+      //       } else {
+      //         this.setState({ SoloTodoToday: data });
+      //       }
+      //     });
+      //   }
+      // });
     }
     this.setState({ window_width: window.innerWidth });
   }
