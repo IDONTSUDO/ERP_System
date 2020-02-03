@@ -1,0 +1,21 @@
+{
+  "name": "integration",
+  "version": "1.0.0",
+  "description": "",
+  "main": "root.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "fast-xml-parser": "^3.16.0",
+    "he": "^1.2.0",
+    "mongoose": "^5.8.10",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.5",
+    "xml-js": "^1.6.11"
+  }
+}
