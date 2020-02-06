@@ -2,6 +2,13 @@
   position: absolute;
 }
 .ant-select-selection--multiple{
+  width: 500px;
+}
+.dropdown_contr_agent{
+  width:200%;
+  position:fixed;
+}
+.ant-select-selection--multiple{
   width:250px;
   max-width: 500px;
 }
@@ -42,6 +49,9 @@
   width: 2000px;
   color: #000000;
   background-color: #d1ecf1;
+}
+.calendar_body{
+  background-color: #ffffff;
 }
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {

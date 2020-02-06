@@ -395,7 +395,7 @@ export const ChangeHistory = (DealId, status) => {
         .catch(err => console.log(err))
 }
 export const ChangeHistoryItem = (DealId, payload) => {
-    console.log(JSON.stringify(payload))
+  
     return fetch(`${process.env.REACT_APP_API_URL}/change/history/${DealId}`, {
         method: "PUT",
         headers: myHeaders,
@@ -473,7 +473,7 @@ export const TodoUpTime = (ID, UpTime) => {
         .catch(err => console.log(err))
 }
 export const TodoChangeComandList = (todoId, payload) => {
-
+   
     return fetch(`${process.env.REACT_APP_API_URL}/todo/change/${todoId}`, {
         method: "POST",
         headers: myHeaders,
@@ -832,11 +832,47 @@ export const UpdateDaysTodoComplete = (payload)=>{
 export const DeleteTodo = (TodoId) =>{
     return fetch(`${process.env.REACT_APP_API_URL}/delete/todo/${TodoId}`, {
         method: "DELETE",
-        headers: myHeaders
+        headers: myHeaders,
     }).then(response => {
         return response.json()
     })
         .catch(err => {
+            console.log(err)
+        })
+}
+export const SearchAgentEmail = (item) =>{
+    
+    return fetch(`${process.env.REACT_APP_API_URL}/search/managing/director/to/email`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({item})
+    }).then(response => {
+        return response.json()
+    })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const GetTodoByAgent = (agentId) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/agent/todo/${agentId}`, {
+        method: "GET",
+        headers: myHeaders,
+    }).then(response => {
+        return response.json()
+    })
+        .catch(err => {
+            console.log(err)
+        })
+}
+export const GetAgentTodoStatistic = (agentId) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/agent/todo/quality${agentId}`,{
+        method:"GET",
+        headers: myHeaders
+    }).then(response =>{
+        return response.json()
+    })
+        .catch(err =>{
             console.log(err)
         })
 }

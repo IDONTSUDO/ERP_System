@@ -499,7 +499,9 @@ export default class Job extends Component {
     let El3;
     let str2 = 0;
     let ComandDealComplete = false
+  
     while (usersArray.length > str2) {
+ 
       if (usersArray[str2] !== userId + "IAMWORKED") {
         UsersLsatArray.push(usersArray[str2]);
       }
@@ -512,15 +514,16 @@ export default class Job extends Component {
           UsersLsatArray.push(usersArray[str1 + 1] + "IAMWORKED");
           El3 = usersArray[str1 + 1];
         } else {
-          // this.SetStatusCompleteComandWork();
-          // this.clickSetStatusCompleteJob();
+         
+          UsersLsatArray.push(usersArray[str1].slice(0,-9));
+        
           ComandDealComplete = true
-          console.log("ДАККАК ЖЕ ТЫ ЗАЕБАЛ ХУЙНЯ СОБАЧЬЯ СКОЛЬКО МОЖНО БЛЯТь");
+         
         }
       }
       str2++;
     }
-
+   
     var filteredTime = UsersLsatArray.filter(function(el) {
       return el !== El3;
     });
@@ -532,21 +535,23 @@ export default class Job extends Component {
         action: actionArray[index]
       };
     });
-    // ДЕЛО ЧОТО ТАМ БЛА АБЛА"
-    // news = El3;
-    // console.log(news)
+    
     worker_by = { user: El3 };
 
-    // worker_by.push(El3);
-
+    
     JobArray = LastArray;
-    // let status = "Требуется уточнение";
-
-    let payload = {
-      JobArray
-    };
+ 
+    let payload = {}
+    let status = "Выполнено"
     if(ComandDealComplete === true){
-      console.log('todo complete')
+      payload ={JobArray,status}
+    }else{
+      payload = {
+        JobArray
+      };
+    }
+    
+    if(ComandDealComplete === true){
       worker_by = null;
       worker_by = { user: postedBy}
       TodoChangeComandList(todoId, payload).then(data => {

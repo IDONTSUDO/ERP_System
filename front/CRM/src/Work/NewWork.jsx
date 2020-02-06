@@ -1,5 +1,13 @@
 import React from "react";
-import { list, NewTodo, NewNewsJob, NewAssignTodoToday } from "../Api/Http";
+import {
+  list,
+  NewTodo,
+  NewNewsJob,
+  NewAssignTodoToday,
+  SearchAgentEmail,
+  MyAgentList,
+  SearchContrAgent
+} from "../Api/Http";
 import { isAuthenticated } from "../Api/Auth";
 import { everyday, IsEveryDaySub } from "../helper/everyday.js";
 import {
@@ -9,15 +17,17 @@ import {
   Icon,
   DatePicker,
   Input,
-  Select
+  Select,
+  Checkbox
 } from "antd";
 import moment from "moment";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; 
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-const { Option } = Select;
+const { Option, OptGroup } = Select;
+
 const { TabPane } = Tabs;
 
 class Work extends React.Component {
@@ -29,14 +39,17 @@ class Work extends React.Component {
       // это нужно для формирования новостей
       startDate: new Date(),
       tags: [],
+      emaiFind: false,
       //это список юзеров
       worker: [],
       title: "",
       description: "",
       user: "",
+      role: "",
       loading: false,
       importance: "",
       visible: false,
+      contr_agent: [],
       error: "",
       // это то что должен сделать работник
       workerJob0: "",
@@ -61,12 +74,16 @@ class Work extends React.Component {
       workerTime7: "",
       workerTime8: "",
       workerTime9: "",
-      disbledSelect: true
+      disbledSelect: true,
+      contr_agent_id: ""
     };
     this.handleActionEditor = this.handleActionEditor.bind(this);
   }
   componentDidMount() {
-    this.setState({ user: isAuthenticated().direct });
+    this.setState({
+      user: isAuthenticated().direct,
+      role: isAuthenticated().direct.role
+    });
     everyday();
     list().then(data => {
       if (data.error) {
@@ -131,7 +148,7 @@ class Work extends React.Component {
     return true;
   };
   onChangeworkerTime0 = (date, dateString) => {
-    console.log(date,dateString)
+    console.log(date, dateString);
     this.setState({ workerTime0: date });
   };
   onChangeworkerTime1 = (date, dateString) => {
@@ -182,12 +199,9 @@ class Work extends React.Component {
         worker
       } = this.state;
 
-
       let tagsArray = [];
-      let names_workers_list = tags
-      
-      
-    
+      let names_workers_list = tags;
+
       for (let index = 0; tags.length > index; index++) {
         for (let index1 = 0; worker.length > index1; index1++) {
           if (worker[index1].name === tags[index]) {
@@ -195,18 +209,24 @@ class Work extends React.Component {
           }
         }
       }
-      
 
       let time = moment(startDate)
         .locale("ru")
         .format("LL");
+      let mounth = moment(startDate)
+        .locale("ru")
+        .format("MM");
+      let year = moment(startDate)
+        .locale("ru")
+        .format("YY");
+
       tags = [];
       let finalyUserArray = [];
       tags = tagsArray;
 
       let comand = false;
       // tags
-     
+
       let posted_by = isAuthenticated().direct._id;
       let name_posted = isAuthenticated().direct.name;
       let eventNews = "Назначено новое дело";
@@ -221,22 +241,51 @@ class Work extends React.Component {
           user: user
         };
       });
-      let paylod = {
-        posted_by,
-        link,
-        name_posted,
-        eventNews,
-        comand,
-        importance,
-        title,
-        description,
-        time,
-        worker_by,
-        tags,
-        names_workers_list
-      };
+      let { agent, agentId } = this.state;
+      let agentByTodo = [];
+      agentByTodo.push(agent, agentId);
+      let payload = [];
 
-      NewNewsJob(paylod).then(data => {
+      if (agentByTodo[1] === undefined) {
+        payload = {
+          year,
+          mounth,
+          time,
+          posted_by,
+          link,
+          name_posted,
+          eventNews,
+          comand,
+          importance,
+          title,
+          description,
+          time,
+          worker_by,
+          tags,
+          names_workers_list
+        };
+      } else {
+        payload = {
+          year,
+          mounth,
+          time,
+          posted_by,
+          link,
+          name_posted,
+          eventNews,
+          comand,
+          importance,
+          title,
+          description,
+          time,
+          worker_by,
+          tags,
+          agentByTodo,
+          names_workers_list
+        };
+      }
+
+      NewNewsJob(payload).then(data => {
         if (data.error) {
           this.openNotificationError();
         } else
@@ -345,7 +394,9 @@ class Work extends React.Component {
       workerTime9,
       importance,
       title,
-      user
+      user,
+      agent,
+      agentId
     } = this.state;
     let timeArray = [];
     let newTimeArray = [];
@@ -382,8 +433,7 @@ class Work extends React.Component {
       workerJob8,
       workerJob9
     );
-    
-    
+
     for (let t = 0; timeArray.length > t; t++) {
       newTimeArray.push(timeArray[t]._d);
     }
@@ -391,7 +441,7 @@ class Work extends React.Component {
     var filteredTime = newTimeArray.filter(function(el) {
       return el != undefined;
     });
-
+    console.log(filteredTime);
     for (let k = 0; filteredTime.length > k; k++) {
       lastTimeArray.push(
         moment(filteredTime[k])
@@ -473,22 +523,43 @@ class Work extends React.Component {
       let worker_by = jobNews;
       let eventNews = "Назначено новое дело";
       let link = `${process.env.REACT_APP_API_NEWS_JOB}`;
-      let names_workers_list = tags
-      let paylod = {
-        
-        names_workers_list,
-        link,
-        worker_by,
-        eventNews,
-        posted_by,
-        name_posted,
-        JobArray,
-        comand,
-        importance,
-        title,
-        jobNews
-      };
-      NewNewsJob(paylod).then(data => {
+      let names_workers_list = tags;
+      let payload;
+      let agentByTodo = [];
+      agentByTodo.push(agent, agentId);
+      console.log(agentByTodo[1]);
+      if (agentByTodo[1] === undefined) {
+        payload = {
+          names_workers_list,
+          link,
+          worker_by,
+          eventNews,
+          posted_by,
+          name_posted,
+          JobArray,
+          comand,
+          importance,
+          title,
+          jobNews
+        };
+      } else {
+        payload = {
+          names_workers_list,
+          link,
+          worker_by,
+          eventNews,
+          posted_by,
+          name_posted,
+          JobArray,
+          comand,
+          importance,
+          title,
+          jobNews,
+          agentByTodo
+        };
+      }
+
+      NewNewsJob(payload).then(data => {
         if (data.error) {
           this.openNotificationError();
         } else {
@@ -516,7 +587,9 @@ class Work extends React.Component {
             workerTime6: "",
             workerTime7: "",
             workerTime8: "",
-            workerTime9: ""
+            workerTime9: "",
+            agent: undefined,
+            agentId: undefined
           });
           document.querySelector(".ant-select-selection__clear").click();
           let sub = IsEveryDaySub()._id;
@@ -545,9 +618,107 @@ class Work extends React.Component {
     });
     this.setState({ error: "" });
   }
+  handelInputChangeAgent = value => {
+    // if(value.join() === ""){
+    //   console.log(200)
+    // }
 
+    if (value.join().length === 0) {
+      this.setState({ agent: undefined, agentId: undefined });
+    }
+    let { contr_agent } = this.state;
 
+    for (let i of contr_agent) {
+      // переводим value в строку
+
+      if (i._id === value.join()) {
+        this.setState({ agent: i.name, agentId: i._id });
+      }
+    }
+  };
+  handleChangeSearchAgent = item => {
+    let { emaiFind, role } = this.state;
+
+    if (item.length > 1) {
+      if (emaiFind) {
+        switch (role) {
+          case "Директор":
+            SearchAgentEmail(item).then(data => {
+              if (data.err) {
+                this.openNotificationError();
+              } else {
+                this.setState({ contr_agent: data });
+              }
+            });
+            break;
+          case "Управляющий":
+            SearchAgentEmail(item).then(data => {
+              if (data.err) {
+                this.openNotificationError();
+              } else {
+                this.setState({ contr_agent: data });
+              }
+            });
+            break;
+          case "Менеджер":
+            MyAgentList(isAuthenticated().direct._id).then(data => {
+              if (data.err) {
+                this.openNotificationError();
+              } else {
+                this.setState({ contr_agent: data });
+              }
+            });
+            break;
+          default:
+        }
+      } else {
+        switch (role) {
+          case "Директор":
+            SearchContrAgent(item).then(data => {
+              if (data.err) {
+                this.openNotificationError();
+              } else {
+                this.setState({ contr_agent: data });
+              }
+            });
+            break;
+          case "Управляющий":
+            SearchContrAgent(item).then(data => {
+              if (data.err) {
+                this.openNotificationError();
+              } else {
+                this.setState({ contr_agent: data });
+              }
+            });
+            break;
+          case "Менеджер":
+            MyAgentList(isAuthenticated.user._id).then(data => {
+              if (data.err) {
+                this.openNotificationError();
+              } else {
+                this.setState({ contr_agent: data });
+              }
+            });
+            break;
+          default:
+        }
+      }
+    }
+  };
+  handleCancelSearchInputAgent = e => {
+    console.log(e);
+    // this.setState({agent:null})
+  };
+  handleChangeSearchAgentEmail = e => {
+    this.setState({ emaiFind: e.target.checked });
+  };
   render() {
+    const options = this.state.contr_agent.map(d => (
+      <Option key={d._id}>
+        {" "}
+        {this.state.emaiFind ? <b>{d.email} </b> : null} {d.name}
+      </Option>
+    ));
     const {
       worker,
       description,
@@ -566,7 +737,7 @@ class Work extends React.Component {
       workerJob9,
       disbledSelect
     } = this.state;
-    function handleScroll(event){
+    function handleScroll(event) {
       console.log(event); //Get the scroll event
     }
     return (
@@ -574,7 +745,7 @@ class Work extends React.Component {
         <div className="screen-reader">
           <div className="container">
             <div className="row">
-              <Tabs defaultActiveKey="1" className="new_jobs_list" >
+              <Tabs defaultActiveKey="1" className="new_jobs_list">
                 <TabPane tab="Одиночное" key="1">
                   <form>
                     <div>
@@ -589,7 +760,6 @@ class Work extends React.Component {
                         onChange={this.handleAction("title")}
                         type="text"
                         class="form-control"
-                       
                       />
                     </div>
 
@@ -602,12 +772,11 @@ class Work extends React.Component {
                       </label>
                       <ReactQuill
                         onChange={this.handleActionEditor("description")}
-        
                       />
                     </div>
                   </form>
 
-                  <div className="col-md-4">
+                  <div>
                     <label
                       className="label_position text-muted"
                       for="exampleFormControlTextarea1"
@@ -633,7 +802,7 @@ class Work extends React.Component {
                       </select>
                     </div>
                   </div>
-                  <div className="col-md-4">
+                  <div>
                     <h3>Исполнители</h3>
                     <div className="Tags">
                       <Select
@@ -646,22 +815,54 @@ class Work extends React.Component {
                         allowClear={true}
                       >
                         {worker.map((workerOne, i = 1) => (
-                          <Option value={workerOne.name} label={workerOne.name}>
-                            <span role="img" aria-label="China">
-                              {workerOne.name}
-                            </span>
-                          </Option>
+                          <OptGroup label={workerOne.role}>
+                            <Option
+                              value={workerOne.name}
+                              label={workerOne.name}
+                            >
+                              <span role="img" aria-label="China">
+                                {workerOne.name}
+                              </span>
+                            </Option>
+                          </OptGroup>
                         ))}
                       </Select>
                     </div>
+                    <h3>Контр-Агент</h3>
+                    <div style={{ padding: "3px" }} className="Tags">
+                      <Select
+                        dropdownClassName="dropdown_contr_agent"
+                        mode="multiple"
+                        showSearch
+                        value={this.state.agent}
+                        placeholder="Выберите контр-агента"
+                        style={{ width: "max-content" }}
+                        defaultActiveFirstOption={false}
+                        showArrow={false}
+                        optionLabelProp="label"
+                        filterOption={false}
+                        allowClear={true}
+                        onCancel={this.handleCancelSearchInputAgent}
+                        onSearch={this.handleChangeSearchAgent}
+                        onChange={this.handelInputChangeAgent}
+                        notFoundContent={null}
+                      >
+                        {options}
+                      </Select>
+                    </div>
+                    <div style={{ padding: "10px" }}>
+                      <Checkbox onChange={this.handleChangeSearchAgentEmail}>
+                        Поиск по email
+                      </Checkbox>
+                    </div>
                   </div>
-                  {/* style={{ padding: "50px" }} */}
-                  <div  className="col-md-4">
+
+                  <div className="col-md-4">
                     <Button onClick={this.clickSubmit}>Отправить</Button>
                   </div>
                 </TabPane>
                 <TabPane tab="Командное" key="3">
-                  <div className="col-md-4">
+                  <div>
                     <h3>Исполнители</h3>
                     <div className="Tags">
                       <Select
@@ -684,7 +885,6 @@ class Work extends React.Component {
                           </Option>
                         ))}
                       </Select>
-                      
                     </div>
                   </div>
                   <h1 style={{ padding: "0.5em" }}></h1>
@@ -709,6 +909,32 @@ class Work extends React.Component {
                           <option>Средней важности</option>
                           <option>Не очень важное</option>
                         </select>
+                        <h3 style={{ padding: "5px" }}>Контр-Агент</h3>
+                        <div className="Tags">
+                          <Select
+                            mode="multiple"
+                            showSearch
+                            value={this.state.agent}
+                            placeholder="Выберите контр-агента"
+                            style={{ width: "max-content" }}
+                            defaultActiveFirstOption={false}
+                            showArrow={false}
+                            optionLabelProp="label"
+                            filterOption={false}
+                            allowClear={true}
+                            onCancel={this.handleCancelSearchInputAgent}
+                            onSearch={this.handleChangeSearchAgent}
+                            onChange={this.handelInputChangeAgent}
+                            notFoundContent={null}
+                          >
+                            {options}
+                          </Select>
+                          <Checkbox
+                            onChange={this.handleChangeSearchAgentEmail}
+                          >
+                            Поиск по email
+                          </Checkbox>
+                        </div>
                       </>
                     ) : (
                       ""

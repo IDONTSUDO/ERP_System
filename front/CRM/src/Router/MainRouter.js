@@ -19,7 +19,8 @@ import MyAgent from '../Contr-agent/MyAgent.jsx'
 import AllAgent from '../Contr-agent/AllAgent.jsx'
 import ManageAgentPrice from '../Contr-agent/ManagePriceToAgent.jsx'
 import EditContrAgent from '../Contr-agent/EditContrAgent.jsx'
-
+import AgentTask from '../Contr-agent/AgentTask'
+import AgentTasks from '../Contr-agent/AgentTasks.jsx'
 
 import Work from '../Work/NewWork.jsx'
 import NewWorker from '../User/NewWorker.jsx'
@@ -67,7 +68,11 @@ const MainRouter = () => (
             <PrivateRoute exact path="/new/agent" component={NewAgent} />
             <PrivateRoute exact path="/agent/:agentId" component={AgentProfile} />
             <PrivateRoute exact path="/agent/priced/:agentId" component={ManageAgentPrice} />
+            <PrivateRoute exact path="/agent/tasks/:agentId" component={AgentTasks}/>
+            <PrivateRoute exact path="/agent/task/:taskId" component={AgentTask}/>
 
+
+            
             <PrivateRoute exact path="/edit/job/:jobid" component={EditorJob} />
             <PrivateRoute exact path="/todo/assign/user/:userBy" component={TodoAssignUserBy} />
             <PrivateRoute exact path="/new/deal/:userId" component={NewDeal} />
