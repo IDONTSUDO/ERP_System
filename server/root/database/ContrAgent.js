@@ -10,6 +10,9 @@ const contrAgentSchema = new mongoose.Schema({
     name: {
         type: String,
     },
+    UUID: {
+        type:String
+    },
     phone: {
         type: String,
     },
@@ -45,7 +48,7 @@ const contrAgentSchema = new mongoose.Schema({
         default:"none"
     },
     tech:{ //техника 
-        type:String,
+        type:Array,
         default:"none"
     },
     tags: [{

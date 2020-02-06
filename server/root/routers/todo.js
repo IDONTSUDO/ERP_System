@@ -20,6 +20,9 @@ const {
     AssiggnedTaskUserBy,
     DeletedTodo
 } = require("../controllers/todo.js")
+const {agentUpdateStatistic} = require("../controllers/ContrAgent")
+
+
 const { requireSignin } = require("../middleware/middleware.js")
 const { workerById, workerSelectId } = require("../controllers/Company")
 const router = express.Router({ mergeParams: true });
@@ -42,7 +45,7 @@ router.post('/new/todo/so-so/:workerById', requireSignin, SOSotodo)
 router.post('/new/todo/awesome/:workerSelectId', requireSignin, NewTodoUserAwesome)
 router.post('/comment/todo/', requireSignin, NewComents)
 router.post('/delete/comment/:comentById', requireSignin, DeleteComent)
-router.post('/todo/change/:todoid', requireSignin, TodoChange)
+router.post('/todo/change/:todoid', requireSignin, TodoChange,agentUpdateStatistic)
 
 router.put('/user/news/', requireSignin, NewUserNews)
 router.delete('/delete/todo/:todoid', requireSignin,DeletedTodo)

@@ -10,8 +10,23 @@ sudo apt update &&
 sudo apt install make libssl-dev libghc-zlib-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip &&
 
 #install curl
-
 sudo apt install curl &&
+
+
+# install cmake 
+
+wget https://github.com/Kitware/CMake/releases/download/v3.15.2/cmake-3.15.2.tar.gz &&
+tar -zxvf cmake-3.15.2.tar.gz &&
+cd cmake-3.15.2 &&
+./bootstrap &&
+make &&
+sudo make install &&
+
+
+# install python
+
+sudo apt install software-properties-common &&
+
 
 # install node js
 sudo apt-get update &&

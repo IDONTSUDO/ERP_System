@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const { ObjectId } = mongoose.Schema
-const todoSchema = new mongoose.Schema({
+const agentTasksSchema = new mongoose.Schema({
     title: {
         type: String
     },
@@ -11,17 +11,14 @@ const todoSchema = new mongoose.Schema({
         type: String,
         default: "в работе"
     },
-    posted_by_name:{
-        type:String
+    agentByTodo:{
+        type:Array
     },
     mounth:{
         type:String
     },
     year:{
         type:String
-    },
-    agentByTodo:{
-        type:Array
     },
     created: {
         type: Date,
@@ -61,4 +58,4 @@ const todoSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model("TODO", todoSchema)
+module.exports = mongoose.model("AgentTask", agentTasksSchema)

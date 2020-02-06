@@ -8,7 +8,11 @@ const {
     ChangeAgent,
     DeleteManagerForAgent,
     ManageAddAgent,
-    NewAgent } = require("../controllers/ContrAgent")
+    NewAgent,
+    AgentStates,
+    SearchAgentEmail,
+    TodoAgentFind,
+    TodoAgentQuality } = require("../controllers/ContrAgent")
 const { workerById } = require("../controllers/Company")
 const {requireSignin} = require("../middleware/middleware.js")
 
@@ -17,16 +21,20 @@ const router = express.Router({mergeParams: true});
 
 router.get('/agent/list',requireSignin, AllAgent )
 router.get('/agent/:agentId',requireSignin,  getAgentProfile)
+router.get("/agent/todo/:agentId",TodoAgentFind)
+router.get('/agent/todo/quality/:agentId',TodoAgentQuality)
 
 router.post('/agent/search',requireSignin, SearchAgent )
 router.post('/new/agent/:workerById',requireSignin, NewAgent)
 router.post('/agent/manage/',requireSignin, getMyListAgent)
 router.post('/new/manage/agent/:agentId',requireSignin, ManageAddAgent)
-
+router.post("/get/contragent/date",AgentStates);
+router.post("/search/managing/director/to/email",SearchAgentEmail)
 
 router.delete('/delete/manage/agent/:workerById',requireSignin, DeleteManagerForAgent)
-router.put('/change/agent/:agentId',requireSignin,  ChangeAgent)
 
+
+router.put('/change/agent/:agentId',requireSignin,  ChangeAgent)
 
 router.param('workerById',workerById)
 router.param('agentId', agentId)

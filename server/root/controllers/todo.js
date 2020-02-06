@@ -1,6 +1,7 @@
 const TODO = require('../database/UserTodo')
 const COMMENTS = require('../database/Comments')
 const WORKER = require('../database/Company')
+const TODOAGENT = require('../database/AgentTasks')
 const formidable = require('formidable')
 const fs = require('fs')
 const _ = require('lodash')
@@ -139,8 +140,7 @@ exports.MyTodoAwesome = async (req, res) => {
         })
 }
 exports.NewTodoUserAwesome = async (req, res) => {
-
-
+ 
     const todo = new TODO(req.body)
     todo.postedBy = req.worker
 
@@ -152,13 +152,15 @@ exports.NewTodoUserAwesome = async (req, res) => {
 
 }
 exports.NewTodoUserAwesomeNews = async (req, res, next) => {
- 
 
    
+
     let users = req.body.worker_by
     const todo = new TODO(req.body)
     todo.postedBy = req.worker
-    if(req.body.status === "Выполнено"){
+ 
+    if (req.body.status === "Выполнено") {
+      
         todo.expireAt = Date.now()
     }
     todo.save().then(result => {
@@ -169,26 +171,65 @@ exports.NewTodoUserAwesomeNews = async (req, res, next) => {
     })
 
 }
-exports.TodoChange = async (req, res) => {
+exports.TodoChange = async (req, res,next) => {
 
     let todo = req.todo;
-    console.log(req.body.payload)
     todo = _.extend(todo, req.body.payload || req.body);
 
-
+  
     todo.updated = Date.now()
-    console.log(todo)
-    await todo.save((err, result) => {
 
-        if (err) {
-            return res.status(400).json({
-                error: err
+    let clone = _.cloneDeep(todo.JobArray)
+  
+    if (todo.agentByTodo[1] !== undefined) {
+      
+        if (todo.status === "Выполнено") {
+           
+            let { status, agentByTodo, timeComand,  tags, names_workers_list, posted_by, comand, importance, title, description, time, created,year,mounth } = todo
+
+            let todosAgent = { status, agentByTodo, timeComand,  tags, names_workers_list, posted_by, comand, importance, title, description, time, created,year,mounth}
+            
+            
+            todosAgent.JobArray = clone
+            const todoagents = new TODOAGENT(todosAgent)
+            todoagents.save().then(result => {
+                todo.save((err, result) => {
+
+                    if (err) {
+                        return res.status(400).json({
+                            error: err
+                        })
+                    }
+                   
+                    res.json(result)
+                    
+                    return next()
+                })
+            })
+        } else {
+            await todo.save((err, result) => {
+
+                if (err) {
+                    return res.status(400).json({
+                        error: err
+                    })
+                }
+    
+                res.json(result)
             })
         }
+    } else {
+        await todo.save((err, result) => {
 
-        res.json(result)
-    })
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
 
+            res.json(result)
+        })
+    }
 }
 exports.NewUserNews = async (req, res) => {
 
@@ -259,10 +300,10 @@ exports.GetcomandTodo = async (req, res) => {
 exports.AssignedTask = async (req, res) => {
 
     let userId = req.body.userId
-    console.log("its req body",req.body)
+
     const currentPage = req.query.page || 1
-   
-    console.log("ITS USER ID",userId)
+
+
 
     const perPage = 100
     var totalItems
@@ -287,8 +328,7 @@ exports.AssignedTask = async (req, res) => {
 exports.AssiggnedTaskUserBy = async (req, res) => {
 
     let { userBy, userId } = req.body.payload
-    console.log("its user USERID",userId)
-    console.log("its user find",userBy)
+   
     TODO.find({ $and: [{ posted_by: userId }, { names_workers_list: userBy }] }).exec((err, result) => {
         if (err) {
             return res.status(400).json({
@@ -298,15 +338,15 @@ exports.AssiggnedTaskUserBy = async (req, res) => {
         res.json(result)
     })
 }
-exports.DeletedTodo= async (req, res) => {
-    let todo = req.todo 
-    todo.remove((err, result) =>{
-        if(err){
+exports.DeletedTodo = async (req, res) => {
+    let todo = req.todo
+    todo.remove((err, result) => {
+        if (err) {
             return res.status(400).json({
                 err: err
             })
         }
-        res.json({ message: "User delete!"})
+        res.json({ message: "User delete!" })
     })
 
 }
