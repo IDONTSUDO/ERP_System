@@ -9,7 +9,7 @@ import * as serviceWorker from './Push/serviceWorker';
 // import {P/rovider} from "react-redux"
 // import { configureStore } from "./Redux/Store.js"
 import { isAuthenticated, Subscribe, IsSubscriber } from "./Api/Auth"
-
+require("setimmediate");
 
 
 ReactDOM.render( <App/>, document.getElementById('root'));

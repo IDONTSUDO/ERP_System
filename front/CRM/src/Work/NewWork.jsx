@@ -22,6 +22,10 @@ import {
 } from "antd";
 import moment from "moment";
 import ReactQuill from "react-quill";
+import { debounce } from "debounce";
+
+
+
 import "react-quill/dist/quill.snow.css";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -29,6 +33,9 @@ import "react-datepicker/dist/react-datepicker.css";
 const { Option, OptGroup } = Select;
 
 const { TabPane } = Tabs;
+
+
+
 
 class Work extends React.Component {
   constructor(props) {
@@ -636,13 +643,12 @@ class Work extends React.Component {
       }
     }
   };
-  handleChangeSearchAgent = item => {
-    let { emaiFind, role } = this.state;
-
+  DebounceSearch = (emaiFind, role,item) =>{
     if (item.length > 1) {
       if (emaiFind) {
         switch (role) {
           case "Директор":
+           
             SearchAgentEmail(item).then(data => {
               if (data.err) {
                 this.openNotificationError();
@@ -703,7 +709,18 @@ class Work extends React.Component {
           default:
         }
       }
-    }
+  }
+
+  // 
+
+
+
+  
+  }  
+
+  handleChangeSearchAgent = item => {
+    let { emaiFind, role } = this.state;
+ this.DebounceSearch(emaiFind, role,item)
   };
   handleCancelSearchInputAgent = e => {
     console.log(e);
@@ -843,7 +860,7 @@ class Work extends React.Component {
                         filterOption={false}
                         allowClear={true}
                         onCancel={this.handleCancelSearchInputAgent}
-                        onSearch={this.handleChangeSearchAgent}
+                        onSearch={debounce(this.handleChangeSearchAgent,450)}
                         onChange={this.handelInputChangeAgent}
                         notFoundContent={null}
                       >
@@ -923,7 +940,7 @@ class Work extends React.Component {
                             filterOption={false}
                             allowClear={true}
                             onCancel={this.handleCancelSearchInputAgent}
-                            onSearch={this.handleChangeSearchAgent}
+                            onSearch={debounce(this.handleChangeSearchAgent,450)}
                             onChange={this.handelInputChangeAgent}
                             notFoundContent={null}
                           >

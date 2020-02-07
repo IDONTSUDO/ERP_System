@@ -69,7 +69,7 @@ const MainRouter = () => (
             <PrivateRoute exact path="/agent/:agentId" component={AgentProfile} />
             <PrivateRoute exact path="/agent/priced/:agentId" component={ManageAgentPrice} />
             <PrivateRoute exact path="/agent/tasks/:agentId" component={AgentTasks}/>
-            <PrivateRoute exact path="/agent/task/:taskId" component={AgentTask}/>
+            <PrivateRoute exact path="/agent/task/:agentId/:month/:year" component={AgentTask}/>
 
 
             

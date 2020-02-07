@@ -1,8 +1,8 @@
 
 var parser = require('fast-xml-parser');
-let http = require('http')
+
 let request = require('request');
-var convert = require('xml-js');
+
 var he = require('he');
 
 require("dotenv").config()

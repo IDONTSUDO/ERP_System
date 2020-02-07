@@ -876,3 +876,27 @@ export const GetAgentTodoStatistic = (agentId) =>{
             console.log(err)
         })
 }
+export const GetAgentYearStatistic = ( agentId, Year) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/year/agent/todo/statistics`,{
+        method: "POST",
+        headers: myHeaders,
+        body:JSON.stringify({agentId, Year})
+    }).then(responce =>{
+        return responce.json()
+    })
+        .catch(err =>{
+            console.log(err)
+        })
+}
+export const GetAgentMountAndYear = (agentId,Year,Mounth) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/year/on/mounth/todo/agent/todo`,{
+        method:"POST",
+        headers:myHeaders,
+        body: JSON.stringify({agentId,Year,Mounth})
+    }).then(responce =>{
+        return responce.json()
+    })
+        .catch(err =>{
+            console.log(err)
+        })
+}

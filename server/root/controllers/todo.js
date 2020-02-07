@@ -173,26 +173,31 @@ exports.NewTodoUserAwesomeNews = async (req, res, next) => {
 }
 exports.TodoChange = async (req, res,next) => {
 
-    let todo = req.todo;
+    var todo = req.todo;
     todo = _.extend(todo, req.body.payload || req.body);
 
   
     todo.updated = Date.now()
-
-    let clone = _.cloneDeep(todo.JobArray)
-  
+    console.log(todo.agentByTodo)
+    
     if (todo.agentByTodo[1] !== undefined) {
       
         if (todo.status === "Выполнено") {
-           
-            let { status, agentByTodo, timeComand,  tags, names_workers_list, posted_by, comand, importance, title, description, time, created,year,mounth } = todo
+            let cloneJobArray = _.cloneDeep(todo.JobArray)
+            let cloneagentByTodo = _.cloneDeep(todo.agentByTodo)
+            
+            let { status,  timeComand,  tags, names_workers_list, posted_by, comand, importance, title, description, time, created,year,mounth } = todo
 
-            let todosAgent = { status, agentByTodo, timeComand,  tags, names_workers_list, posted_by, comand, importance, title, description, time, created,year,mounth}
-            
-            
-            todosAgent.JobArray = clone
+            let todosAgent = {  status, timeComand,  tags, names_workers_list, posted_by, comand, importance, title, description, time, created,year,mounth }
+            todosAgent.agentByTodo = cloneagentByTodo
+            todosAgent.JobArray  = cloneJobArray
             const todoagents = new TODOAGENT(todosAgent)
+
+       
             todoagents.save().then(result => {
+
+                todo.expireAt = Date.now()
+
                 todo.save((err, result) => {
 
                     if (err) {
@@ -203,7 +208,7 @@ exports.TodoChange = async (req, res,next) => {
                    
                     res.json(result)
                     
-                    return next()
+                    // return next()
                 })
             })
         } else {

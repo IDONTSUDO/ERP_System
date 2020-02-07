@@ -220,6 +220,7 @@ exports.TodoAgentFind = (req, res, id) => {
         if (err) {
             return res.status(400).json({ err })
         } else {
+            console.log(result)
             return res.status(200).json(result)
         }
     })
@@ -231,6 +232,7 @@ exports.TodoAgentQuality = async (req, res, id) => {
         if (err) {
             return res.status(400).json({ err })
         } else {
+            console.log(result)
             return res.status(200).json(result)
         }
     })
@@ -243,104 +245,138 @@ exports.agentUpdateStatistic = async (req, res) => {
 
     let mounth = todoDestr.mounth;
     let agentIdByFind = todoDestr.agentByTodo[1];
-
-    switch (mounth) {
-        case "01":
-            AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 1: +1 } }, function (error, success) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(success);
-                }
-            })
-        case "02":
-
-            AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 2: +1 } }, function (error, success) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(success);
-                }
-            })
-        case "03":
-            AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 3: +1 } }, function (error, success) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(success);
-                }
-            })
-        case "04":
-            AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 4: +1 } }, function (error, success) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(success);
-                }
-            })
-        case "05":
-            AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 5: +1 } }, function (error, success) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(success);
-                }
-            })
-        case "06":
-            AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 6: +1 } }, function (error, success) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(success);
-                }
-            })
-        case "07":
-            AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 7: +1 } }, function (error, success) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(success);
-                }
-            })
-        case "08":
-            AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 8: +1 } }, function (error, success) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(success);
-                }
-            })
-        case "09":
-            AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 9: +1 } }, function (error, success) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(success);
-                }
-            })
-        case "10":
-            AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 10: +1 } }, function (error, success) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(success);
-                }
-            })
-        case "11":
-            AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 11: +1 } }, function (error, success) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(success);
-                }
-            })
-        case "12":
-            AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 12: +1 } }, function (error, success) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(success);
-                }
-            })
+    
+    if(mounth === "01") {
+        AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 1: +1 } }, function (error, success) {
+            if (error) {
+                return console.log(error);
+            } else {
+                return console.log(success);
+            }
+        })
     }
+    else if (mounth === "02") {
+        AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 2: +1 } }, function (error, success) {
+            if (error) {
+                return console.log(error);
+            } else {
+                return console.log(success);
+            }
+        })
+    }
+    else if (mounth === "03") {
+        AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 3: +1 } }, function (error, success) {
+            if (error) {
+                return console.log(error);
+            } else {
+                return console.log(success);
+            }
+        })
+    }
+    else if (mounth === "04") {
+        AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 4: +1 } }, function (error, success) {
+            if (error) {
+                return console.log(error);
+            } else {
+                return console.log(success);
+            }
+        })
+    }
+    else if (mounth === "05") {
+        AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 5: +1 } }, function (error, success) {
+            if (error) {
+                return console.log(error);
+            } else {
+                return console.log(success);
+            }
+        })
+    }
+    else if (mounth === "06") {
+        AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 6: +1 } }, function (error, success) {
+            if (error) {
+                return console.log(error);
+            } else {
+                return console.log(success);
+            }
+        })
+    }
+    else if (mounth === "07") {
+        AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 7: +1 } }, function (error, success) {
+            if (error) {
+                return console.log(error);
+            } else {
+                return console.log(success);
+            }
+        })
+    }
+    else if (mounth === "08") {
+        AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 8: +1 } }, function (error, success) {
+            if (error) {
+                return console.log(error);
+            } else {
+                return console.log(success);
+            }
+        })
+    }
+    else if (mounth === "09") {
+        AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 9: +1 } }, function (error, success) {
+            if (error) {
+                return console.log(error);
+            } else {
+                return console.log(success);
+            }
+        })
+    }
+    else if (mounth === "10") {
+        AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 10: +1 } }, function (error, success) {
+            if (error) {
+                return console.log(error);
+            } else {
+                return console.log(success);
+            }
+        })
+    }
+    else if (mounth === "11") {
+        AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 11: +1 } }, function (error, success) {
+            if (error) {
+                return console.log(error);
+            } else {
+                return console.log(success);
+            }
+        })
+    }
+    else if (mounth === "12") {
+        AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 12: +1 } }, function (error, success) {
+            if (error) {
+                return console.log(error);
+            } else {
+                return console.log(success);
+            }
+        })
+    }
+
+
 }
+exports.GetYearStatisticAgent = async (req, res) => {
+    let { agentId } = req.body
+
+    AgentStatistic.findOne({ agentBy: agentId }).then((result, err) => {
+        if (err) {
+            return res.status(400).json({ err })
+        } else {
+            return res.status(200).json(result)
+        }
+    })
+}
+exports.GetYearAndMountStatistichAgent = async (req, res) => {
+    let { agentId, Year, Mounth } = req.body
+    
+    TodoAgent.find({year: Year, mounth: Mounth,agentByTodo: { $all: [`${agentId}`] }}).then((err, result) => {
+        if (err) {
+            return res.status(400).json({ err })
+        } else {
+            return res.status(200).json(result)
+        }
+    })
+}
+

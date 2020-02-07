@@ -40,10 +40,6 @@ const agentTasksSchema = new mongoose.Schema({
         type: ObjectId,
         ref: "User"
     },
-    expireAt: {
-        type: Date,
-        index: { expires: '5m' },
-    },
     name_posted:{
         type:String
     },
