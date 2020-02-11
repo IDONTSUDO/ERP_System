@@ -178,7 +178,7 @@ exports.TodoChange = async (req, res,next) => {
 
   
     todo.updated = Date.now()
-    console.log(todo.agentByTodo)
+   
     
     if (todo.agentByTodo[1] !== undefined) {
       
@@ -186,9 +186,9 @@ exports.TodoChange = async (req, res,next) => {
             let cloneJobArray = _.cloneDeep(todo.JobArray)
             let cloneagentByTodo = _.cloneDeep(todo.agentByTodo)
             
-            let { status,  timeComand,  tags, names_workers_list, posted_by, comand, importance, title, description, time, created,year,mounth } = todo
+            let { status,name_posted,  timeComand,  tags, names_workers_list, posted_by, comand, importance, title, description, time, created,year,mounth } = todo
 
-            let todosAgent = {  status, timeComand,  tags, names_workers_list, posted_by, comand, importance, title, description, time, created,year,mounth }
+            let todosAgent = {  status,name_posted, timeComand,  tags, names_workers_list, posted_by, comand, importance, title, description, time, created,year,mounth }
             todosAgent.agentByTodo = cloneagentByTodo
             todosAgent.JobArray  = cloneJobArray
             const todoagents = new TODOAGENT(todosAgent)
@@ -208,7 +208,7 @@ exports.TodoChange = async (req, res,next) => {
                    
                     res.json(result)
                     
-                    // return next()
+                    return next()
                 })
             })
         } else {

@@ -32,7 +32,7 @@ const contrAgentSchema = new mongoose.Schema({
         type: String,
     },
     agentGeo:{
-        type:String,
+        type:Array,
         default:"none"
     },
     Date: {
@@ -44,7 +44,7 @@ const contrAgentSchema = new mongoose.Schema({
         default:"none"
     },
     specialications:{ //специализация
-        type:String,
+        type:Array,
         default:"none"
     },
     tech:{ //техника 

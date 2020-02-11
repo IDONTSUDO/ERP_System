@@ -14,7 +14,14 @@ const {
     TodoAgentFind,
     TodoAgentQuality,
     GetYearStatisticAgent,
-    GetYearAndMountStatistichAgent } = require("../controllers/ContrAgent")
+    GetYearAndMountStatistichAgent,
+    taskId,
+    getTask,
+    NewSpec,
+    allSpec,
+    specid,
+    RemoveSpec,
+    changeAgentProfile } = require("../controllers/ContrAgent")
 const { workerById } = require("../controllers/Company")
 const {requireSignin} = require("../middleware/middleware.js")
 
@@ -25,7 +32,11 @@ router.get('/agent/list',requireSignin, AllAgent )
 router.get('/agent/:agentId',requireSignin,  getAgentProfile)
 router.get('/agent/todo/:agentId',TodoAgentFind)
 router.get('/agent/todo/quality/:agentId',TodoAgentQuality)
+router.get('/agent/task/:taskId',getTask)
+router.get('/all/spec/agent', allSpec)
 
+
+router.post('/new/spec/agent',NewSpec)
 router.post('/agent/search',requireSignin, SearchAgent )
 router.post('/new/agent/:workerById',requireSignin, NewAgent)
 router.post('/agent/manage/',requireSignin, getMyListAgent)
@@ -36,12 +47,24 @@ router.post('/year/agent/todo/statistics',GetYearStatisticAgent)
 router.post('/year/on/mounth/todo/agent/todo',GetYearAndMountStatistichAgent)
 
 router.delete('/delete/manage/agent/:workerById',requireSignin, DeleteManagerForAgent)
+router.delete('/delete/spec/:specid',RemoveSpec)
 
 
 router.put('/change/agent/:agentId',requireSignin,  ChangeAgent)
-
+router.put('/change/agent/profile/:agentId',changeAgentProfile)// export const deleteSpec = (id) =>{
+//     return fetch(`${process.env.REACT_APP_API_URL}/delete/spec/${id}`,{
+//         method:"PUT",
+//         headers: myHeaders
+//     }).then(responce =>{
+//         return responce.json()
+//     }).catch(err =>{
+//         console.log(err)
+//         return err
+//     })
+// }
+router.param('specid',specid)
 router.param('workerById',workerById)
 router.param('agentId', agentId)
-
+router.param('taskId',taskId)
 
 module.exports = router

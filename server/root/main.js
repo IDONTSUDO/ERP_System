@@ -48,7 +48,7 @@ const Integration = require("./routers/Integration.js")
 
 
 app.use(cookieParser())
-// app.use(morgan('tiny'))
+app.use(morgan('tiny'))
 app.use(bodyParser.json())
 app.use(expressValidator())
 app.use(cors())
