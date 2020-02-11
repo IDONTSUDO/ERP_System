@@ -53,6 +53,17 @@
 .calendar_body{
   background-color: #ffffff;
 }
+.ant-icon-pos{
+  float:left;
+  padding:1px;
+}
+.spec-border{
+  padding:5px;
+  width: min-content;
+}
+.delete_ant_icon{
+  float: left;
+}
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
   .postisitonRelativeSmeni {

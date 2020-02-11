@@ -127,7 +127,7 @@ export default class AllAgent extends Component {
                     value={item}
                     type="text"
                     class="form-control"
-                    placeholder="Поиск ..."
+                    placeholder="Поиск "
                     aria-label="Recipient's username"
                     aria-describedby="basic-addon2"
                   />

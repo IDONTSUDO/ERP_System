@@ -581,7 +581,7 @@ export default class Job extends Component {
       });
  
     }else{
-      console.log('todo next')
+   
       TodoChangeComandList(todoId, payload).then(data => {
         if (data.error) {
           this.setState({ error: true });

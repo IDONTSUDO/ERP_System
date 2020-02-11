@@ -484,6 +484,17 @@ export const TodoChangeComandList = (todoId, payload) => {
         })
         .catch(err => console.log(err))
 }
+export const ChangeAgentProfile = (AgentId, payload) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/change/agent/profile/${AgentId}`,{
+        method:"PUT",
+        headers: myHeaders,
+        body:JSON.stringify({payload})
+    })
+        .then(responce =>{
+            return responce.json()
+        })
+        .catch(err => console.log(err))
+}
 export const ChangeAgent = (AgentId, status) => {
     return fetch(`${process.env.REACT_APP_API_URL}/change/agent/${AgentId}`, {
         method: "PUT",
@@ -692,7 +703,7 @@ export const MailImger = () => {
         .then(responce => {
             return responce.json()
         })
-        .catch(err => console.log(err))
+        .catch(err =>  console.log(err) )
 }
 export const UploadEmailImg = (file) => {
     const formData = new FormData();
@@ -713,6 +724,7 @@ export const UploadEmailImg = (file) => {
     })
         .catch(err => {
             console.log(err)
+            return err
         })
 }
 export const DeleteImg = (id) => {
@@ -730,6 +742,7 @@ export const DeleteImg = (id) => {
     })
         .catch(err => {
             console.log(err)
+            return err
         })
 }
 export const NewSubscribeEveryDay = () => {
@@ -741,6 +754,7 @@ export const NewSubscribeEveryDay = () => {
     })
         .catch(err => {
             console.log(err)
+            return err
         })
 }
 export const NewAssignTodoToday = (statisticId) => {
@@ -753,6 +767,7 @@ export const NewAssignTodoToday = (statisticId) => {
     })
         .catch(err => {
             console.log(err)
+            return err
         })
 }
 export const AllStatistic = (userId) => {
@@ -765,6 +780,7 @@ export const AllStatistic = (userId) => {
     })
         .catch(err => {
             console.log(err)
+            return err
         })
 }
 
@@ -779,6 +795,7 @@ export const NewTodoCompleteStatistic = (statisticId) => {
     })
         .catch(err => {
             console.log(err)
+            return err
         })
 }
 export const NewComentStatistic = (statisticId) => {
@@ -791,6 +808,7 @@ export const NewComentStatistic = (statisticId) => {
     })
         .catch(err => {
             console.log(err)
+            return err
         })
 }
 export const MyAssignedTodo = (userId) => {
@@ -803,6 +821,7 @@ export const MyAssignedTodo = (userId) => {
     })
         .catch(err => {
             console.log(err)
+            return err
         })
 }
 export const AssignedTodoUserBy = (payload) => {
@@ -815,6 +834,7 @@ export const AssignedTodoUserBy = (payload) => {
     })
         .catch(err => {
             console.log(err)
+            return err
         })
 }
 export const UpdateDaysTodoComplete = (payload)=>{
@@ -827,6 +847,7 @@ export const UpdateDaysTodoComplete = (payload)=>{
     })
         .catch(err => {
             console.log(err)
+            return err
         })
 }
 export const DeleteTodo = (TodoId) =>{
@@ -838,6 +859,7 @@ export const DeleteTodo = (TodoId) =>{
     })
         .catch(err => {
             console.log(err)
+            return err
         })
 }
 export const SearchAgentEmail = (item) =>{
@@ -851,6 +873,7 @@ export const SearchAgentEmail = (item) =>{
     })
         .catch(err => {
             console.log(err)
+            return err
         })
 }
 
@@ -863,6 +886,7 @@ export const GetTodoByAgent = (agentId) =>{
     })
         .catch(err => {
             console.log(err)
+            return err
         })
 }
 export const GetAgentTodoStatistic = (agentId) =>{
@@ -874,6 +898,7 @@ export const GetAgentTodoStatistic = (agentId) =>{
     })
         .catch(err =>{
             console.log(err)
+            return err
         })
 }
 export const GetAgentYearStatistic = ( agentId, Year) =>{
@@ -886,6 +911,7 @@ export const GetAgentYearStatistic = ( agentId, Year) =>{
     })
         .catch(err =>{
             console.log(err)
+            return err
         })
 }
 export const GetAgentMountAndYear = (agentId,Year,Mounth) =>{
@@ -898,5 +924,55 @@ export const GetAgentMountAndYear = (agentId,Year,Mounth) =>{
     })
         .catch(err =>{
             console.log(err)
+            return err
         })
+}
+export const GetTask = (taskId) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/agent/task/${taskId}`,{
+        method:"GET",
+        headers:myHeaders,
+        
+    }).then(responce => {
+        return responce.json()
+    })
+        .catch(err =>{
+            console.log(err)
+            return err
+        })
+}
+export const NewSpecialication = (data) =>{
+ return fetch(`${process.env.REACT_APP_API_URL}/new/spec/agent`,{
+     method: "POST",
+     headers: myHeaders,
+     body: JSON.stringify({data})
+ }).then(responce =>{
+     return responce.json()
+ })
+    .catch(err =>{
+        console.log(err)
+        return err
+    })
+}
+
+export const AllSpecList = () =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/all/spec/agent`,{
+        method:"GET",
+        headers:myHeaders
+    }).then(responce =>{
+        return responce.json()
+    }).catch(err =>{
+        console.log(err)
+        return err
+    })
+}
+export const deleteSpecialisations = (id) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/delete/spec/${id}`,{
+        method:"DELETE",
+        headers: myHeaders
+    }).then(responce =>{
+        return responce.json()
+    }).catch(err =>{
+        console.log(err)
+        return err
+    })
 }

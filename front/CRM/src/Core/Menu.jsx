@@ -34,8 +34,8 @@ class MenuMain extends React.Component {
       // isOnline();
       var userId = isAuthenticated().direct._id;
       var userRole = isAuthenticated().direct.role;
-      this.setState({role:userRole})
-      
+      this.setState({ role: userRole });
+
       // MyTodoComandQuality(userId).then(data => {
       //   if (data.error) {
       //   } else {
@@ -304,6 +304,32 @@ class MenuMain extends React.Component {
                           </Menu.Item>
                        
                         </SubMenu>                           */}
+                        <SubMenu
+                          key="sub9"
+                          title={
+                            <>
+                              <span>
+                                <Icon type="bar-chart" />
+
+                                <span>Статистика</span>
+                              </span>
+                            </>
+                          }
+                        >
+                          <Menu.Item key="53">
+                            <Link to="/contr/agent/statistic">
+                              <span>Статистика контр агентов</span>
+                            </Link>
+                          </Menu.Item>
+                          <Menu.Item key="56">
+                          <Link to="/enterprise/statistic">
+                              <span>Статистика предпрития</span>
+                            </Link>
+                          </Menu.Item>
+
+
+                         
+                        </SubMenu>
                       </Menu>
                     </Sider>
                   </Layout>
@@ -313,7 +339,6 @@ class MenuMain extends React.Component {
           </>
         ) : (
           <MobileMenu />
-          
         )}
         {!isAuthenticated() && <></>}
       </>
@@ -323,5 +348,6 @@ class MenuMain extends React.Component {
 
 export default MenuMain;
 
-
-
+{
+  /* <Icon type="bar-chart" /> */
+}

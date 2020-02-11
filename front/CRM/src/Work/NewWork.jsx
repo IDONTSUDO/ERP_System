@@ -403,7 +403,8 @@ class Work extends React.Component {
       title,
       user,
       agent,
-      agentId
+      agentId,
+      contr_agent
     } = this.state;
     let timeArray = [];
     let newTimeArray = [];
@@ -534,10 +535,11 @@ class Work extends React.Component {
       let payload;
       let agentByTodo = [];
       agentByTodo.push(agent, agentId);
-      console.log(agentByTodo[1]);
+      console.log(agentByTodo)
       if (agentByTodo[1] === undefined) {
         payload = {
           names_workers_list,
+          
           link,
           worker_by,
           eventNews,

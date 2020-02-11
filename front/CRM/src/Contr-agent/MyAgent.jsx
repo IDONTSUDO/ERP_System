@@ -9,10 +9,15 @@ import {
   Spin,
   Card,
   Icon,
+  Select,
   notification
 } from "antd";
+
 import { Link } from "react-router-dom";
-import Error from "../Error/Error.jsx"
+import Error from "../Error/Error.jsx";
+import Rusmap from "../helper/RUSSIAN_MAP.js";
+
+const { Option } = Select;
 
 const pStyle = {
   fontSize: 16,
@@ -57,6 +62,7 @@ export default class MyAgent extends Component {
       phone: "",
       INN: "",
       general_director: "",
+      agentGeo: [],
       OGRN: "",
       email: "",
       worker: [],
@@ -145,6 +151,9 @@ export default class MyAgent extends Component {
       }
     });
   }
+  handleSelectOblastChange = item => {
+    this.setState({ agentGeo: item });
+  };
   ChangeAgentStatus2(AgentId) {
     let status = "Капризный";
     ChangeAgent(AgentId, status).then(data => {
@@ -283,9 +292,7 @@ export default class MyAgent extends Component {
               </Row>
               <Row></Row>
               <Row>
-                <Col span={24}>
-      
-                </Col>
+                <Col span={24}></Col>
               </Row>
               <Divider />
               <p style={pStyle}>Данные о компании</p>
@@ -316,7 +323,7 @@ export default class MyAgent extends Component {
                     content={<a>{legal_address}</a>}
                   />
                 </Col>
-                  
+
                 <Col span={12}>
                   <DescriptionItem
                     title="Полное имя компании"
@@ -325,7 +332,7 @@ export default class MyAgent extends Component {
                 </Col>
                 <Col span={12}>
                   <DescriptionItem
-                    title="Юридический адрес"
+                    title="Сокращенное имя компании"
                     content={<a>{name}</a>}
                   />
                 </Col>
@@ -350,18 +357,8 @@ export default class MyAgent extends Component {
                   <DescriptionItem title="Полезная информация" content={any} />
                 </Col>
               </Row>
-              <Row>
-                {/* <Col span={24}>
-                <DescriptionItem
-                  title="Статус"
-                  content={
-                  
-                    }
-                />
-                <div>
 
-                </div>
-              </Col> */}
+              <Row>
               </Row>
               <Row>
                 <Col span={24}>
@@ -383,7 +380,9 @@ export default class MyAgent extends Component {
                     </Button>
                     <div style={{ padding: "5px" }}></div>
                     <Button>
-                      <Link to={`/agent/edit/${id}`}>Редактированние контр агента</Link>
+                      <Link to={`/agent/edit/${id}`}>
+                        Редактированние контр агента
+                      </Link>
                     </Button>
                   </div>
                 </Col>
