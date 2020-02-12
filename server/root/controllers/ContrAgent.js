@@ -471,7 +471,7 @@ exports.GetYearAndMountStatistichAgent = async (req, res) => {
 
 
 
-//  TODO [?]as manager: statistic common contr agent job
+// TODO [?]as manager: statistic common contr agent job
 
 // TODO [!] find all contragent by agentGeo 
 // TODO [!] find all contragent by specialications

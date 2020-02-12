@@ -36,9 +36,34 @@
   color: #ff6f00;
 }
 .dark-teal-text {
-  color: #004d40;
+  color: #2f413e;
 }
-
+.email_main_pos{
+  position: absolute;
+  padding: 1em 6em 0.1em;
+}
+.img_h3{
+  color:#fdeeee;
+}
+/* tabs:active */
+.img_h3:target{
+  color:#da1717;
+}
+.img_h3:active{
+  color:#da1717;
+}
+.img_h3_copy{
+  color:#fdeeee;
+}
+.img_h3_copy:active{
+  color:#40e70ede;
+}
+.img_h3_delete{
+  color:#fdeeee;
+}
+.img_h3_delete:active{
+  color:#da1717;
+}
 .alert {
   position: absolute;
   padding: 0.75rem 1.25rem;
@@ -872,6 +897,7 @@
   transition: opacity 0.6s;
   vertical-align: middle;
   line-height: 200px;
+  cursor:pointer;
 }
 
 .gallery-text:hover {
@@ -882,7 +908,7 @@
   display: inline-table;
   vertical-align: middle;
   line-height: 100%;
-  color: rgb(219, 23, 17);
+  /* color: rgb(219, 23, 17); */
 }
 .upload-btn-wrapper {
   position: relative;
@@ -893,7 +919,7 @@
 .btn-uploaded {
   border: 2px solid gray;
   color: gray;
-  background-color: white;
+  background-color: #ffffff;
   padding: 8px 20px;
   border-radius: 8px;
   font-size: 20px;

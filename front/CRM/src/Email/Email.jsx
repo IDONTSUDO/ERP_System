@@ -1,80 +1,431 @@
 import React, { Component } from "react";
-import { MailImger, UploadEmailImg, DeleteImg } from "../Api/Http.js";
+import { MailImger, UploadEmailImg, DeleteImg,SaveSnipet,GetSnipets,SnipetDelete } from "../Api/Http.js";
 import Error from "../Error/Error.jsx";
-import { Upload, Icon, message, Button, Input,Switch } from "antd";
+import EmailEditor from "react-email-editor";
+import Highlighter from "react-highlight-words";
+import {isAuthenticated} from "../Api/Auth";
 
+import {
+  Table,
+  Upload,
+  Icon,
+  message,
+  Button,
+  Input,
+  Switch,
+  Drawer,
+  Popover,
+  Spin,
+  Modal
+} from "antd";
+const content = (
+  <div>
+    <p>Content</p>
+    <p>Content</p>
+  </div>
+);
+
+
+const data = [
+  {
+    key: "1",
+    name: "John Brown",
+    age: 32,
+    address: "New York No. 1 Lake Park"
+  },
+  {
+    key: "2",
+    name: "Joe Black",
+    age: 42,
+    address: "London No. 1 Lake Park"
+  },
+  {
+    key: "3",
+    name: "Jim Green",
+    age: 32,
+    address: "Sidney No. 1 Lake Park"
+  },
+  {
+    key: "4",
+    name: "Jim Red",
+    age: 32,
+    address: "London No. 2 Lake Park"
+  }
+];
 
 export default class Email extends Component {
   constructor() {
     super();
     this.state = {
-      images: [],
+      // errors
       erors: false,
-      value: "",
-      visible: false,
-      file: null,
-      img_edit_mode:false,
-      imgDefault:"http://gallery.mailchimp.com/27aac8a65e64c994c4416d6b8/images/body_placeholder_650px.png",
-      textHeader1: "Разработка вашего шаблона",
-      textHeader2:"Стилизация вашего контентa",
-      textMessage1: "Настройте свой шаблон, нажав на вкладки редактора стилей вверху. Установите ваши шрифты, цвета и стили. После того, как настройка вашего стиля полностью завершена, вы можете нажать здесь, в этой области, удалить текст и начать добавлять свой собственный потрясающий контент.",
-      textMessage2:"После ввода содержимого выделите текст, который хотите стилизовать, и выберите параметры, заданные в редакторе стилей, в раскрывающемся списке «стили». Хотите избавиться от стиля текста, но не можете это сделать? Просто используйте кнопку «удалить форматирование», чтобы удалить текст любого форматирования и сбросить ваш стиль.",
-      textItalic1:"Сделайте вашу электронную почту легко читаемой",
-      textItalic2:"Создать красивую электронную почту просто"
+
+      // agents
+      visibleAgents: false,
+      agntLoaders: true,
+      // imgers
+      visibleImgs: false,
+      imgList: [],
+      imgLoader: false,
+      // tabel
+      searchText: "",
+      searchedColumn: "",
+
+      // snipets
+      snipetVisibel:false,
+      newSnipets:"",
+      snipetName:"",
+      snipetList:[],
+      loadingSnipetSave:false,
+      snipetsListLoading:false,
+      snipetsListVisibel:false
     };
   }
   componentDidMount() {
-    MailImger().then(data => {
-      if (data.err) {
-        this.setState({ erors: true });
-      } else {
-        this.setState({ images: data });
-      }
-    });
+   
+    this.email = new FormData();
   }
   forceUpdate() {
     MailImger().then(data => {
       if (data.err) {
         this.setState({ erors: true });
       } else {
-        this.setState({ images: data });
+        this.setState({ imgList: data });
       }
     });
   }
-  handleClick = (id) => {
-   let url = "http://localhost:8080/" +id
-   this.setState({imgDefault:url})
+  handleClickImgDelete = (id) =>{
+   
+    
+    DeleteImg(id).then(data =>{
+      if(data.err){
+        this.setState({errorsValid: true})
+      }else{
+        this.forceUpdate()
+      }
+    })
   }
-  switchChange = (checked) =>{
-      this.setState({img_edit_mode:checked})
+  
+  handleClickImgCopy =  (id)  =>{
+    let copyInfo = `${process.env.REACT_APP_API_URL}/${id}`
+    navigator.clipboard.writeText(copyInfo)
+    // textAreaRef.current.
+
   }
+  switchChange = checked => {
+    this.setState({ img_edit_mode: checked });
+  };
   handleChange = name => event => {
-    console.log(200)
     this.setState({ error: "" });
     this.setState({ [name]: event.target.value });
   };
+  exportHtml = () => {
+    this.editor.exportHtml(data => {
+      const { design, html } = data;
+      console.log("exportHtml",typeof design);
+    });
+  };
+
+  // SNIPET
+  showModalSnipets = () => {
+    this.setState({
+      snipetVisibel: true,
+    });
+  };
+  handleOkSnipetSave = () =>{
+
+    this.editor.exportHtml(data => {
+      const { design, html } = data;
+  
+      let { snipetName } = this.state
+
+    let payload = {
+      snipetName,
+      design
+    }
+    SaveSnipet(payload)
+    }); 
+    
+  }
+  SnipetsListDriwer = () =>{
+    GetSnipets().then(data =>{
+      if(data.err){
+        this.setState({error:true})
+      }else{
+        this.setState({snipetList:data,snipetsListVisibel:true})
+      }
+    })
+  }
+  handleCancelSnipetSave = () =>{
+    this.setState({snipetName:"",snipetVisibel:false})
+  }
+  handelSaveSnipet = () =>{
+// snipetVisibel
+  }
+  // Agents Driwer
+  showDrawerAgents = () => {
+    this.setState({
+      visibleAgents: true
+    });
+  };
+  onCloseAgentsDriver = () => {
+    this.setState({
+      visibleAgents: false,
+      agntLoaders: true
+    });
+  };
+  //  img Driver
+  showDrawerImger = () => {
+    this.setState({
+      visibleImgs: true,
+      imgLoader: true
+    });
+    MailImger().then(data => {
+      if (data.err) {
+        this.setState({ error: true });
+      } else {
+        this.setState({ imgLoader: false, imgList: data });
+      }
+    });
+  };
+  onCloseImgsDriver = () => {
+    this.setState({
+      visibleImgs: false
+    });
+  };
+  handleChangeNewEmailPhoto = name =>event => {
+    event.preventDefault();
+    const value = name === "email" ? event.target.files[0] : event.target.value;
+  
+    // let userId = isAuthenticated().direct._id;
+
+    UploadEmailImg(value).then(data =>{
+      this.forceUpdate()
+    })
+      // console.log(email)
+    // this.userData.set("Date_of_Birth",Date_of_Birth)
+
+  }
+  // TABEL
+  getColumnSearchProps = dataIndex => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters
+    }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={node => {
+            this.searchInput = node;
+          }}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={e =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            this.handleSearch(selectedKeys, confirm, dataIndex)
+          }
+          style={{ width: 188, marginBottom: 8, display: "block" }}
+        />
+        <Button
+          type="primary"
+          onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+          icon="search"
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          Search
+        </Button>
+        <Button
+          onClick={() => this.handleReset(clearFilters)}
+          size="small"
+          style={{ width: 90 }}
+        >
+          Reset
+        </Button>
+      </div>
+    ),
+    filterIcon: filtered => (
+      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: visible => {
+      if (visible) {
+        setTimeout(() => this.searchInput.select());
+      }
+    },
+    render: text =>
+      this.state.searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          searchWords={[this.state.searchText]}
+          autoEscape
+          textToHighlight={text.toString()}
+        />
+      ) : (
+        text
+      )
+  });
+
+  handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    this.setState({
+      searchText: selectedKeys[0],
+      searchedColumn: dataIndex
+    });
+  };
+
+  handleReset = clearFilters => {
+    clearFilters();
+    this.setState({ searchText: "" });
+  };
 
   render() {
-    let { images, errors,img_edit_mode,  textHeader1,textMessage1,textMessage2,textHeader2,textItalic1,textItalic2,imgDefault } = this.state;
+    let { errors } = this.state;
+    const columns = [
+      {
+        title: "Имя",
+        dataIndex: "name",
+        key: "name",
+        width: "30%",
+        ...this.getColumnSearchProps("name")
+      },
+      {
+        title: "Email",
+        dataIndex: "age",
+        key: "age",
+        width: "20%",
+        ...this.getColumnSearchProps("age")
+      },
+      {
+        title: "Специализация",
+        dataIndex: "address",
+        key: "address",
+        ...this.getColumnSearchProps("address")
+      },
+      {
+        title: "Специализация",
+        dataIndex: "address",
+        key: "address",
+        ...this.getColumnSearchProps("address")
+      },
+      {
+        title: "Специализация",
+        dataIndex: "address",
+        key: "address",
+        ...this.getColumnSearchProps("address")
+      }
+    ];
+    const success = () => {
+      message.success('Адрес изображения скопирован!');
+    };
     return (
+      
       <div>
         {errors ? (
           <Error />
         ) : (
           <>
-            <div className="postisitonRelativeSmeni">
-              <div className="container">
+            <div className="email_main_pos">
+              <div classname="container">
                 <div className="row">
-                  <div className="col-md-1">
-                    <div style={{ padding: "5px" }}>
-                      
-                    <Switch  onChange={this.switchChange}   defaultChecked />
-                    </div>
-                  
+                  <div className="col">
+                    <Button
+                      type="primary"
+                      size="large"
+                      shape=""
+                      onClick={this.showDrawerAgents}
+                      icon="solution"
+                    >
+                      Агенты
+                    </Button>
 
-                    {images.map((img, i) => (
-                      <>
-                        <div className="gallery">
+                    <Popover content={content} title="Title" trigger="click">
+                      <Button
+                        size="large"
+                        type="primary"
+                        shape=""
+                        icon="question-circle"
+                      >
+                        Помощь
+                      </Button>
+                    </Popover>
+                    {/* <Icon type="picture" /> */}
+                    <Button
+                      size="large"
+                      type="primary"
+                      shape=""
+                      onClick={this.showDrawerImger}
+                      icon="file-image"
+                    >
+                      Фото
+                    </Button>
+                    <Button
+                      size="large"
+                      type="primary"
+                      shape=""
+                      onClick={this.SnipetsListDriwer}
+                      icon="picture"
+                    >
+                      Снипеты
+                    </Button>
+                    <Button
+                      size="large"
+                      type="primary"
+                      shape=""
+                      onClick={this.showModalSnipets}
+                      icon="file-add"
+                    >
+                      Сохранить
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              {/* <div>
+  <button onClick={this.exportHtml}>Export HTML</button>
+</div> */}
+
+              <EmailEditor ref={editor => (this.editor = editor)} />
+            </div>
+          </>
+        )}
+        <Drawer
+          width={900}
+          title={(
+            <>
+<div>Управление изображениями</div>
+<div>
+<div class="upload-btn-wrapper">
+          <button class="btn-uploaded">Загрузить</button>
+          <input
+            onChange={this.handleChangeNewEmailPhoto("email")}
+            type="file"
+            accept="image/*"
+          />
+        </div>
+        </div>
+</>
+         )}
+          placement="right"
+          closable={true}
+          onClose={this.onCloseImgsDriver}
+          visible={this.state.visibleImgs}
+        >
+          {this.state.imgLoader ? (
+            <Spin size="large" />
+          ) : (
+            <>
+              {this.state.imgList.map((img, i) => (
+                <>
+                <div className="container"><div className="row">
+                  <div className="mb-4">
+                  <div className="gallery">
                           <div
                          
                           className="gallery-image">
@@ -89,250 +440,82 @@ export default class Email extends Component {
                           </div>
                          
                           <div className="gallery-text">
-                            <h3 style={{ color: "#48f542" }} onClick={id => this.handleClick(img.filename, id)}>Фото 1</h3>
-                            <h3 style={{ color: "#f54542" }}  onClick={id => this.handleClick(img.filename, id)}>Фото 2</h3>
+                          {/* handleClickImgDelete handleClickImgCopy */}
+                            <h3 className="img_h3_delete"  onClick={id => this.handleClickImgDelete(img._id, id)}>Удалить</h3>
+                            <h3 style={{ color: "#ffffff" }}>/</h3>
+                            <h3  className="img_h3_copy" onClick={id => this.handleClickImgCopy(img.filename, id)} >Копировать</h3>
                           </div>
                           
                             
                          
                         </div>
-                        {img_edit_mode ? ( <Button type="danger"></Button>):(<></>)}
-                       
-                      </>
-                    ))}
                   </div>
-                </div>
-              </div>
-              <div class="container">
-                <body
-                  leftmargin="0"
-                  marginwidth="0"
-                  topmargin="0"
-                  marginheight="0"
-                  offset="0"
-                >
-                  <center>
-                    <table
-                      align="center"
-                      border="0"
-                      cellpadding="0"
-                      cellspacing="0"
-                      height="100%"
-                      width="100%"
-                      id="bodyTable"
-                    >
-                      <tr>
-                        <td align="center" valign="top" id="bodyCell">
-                          <table
-                            border="0"
-                            cellpadding="0"
-                            cellspacing="0"
-                            id="templateContainer"
-                          >
-                            <tr>
-                              <td align="center" valign="top">
-                                <table
-                                  border="0"
-                                  cellpadding="0"
-                                  cellspacing="0"
-                                  width="100%"
-                                  id="templatePreheader"
-                                >
-                                  <tr>
-                                    <td
-                                      valign="top"
-                                      class="preheaderContent"
-                                    ></td>
+                  </div> </div>
+                </>
+              ))}
+            </>
+          )}
+        </Drawer>
+        <Drawer
+          width={900}
+          title="Контр Агенты для раccылки"
+          placement="left"
+          closable={true}
+          onClose={this.onCloseAgentsDriver}
+          visible={this.state.visibleAgents}
+        >
+          {this.state.agntLoaders ? (
+            <>
+              {" "}
+              <Spin size="large" />
+            </>
+          ) : (
+            <>
+              {" "}
+              <Table columns={columns} dataSource={data} />
+            </>
+          )}
+        </Drawer>
 
-                                   
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td align="center" valign="top">
-                                <table
-                                  border="0"
-                                  cellpadding="0"
-                                  cellspacing="0"
-                                  width="100%"
-                                  id="templateHeader"
-                                >
-                                  <tr>
-                                    <td valign="top" class="headerContent">
-                                      <img
-                                      onClick
-                                        src="http://gallery.mailchimp.com/2425ea8ad3/images/header_placeholder_600px.png"
-                                        id="headerImage"
-                                      />
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td align="center" valign="top">
-                                <table
-                                  border="0"
-                                  cellpadding="0"
-                                  cellspacing="0"
-                                  width="100%"
-                                  id="templateBody"
-                                >
-                                  <tr>
-                                    <td  onChange={this.handleChange("textMessage1")} valign="top" class="bodyContent" contenteditable="true">
-                                      <h1 contenteditable="true"  onChange={this.handleChange("textHeader1")}           value={textHeader1}>{textHeader1}</h1>
-                                      <h3 contenteditable="true">
-                                      {/* textMessage1,textHeader2,textItalic1,textItalic2  */}
-                                   </h3>
-                                     {textMessage1}
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td
-                                      class="bodyContent"
-                                      style={{
-                                        paddingTop: "0",
-                                        paddingBottom: "0"
-                                      }}
-                                    >
-                                      <img
-                                        src={imgDefault}
-                                        id="bodyImage"
-                                      />
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td valign="top" class="bodyContent" contenteditable="true">
-                                      <h2 contenteditable="true"  onChange={this.handleChange("textHeader2")}>{textHeader2}</h2>
-                                      <h4 contenteditable="true" onChange={this.handleChange("textMessage2")}>{textMessage2}</h4><em>styles</em>" drop down box. Want to{" "}
-                                      {textMessage2}
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td align="center" valign="top">
-                                <table
-                                  border="0"
-                                  cellpadding="0"
-                                  cellspacing="0"
-                                  width="100%"
-                                  id="templateFooter"
-                                >
-                                  
-                                  <tr>
-                                    <td
-                                      valign="top"
-                                      class="footerContent"
-                                      style={{ paddingTop: "0" }}
-                                    >
-                                      <br />
-                                      <strong>svarog.robot@gmail.com</strong>
-                                      <br />
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td
-                                      valign="top"
-                                      class="footerContent"
-                                      style={{ paddingTop: "0" }}
-                                    >
-                                      <a href="*|UNSUB|*">
-                                       Отписаться от рассылок
-                                      </a>
-                                      
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                    </table>
-                  </center>
-                </body>
-              </div>
-            </div>
-          </>
-        )}
+        {/* SNIPETS SAVE */}
+        <Modal
+          visible={this.state.snipetVisibel}
+          title={(<h1>Название снипета</h1>)}
+          onOk={this.handleOkSnipetSave}
+          onCancel={this.handleCancelSnipetSave}
+          footer={[
+            <Button key="back" onClick={this.handleCancelSnipetSave}>
+              Назад
+            </Button>,
+            <Button key="submit" type="primary" loading={this.state.loadingSnipetSave} onClick={this.handleOkSnipetSave}>
+              Сохранить
+            </Button>,
+          ]}
+        >
+        
+         <Input onChange={this.handleChange("snipetName")} value={this.state.snipetName}></Input>
+        </Modal>
+        <Drawer
+          width={900}
+          title="Снипеты"
+          placement="left"
+          closable={true}
+          onClose={this.onCloseAgentsDriver}
+          visible={this.state.snipetsListVisibel}
+        >
+          {this.state.snipetsListLoading ? (
+            <>
+              {" "}
+              <Spin size="large" />
+            </>
+          ) : (
+            <>
+             
+            </>
+          )}
+        </Drawer>
       </div>
     );
   }
 }
-{
-  /* <h1>Email рассылки</h1>
-<div style={{ padding: "5px" }}>
-  <Button type="primary" onClick={this.showDrawer}>
-    Контр агенты
-  </Button>
-</div>
-
-<div class="row">
-  <div class="col-sm">
-    {images.map((img, i) => (
-      <>
-        <div className="gallery">
-          <div className="gallery-image">
-            <img
-              
-              src={`${process.env.REACT_APP_API_URL}/${img.filename}`}
-              alt={img.filename}
-              style={{ height: "200px", width: "300px" }}
-            />
-
-            <div className="gallery-text">
-              <h3 onClick={console.log(201)}>Удалить?</h3>
-              <h3 onClick={console.log(200)}>Удалить?</h3>
-              <h3 onClick={console.log(203)}>Удалить?</h3>
-            </div>
-
-
-          </div>
-        </div>
-        <Radio.Group
-          onChange={this.onChange}
-          value={this.state.value}
-        >
-          <Radio value={img.filename}>Выбрать</Radio>
-        </Radio.Group>
-      </>
-    ))}
-    <form
-      action="/profile"
-      method="post"
-      enctype="multipart/form-data"
-    >
-      <input
-        onChange={this.fileUpload}
-        type="file"
-        name="avatar"
-      />
-    </form>
-  </div>
-  <div class="col-sm">
-    {" "}
-    <div>
-      <Input
-        placeholder="Введите заголовок письма"
-        allowClear
-        onChange={this.onChange}
-      />
-      <br />
-      <br />
-      <TextArea
-        placeholder="Введите текст тела письма"
-        allowClear
-        onChange={this.onChange}
-      />
-    </div>
-  </div>
-  <Button type="primary" onClick={this.fileLoader}>
-    Отправить
-  </Button>
-
-  <div class="col-sm">Одна из трёх колонок</div>
-</div> */
-}
+// snipetsListVisibel

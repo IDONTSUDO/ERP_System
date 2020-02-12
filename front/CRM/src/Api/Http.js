@@ -694,7 +694,16 @@ export const NewNewToSetStatusJob = (payload) => {
         })
         .catch(err => console.log(err))
 }
-
+export const SaveSnipet = (payload) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/save/email/snipets`,{
+        method:"POST",
+        headers:myHeaders,
+        body:JSON.stringify({payload})
+    }).then(responce =>{
+        return responce.json()
+    })
+    .catch(err => { return err })
+}  
 export const MailImger = () => {
     return fetch(`${process.env.REACT_APP_API_URL}/images/email/all`, {
         method: "GET",
@@ -706,17 +715,16 @@ export const MailImger = () => {
         .catch(err =>  console.log(err) )
 }
 export const UploadEmailImg = (file) => {
+  
     const formData = new FormData();
     formData.append("email", file);
-
+    console.log(formData)
     return fetch(`${process.env.REACT_APP_API_URL}/photos/upload`, {
         method: "POST",
         headers: {
-            Accept: "application/json",
+            ContentType: 'multipart/form-data',
             Authorization: `Bearer ${token}`
-
         },
-
         body: formData
     }).then(response => {
         console.log(response)
@@ -728,15 +736,9 @@ export const UploadEmailImg = (file) => {
         })
 }
 export const DeleteImg = (id) => {
-
-    return fetch(`${process.env.REACT_APP_API_URL}/images/del`, {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-
-        },
-        body: JSON.stringify({ id })
+    return fetch(`${process.env.REACT_APP_API_URL}/images/del/${id}`, {
+        method: "DELETE",
+        headers: myHeaders,
     }).then(response => {
         return response.json()
     })
@@ -968,6 +970,28 @@ export const AllSpecList = () =>{
 export const deleteSpecialisations = (id) =>{
     return fetch(`${process.env.REACT_APP_API_URL}/delete/spec/${id}`,{
         method:"DELETE",
+        headers: myHeaders
+    }).then(responce =>{
+        return responce.json()
+    }).catch(err =>{
+        console.log(err)
+        return err
+    })
+}
+export const SnipetDelete = (id) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/snipets/delete/:${id}`,{
+        method:"DELETE",
+        headers: myHeaders
+    }).then(responce =>{
+        return responce.json()
+    }).catch(err =>{
+        console.log(err)
+        return err
+    })
+}
+export const GetSnipets = (id) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/get/email/snipet`,{
+        method:"GET",
         headers: myHeaders
     }).then(responce =>{
         return responce.json()

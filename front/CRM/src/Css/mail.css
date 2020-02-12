@@ -99,7 +99,7 @@
 			* @style heading 3
 			*/
 			h3{
-				/*@editable*/ color:#606060 !important;
+				/* @editable color:#606060 !important; */
 				display:block;
 				/*@editable*/ font-family:Helvetica;
 				/*@editable*/ font-size:16px;
