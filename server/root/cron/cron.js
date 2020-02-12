@@ -83,8 +83,7 @@ function CRON_USER_TODO() {
 }
 
 
-
-
+//TODO by manager: every week reminder to contr agent not filled
 module.exports.Cron = function () {
   console.log("CRON START")
   CRON_USER_TODO()

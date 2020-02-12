@@ -467,3 +467,8 @@ exports.GetYearAndMountStatistichAgent = async (req, res) => {
     })
 }
 
+// TODO  [?] change agent not detect
+
+
+
+//  TODO [?]as manager: statistic common contr agent job

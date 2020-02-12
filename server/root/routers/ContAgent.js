@@ -51,17 +51,8 @@ router.delete('/delete/spec/:specid',RemoveSpec)
 
 
 router.put('/change/agent/:agentId',requireSignin,  ChangeAgent)
-router.put('/change/agent/profile/:agentId',changeAgentProfile)// export const deleteSpec = (id) =>{
-//     return fetch(`${process.env.REACT_APP_API_URL}/delete/spec/${id}`,{
-//         method:"PUT",
-//         headers: myHeaders
-//     }).then(responce =>{
-//         return responce.json()
-//     }).catch(err =>{
-//         console.log(err)
-//         return err
-//     })
-// }
+router.put('/change/agent/profile/:agentId',changeAgentProfile)
+
 router.param('specid',specid)
 router.param('workerById',workerById)
 router.param('agentId', agentId)
