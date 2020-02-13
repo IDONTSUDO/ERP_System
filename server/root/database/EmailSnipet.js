@@ -5,6 +5,9 @@ const EmailSnipetSchema = new mongoose.Schema({
     },
     name:{
         type:String
+    },
+    dateCreated:{
+        type:Date
     }
 })
 module.exports = mongoose.model("EmailSnipet", EmailSnipetSchema)

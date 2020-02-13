@@ -83,6 +83,8 @@ exports.SaveEmailSnipet = async (req,res) =>{
 
     snip.name = payload.snipetName
     snip.disign = payload.design 
+    snip.dateCreated = Date.now()
+
     snip.save().then(result => {
         console.log(result)
         res.status(200).json({
@@ -93,7 +95,7 @@ exports.SaveEmailSnipet = async (req,res) =>{
 }
 exports.getEmailSnipet = async (req,res) =>{
     const currentPage = req.query.page || 1
-    const perPage = 6
+    const perPage = 50
     var totalItems
 
     const snipets = await EmailSnipet.find()

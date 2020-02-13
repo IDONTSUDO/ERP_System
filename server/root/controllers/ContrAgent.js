@@ -140,7 +140,7 @@ exports.SearchAgentEmail = async (req, res) => {
 exports.AllAgent = async (req, res) => {
 
     const currentPage = req.query.page || 1
-    const perPage = 6
+    const perPage = 50
     var totalItems
 
     const agents = await ContrAgent.find()
@@ -150,7 +150,7 @@ exports.AllAgent = async (req, res) => {
             totalItems = count;
             return ContrAgent.find()
                 .skip((currentPage - 1) * perPage)
-                .select('_id name')
+                // .select('_id name')
                 .limit(perPage)
 
         })
