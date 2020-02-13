@@ -15,6 +15,7 @@ exports.emailId = async (req, res,next,id) => {
 }
 
 exports.SnipetId = async (req, res,next,id) =>{
+    console.log(id)
 
     EmailSnipet.findById(id)
     .exec((err, result) => {
@@ -25,7 +26,7 @@ exports.SnipetId = async (req, res,next,id) =>{
             })
         }
         req.snip = result
-        
+        console.log(result)
         next()
     })
 }
@@ -65,7 +66,7 @@ exports.MailDeleteCollection = async (req, res) => {
 
 exports.SnipetsDelete = async (req,res) =>{
     let snip =  req.snip
-  
+    console.log(snip)
     await snip.remove((err, snip) => {
         if (err) {
             return res.status(400).json({
@@ -84,7 +85,7 @@ exports.SaveEmailSnipet = async (req,res) =>{
     snip.name = payload.snipetName
     snip.disign = payload.design 
     snip.dateCreated = Date.now()
-
+    snip.html = payload.html
     snip.save().then(result => {
         console.log(result)
         res.status(200).json({
@@ -112,4 +113,10 @@ exports.getEmailSnipet = async (req,res) =>{
             res.status(200).json(snipets)
         })
         .catch(err => console.log(err))
+}
+exports.getDisign = async (req, res) => {
+    let disign =   req.snip
+    
+    return res.status(200).json(disign.disign)
+
 }

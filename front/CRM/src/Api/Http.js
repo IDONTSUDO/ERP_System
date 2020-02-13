@@ -979,7 +979,7 @@ export const deleteSpecialisations = (id) =>{
     })
 }
 export const SnipetDelete = (id) =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/snipets/delete/:${id}`,{
+    return fetch(`${process.env.REACT_APP_API_URL}/snipets/delete/${id}`,{
         method:"DELETE",
         headers: myHeaders
     }).then(responce =>{
@@ -993,6 +993,17 @@ export const GetSnipets = (id) =>{
     return fetch(`${process.env.REACT_APP_API_URL}/get/email/snipet`,{
         method:"GET",
         headers: myHeaders
+    }).then(responce =>{
+        return responce.json()
+    }).catch(err =>{
+        console.log(err)
+        return err
+    })
+}
+export const GetDisign = (id) =>{
+    return fetch (`${process.env.REACT_APP_API_URL}/get/disign/${id}`,{
+        method:"GET",
+        headers:myHeaders
     }).then(responce =>{
         return responce.json()
     }).catch(err =>{

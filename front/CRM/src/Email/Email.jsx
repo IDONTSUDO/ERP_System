@@ -7,7 +7,8 @@ import {
   GetSnipets,
   SnipetDelete,
   AllSpecList,
-  ContrAgentList
+  ContrAgentList,
+  GetDisign
 } from "../Api/Http.js";
 import Error from "../Error/Error.jsx";
 import EmailEditor from "react-email-editor";
@@ -92,6 +93,13 @@ export default class Email extends Component {
         this.setState({ imgList: data });
       }
     });
+    GetSnipets().then(data => {
+      if (data.err) {
+        this.setState({ error: true });
+      } else {
+        this.setState({ snipetList: data });
+      }
+    });
   }
   handleClickImgDelete = id => {
     DeleteImg(id).then(data => {
@@ -106,7 +114,6 @@ export default class Email extends Component {
   handleClickImgCopy = id => {
     let copyInfo = `${process.env.REACT_APP_API_URL}/${id}`;
     navigator.clipboard.writeText(copyInfo);
-
   };
   switchChange = checked => {
     this.setState({ img_edit_mode: checked });
@@ -123,6 +130,7 @@ export default class Email extends Component {
   };
 
   // SNIPET
+
   next() {
     const current = this.state.current + 1;
     this.setState({ current });
@@ -132,6 +140,20 @@ export default class Email extends Component {
     const current = this.state.current - 1;
     this.setState({ current });
   }
+
+  DeleteSnipets = (e, w) => {
+    // loadDesign
+    let re = /"/gi;
+    const id = w.target.value.replace(re, "");
+
+    SnipetDelete(id).then(data => {
+      if (data.err) {
+        console.log(data.err);
+      } else {
+        this.forceUpdate();
+      }
+    });
+  };
 
   onCloseSnipetsDriver = () => {
     this.setState({ snipetsListVisibel: false });
@@ -150,7 +172,8 @@ export default class Email extends Component {
 
       let payload = {
         snipetName,
-        design
+        design,
+        html
       };
       SaveSnipet(payload);
     });
@@ -245,14 +268,21 @@ export default class Email extends Component {
     event.preventDefault();
     const value = name === "email" ? event.target.files[0] : event.target.value;
 
-
-
     UploadEmailImg(value).then(data => {
       this.forceUpdate();
     });
   };
-  LoadSnipets = (q, w, e, r, t, y) => {
-    console.log(q, w, e, r, t, y);
+  LoadSnipets = (q, w) => {
+    let re = /"/gi;
+    const description = w.target.value.replace(re, "");
+
+    GetDisign(description).then(data => {
+      if (data.err) {
+        console.log(data.err);
+      } else {
+        this.editor.loadDesign(data);
+      }
+    });
   };
   // TABEL
   getColumnSearchProps = dataIndex => ({
@@ -693,6 +723,12 @@ export default class Email extends Component {
             value={this.state.snipetName}
           ></Input>
         </Modal>
+
+
+
+
+
+      {/* SNIPET DRAWER  */}
         <Drawer
           width={900}
           title="Снипеты"
@@ -712,10 +748,26 @@ export default class Email extends Component {
                 <>
                   <div key={i}>
                     <h1>{snip.name}</h1>
-                    <h2>{snip._id}</h2>
-                    <Button onClick={snip => this.LoadSnipets(snip._id, snip)}>
+                    <Button
+                      value={snip._id}
+                      onClick={snip => this.LoadSnipets(snip.disign, snip)}
+                    >
                       Загрузить снипет
                     </Button>
+
+                    <Button
+                      type="danger"
+                      icon="delete"
+                      value={snip._id}
+                      onClick={snip => this.DeleteSnipets(snip.disign, snip)}
+                    ></Button>
+                    {/* <Icon type="eye" /> */}
+                    <Popover content={(<div dangerouslySetInnerHTML={{ __html: snip.html }} />)} title="Превью" trigger="click">
+                    <Button
+                      type="primary"
+                      icon="eye"
+                    ></Button>
+                    </Popover>
                     <div>
                       {moment(snip.dateCreated)
                         .locale("ru")

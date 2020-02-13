@@ -8,6 +8,9 @@ const EmailSnipetSchema = new mongoose.Schema({
     },
     dateCreated:{
         type:Date
+    },
+    html:{
+        type:Object
     }
 })
 module.exports = mongoose.model("EmailSnipet", EmailSnipetSchema)

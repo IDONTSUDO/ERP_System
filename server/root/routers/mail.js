@@ -6,9 +6,8 @@ const {
   SaveEmailSnipet,
   getEmailSnipet,
   SnipetId,
-  SnipetsDelete
-
-
+  SnipetsDelete,
+  getDisign
 } = require("../controllers/mail.images")
 let ImagesMail = require("../database/Images")
 
@@ -44,7 +43,7 @@ router.post('/save/email/snipets',SaveEmailSnipet)
 
 router.get('/get/email/snipet',getEmailSnipet)
 router.get('/images/email/all',MailPaginationGetImage)
-
+router.get('/get/disign/:snipetId',getDisign)
 
 
 router.delete('/images/del/:emailId',MailDeleteCollection)
