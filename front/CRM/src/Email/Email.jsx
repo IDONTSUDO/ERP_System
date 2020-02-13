@@ -1,9 +1,20 @@
 import React, { Component } from "react";
-import { MailImger, UploadEmailImg, DeleteImg,SaveSnipet,GetSnipets,SnipetDelete } from "../Api/Http.js";
+import {
+  MailImger,
+  UploadEmailImg,
+  DeleteImg,
+  SaveSnipet,
+  GetSnipets,
+  SnipetDelete,
+  AllSpecList,
+  ContrAgentList
+} from "../Api/Http.js";
 import Error from "../Error/Error.jsx";
 import EmailEditor from "react-email-editor";
 import Highlighter from "react-highlight-words";
-import {isAuthenticated} from "../Api/Auth";
+import moment from "moment";
+import Rusmap from "../helper/RUSSIAN_MAP";
+import { isAuthenticated } from "../Api/Auth";
 
 import {
   Table,
@@ -16,42 +27,20 @@ import {
   Drawer,
   Popover,
   Spin,
-  Modal
+  Modal,
+  Tag,
+  Checkbox,
+  Steps
 } from "antd";
+
+const { Step } = Steps;
+
 const content = (
   <div>
     <p>Content</p>
     <p>Content</p>
   </div>
 );
-
-
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park"
-  },
-  {
-    key: "2",
-    name: "Joe Black",
-    age: 42,
-    address: "London No. 1 Lake Park"
-  },
-  {
-    key: "3",
-    name: "Jim Green",
-    age: 32,
-    address: "Sidney No. 1 Lake Park"
-  },
-  {
-    key: "4",
-    name: "Jim Red",
-    age: 32,
-    address: "London No. 2 Lake Park"
-  }
-];
 
 export default class Email extends Component {
   constructor() {
@@ -63,6 +52,12 @@ export default class Email extends Component {
       // agents
       visibleAgents: false,
       agntLoaders: true,
+      childrenDrawerAgents: false,
+      current: 0,
+      resultAgents: [],
+      resultSimpelAgentGeo: [],
+      resultSimpelAgentSpec: [],
+      mapList: [],
       // imgers
       visibleImgs: false,
       imgList: [],
@@ -70,20 +65,24 @@ export default class Email extends Component {
       // tabel
       searchText: "",
       searchedColumn: "",
+      agentList: [],
+      specList: [],
 
       // snipets
-      snipetVisibel:false,
-      newSnipets:"",
-      snipetName:"",
-      snipetList:[],
-      loadingSnipetSave:false,
-      snipetsListLoading:false,
-      snipetsListVisibel:false
+      snipetVisibel: false,
+      newSnipets: "",
+      snipetName: "",
+      snipetList: [],
+      loadingSnipetSave: false,
+      snipetsListLoading: false,
+      snipetsListVisibel: false
     };
   }
   componentDidMount() {
-   
     this.email = new FormData();
+    let mapArray = [];
+    Rusmap.map((geo, i) => mapArray.push(geo.value));
+    this.setState({ mapList: mapArray });
   }
   forceUpdate() {
     MailImger().then(data => {
@@ -94,24 +93,21 @@ export default class Email extends Component {
       }
     });
   }
-  handleClickImgDelete = (id) =>{
-   
-    
-    DeleteImg(id).then(data =>{
-      if(data.err){
-        this.setState({errorsValid: true})
-      }else{
-        this.forceUpdate()
+  handleClickImgDelete = id => {
+    DeleteImg(id).then(data => {
+      if (data.err) {
+        this.setState({ errorsValid: true });
+      } else {
+        this.forceUpdate();
       }
-    })
-  }
-  
-  handleClickImgCopy =  (id)  =>{
-    let copyInfo = `${process.env.REACT_APP_API_URL}/${id}`
-    navigator.clipboard.writeText(copyInfo)
-    // textAreaRef.current.
+    });
+  };
 
-  }
+  handleClickImgCopy = id => {
+    let copyInfo = `${process.env.REACT_APP_API_URL}/${id}`;
+    navigator.clipboard.writeText(copyInfo);
+
+  };
   switchChange = checked => {
     this.setState({ img_edit_mode: checked });
   };
@@ -122,52 +118,104 @@ export default class Email extends Component {
   exportHtml = () => {
     this.editor.exportHtml(data => {
       const { design, html } = data;
-      console.log("exportHtml",typeof design);
+      console.log("exportHtml", typeof design);
     });
   };
 
   // SNIPET
+  next() {
+    const current = this.state.current + 1;
+    this.setState({ current });
+  }
+
+  prev() {
+    const current = this.state.current - 1;
+    this.setState({ current });
+  }
+
+  onCloseSnipetsDriver = () => {
+    this.setState({ snipetsListVisibel: false });
+  };
   showModalSnipets = () => {
     this.setState({
-      snipetVisibel: true,
+      snipetVisibel: true
     });
   };
-  handleOkSnipetSave = () =>{
 
+  handleOkSnipetSave = () => {
     this.editor.exportHtml(data => {
       const { design, html } = data;
-  
-      let { snipetName } = this.state
 
-    let payload = {
-      snipetName,
-      design
-    }
-    SaveSnipet(payload)
-    }); 
-    
-  }
-  SnipetsListDriwer = () =>{
-    GetSnipets().then(data =>{
-      if(data.err){
-        this.setState({error:true})
-      }else{
-        this.setState({snipetList:data,snipetsListVisibel:true})
+      let { snipetName } = this.state;
+
+      let payload = {
+        snipetName,
+        design
+      };
+      SaveSnipet(payload);
+    });
+  };
+  SnipetsListDriwer = () => {
+    this.setState({ snipetsListLoading: true });
+    GetSnipets().then(data => {
+      if (data.err) {
+        this.setState({ error: true });
+      } else {
+        this.setState({
+          snipetList: data,
+          snipetsListVisibel: true,
+          snipetsListLoading: false
+        });
       }
-    })
-  }
-  handleCancelSnipetSave = () =>{
-    this.setState({snipetName:"",snipetVisibel:false})
-  }
-  handelSaveSnipet = () =>{
-// snipetVisibel
-  }
+    });
+  };
+  handleCancelSnipetSave = () => {
+    this.setState({ snipetName: "", snipetVisibel: false });
+  };
+  handelSaveSnipet = () => {
+    // snipetVisibel
+  };
+
   // Agents Driwer
   showDrawerAgents = () => {
     this.setState({
       visibleAgents: true
     });
+    ContrAgentList().then(data => {
+      if (data.err) {
+        this.setState({ error: true });
+      } else {
+        this.setState({ agentList: data });
+        AllSpecList().then(data => {
+          if (data.err) {
+            this.setState({ error: true });
+          } else {
+            this.setState({ specList: data, agntLoaders: false });
+          }
+        });
+      }
+    });
   };
+
+  showChildrenDrawerAgents = () => {
+    this.setState({
+      childrenDrawerAgents: true
+    });
+  };
+
+  onChildrenDrawerCloseAgents = () => {
+    this.setState({
+      childrenDrawerAgents: false
+    });
+  };
+
+  changeCheckBoxGeo = geo => {
+    this.setState({ resultSimpelAgentGeo: geo });
+  };
+  changeCheckBoxSpec = spec => {
+    this.setState({ resultSimpelAgentSpec: spec });
+  };
+
   onCloseAgentsDriver = () => {
     this.setState({
       visibleAgents: false,
@@ -193,19 +241,19 @@ export default class Email extends Component {
       visibleImgs: false
     });
   };
-  handleChangeNewEmailPhoto = name =>event => {
+  handleChangeNewEmailPhoto = name => event => {
     event.preventDefault();
     const value = name === "email" ? event.target.files[0] : event.target.value;
-  
-    // let userId = isAuthenticated().direct._id;
 
-    UploadEmailImg(value).then(data =>{
-      this.forceUpdate()
-    })
-      // console.log(email)
-    // this.userData.set("Date_of_Birth",Date_of_Birth)
 
-  }
+
+    UploadEmailImg(value).then(data => {
+      this.forceUpdate();
+    });
+  };
+  LoadSnipets = (q, w, e, r, t, y) => {
+    console.log(q, w, e, r, t, y);
+  };
   // TABEL
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({
@@ -285,7 +333,9 @@ export default class Email extends Component {
     clearFilters();
     this.setState({ searchText: "" });
   };
-
+  handelTag = dataIndex => {
+    return <h1>{dataIndex}</h1>;
+  };
   render() {
     let { errors } = this.state;
     const columns = [
@@ -298,35 +348,104 @@ export default class Email extends Component {
       },
       {
         title: "Email",
-        dataIndex: "age",
+        dataIndex: "email",
         key: "age",
         width: "20%",
-        ...this.getColumnSearchProps("age")
+        ...this.getColumnSearchProps("email")
       },
       {
         title: "Специализация",
-        dataIndex: "address",
-        key: "address",
-        ...this.getColumnSearchProps("address")
+        dataIndex: "specialications",
+        key: "specialications",
+        filters: this.state.specList.map((spec, i) => ({
+          text: spec.data,
+          value: spec.data
+        })),
+        // [{ text: 'Male', value: 'male' }, { text: 'Female', value: 'female' }]
+        render: specialications => (
+          <span>
+            {specialications.map(tag => {
+              let color = tag.length > 5 ? "geekblue" : "green";
+              if (tag === "loser") {
+                color = "volcano";
+              }
+              return (
+                <Tag color={color} key={tag}>
+                  {tag.toUpperCase()}
+                </Tag>
+              );
+            })}
+          </span>
+        )
       },
       {
-        title: "Специализация",
-        dataIndex: "address",
-        key: "address",
-        ...this.getColumnSearchProps("address")
-      },
-      {
-        title: "Специализация",
-        dataIndex: "address",
-        key: "address",
-        ...this.getColumnSearchProps("address")
+        title: "Гео",
+        dataIndex: "agentGeo",
+        key: "agentGeo",
+        // ...this.handelTag("agentGeo")
+        render: agentGeo => (
+          <span>
+            {agentGeo.map(tag => {
+              let color = tag.length > 5 ? "geekblue" : "green";
+              if (tag === "loser") {
+                color = "volcano";
+              }
+              return (
+                <Tag color={color} key={tag}>
+                  {tag.toUpperCase()}
+                </Tag>
+              );
+            })}
+          </span>
+        )
       }
     ];
     const success = () => {
-      message.success('Адрес изображения скопирован!');
+      message.success("Адрес изображения скопирован!");
     };
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(
+          `selectedRowKeys: ${selectedRowKeys}`,
+          "selectedRows: ",
+          selectedRows
+        );
+      },
+      getCheckboxProps: record => ({
+        disabled: record.name === "Disabled User", // Column configuration not to be checked
+        name: record.name
+      })
+    };
+
+    const steps = [
+      {
+        title: "Выберете специализации.",
+
+        content: (
+          <Checkbox.Group
+            options={specListToStr(this.state.specList)}
+            onChange={this.changeCheckBoxSpec}
+          />
+        )
+      },
+      {
+        title: "Географиеское расположение",
+        content: (
+          <>
+            <Checkbox.Group
+              options={this.state.mapList}
+              onChange={this.changeCheckBoxGeo}
+            />
+          </>
+        )
+      }
+    ];
+    function specListToStr(specList) {
+      let SpecArray = [];
+      specList.map((spec, i) => SpecArray.push(spec.data));
+      return SpecArray;
+    }
     return (
-      
       <div>
         {errors ? (
           <Error />
@@ -397,21 +516,21 @@ export default class Email extends Component {
         )}
         <Drawer
           width={900}
-          title={(
+          title={
             <>
-<div>Управление изображениями</div>
-<div>
-<div class="upload-btn-wrapper">
-          <button class="btn-uploaded">Загрузить</button>
-          <input
-            onChange={this.handleChangeNewEmailPhoto("email")}
-            type="file"
-            accept="image/*"
-          />
-        </div>
-        </div>
-</>
-         )}
+              <div>Управление изображениями</div>
+              <div>
+                <div class="upload-btn-wrapper">
+                  <button class="btn-uploaded">Загрузить</button>
+                  <input
+                    onChange={this.handleChangeNewEmailPhoto("email")}
+                    type="file"
+                    accept="image/*"
+                  />
+                </div>
+              </div>
+            </>
+          }
           placement="right"
           closable={true}
           onClose={this.onCloseImgsDriver}
@@ -423,34 +542,43 @@ export default class Email extends Component {
             <>
               {this.state.imgList.map((img, i) => (
                 <>
-                <div className="container"><div className="row">
-                  <div className="mb-4">
-                  <div className="gallery">
-                          <div
-                         
-                          className="gallery-image">
+                  <div className="container">
+                    <div className="row">
+                      <div className="mb-4">
+                        <div className="gallery">
+                          <div className="gallery-image">
                             <img
                               className=""
-                              
                               src={`${process.env.REACT_APP_API_URL}/${img.filename}`}
                               alt={img.filename}
                               style={{ height: "200px", width: "300px" }}
                             />
-                            
                           </div>
-                         
+
                           <div className="gallery-text">
-                          {/* handleClickImgDelete handleClickImgCopy */}
-                            <h3 className="img_h3_delete"  onClick={id => this.handleClickImgDelete(img._id, id)}>Удалить</h3>
+                            {/* handleClickImgDelete handleClickImgCopy */}
+                            <h3
+                              className="img_h3_delete"
+                              onClick={id =>
+                                this.handleClickImgDelete(img._id, id)
+                              }
+                            >
+                              Удалить
+                            </h3>
                             <h3 style={{ color: "#ffffff" }}>/</h3>
-                            <h3  className="img_h3_copy" onClick={id => this.handleClickImgCopy(img.filename, id)} >Копировать</h3>
+                            <h3
+                              className="img_h3_copy"
+                              onClick={id =>
+                                this.handleClickImgCopy(img.filename, id)
+                              }
+                            >
+                              Копировать
+                            </h3>
                           </div>
-                          
-                            
-                         
                         </div>
+                      </div>
+                    </div>{" "}
                   </div>
-                  </div> </div>
                 </>
               ))}
             </>
@@ -472,7 +600,70 @@ export default class Email extends Component {
           ) : (
             <>
               {" "}
-              <Table columns={columns} dataSource={data} />
+              <Table
+                rowSelection={rowSelection}
+                columns={columns}
+                dataSource={this.state.agentList}
+              />
+              <Button icon="share-alt" onClick={this.showChildrenDrawerAgents}>
+                Простая настройка
+              </Button>
+              <Drawer
+                title="Простая настройка"
+                width={600}
+                closable={false}
+                onClose={this.onChildrenDrawerCloseAgents}
+                visible={this.state.childrenDrawerAgents}
+              >
+                <div>
+                  <Steps current={this.state.current}>
+                    {steps.map(item => (
+                      <Step key={item.title} title={item.title} />
+                    ))}
+                  </Steps>
+                  <div className="steps-content">
+                    {steps[this.state.current].content}
+                  </div>
+                  <div className="steps-action">
+                    {this.state.current < steps.length - 1 && (
+                      <Button type="primary" onClick={() => this.next()}>
+                        Следующий этап
+                      </Button>
+                    )}
+                    {this.state.current === steps.length - 1 && (
+                      <Button
+                        type="primary"
+                        onClick={() => message.success("Выполнено!")}
+                      >
+                        Завершить
+                      </Button>
+                    )}
+                    {/* TODOODOODODODODOODO */}
+
+                    {this.state.current > 0 && (
+                      <Button
+                        style={{ marginLeft: 8 }}
+                        onClick={() => this.prev()}
+                      >
+                        Назад
+                      </Button>
+                    )}
+                  </div>
+                </div>
+
+                {/* 
+            
+            
+            {this.state.specList.map((spec, i) => (
+              <>
+                      <Checkbox value={spec.data}>{spec.data}</Checkbox>
+
+              
+              </>
+            )) }
+            */}
+              </Drawer>
+              {/* TODO */}
             </>
           )}
         </Drawer>
@@ -480,27 +671,34 @@ export default class Email extends Component {
         {/* SNIPETS SAVE */}
         <Modal
           visible={this.state.snipetVisibel}
-          title={(<h1>Название снипета</h1>)}
+          title={<h1>Название снипета</h1>}
           onOk={this.handleOkSnipetSave}
           onCancel={this.handleCancelSnipetSave}
           footer={[
             <Button key="back" onClick={this.handleCancelSnipetSave}>
               Назад
             </Button>,
-            <Button key="submit" type="primary" loading={this.state.loadingSnipetSave} onClick={this.handleOkSnipetSave}>
+            <Button
+              key="submit"
+              type="primary"
+              loading={this.state.loadingSnipetSave}
+              onClick={this.handleOkSnipetSave}
+            >
               Сохранить
-            </Button>,
+            </Button>
           ]}
         >
-        
-         <Input onChange={this.handleChange("snipetName")} value={this.state.snipetName}></Input>
+          <Input
+            onChange={this.handleChange("snipetName")}
+            value={this.state.snipetName}
+          ></Input>
         </Modal>
         <Drawer
           width={900}
           title="Снипеты"
           placement="left"
           closable={true}
-          onClose={this.onCloseAgentsDriver}
+          onClose={this.onCloseSnipetsDriver}
           visible={this.state.snipetsListVisibel}
         >
           {this.state.snipetsListLoading ? (
@@ -510,7 +708,22 @@ export default class Email extends Component {
             </>
           ) : (
             <>
-             
+              {this.state.snipetList.map((snip, i) => (
+                <>
+                  <div key={i}>
+                    <h1>{snip.name}</h1>
+                    <h2>{snip._id}</h2>
+                    <Button onClick={snip => this.LoadSnipets(snip._id, snip)}>
+                      Загрузить снипет
+                    </Button>
+                    <div>
+                      {moment(snip.dateCreated)
+                        .locale("ru")
+                        .format("LL")}
+                    </div>
+                  </div>
+                </>
+              ))}
             </>
           )}
         </Drawer>
@@ -518,4 +731,3 @@ export default class Email extends Component {
     );
   }
 }
-// snipetsListVisibel

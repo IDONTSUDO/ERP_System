@@ -41,6 +41,7 @@
 .email_main_pos{
   position: absolute;
   padding: 1em 6em 0.1em;
+  left:50px;
 }
 .img_h3{
   color:#fdeeee;
