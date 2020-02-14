@@ -37,8 +37,9 @@ import {
   Checkbox,
   Steps,
   notification,
-  Select
+  Select,
 } from "antd";
+const { CheckableTag } = Tag;
 
 const { Step } = Steps;
 
@@ -76,8 +77,11 @@ export default class Email extends Component {
       agentList: [],
       specList: [],
       searchAgentEmail: "",
+      selectedRowKeys: [],
       searchAgentName: "",
-      geoSearch:[],
+      geoSearch: [],
+      agentResultsList:[],
+      filteredAgent:[],
       // snipets
       snipetVisibel: false,
       newSnipets: "",
@@ -319,9 +323,9 @@ export default class Email extends Component {
     }
   };
   handelSearchGeo = () => {
-    let {geoSearch} = this.state
-    console.log(geoSearch)
-  }
+    let { geoSearch } = this.state;
+    console.log(geoSearch);
+  };
   handlerAnyInput = name => event => {
     this.setState({ error: "" });
     this.setState({ [name]: event.target.value });
@@ -350,30 +354,32 @@ export default class Email extends Component {
       }
     });
   };
-  handleSelectgeoSearch = (data)=>{
-    this.setState({geoSearch:data})
-  }
-  handelSearchGeo = () =>{
-    let {geoSearch} = this.state
-   
-    SearchGeoAgents(geoSearch).then(data =>{
-      if(data.err){
-        this.setState({error: true})
-      }else{
-        this.setState({agentList:data})
+  handleSelectgeoSearch = data => {
+    this.setState({ geoSearch: data });
+  };
+  handelSearchGeo = () => {
+    let { geoSearch } = this.state;
+
+    SearchGeoAgents(geoSearch).then(data => {
+      if (data.err) {
+        this.setState({ error: true });
+      } else {
+        this.setState({ agentList: data });
       }
-    })
-    
+    });
+
     // if(geoSearch.length === 0){
     //   this.geoSerchError()
     // }else{
 
     // }
-  }
+  };
   renderFilterGeo = data => ({
     filterDropdown: ({}) => (
       <div style={{ padding: 8 }}>
-        <Button type="primary" onClick={this.handelSearchGeo} >Поиск</Button>
+        <Button type="primary" onClick={this.handelSearchGeo}>
+          Поиск
+        </Button>
         <Select
           style={{ width: "auto" }}
           className="col-xs-12"
@@ -405,6 +411,12 @@ export default class Email extends Component {
       </div>
     )
   });
+  handleCloseTagsAngt = (data) =>{
+    // console.log(data)
+  
+    // let filterResult = agentResultsList
+    this.setState({filteredAgent:data})
+  }
   renderFilterSpec = data => ({
     filterDropdown: ({}) => (
       <div style={{ padding: 8 }}>
@@ -496,7 +508,14 @@ export default class Email extends Component {
         text
       )
   });
-
+  handelAddingTagsAnetList = agent => {
+    let {agentResultsList} = this.state;
+    let ArrayAgents = []
+    ArrayAgents = agentResultsList
+    ArrayAgents.push(agent)
+    
+    this.setState({agentResultsList:ArrayAgents})
+  };
   handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     this.setState({
@@ -518,16 +537,40 @@ export default class Email extends Component {
       icon: <Icon type="frown" style={{ color: "#108ee9" }} />
     });
   };
-  geoSerchError = () =>{
+  geoSerchError = () => {
     notification.open({
       message: "Вы не ввели данных для поиска",
       icon: <Icon type="frown" style={{ color: "#108ee9" }} />
     });
-  }
+  };
+  // onSelectChange = selectedRowKeys => {
+  //   console.log('selectedRowKeys changed: ', selectedRowKeys);
+  //   this.setState({ selectedRowKeys });
+  /**
+   *
+   *
+   * @returns
+   * @memberof Email
+   */
   render() {
     let { errors } = this.state;
 
     const columns = [
+
+      {
+        title: "Action",
+        key: "action",
+        render: (text, record) => (
+          <span>
+          
+            <Button
+              onClick={agent => this.handelAddingTagsAnetList(text, agent)}
+            >
+              +
+            </Button>
+          </span>
+        )
+      },
       {
         title: "Имя",
         dataIndex: "name",
@@ -594,19 +637,9 @@ export default class Email extends Component {
     const success = () => {
       message.success("Адрес изображения скопирован!");
     };
-    const rowSelection = {
-      onChange: (selectedRowKeys, selectedRows) => {
-        console.log(
-          `selectedRowKeys: ${selectedRowKeys}`,
-          "selectedRows: ",
-          selectedRows
-        );
-      },
-      getCheckboxProps: record => ({
-        disabled: record.name === "Disabled User", // Column configuration not to be checked
-        name: record.name
-      })
-    };
+    let { selectedRowKeys } = this.state;
+
+    const hasSelected = this.state.selectedRowKeys.length > 0;
 
     const steps = [
       {
@@ -690,11 +723,37 @@ export default class Email extends Component {
                     >
                       Сохранить
                     </Button>
+                    <Button
+                      size="large"
+                      type="primary"
+                      shape=""
+                      // onClick={this.showModalSnipets}
+                      icon="mail"
+                    >
+                      
+                    </Button>
                   </div>
                 </div>
               </div>
 
-              <EmailEditor ref={editor => (this.editor = editor)} />
+              <EmailEditor locale="ru" ref={editor => (this.editor = editor)} />
+
+
+
+              <div className="row">
+            {this.state.agentResultsList.map((agnt,i) =>( 
+                <Tag
+                closable
+                onClose={e => {
+                  // e.preventDefault();
+                  this.handleCloseTagsAngt(e);
+                }}
+              >
+                {agnt.name}
+              </Tag>
+        ))}
+
+              </div>
             </div>
           </>
         )}
@@ -785,8 +844,14 @@ export default class Email extends Component {
           ) : (
             <>
               {" "}
+              <span style={{ marginLeft: 8 }}>
+                {hasSelected
+                  ? `Selected ${this.state.selectedRowKeys.length} items`
+                  : ""}
+              </span>
               <Table
-                rowSelection={rowSelection}
+                // rowSelection={rowSelection}
+                // rowSelection={}
                 columns={columns}
                 dataSource={this.state.agentList}
               />
