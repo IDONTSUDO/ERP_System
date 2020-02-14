@@ -1011,3 +1011,28 @@ export const GetDisign = (id) =>{
         return err
     })
 }
+export const SeacrhSpecAgnets = (spec) =>{
+    return fetch (`${process.env.REACT_APP_API_URL}/get/spec/agents`,{
+        method:"POST",
+        headers:myHeaders,
+        body:JSON.stringify(spec)
+    }).then(responce =>{
+        return responce.json()
+    }).catch(err =>{
+        console.log(err)
+        return err
+    })
+}
+
+export const SearchGeoAgents = (geoList) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/get/geo/search`,{
+        method:"POST",
+        headers:myHeaders,
+        body:JSON.stringify(geoList)
+    }).then(responce =>{
+        return responce.json()
+    }).catch(err =>{
+        console.log(err)
+        return err
+    })
+}

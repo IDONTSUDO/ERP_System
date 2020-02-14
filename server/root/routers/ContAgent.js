@@ -21,7 +21,10 @@ const {
     allSpec,
     specid,
     RemoveSpec,
-    changeAgentProfile } = require("../controllers/ContrAgent")
+    changeAgentProfile,
+    searchSpec,
+    searchGeo } = require("../controllers/ContrAgent")
+    
 const { workerById } = require("../controllers/Company")
 const {requireSignin} = require("../middleware/middleware.js")
 
@@ -35,7 +38,7 @@ router.get('/agent/todo/quality/:agentId',TodoAgentQuality)
 router.get('/agent/task/:taskId',getTask)
 router.get('/all/spec/agent', allSpec)
 
-
+router.post('/get/geo/search',searchGeo)
 router.post('/new/spec/agent',NewSpec)
 router.post('/agent/search',requireSignin, SearchAgent )
 router.post('/new/agent/:workerById',requireSignin, NewAgent)
@@ -45,6 +48,8 @@ router.post('/get/contragent/date',AgentStates);
 router.post('/search/managing/director/to/email',SearchAgentEmail)
 router.post('/year/agent/todo/statistics',GetYearStatisticAgent)
 router.post('/year/on/mounth/todo/agent/todo',GetYearAndMountStatistichAgent)
+router.post('/get/spec/agents',searchSpec)
+
 
 router.delete('/delete/manage/agent/:workerById',requireSignin, DeleteManagerForAgent)
 router.delete('/delete/spec/:specid',RemoveSpec)

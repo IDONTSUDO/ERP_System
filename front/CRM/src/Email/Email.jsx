@@ -8,7 +8,11 @@ import {
   SnipetDelete,
   AllSpecList,
   ContrAgentList,
-  GetDisign
+  GetDisign,
+  SearchContrAgent,
+  SearchAgentEmail,
+  SeacrhSpecAgnets,
+  SearchGeoAgents
 } from "../Api/Http.js";
 import Error from "../Error/Error.jsx";
 import EmailEditor from "react-email-editor";
@@ -16,7 +20,7 @@ import Highlighter from "react-highlight-words";
 import moment from "moment";
 import Rusmap from "../helper/RUSSIAN_MAP";
 import { isAuthenticated } from "../Api/Auth";
-
+import { debounce } from "debounce";
 import {
   Table,
   Upload,
@@ -31,7 +35,9 @@ import {
   Modal,
   Tag,
   Checkbox,
-  Steps
+  Steps,
+  notification,
+  Select
 } from "antd";
 
 const { Step } = Steps;
@@ -42,6 +48,7 @@ const content = (
     <p>Content</p>
   </div>
 );
+const { Option } = Select;
 
 export default class Email extends Component {
   constructor() {
@@ -68,7 +75,9 @@ export default class Email extends Component {
       searchedColumn: "",
       agentList: [],
       specList: [],
-
+      searchAgentEmail: "",
+      searchAgentName: "",
+      geoSearch:[],
       // snipets
       snipetVisibel: false,
       newSnipets: "",
@@ -175,7 +184,9 @@ export default class Email extends Component {
         design,
         html
       };
+
       SaveSnipet(payload);
+      this.setState({ snipetVisibel: false });
     });
   };
   SnipetsListDriwer = () => {
@@ -285,6 +296,141 @@ export default class Email extends Component {
     });
   };
   // TABEL
+  // SearchContrAgent
+
+  specListToStr = specList => {
+    let SpecArray = [];
+    specList.map((spec, i) => SpecArray.push(spec.data));
+    return SpecArray;
+  };
+
+  searchEmail = () => {
+    let { searchAgentEmail } = this.state;
+    if (searchAgentEmail.length < 3) {
+      return this.searchError();
+    } else {
+      SearchAgentEmail(searchAgentEmail).then(data => {
+        if (data.err) {
+          this.setState({ error: true });
+        } else {
+          this.setState({ agentList: data });
+        }
+      });
+    }
+  };
+  handelSearchGeo = () => {
+    let {geoSearch} = this.state
+    console.log(geoSearch)
+  }
+  handlerAnyInput = name => event => {
+    this.setState({ error: "" });
+    this.setState({ [name]: event.target.value });
+  };
+  SearchName = () => {
+    let { searchAgentName } = this.state;
+    if (searchAgentName.length < 3) {
+      return this.searchError();
+    } else {
+      SearchContrAgent(searchAgentName).then(data => {
+        if (data.err) {
+          this.setState({ error: true });
+        } else {
+          this.setState({ agentList: data });
+        }
+      });
+    }
+  };
+
+  changeSeachCheckBoxSpec = spec => {
+    SeacrhSpecAgnets(spec).then(data => {
+      if (data.err) {
+        this.setState({ error: true });
+      } else {
+        this.setState({ agentList: data });
+      }
+    });
+  };
+  handleSelectgeoSearch = (data)=>{
+    this.setState({geoSearch:data})
+  }
+  handelSearchGeo = () =>{
+    let {geoSearch} = this.state
+   
+    SearchGeoAgents(geoSearch).then(data =>{
+      if(data.err){
+        this.setState({error: true})
+      }else{
+        this.setState({agentList:data})
+      }
+    })
+    
+    // if(geoSearch.length === 0){
+    //   this.geoSerchError()
+    // }else{
+
+    // }
+  }
+  renderFilterGeo = data => ({
+    filterDropdown: ({}) => (
+      <div style={{ padding: 8 }}>
+        <Button type="primary" onClick={this.handelSearchGeo} >Поиск</Button>
+        <Select
+          style={{ width: "auto" }}
+          className="col-xs-12"
+          mode="multiple"
+          style={{ width: "100%" }}
+          placeholder="Выберите область"
+          value={this.state.geoSearch}
+          onChange={this.handleSelectgeoSearch}
+        >
+          {Rusmap.map(map => (
+            <Select.Option key={map.value} value={map.value}>
+              {map.value}
+            </Select.Option>
+          ))}
+        </Select>
+      </div>
+    )
+  });
+  renderFilterEmail = data => ({
+    filterDropdown: ({}) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          value={this.state.searchAgentEmail}
+          placeHolder="Поиск по Email"
+          onChange={this.handlerAnyInput("searchAgentEmail")}
+        />
+        <Button onClick={this.searchEmail}>Поиск</Button>
+        <Button>Очистить</Button>
+      </div>
+    )
+  });
+  renderFilterSpec = data => ({
+    filterDropdown: ({}) => (
+      <div style={{ padding: 8 }}>
+        <>
+          <Checkbox.Group
+            options={this.specListToStr(this.state.specList)}
+            onChange={this.changeSeachCheckBoxSpec}
+          />
+        </>
+      </div>
+    )
+  });
+  renderFilterName = data => ({
+    filterDropdown: ({}) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          value={this.state.searchAgentName}
+          placeHolder="Поиск по имени"
+          onChange={this.handlerAnyInput("searchAgentName")}
+        />
+        <Button onClick={this.SearchName}>Поиск</Button>
+        <Button>Очистить</Button>
+      </div>
+    )
+  });
+
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -366,32 +512,44 @@ export default class Email extends Component {
   handelTag = dataIndex => {
     return <h1>{dataIndex}</h1>;
   };
+  searchError = () => {
+    notification.open({
+      message: "Введите больше 3 знаков для поиска",
+      icon: <Icon type="frown" style={{ color: "#108ee9" }} />
+    });
+  };
+  geoSerchError = () =>{
+    notification.open({
+      message: "Вы не ввели данных для поиска",
+      icon: <Icon type="frown" style={{ color: "#108ee9" }} />
+    });
+  }
   render() {
     let { errors } = this.state;
+
     const columns = [
       {
         title: "Имя",
         dataIndex: "name",
         key: "name",
         width: "30%",
-        ...this.getColumnSearchProps("name")
+        ...this.renderFilterName("email")
       },
       {
         title: "Email",
         dataIndex: "email",
         key: "age",
         width: "20%",
-        ...this.getColumnSearchProps("email")
+        // filterIcon:(<><Icon type="search" style={{ color:   "#1890ff"  }} /></>),
+        ...this.renderFilterEmail("email")
+
+        // ...this.getColumnSearchProps("email")
       },
       {
         title: "Специализация",
         dataIndex: "specialications",
         key: "specialications",
-        filters: this.state.specList.map((spec, i) => ({
-          text: spec.data,
-          value: spec.data
-        })),
-        // [{ text: 'Male', value: 'male' }, { text: 'Female', value: 'female' }]
+        ...this.renderFilterSpec("specialications"),
         render: specialications => (
           <span>
             {specialications.map(tag => {
@@ -413,6 +571,8 @@ export default class Email extends Component {
         dataIndex: "agentGeo",
         key: "agentGeo",
         // ...this.handelTag("agentGeo")
+        ...this.renderFilterGeo("agnetGeo"),
+
         render: agentGeo => (
           <span>
             {agentGeo.map(tag => {
@@ -430,6 +590,7 @@ export default class Email extends Component {
         )
       }
     ];
+
     const success = () => {
       message.success("Адрес изображения скопирован!");
     };
@@ -453,7 +614,7 @@ export default class Email extends Component {
 
         content: (
           <Checkbox.Group
-            options={specListToStr(this.state.specList)}
+            options={this.specListToStr(this.state.specList)}
             onChange={this.changeCheckBoxSpec}
           />
         )
@@ -470,11 +631,7 @@ export default class Email extends Component {
         )
       }
     ];
-    function specListToStr(specList) {
-      let SpecArray = [];
-      specList.map((spec, i) => SpecArray.push(spec.data));
-      return SpecArray;
-    }
+
     return (
       <div>
         {errors ? (
@@ -536,9 +693,6 @@ export default class Email extends Component {
                   </div>
                 </div>
               </div>
-              {/* <div>
-  <button onClick={this.exportHtml}>Export HTML</button>
-</div> */}
 
               <EmailEditor ref={editor => (this.editor = editor)} />
             </div>
@@ -614,6 +768,7 @@ export default class Email extends Component {
             </>
           )}
         </Drawer>
+
         <Drawer
           width={900}
           title="Контр Агенты для раccылки"
@@ -689,7 +844,7 @@ export default class Email extends Component {
                       <Checkbox value={spec.data}>{spec.data}</Checkbox>
 
               
-              </>
+              </>a
             )) }
             */}
               </Drawer>
@@ -724,11 +879,7 @@ export default class Email extends Component {
           ></Input>
         </Modal>
 
-
-
-
-
-      {/* SNIPET DRAWER  */}
+        {/* SNIPET DRAWER  */}
         <Drawer
           width={900}
           title="Снипеты"
@@ -762,11 +913,14 @@ export default class Email extends Component {
                       onClick={snip => this.DeleteSnipets(snip.disign, snip)}
                     ></Button>
                     {/* <Icon type="eye" /> */}
-                    <Popover content={(<div dangerouslySetInnerHTML={{ __html: snip.html }} />)} title="Превью" trigger="click">
-                    <Button
-                      type="primary"
-                      icon="eye"
-                    ></Button>
+                    <Popover
+                      content={
+                        <div dangerouslySetInnerHTML={{ __html: snip.html }} />
+                      }
+                      title="Превью"
+                      trigger="click"
+                    >
+                      <Button type="primary" icon="eye"></Button>
                     </Popover>
                     <div>
                       {moment(snip.dateCreated)

@@ -6,11 +6,11 @@ const Specialisation = require('../database/Specialisations')
 
 const _ = require('lodash')
 
-exports.taskId = async (req, res,next,id) =>{
+exports.taskId = async (req, res, next, id) => {
     TodoAgent.findById(id)
-        .exec((err,result) =>{
-            if(err || !result){
-                return res.status(400).json({error:"Tasks not found"})
+        .exec((err, result) => {
+            if (err || !result) {
+                return res.status(400).json({ error: "Tasks not found" })
             }
             req.task = result
             next()
@@ -30,17 +30,17 @@ exports.agentId = async (req, res, next, id) => {
         })
 }
 
-exports.specid = async (req, res,next,id) => {
+exports.specid = async (req, res, next, id) => {
     Specialisation.findById(id)
-        .exec((err,result) => {
-            if(err || !result){
-                return res.status(400).json({error:"spec not found"})
+        .exec((err, result) => {
+            if (err || !result) {
+                return res.status(400).json({ error: "spec not found" })
             }
             req.spec = result
             next()
         })
 }
-exports.RemoveSpec = async (req, res) =>{
+exports.RemoveSpec = async (req, res) => {
     let spec = req.spec
 
     await spec.remove((err, result) => {
@@ -53,11 +53,11 @@ exports.RemoveSpec = async (req, res) =>{
     })
 }
 
-exports.changeAgentProfile = async (req, res) =>{
+exports.changeAgentProfile = async (req, res) => {
     let agent = req.agent
-    let {payload} = req.body
+    let { payload } = req.body
     agent = _.extend(agent, payload)
-      await agent.save((err, result) => {
+    await agent.save((err, result) => {
 
         if (err) {
             return res.status(400).json({
@@ -69,9 +69,9 @@ exports.changeAgentProfile = async (req, res) =>{
     })
 
 }
-exports.NewSpec  = async (req, res) =>{
+exports.NewSpec = async (req, res) => {
 
-    
+
     const spec = new Specialisation(req.body)
 
     await spec.save((err, result) => {
@@ -81,23 +81,22 @@ exports.NewSpec  = async (req, res) =>{
                 error: err
             })
         }
-        console.log(result)
         res.json(result)
     })
 }
-exports.allSpec = async (req, res) =>{
+exports.allSpec = async (req, res) => {
     Specialisation.find({})
-    .exec((err,result) =>{
-        if(err){
-            return res.status(400).json({
-                err:err
-            })
-        }
-        res.json(result)
-    })
+        .exec((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    err: err
+                })
+            }
+            res.json(result)
+        })
 }
 
-exports.getTask = async (req, res) =>{
+exports.getTask = async (req, res) => {
     let task = req.task
     return res.status(200).json(task)
 }
@@ -119,15 +118,33 @@ exports.getAgentProfile = async (req, res) => {
 }
 exports.SearchAgent = async (req, res) => {
     ContrAgent.find({ name: new RegExp(req.body.item, 'i') })
-        .select("_id name")
+        .select("_id full_name email name agentGeo specialications")
         .then(result => res.json(result))
         .catch(e => console.error(e))
 }
+exports.searchSpec = async (req, res) => {
+    console.log(req.body)
+    let specList = req.body
 
+    // let re = /"/gi;
+    // const description = w.target.value.replace(re, "");
+
+    ContrAgent.find({ specialications: { $all: [`${specList}`] } })
+        .select("_id full_name email name agentGeo specialications")
+        .exec((err, result) => {
+            if (err) {
+                return res.status(400).json({ err })
+            } else {
+                console.log(result)
+                return res.status(200).json(result)
+            }
+        })
+    // return res.status(200).json()
+}
 exports.SearchAgentEmail = async (req, res) => {
 
     ContrAgent.find({ email: new RegExp(req.body.item, 'i') })
-        .select("_id name full_name email")
+        .select("_id full_name email name agentGeo specialications")
         .exec((err, result) => {
             if (err) {
                 return res.status(400).json({ err })
@@ -315,11 +332,11 @@ exports.TodoAgentFind = (req, res, id) => {
 exports.TodoAgentQuality = async (req, res, id) => {
     let agentId = req.agent._id
 
-    TodoAgent.count({ agentByTodo: { $all: [`${agentId}}`] } }).exec((err, result) => {
+    TodoAgent.count({ agentByTodo: { $all: [`${agentId}`] } }).exec((err, result) => {
         if (err) {
             return res.status(400).json({ err })
         } else {
-            console.log(result)
+            
             return res.status(200).json(result)
         }
     })
@@ -327,13 +344,13 @@ exports.TodoAgentQuality = async (req, res, id) => {
 
 
 exports.agentUpdateStatistic = async (req, res) => {
-    
+
     let todoDestr = req.todo;
 
     let mounth = todoDestr.mounth;
     let agentIdByFind = todoDestr.agentByTodo[1];
-   
-    if(mounth === "01") {
+
+    if (mounth === "01") {
         AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 1: +1 } }, function (error, success) {
             if (error) {
                 return console.log(error);
@@ -457,8 +474,8 @@ exports.GetYearStatisticAgent = async (req, res) => {
 }
 exports.GetYearAndMountStatistichAgent = async (req, res) => {
     let { agentId, Year, Mounth } = req.body
-    
-    TodoAgent.find({year: Year, mounth: Mounth,agentByTodo: { $all: [`${agentId}`] }}).then((result,err) => {
+
+    TodoAgent.find({ year: Year, mounth: Mounth, agentByTodo: { $all: [`${agentId}`] } }).then((result, err) => {
         if (err) {
             return res.status(400).json({ err })
         } else {
@@ -466,7 +483,19 @@ exports.GetYearAndMountStatistichAgent = async (req, res) => {
         }
     })
 }
+exports.searchGeo = async (req, res) => {
+    let geoData = req.body
 
+    ContrAgent.find({ agentGeo: { $all: [`${geoData}`] } })
+        .select("_id full_name email name agentGeo specialications")
+        .exec((err, result) => {
+            if (err) {
+                return res.status(400).json({ err })
+            } else {
+                return res.status(200).json(result)
+            }
+        })
+}
 // TODO  [?] change agent not detect
 
 
