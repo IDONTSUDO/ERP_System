@@ -1,9 +1,10 @@
 
 let parser = require('fast-xml-parser');
+let Integration = require('../database/Integration.js')
 let AgentStatistic = require('../database/AgentStatistic.js')
 let ContrAgent = require('../database/ContrAgent.js')
 let request = require('request');
-var rp = require('request-promise');
+let rp = require('request-promise');
 
 let he = require('he');
 
@@ -31,9 +32,43 @@ let options = {
 
 
 
+exports.integrationList = async (req, res) =>{
+    const currentPage = req.query.page || 1
+    const perPage = 50
+    var totalItems
 
+    const integrations = await Integration.find()
 
-exports.integrationAllAgent = (req, res,next) => {
+        .countDocuments()
+        .then(count => {
+            totalItems = count;
+            return Integration.find()
+                .skip((currentPage - 1) * perPage)
+                
+                .limit(perPage)
+
+        })
+        .then(data => {
+            res.status(200).json(data)
+        })
+        .catch(err => console.log(err))
+}
+
+exports.integrationAllAgent = async (req, res,next) => {
+    let report 
+    // Integration.save()
+   
+    let intg = new Integration(req.body)
+    // let user = {
+    //     user:req.body
+    // }
+    intg.date = Date.now()
+    intg.userBy = req.body
+    await intg.save((err, result) => {
+
+ 
+        report = result._id
+
 
     // алгоритм сложностью o(n / ебаный в рот этого enterpise). 
     rp(`${process.env.SERVER_1C}`)
@@ -98,6 +133,10 @@ exports.integrationAllAgent = (req, res,next) => {
         .catch(function (err) {
             return res.status(200).json({ "ebany": "1-c" })
         });
+
+
+
+    })
 }
 exports.agentStaricTabel = (req,next) =>{
    let agentId =  req.agentId 

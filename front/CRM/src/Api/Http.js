@@ -1036,3 +1036,26 @@ export const SearchGeoAgents = (geoList) =>{
         return err
     })
 }
+export const ItegrationContrAgent = (userBy) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/integration/on`,{
+        method:"POST",
+        headers: myHeaders,
+        body: JSON.stringify(userBy)
+    }).then(responce =>{
+        return responce.json()
+    }).catch(err =>{
+        console.log(err)
+        return err
+    })
+}
+export const integrationList = () =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/integration/list`,{
+        method:"GET",
+        headers: myHeaders,
+    }).then(responce =>{
+        return responce.json()
+    }).catch(err =>{
+        console.log(err)
+        return err
+    })
+}

@@ -4,6 +4,11 @@
 .ant-select-selection--multiple{
   width: 500px;
 }
+.phone_cotrolAgents{
+  border-color: #c0e8e3;
+  border-style: solid;
+  background-color: tomato
+}
 .dropdown_contr_agent{
   width:200%;
   position:fixed;
@@ -37,6 +42,11 @@
 }
 .dark-teal-text {
   color: #2f413e;
+}
+.control_agent_main{
+  position: absolute;
+  padding: 1em 6em 0.1em;
+  left:50px;
 }
 .email_main_pos{
   position: absolute;

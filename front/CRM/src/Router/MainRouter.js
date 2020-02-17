@@ -42,6 +42,12 @@ import CompanyStatistic from '../Statistic/CompanyStatistic.jsx'
 import MessageList from '../Messages/MessageList.jsx'
 
 import EditorJob  from "../Work/EditorJob.jsx"
+
+
+import ControlAgents from "../ControlAgents/ControlAgents.jsx"
+
+
+
 const MainRouter = () => (
     <div>
         <MenuMain />
@@ -85,6 +91,10 @@ const MainRouter = () => (
             <PrivateRoute exact path="/agent/edit/:agentId" component={EditContrAgent} />
             <PrivateRoute exact path="/message" component={MessageList} />
             <PrivateRoute exact path="/mailing" component={Mail} />
+
+
+            <PrivateRoute exact path="/control/agent" component={ControlAgents}/>
+
         </Switch>
     </div>
 )

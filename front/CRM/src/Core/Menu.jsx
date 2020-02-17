@@ -253,6 +253,7 @@ class MenuMain extends React.Component {
                             ) : (
                               ""
                             )}
+                            {/* /control/agent */}
                             <Menu.Item key="8">
                               <Link
                                 to={`/my/agent/${isAuthenticated().direct._id}`}
@@ -266,6 +267,17 @@ class MenuMain extends React.Component {
                               <Menu.Item key="12">
                                 <Link to="/new/agent">
                                   <span>Создать нового </span>
+                                </Link>
+                              </Menu.Item>
+                            ) : (
+                              ""
+                            )}
+                              {["Директор", "Управляющий"].includes(
+                              role
+                            ) ? (
+                              <Menu.Item key="12">
+                                <Link to="/control/agent">
+                                  <span>Управление контр-агентами</span>
                                 </Link>
                               </Menu.Item>
                             ) : (

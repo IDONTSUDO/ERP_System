@@ -70,6 +70,7 @@ const contrAgentSchema = new mongoose.Schema({
     },
     payment_account: {
         type: String
-    }
+    },
+    active:{type:Boolean,default:true}
 })
 module.exports = mongoose.model("Agent", contrAgentSchema)
