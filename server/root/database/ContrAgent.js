@@ -3,33 +3,43 @@ const { ObjectId } = mongoose.Schema
 const contrAgentSchema = new mongoose.Schema({
     company: {
         type: String,
+        default:"none"
     },
     full_name: {
         type: String,
+        default:"none"
     },
     name: {
         type: String,
+        default:"none"
     },
     UUID: {
-        type:String
+        type:String,
+        default:"none"
     },
     phone: {
         type: String,
+        default:"none"
     },
     status: {
         type: String,
+        default:"none"
     },
     INN: {
         type: String,
+        default:"none"
     },
     general_director: {
         type: String,
+        default:"none"
     },
     OGRN: {
         type: String,
+        default:"none"
     },
     email: {
         type: String,
+        default:"none"
     },
     agentGeo:{
         type:Array,
@@ -51,25 +61,29 @@ const contrAgentSchema = new mongoose.Schema({
         type:Array,
         default:"none"
     },
-    tags: [{
+    tags: {
         type: Object,
         default:"none"
-    }],
+    },
     postedBy: {
         type: ObjectId,
         ref: "User"
     },
     any: {
-        type: String
+        type: String,
+        default:"none"
     },
     legal_address: {
-        type: String
+        type: String,
+        default:"none"
     },
     actual_address: {
-        type: String
+        type: String,
+        default:"none"
     },
     payment_account: {
-        type: String
+        type: String,
+        default:"none"
     },
     active:{type:Boolean,default:true}
 })
