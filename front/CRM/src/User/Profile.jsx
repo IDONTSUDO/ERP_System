@@ -34,10 +34,25 @@ class Profile extends Component {
     });
     AllStatistic(userId).then(data => {
       let total_installment = 0
-      if (data != undefined) {
-        this.setState({ static: data });
+      // console.log(typeof data)
+      if(data === "Not found"){
+        this.setState({browserCalendar: false, open:false})
+      }else{
+        this.setState({ static: data, open:false})
       }
-      this.setState({ open: false });
+      // data === String ? (
+      //   this.setState({browserCalendar: false, open:false})
+      // ):(
+      //   this.setState({ static: data, open:false})
+      // )
+      
+      // if (data.hasOwnProperty('day')) {
+        // this.setState({ static: data, open:false});
+      // }else{
+
+        // this.setState({ browserCalendar: false, open:false});
+      // }
+     
     });
   };
   initNotCalendar = userId => {

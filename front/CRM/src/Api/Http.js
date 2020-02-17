@@ -781,7 +781,7 @@ export const AllStatistic = (userId) => {
         return response.json()
     })
         .catch(err => {
-            console.log(err)
+            // console.log(err)
             return err
         })
 }
