@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { GetTodoByAgent, GetAgentYearStatistic } from "../Api/Http.js";
+import {
+  GetTodoByAgent,
+  GetAgentYearStatistic,
+  GetAgentMountAndYear
+} from "../Api/Http.js";
 import { isAuthenticated } from "../Api/Auth";
 import { Link } from "react-router-dom";
 import { Spin } from "antd";
@@ -19,20 +23,16 @@ class AgentTasks extends Component {
   componentDidMount() {
     let agentId = this.props.match.params.agentId;
 
-    GetTodoByAgent(agentId).then(data => {
-      if (data.err) {
-        console.log(data.err);
-      } else {
-        this.setState({ todos: data, agentID: agentId });
-      }
-    });
+  
+   let Mounth = moment().locale("ru").format("MM")
+   let Year = moment().locale("ru").format("YY")
+        GetAgentMountAndYear(agentId, Year, Mounth).then(data => {
+          this.setState({todos:data,open:false,agentID:agentId})
+        });
   }
 
   panelChange = (momentDate, regim) => {
     let { agentID } = this.state;
-    // agentId, Year
-    // agentId, Year
-    // let agentId = moment(momentDate).locale("ru").format("LL");
 
     if (regim === "year") {
       let Year = moment(momentDate)
@@ -86,7 +86,7 @@ class AgentTasks extends Component {
     let { yearStatistic } = this.state;
     // console.log( yearStatistic);
     // console.log(typeof yearStatistic)
-    console.log(value.month())
+    console.log(value.month());
     if (value.month() === 0) {
       return yearStatistic[1];
     }
@@ -113,7 +113,7 @@ class AgentTasks extends Component {
       return yearStatistic[11];
     } else if (value.month() === 11) {
       return yearStatistic[12];
-    } 
+    }
   };
   monthCellRender = value => {
     const num = this.getMonthData(value);
@@ -121,11 +121,12 @@ class AgentTasks extends Component {
       <div className="notes-month">
         <section>
           <Link
-
-          // :agentId/:month/:year
+            // :agentId/:month/:year
             to={`/agent/task/${this.state.agentID}/${moment(value)
               .locale("ru")
-              .format("MM")}/${moment(value).locale("ru").format("YY")}`}
+              .format("MM")}/${moment(value)
+              .locale("ru")
+              .format("YY")}`}
           >
             <h2>{num} *</h2>
           </Link>
