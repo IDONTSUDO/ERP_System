@@ -6,7 +6,7 @@ var myHeaders = new Headers({
     "Authorization": `Bearer ${token}`
 })
 
-export const  manage_list = () =>{
+export const manage_list = () => {
     return fetch(`${process.env.REACT_APP_API_URL}/manage/list`, {
         method: "GET",
         headers: myHeaders
@@ -100,18 +100,18 @@ export const updateUser = (user, next) => {
     if (typeof window !== "undefined") {
         if (localStorage.getItem("jwt")) {
             let auth = JSON.parse(localStorage.getItem("jwt"))
-            
+
             auth.direct = user
-            console.log(auth.direct)      
+            console.log(auth.direct)
             console.log(auth.token)
             let newData = new Object();
 
             newData.direct = auth.direct.direct
-            
+
             newData.token = auth.token
-            
+
             // newData.add()
-            
+
             // console.log("new data",newData)
             // console.log(auth)
 
@@ -405,7 +405,7 @@ export const ChangeHistory = (DealId, status) => {
         .catch(err => console.log(err))
 }
 export const ChangeHistoryItem = (DealId, payload) => {
-  
+
     return fetch(`${process.env.REACT_APP_API_URL}/change/history/${DealId}`, {
         method: "PUT",
         headers: myHeaders,
@@ -483,7 +483,7 @@ export const TodoUpTime = (ID, UpTime) => {
         .catch(err => console.log(err))
 }
 export const TodoChangeComandList = (todoId, payload) => {
-   
+
     return fetch(`${process.env.REACT_APP_API_URL}/todo/change/${todoId}`, {
         method: "POST",
         headers: myHeaders,
@@ -494,13 +494,13 @@ export const TodoChangeComandList = (todoId, payload) => {
         })
         .catch(err => console.log(err))
 }
-export const ChangeAgentProfile = (AgentId, payload) =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/change/agent/profile/${AgentId}`,{
-        method:"PUT",
+export const ChangeAgentProfile = (AgentId, payload) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/change/agent/profile/${AgentId}`, {
+        method: "PUT",
         headers: myHeaders,
-        body:JSON.stringify({payload})
+        body: JSON.stringify({ payload })
     })
-        .then(responce =>{
+        .then(responce => {
             return responce.json()
         })
         .catch(err => console.log(err))
@@ -680,7 +680,7 @@ export const DeleteDevice = (device) => {
 }
 
 export const NewNewsToComment = (payload) => {
-    console.log(JSON.stringify({payload}))
+    console.log(JSON.stringify({ payload }))
     return fetch(`${process.env.REACT_APP_API_URL}/new/news/coments`, {
         method: "POST",
         headers: myHeaders,
@@ -704,16 +704,16 @@ export const NewNewToSetStatusJob = (payload) => {
         })
         .catch(err => console.log(err))
 }
-export const SaveSnipet = (payload) =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/save/email/snipets`,{
-        method:"POST",
-        headers:myHeaders,
-        body:JSON.stringify({payload})
-    }).then(responce =>{
+export const SaveSnipet = (payload) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/save/email/snipets`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({ payload })
+    }).then(responce => {
         return responce.json()
     })
-    .catch(err => { return err })
-}  
+        .catch(err => { return err })
+}
 export const MailImger = () => {
     return fetch(`${process.env.REACT_APP_API_URL}/images/email/all`, {
         method: "GET",
@@ -722,10 +722,10 @@ export const MailImger = () => {
         .then(responce => {
             return responce.json()
         })
-        .catch(err =>  console.log(err) )
+        .catch(err => console.log(err))
 }
 export const UploadEmailImg = (file) => {
-  
+
     const formData = new FormData();
     formData.append("email", file);
     console.log(formData)
@@ -849,7 +849,7 @@ export const AssignedTodoUserBy = (payload) => {
             return err
         })
 }
-export const UpdateDaysTodoComplete = (payload)=>{
+export const UpdateDaysTodoComplete = (payload) => {
     return fetch(`${process.env.REACT_APP_API_URL}/update/days/statistics/todo/complete`, {
         method: "POST",
         headers: myHeaders,
@@ -862,7 +862,7 @@ export const UpdateDaysTodoComplete = (payload)=>{
             return err
         })
 }
-export const DeleteTodo = (TodoId) =>{
+export const DeleteTodo = (TodoId) => {
     return fetch(`${process.env.REACT_APP_API_URL}/delete/todo/${TodoId}`, {
         method: "DELETE",
         headers: myHeaders,
@@ -874,12 +874,12 @@ export const DeleteTodo = (TodoId) =>{
             return err
         })
 }
-export const SearchAgentEmail = (item) =>{
-    
+export const SearchAgentEmail = (item) => {
+
     return fetch(`${process.env.REACT_APP_API_URL}/search/managing/director/to/email`, {
         method: "POST",
         headers: myHeaders,
-        body: JSON.stringify({item})
+        body: JSON.stringify({ item })
     }).then(response => {
         return response.json()
     })
@@ -889,7 +889,7 @@ export const SearchAgentEmail = (item) =>{
         })
 }
 
-export const GetTodoByAgent = (agentId) =>{
+export const GetTodoByAgent = (agentId) => {
     return fetch(`${process.env.REACT_APP_API_URL}/agent/todo/${agentId}`, {
         method: "GET",
         headers: myHeaders,
@@ -901,171 +901,233 @@ export const GetTodoByAgent = (agentId) =>{
             return err
         })
 }
-export const GetAgentTodoStatistic = (agentId) =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/agent/todo/quality${agentId}`,{
-        method:"GET",
+export const GetAgentTodoStatistic = (agentId) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/agent/todo/quality${agentId}`, {
+        method: "GET",
         headers: myHeaders
-    }).then(response =>{
+    }).then(response => {
         return response.json()
     })
-        .catch(err =>{
+        .catch(err => {
             console.log(err)
             return err
         })
 }
-export const GetAgentYearStatistic = ( agentId, Year) =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/year/agent/todo/statistics`,{
+export const GetAgentYearStatistic = (agentId, Year) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/year/agent/todo/statistics`, {
         method: "POST",
         headers: myHeaders,
-        body:JSON.stringify({agentId, Year})
-    }).then(responce =>{
-        return responce.json()
-    })
-        .catch(err =>{
-            console.log(err)
-            return err
-        })
-}
-export const GetAgentMountAndYear = (agentId,Year,Mounth) =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/year/on/mounth/todo/agent/todo`,{
-        method:"POST",
-        headers:myHeaders,
-        body: JSON.stringify({agentId,Year,Mounth})
-    }).then(responce =>{
-        return responce.json()
-    })
-        .catch(err =>{
-            console.log(err)
-            return err
-        })
-}
-export const GetTask = (taskId) =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/agent/task/${taskId}`,{
-        method:"GET",
-        headers:myHeaders,
-        
+        body: JSON.stringify({ agentId, Year })
     }).then(responce => {
         return responce.json()
     })
-        .catch(err =>{
+        .catch(err => {
             console.log(err)
             return err
         })
 }
-export const NewSpecialication = (data) =>{
- return fetch(`${process.env.REACT_APP_API_URL}/new/spec/agent`,{
-     method: "POST",
-     headers: myHeaders,
-     body: JSON.stringify({data})
- }).then(responce =>{
-     return responce.json()
- })
-    .catch(err =>{
+export const GetAgentMountAndYear = (agentId, Year, Mounth) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/year/on/mounth/todo/agent/todo`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({ agentId, Year, Mounth })
+    }).then(responce => {
+        return responce.json()
+    })
+        .catch(err => {
+            console.log(err)
+            return err
+        })
+}
+export const GetTask = (taskId) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/agent/task/${taskId}`, {
+        method: "GET",
+        headers: myHeaders,
+
+    }).then(responce => {
+        return responce.json()
+    })
+        .catch(err => {
+            console.log(err)
+            return err
+        })
+}
+export const NewSpecialication = (data) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/new/spec/agent`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({ data })
+    }).then(responce => {
+        return responce.json()
+    })
+        .catch(err => {
+            console.log(err)
+            return err
+        })
+}
+
+export const AllSpecList = () => {
+    return fetch(`${process.env.REACT_APP_API_URL}/all/spec/agent`, {
+        method: "GET",
+        headers: myHeaders
+    }).then(responce => {
+        return responce.json()
+    }).catch(err => {
+        console.log(err)
+        return err
+    })
+}
+export const deleteSpecialisations = (id) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/delete/spec/${id}`, {
+        method: "DELETE",
+        headers: myHeaders
+    }).then(responce => {
+        return responce.json()
+    }).catch(err => {
+        console.log(err)
+        return err
+    })
+}
+export const SnipetDelete = (id) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/snipets/delete/${id}`, {
+        method: "DELETE",
+        headers: myHeaders
+    }).then(responce => {
+        return responce.json()
+    }).catch(err => {
+        console.log(err)
+        return err
+    })
+}
+export const GetSnipets = (id) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/get/email/snipet`, {
+        method: "GET",
+        headers: myHeaders
+    }).then(responce => {
+        return responce.json()
+    }).catch(err => {
+        console.log(err)
+        return err
+    })
+}
+export const GetDisign = (id) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/get/disign/${id}`, {
+        method: "GET",
+        headers: myHeaders
+    }).then(responce => {
+        return responce.json()
+    }).catch(err => {
+        console.log(err)
+        return err
+    })
+}
+export const SeacrhSpecAgnets = (spec) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/get/spec/agents`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify(spec)
+    }).then(responce => {
+        return responce.json()
+    }).catch(err => {
         console.log(err)
         return err
     })
 }
 
-export const AllSpecList = () =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/all/spec/agent`,{
-        method:"GET",
-        headers:myHeaders
-    }).then(responce =>{
+export const SearchGeoAgents = (geoList) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/get/geo/search`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify(geoList)
+    }).then(responce => {
         return responce.json()
-    }).catch(err =>{
+    }).catch(err => {
         console.log(err)
         return err
     })
 }
-export const deleteSpecialisations = (id) =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/delete/spec/${id}`,{
-        method:"DELETE",
-        headers: myHeaders
-    }).then(responce =>{
-        return responce.json()
-    }).catch(err =>{
-        console.log(err)
-        return err
-    })
-}
-export const SnipetDelete = (id) =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/snipets/delete/${id}`,{
-        method:"DELETE",
-        headers: myHeaders
-    }).then(responce =>{
-        return responce.json()
-    }).catch(err =>{
-        console.log(err)
-        return err
-    })
-}
-export const GetSnipets = (id) =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/get/email/snipet`,{
-        method:"GET",
-        headers: myHeaders
-    }).then(responce =>{
-        return responce.json()
-    }).catch(err =>{
-        console.log(err)
-        return err
-    })
-}
-export const GetDisign = (id) =>{
-    return fetch (`${process.env.REACT_APP_API_URL}/get/disign/${id}`,{
-        method:"GET",
-        headers:myHeaders
-    }).then(responce =>{
-        return responce.json()
-    }).catch(err =>{
-        console.log(err)
-        return err
-    })
-}
-export const SeacrhSpecAgnets = (spec) =>{
-    return fetch (`${process.env.REACT_APP_API_URL}/get/spec/agents`,{
-        method:"POST",
-        headers:myHeaders,
-        body:JSON.stringify(spec)
-    }).then(responce =>{
-        return responce.json()
-    }).catch(err =>{
-        console.log(err)
-        return err
-    })
-}
-
-export const SearchGeoAgents = (geoList) =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/get/geo/search`,{
-        method:"POST",
-        headers:myHeaders,
-        body:JSON.stringify(geoList)
-    }).then(responce =>{
-        return responce.json()
-    }).catch(err =>{
-        console.log(err)
-        return err
-    })
-}
-export const ItegrationContrAgent = (userBy) =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/integration/on`,{
-        method:"POST",
+export const ItegrationContrAgent = (userBy) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/integration/on`, {
+        method: "POST",
         headers: myHeaders,
         body: JSON.stringify(userBy)
-    }).then(responce =>{
+    }).then(responce => {
         return responce.json()
-    }).catch(err =>{
+    }).catch(err => {
         console.log(err)
         return err
     })
 }
-export const integrationList = () =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/integration/list`,{
-        method:"GET",
+export const integrationList = () => {
+    return fetch(`${process.env.REACT_APP_API_URL}/integration/list`, {
+        method: "GET",
         headers: myHeaders,
-    }).then(responce =>{
+    }).then(responce => {
         return responce.json()
-    }).catch(err =>{
+    }).catch(err => {
         console.log(err)
         return err
     })
 }
+
+export const agentStaticAtMail = () => {
+    return fetch(`${process.env.REACT_APP_API_URL}/agnet/static/at/mail`, {
+        method: "GET",
+        headers: myHeaders
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
+export const agentStaticAtJob = () => {
+    return fetch(`${process.env.REACT_APP_API_URL}/agnet/static/at/job`, {
+        method: "GET",
+        headers: myHeaders
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+
+}
+//
+export const agentStaticAtAll = () => {
+    return fetch(`${process.env.REACT_APP_API_URL}/agnet/static/at/all`, {
+        method: "GET",
+        headers: myHeaders
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
+export const agentStaticAtTech = () => {
+    return fetch(`${process.env.REACT_APP_API_URL}/agnet/static/at/tech/agent`, {
+        method: "GET",
+        headers: myHeaders
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+export const agentStatiAtManager = () => {
+    return fetch(`${process.env.REACT_APP_API_URL}/agent/static/at/manger`, {
+        method: "GET",
+        headers: myHeaders
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
+
