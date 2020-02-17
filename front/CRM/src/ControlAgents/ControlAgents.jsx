@@ -58,11 +58,17 @@ export default class ControlAgents extends Component {
       }
       key="1"
     >
-     <div>
-       <h1>Всего КонтрАгентов: {this.state.agentAll}</h1>
-       <h2><Icon type="mail" />{`Email заполненных: ${this.state.MailAgent} из ${this.state.agentAll}`}</h2>
-       <h2><Icon type="audit" />{`Дел выполненно:${this.state.jobByAgent}`}</h2>
-       <h2><Icon type="exclamation-circle" />{`Контр агенты которым не назначены менеджеры ${this.state.ManageToAgent}`}</h2>
+     <div className="itg_icon">
+       <h1>Всего КонтрАгентов: {this.state.agentAll}</h1><hr/>
+       <Icon style={{ fontSize: '32px',color: '#ebe134'  }} className="icon_width_itg" type="mail" />
+       <h2>{`Email заполненных: ${this.state.MailAgent} из ${this.state.agentAll}`}</h2>
+       <Icon style={{ fontSize: '32px',color: '#13e83a'  }} className="icon_width_itg" type="audit" />
+       <h2>{`Дел выполненно:${this.state.jobByAgent}`}</h2>
+       <Icon style={{ fontSize: '32px',color: '#eb3434'  }} className="icon_width_itg" type="exclamation-circle" />
+       <h2>{`Не назначеные  ${this.state.ManageToAgent}`}</h2>
+       <div >
+     
+       </div>
      </div>
     </TabPane>
     <TabPane
@@ -79,17 +85,16 @@ export default class ControlAgents extends Component {
               {" "}
               Синхронизация с 1-С
             </Button>
+           <h1>Последниее синхронизции</h1>
            
-              <div className="row phone_cotrolAgents">
                 {this.state.listIntegration.map((itg, i) => (
-                  <div className="col-md-4">
+                  <div >
                     {/* <div>{itg.userBy}</div> */}
 
                     <Moment fromNow>{itg.date}</Moment>
                   </div>
                 ))}
               </div>
-            </div>
     </TabPane>
   </Tabs>
         </div>

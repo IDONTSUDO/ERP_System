@@ -4,6 +4,12 @@
 .ant-select-selection--multiple{
   width: 500px;
 }
+.itg_icon{
+  flex-direction: column;
+  /* display: flex; */
+  align-items: center;
+  justify-content: center
+}
 .phone_cotrolAgents{
   border-color: #c0e8e3;
   border-style: solid;

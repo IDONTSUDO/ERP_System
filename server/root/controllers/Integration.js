@@ -34,17 +34,15 @@ let options = {
 
 exports.integrationList = async (req, res) =>{
     const currentPage = req.query.page || 1
-    const perPage = 50
-    var totalItems
+    const perPage = 5
 
-    const integrations = await Integration.find()
+    const integrations = await Integration.find({})
 
         .countDocuments()
         .then(count => {
             totalItems = count;
-            return Integration.find()
-                .skip((currentPage - 1) * perPage)
-                
+            return Integration.find({})
+            .sort({'_id':-1}).limit(5)
                 .limit(perPage)
 
         })
