@@ -16,7 +16,8 @@ const {
     WorkerStatisticTabel,
     wokerEditDeviceData,
     wokerEditDeviceDataDelete,
-    getIpGeolocatedData } = require('../controllers/Company.js')
+    getIpGeolocatedData ,
+    ManageList} = require('../controllers/Company.js')
 const { requireSignin } = require("../middleware/middleware.js")
 
 const router = express.Router({ mergeParams: true });
@@ -28,7 +29,7 @@ router.get('/all/worker', requireSignin, workerAll)
 router.get('/all/worker/list', requireSignin, ListworkerAll)
 router.get('/user/photo/:workerById', workerPhoto)
 router.get('/all/financy', requireSignin, workerFinancyAll)
-
+router.get('/manage/list',ManageList)
 router.post('/worker/manager/', requireSignin, WokerToManagerRole)
 router.post('/new/worker/', requireSignin, Newworker,WorkerStatisticTabel)
 router.post('/test/search/', searchWorker)

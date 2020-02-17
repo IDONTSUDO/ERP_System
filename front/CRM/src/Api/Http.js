@@ -6,7 +6,17 @@ var myHeaders = new Headers({
     "Authorization": `Bearer ${token}`
 })
 
-
+export const  manage_list = () =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/manage/list`, {
+        method: "GET",
+        headers: myHeaders
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
 export const list = page => {
     return fetch(`${process.env.REACT_APP_API_URL}/all/worker/list/?page=${page}`, {
         method: "GET",

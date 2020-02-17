@@ -42,6 +42,11 @@ exports.workerById = async (req, res, next, id) => {
             next()
         })
 }
+exports.ManageList = async (req, res) =>{
+    Worker.find({role:"Менеджер"}).then(data => {
+        return res.status(200).json(data)
+    })
+}
 exports.Newworker = async (req, res, next) => {
     const workerExists = await Worker.findOne({ email: req.body.email })
     if (workerExists) return res.status(403).json({

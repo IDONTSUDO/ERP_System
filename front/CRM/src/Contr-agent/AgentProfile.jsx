@@ -1,10 +1,26 @@
 import React, { Component } from "react";
 import ReactTags from "react-tag-autocomplete";
-import { GetAgentProfile, list, AddManageForAgent,PricedAtManage  } from "../Api/Http";
-import { Button, Descriptions, Icon, notification,Tabs } from "antd";
+import {
+  GetAgentProfile,
+  list,
+  AddManageForAgent,
+  PricedAtManage
+} from "../Api/Http";
+import {
+  Button,
+  Descriptions,
+  Icon,
+  notification,
+  Tabs,
+  Tag,
+  Select,
+  Switch
+} from "antd";
 import { isAuthenticated } from "../Api/Auth";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 const { TabPane } = Tabs;
+
+const { Option, OptGroup } = Select;
 
 export default class AgentProfile extends Component {
   constructor() {
@@ -32,6 +48,7 @@ export default class AgentProfile extends Component {
 
   componentDidMount() {
     const agentId = this.props.match.params.agentId;
+    let TagsArray = [];
     GetAgentProfile(agentId).then(data => {
       if (data.error) {
         this.setState({ redirectToProfile: true });
@@ -46,19 +63,37 @@ export default class AgentProfile extends Component {
           INN: data.INN,
           general_director: data.general_director,
           OGRN: data.OGRN,
-          tags: data.tags,
+          // tags: data.tags,
           any: data.any,
           legal_address: data.legal_address,
           actual_address: data.actual_address,
           payment_account: data.payment_account
         });
+
+        if (data.tags === "none") {
+          this.setState({ tags: undefined });
+        } else {
+          data.tags.map(tag => {
+            TagsArray.push(tag.name);
+          });
+
+          this.setState({ tags: TagsArray });
+        }
       }
     });
     list().then(data => {
       if (data.error) {
         console.log(data.error);
       } else {
-        this.setState({ worker: data });
+      
+        let workerList = [];
+        for (let us of data) {
+         let ItsWorkerAtValid = ["Директор", "Управляющий", "Менеджер"].includes(us.role) 
+          if(ItsWorkerAtValid){
+            workerList.push(us)
+          }
+        }
+        this.setState({worker:workerList})
       }
     });
   }
@@ -84,9 +119,19 @@ export default class AgentProfile extends Component {
   clickSubmit = event => {
     event.preventDefault();
     this.setState({ loading: true });
-    const { tags, id } = this.state;
+    const { tags, id, worker } = this.state;
     const token = isAuthenticated().token;
-    AddManageForAgent(tags, id, token).then(data => {
+    let userArray = [];
+
+    for (let i = 0; tags.length > i; i++) {
+      for (let user of worker) {
+        if (user.name === tags[i]) {
+          userArray.push({ name: user.name, _id: user._id });
+        }
+      }
+    }
+
+    AddManageForAgent(userArray, id, token).then(data => {
       if (data.error) {
         this.openNotificationError();
       } else {
@@ -102,6 +147,7 @@ export default class AgentProfile extends Component {
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
+        let TagsArray = [];
         this.setState({
           id: data._id,
           name: data.name,
@@ -112,20 +158,21 @@ export default class AgentProfile extends Component {
           INN: data.INN,
           general_director: data.general_director,
           OGRN: data.OGRN,
-          tags: data.tags,
           any: data.any,
           legal_address: data.legal_address,
           actual_address: data.actual_address,
           payment_account: data.payment_account,
-          result:[]
+          result: []
         });
-      }
-    });
-    list().then(data => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        this.setState({ worker: data });
+        if (data.tags === "none") {
+          this.setState({ tags: undefined });
+        } else {
+          data.tags.map(tag => {
+            TagsArray.push(tag.name);
+          });
+
+          this.setState({ tags: TagsArray });
+        }
       }
     });
   }
@@ -142,6 +189,9 @@ export default class AgentProfile extends Component {
       icon: <Icon type="smile" style={{ color: "#108ee9" }} />
     });
   }
+  ChangeSelect = inputData => {
+    this.setState({ tags: inputData });
+  };
   render() {
     const {
       email,
@@ -157,6 +207,7 @@ export default class AgentProfile extends Component {
       legal_address,
       actual_address,
       payment_account,
+      tags,
       id
     } = this.state;
     return (
@@ -165,36 +216,70 @@ export default class AgentProfile extends Component {
           <div className="">
             <Descriptions title="Корпаративная  информация" layout="vertical">
               <Descriptions.Item label="Имя компании">
-                <p>{name}</p>
+                {name === "none" ? (
+                  <Tag color="geekblue">{name.toUpperCase()}</Tag>
+                ) : (
+                  <div>{name}</div>
+                )}
               </Descriptions.Item>
-              <Descriptions.Item label="Телефон">{phone}</Descriptions.Item>
-              <Descriptions.Item label="Компания">{company}</Descriptions.Item>
+              <Descriptions.Item label="Телефон">
+                {phone === "none" ? (
+                  <Tag color="geekblue">{phone.toUpperCase()}</Tag>
+                ) : (
+                  <div>{phone}</div>
+                )}
+              </Descriptions.Item>
+              <Descriptions.Item label="Компания">
+                {company === "none" ? (
+                  <Tag color="geekblue">{company.toUpperCase()}</Tag>
+                ) : (
+                  <div>{company}</div>
+                )}
+              </Descriptions.Item>
               <Descriptions.Item label="Адрес" span={2}>
-                {legal_address}
+                {legal_address === "none" ? (
+                  <Tag color="geekblue">{legal_address.toUpperCase()}</Tag>
+                ) : (
+                  <div>{legal_address}</div>
+                )}
               </Descriptions.Item>
               <Descriptions.Item label="Генеральный директор">
-                {general_director}
+                {general_director === "none" ? (
+                  <Tag color="geekblue">{general_director.toUpperCase()}</Tag>
+                ) : (
+                  <div>{general_director}</div>
+                )}
               </Descriptions.Item>
-              <Button><Link to={`/agent/tasks/${id}`}>Дела по контр агенту</Link></Button> 
             </Descriptions>
 
-      <div className="Tags">
-              <ReactTags
-                placeholder={"Добавте менеджера"}
-                tags={this.state.tags}
-                suggestions={worker}
-                handleDelete={this.handleDelete.bind(this)}
-                handleAddition={this.handleAddition.bind(this)}
-              />
-            </div>
-            <div style={{ padding: "5px" }}></div>
+            <Select
+              mode="multiple"
+              style={{ width: "max-content" }}
+              placeholder="Выберете исполнителей"
+              onChange={this.ChangeSelect}
+              optionLabelProp="label"
+              value={tags}
+              defaultActiveFirstOption={false}
+              allowClear={true}
+            >
+              {worker.map((workerOne, i = 1) => (
+                <Option value={workerOne.name} label={workerOne.name}>
+                  <span>{workerOne.name}</span>
+                </Option>
+              ))}
+            </Select>
+ <Switch
+      checkedChildren={<Icon type="check" />}
+      unCheckedChildren={<Icon type="close" />}
+      defaultChecked
+    />
             <Button onClick={this.clickSubmit}>Назначить</Button>
- 
-            
+            <Button>
+              <Link to={`/agent/tasks/${id}`}>Дела по контр агенту</Link>
+            </Button>
           </div>
         </div>
       </div>
     );
   }
 }
-
