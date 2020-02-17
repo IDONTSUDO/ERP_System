@@ -23,12 +23,15 @@ class AgentTasks extends Component {
   componentDidMount() {
     let agentId = this.props.match.params.agentId;
 
-  
-   let Mounth = moment().locale("ru").format("MM")
-   let Year = moment().locale("ru").format("YY")
-        GetAgentMountAndYear(agentId, Year, Mounth).then(data => {
-          this.setState({todos:data,open:false,agentID:agentId})
-        });
+    let Mounth = moment()
+      .locale("ru")
+      .format("MM");
+    let Year = moment()
+      .locale("ru")
+      .format("YY");
+    GetAgentMountAndYear(agentId, Year, Mounth).then(data => {
+      this.setState({ todos: data, open: false, agentID: agentId });
+    });
   }
 
   panelChange = (momentDate, regim) => {

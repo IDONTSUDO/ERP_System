@@ -37,7 +37,7 @@ import {
   Checkbox,
   Steps,
   notification,
-  Select,
+  Select
 } from "antd";
 const { CheckableTag } = Tag;
 
@@ -80,8 +80,8 @@ export default class Email extends Component {
       selectedRowKeys: [],
       searchAgentName: "",
       geoSearch: [],
-      agentResultsList:[],
-      filteredAgent:[],
+      agentResultsList: [],
+      filteredAgent: [],
       // snipets
       snipetVisibel: false,
       newSnipets: "",
@@ -377,7 +377,7 @@ export default class Email extends Component {
   renderFilterGeo = data => ({
     filterDropdown: ({}) => (
       <div style={{ padding: 8 }}>
-        <Button type="primary" onClick={this.handelSearchGeo}>
+        <Button style={{padding: 5 }} type="primary"  onClick={this.handelSearchGeo}>
           Поиск
         </Button>
         <Select
@@ -388,6 +388,8 @@ export default class Email extends Component {
           placeholder="Выберите область"
           value={this.state.geoSearch}
           onChange={this.handleSelectgeoSearch}
+          maxTagCount={1}
+          
         >
           {Rusmap.map(map => (
             <Select.Option key={map.value} value={map.value}>
@@ -411,12 +413,12 @@ export default class Email extends Component {
       </div>
     )
   });
-  handleCloseTagsAngt = (data) =>{
+  handleCloseTagsAngt = data => {
     // console.log(data)
-  
+
     // let filterResult = agentResultsList
-    this.setState({filteredAgent:data})
-  }
+    this.setState({ filteredAgent: data });
+  };
   renderFilterSpec = data => ({
     filterDropdown: ({}) => (
       <div style={{ padding: 8 }}>
@@ -509,12 +511,12 @@ export default class Email extends Component {
       )
   });
   handelAddingTagsAnetList = agent => {
-    let {agentResultsList} = this.state;
-    let ArrayAgents = []
-    ArrayAgents = agentResultsList
-    ArrayAgents.push(agent)
-    
-    this.setState({agentResultsList:ArrayAgents})
+    let { agentResultsList } = this.state;
+    let ArrayAgents = [];
+    ArrayAgents = agentResultsList;
+    ArrayAgents.push(agent);
+
+    this.setState({ agentResultsList: ArrayAgents });
   };
   handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -556,13 +558,11 @@ export default class Email extends Component {
     let { errors } = this.state;
 
     const columns = [
-
       {
-        title: "Action",
+        title: "Добавить",
         key: "action",
         render: (text, record) => (
           <span>
-          
             <Button
               onClick={agent => this.handelAddingTagsAnetList(text, agent)}
             >
@@ -729,30 +729,66 @@ export default class Email extends Component {
                       shape=""
                       // onClick={this.showModalSnipets}
                       icon="mail"
-                    >
-                      
-                    </Button>
+                    ></Button>
                   </div>
                 </div>
               </div>
 
               <EmailEditor locale="ru" ref={editor => (this.editor = editor)} />
 
-
-
               <div className="row">
-            {this.state.agentResultsList.map((agnt,i) =>( 
-                <Tag
-                closable
-                onClose={e => {
-                  // e.preventDefault();
-                  this.handleCloseTagsAngt(e);
-                }}
-              >
-                {agnt.name}
-              </Tag>
-        ))}
-
+                {this.state.agentResultsList.map((agnt, i) => (
+                  <>
+                    <Popover
+                      title="Контр Агент"
+                      trigger="click"
+                      title={
+                        <>
+                          <div>Email:{agnt.email}</div>
+                          <div>Полное имя:{agnt.full_name}</div>
+                          <div>Короткое имя:{agnt.name}</div>
+                          <div>Расчетный счет:{agnt.payment_account}</div>
+                          <div>Гео:
+                          {agnt.agentGeo.map((geo, i) => {
+                              let color = geo.length > 5 ? "geekblue" : "green";
+                              if (geo === "loser") {
+                                color = "volcano";
+                              }
+                              return (
+                                <Tag color={color} key={geo}>
+                                  {geo.toUpperCase()}
+                                </Tag>
+                              );
+                          })}
+                          </div>
+                          <div>Техника:
+                          {agnt.tech.map((tech, i) => {
+                            let color = tech.length > 5 ? "geekblue" : "green";
+                            if (tech === "loser") {
+                              color = "volcano";
+                            }
+                            return (
+                              <Tag color={color} key={tech}>
+                                {tech.toUpperCase()}
+                              </Tag>
+                            );
+                          })}
+                          </div>
+                        </>
+                      }
+                    >
+                      <Tag
+                        closable
+                        onClose={e => {
+                          // e.preventDefault();
+                          this.handleCloseTagsAngt(e);
+                        }}
+                      >
+                        {agnt.name}
+                      </Tag>
+                    </Popover>
+                  </>
+                ))}
               </div>
             </div>
           </>
@@ -888,7 +924,6 @@ export default class Email extends Component {
                         Завершить
                       </Button>
                     )}
-                    {/* TODOODOODODODODOODO */}
 
                     {this.state.current > 0 && (
                       <Button

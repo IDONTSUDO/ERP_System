@@ -52,7 +52,8 @@ const contrAgentSchema = new mongoose.Schema({
         default:"none"
     },
     tags: [{
-        type: Object
+        type: Object,
+        default:"none"
     }],
     postedBy: {
         type: ObjectId,
