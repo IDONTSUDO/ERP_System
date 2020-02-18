@@ -1,5 +1,8 @@
 const EmailImg = require('../database/Images')
 const EmailSnipet = require('../database/EmailSnipet')
+const ContrAgent = require('../database/ContrAgent')
+
+
 exports.emailId = async (req, res,next,id) => {
     
     EmailImg.findById(id)
@@ -119,4 +122,36 @@ exports.getDisign = async (req, res) => {
     
     return res.status(200).json(disign.disign)
 
+}
+exports.SimpelEmail = async (req, res) => {
+    
+    let setting = req.body
+
+    let { resultSimpelAgentGeo, resultSimpelAgentSpec} = setting 
+
+  
+    console.log(resultSimpelAgentSpec)
+    let requests = resultSimpelAgentGeo.map(geoData => ContrAgent.find({agentGeo:geoData})
+    .then(data =>{ return (data)}));
+    
+    let i 
+    Promise.all(requests)
+      .then(responses => responses.map((result,i) =>{
+          for(agent of result){ 
+        //1
+            if(agent.specialications !== "none"){
+                for(spec of agent.specialications){
+                //    2
+                    i = resultSimpelAgentSpec.includes(spec) 
+
+                  
+
+                }
+            }        
+          }
+      }))
+    return res.status(200)
+}
+exports.EmailingLists = async (req, res) => {
+    
 }
