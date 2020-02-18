@@ -85,13 +85,13 @@ export default class ControlAgents extends Component {
               {" "}
               Синхронизация с 1-С
             </Button>
-           <h1>Последниее синхронизции</h1>
+           <h1>Последние синхронизции</h1>
            
                 {this.state.listIntegration.map((itg, i) => (
                   <div >
                     {/* <div>{itg.userBy}</div> */}
 
-                    <Moment fromNow>{itg.date}</Moment>
+                    <Icon type="clock-circle" /><Moment fromNow>{itg.date}</Moment>
                   </div>
                 ))}
               </div>

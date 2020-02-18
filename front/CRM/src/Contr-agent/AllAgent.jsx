@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import None from "../Components/None.jsx";
 import { Link, Route } from "react-router-dom";
 import { ContrAgentList, SearchContrAgent } from "../Api/Http";
-import { Button, Modal, Icon, Card } from "antd";
+import { Button, Modal, Icon, Card, Table, Divider } from "antd";
 import { isAuthenticated } from "../Api/Auth";
-import Error from "../Error/Error.jsx"
+import Error from "../Error/Error.jsx";
 
 export default class AllAgent extends Component {
   constructor() {
@@ -58,6 +59,64 @@ export default class AllAgent extends Component {
 
   render() {
     let { agent, item, search, page } = this.state;
+    const columns = [
+      {
+        title: "Короткое имя",
+        dataIndex: "name",
+        key: "name",
+        render: text => <a>{text}</a>
+      },
+      // {
+      //   title: "Tags",
+      //   key: "tags",
+      //   dataIndex: "tags",
+      //   render: tags => (
+      //     <span>
+      //       {tags.map(tag => {
+      //         return <None tag={tag}></None>;
+      //       })}
+      //     </span>
+      //   )
+      // },
+      {
+        title: "Action",
+        key: "_id",
+        render: (text, record) => (
+          <span>
+            <div style={{ padding: "5px" }}>
+              <Button>
+                <Link to={`/agent/${text._id}`}>Посмотреть профиль</Link>
+              </Button>
+            </div>
+          </span>
+        )
+      }
+    ];
+
+    const data = [
+      {
+        key: "1",
+        name: "John Brown",
+        age: 32,
+        address: "New York No. 1 Lake Park",
+        tags: ["nice", "developer"]
+      },
+      {
+        key: "2",
+        name: "Jim Green",
+        age: 42,
+        address: "London No. 1 Lake Park",
+        tags: ["loser"]
+      },
+      {
+        key: "3",
+        name: "Joe Black",
+        age: 32,
+        address: "Sidney No. 1 Lake Park",
+        tags: ["cool", "teacher"]
+      }
+    ];
+
     const style = { backgroundColor: this.state.stripBg };
     return (
       <div className="postisitonRelativeSmeni">
@@ -67,7 +126,8 @@ export default class AllAgent extends Component {
         <div>
           <div style={{ padding: "5px" }}>
             <div className="row">
-              {agent.map((agn, i) => (
+              <Table dataSource={this.state.agent} columns={columns} />
+              {/* {agent.map((agn, i) => (
                 <>
                   <hr />
                   <Card className="col-md-4" size="small" title="Контр Агент">
@@ -81,7 +141,7 @@ export default class AllAgent extends Component {
 
                   <hr />
                 </>
-              ))}
+              ))} */}
             </div>
           </div>
           {page > 1 ? (

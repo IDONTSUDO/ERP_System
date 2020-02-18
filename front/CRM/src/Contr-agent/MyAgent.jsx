@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import None from "../Components/None.jsx"
 import { MyAgentList, GetAgentProfile, ChangeAgent } from "../Api/Http.js";
 import {
   Button,
@@ -207,19 +208,21 @@ export default class MyAgent extends Component {
       payment_account
     } = this.state;
     return (
-      <div className="postisitonRelativeSmeni">
+      <div className="email_main_pos">
         <div className="container">
           <div className="row">
             {agentList.map((agent, i) => (
               <>
                 <div>
-                  <Card styles={{ width: "auto", height: "autocomplete" }}>
-                    <h5 class="text-muted">Имя {agent.name}</h5>
+                  <Card className="card-agent" styles={{ width: "auto", height: "autocomplete" }}>
+                  <Icon className="" style={{ fontSize: '35px', color: '#08c' }}  type="idcard" />
+                    <h5>{agent.name}</h5>
+                    <div>{agent.email}</div>
                     {agent.status === "Друг" ? (
                       <>
                         <div>
                           <div style={{ padding: "5px" }}>
-                            <div className="square-green"></div>
+                            <div className="square-green card_agent_st"></div>
                           </div>
                         </div>
                       </>
@@ -230,7 +233,7 @@ export default class MyAgent extends Component {
                       <>
                         <div>
                           <div style={{ padding: "5px" }}>
-                            <div className="square-red"></div>
+                            <div className="square-red card_agent_st"></div>
                           </div>
                         </div>
                       </>
@@ -241,25 +244,34 @@ export default class MyAgent extends Component {
                       <>
                         <div>
                           <div style={{ padding: "5px" }}>
-                            <div className="square-yellow"></div>
+                            <div  className="square-yellow card_agent_st"></div>
                           </div>
                         </div>
                       </>
                     ) : (
                       ""
                     )}
-
+                    <div className="btn_pad">
                     <Button
-                      onClick={agentId => this.handleClick(agent._id, agentId)}
-                    >
-                      Посмотреть профиль
-                    </Button>
+
+className="agent_profile_btn"
+onClick={agentId => this.handleClick(agent._id, agentId)}
+>
+
+Посмотреть профиль
+</Button>
+                    </div>
                     <br />
+                   
                   </Card>
                 </div>
               </>
-            ))}
+         
+         ))}
+          
+                   
           </div>
+         
         </div>
         <Drawer
           width={640}
@@ -284,10 +296,13 @@ export default class MyAgent extends Component {
               </Row>
               <Row>
                 <Col span={12}>
-                  <DescriptionItem title="Телефон" content={phone} />
+                  <DescriptionItem title="Телефон"
+                  
+                  content={<None tag={phone}></None>}/>
                 </Col>
                 <Col span={12}>
-                  <DescriptionItem title="Email" content={email} />
+                  <DescriptionItem title="Email" 
+                   content={<None tag={email}></None>}/> 
                 </Col>
               </Row>
               <Row></Row>
@@ -308,38 +323,39 @@ export default class MyAgent extends Component {
                 <Col span={12}>
                   <DescriptionItem
                     title="Расчетный счет"
-                    content={<a>{payment_account}</a>}
+                    content={<None tag={payment_account}></None>}
                   />
                 </Col>
                 <Col span={12}>
                   <DescriptionItem
                     title="Актуальный адрес"
-                    content={<a>{actual_address}</a>}
+                    content={<None tag={actual_address}></None>}
+                   
                   />
                 </Col>
                 <Col span={12}>
                   <DescriptionItem
                     title="Юридический адрес"
-                    content={<a>{legal_address}</a>}
+                    content={<None tag={legal_address}></None>}
                   />
                 </Col>
 
                 <Col span={12}>
                   <DescriptionItem
                     title="Полное имя компании"
-                    content={full_name}
+                    content={<None tag={full_name}></None>}
                   />
                 </Col>
                 <Col span={12}>
                   <DescriptionItem
                     title="Сокращенное имя компании"
-                    content={<a>{name}</a>}
+                    content={<None tag={name}></None>}
                   />
                 </Col>
                 <Col span={12}>
                   <DescriptionItem
                     title="Генеральный директор"
-                    content={<a>{general_director}</a>}
+                    content={<None tag={general_director}></None>}
                   />
                 </Col>
               </Row>
@@ -348,10 +364,15 @@ export default class MyAgent extends Component {
               <p style={pStyle}>Контактные данные</p>
               <Row>
                 <Col span={12}>
-                  <DescriptionItem title="Email" content={email} />
+                  <DescriptionItem title="Email" 
+                  content={<None tag={email}></None>}
+                  
+                  />
                 </Col>
                 <Col span={12}>
-                  <DescriptionItem title="Номер телефона" content={phone} />
+                  <DescriptionItem title="Номер телефона"
+                     content={<None tag={phone}></None>}
+               />
                 </Col>
                 <Col span={12}>
                   <DescriptionItem title="Полезная информация" content={any} />

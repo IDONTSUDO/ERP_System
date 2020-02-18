@@ -1129,5 +1129,28 @@ export const agentStatiAtManager = () => {
             console.log(error)
         })
 }
+export const SimpelEmailing = (settings,html) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/simpel/email`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify(settings)
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
 
-
+export const EmailingLists = (settings) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/emailing/lists`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify(settings)
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}

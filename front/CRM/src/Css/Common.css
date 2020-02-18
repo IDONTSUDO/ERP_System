@@ -4,6 +4,33 @@
 .ant-select-selection--multiple{
   width: 500px;
 }
+.card_agent_st{
+  position:absolute; 
+	bottom:90px;
+}
+.ant-tag{
+  white-space: normal;
+}
+.tag_text{
+  word-break: break-word;
+}
+.btn_pad{
+  position:absolute; /* добавили */
+	bottom:70px; /* добавили */
+}
+.rusInputMap{
+  flex-direction: column;
+  /* display: flex; */
+  align-items: center;
+  justify-content: center
+}
+.card-agent{
+ width: 300px;
+ height: 300px;
+}
+.agent_profile_btn{
+  position:absolute;
+}
 .itg_icon{
   flex-direction: column;
   /* display: flex; */

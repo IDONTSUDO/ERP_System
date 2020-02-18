@@ -12,7 +12,9 @@ import {
   SearchContrAgent,
   SearchAgentEmail,
   SeacrhSpecAgnets,
-  SearchGeoAgents
+  SearchGeoAgents,
+  EmailingLists,
+  SimpelEmailing
 } from "../Api/Http.js";
 import Error from "../Error/Error.jsx";
 import EmailEditor from "react-email-editor";
@@ -45,8 +47,8 @@ const { Step } = Steps;
 
 const content = (
   <div>
-    <p>Content</p>
-    <p>Content</p>
+    <p>agentName - для вставки имени контрагента </p>
+    <p>agentLinkToUnsubscribe - для вставки поля для отписки</p>
   </div>
 );
 const { Option } = Select;
@@ -96,6 +98,9 @@ export default class Email extends Component {
     this.email = new FormData();
     let mapArray = [];
     Rusmap.map((geo, i) => mapArray.push(geo.value));
+
+    mapArray.sort((a, b) => a.localeCompare(b))
+  
     this.setState({ mapList: mapArray });
   }
   forceUpdate() {
@@ -123,7 +128,21 @@ export default class Email extends Component {
       }
     });
   };
-
+  SimpelSetingsToEmail = () =>{
+    let { resultSimpelAgentGeo,resultSimpelAgentSpec} = this.state;
+    this.editor.exportHtml(data => {
+      const { html } = data;
+      let settings = {
+        resultSimpelAgentGeo,
+        resultSimpelAgentSpec,
+        html
+      }
+      SimpelEmailing(settings).then(data =>{
+        console.log(data)
+      }) 
+    });
+   
+  }
   handleClickImgCopy = id => {
     let copyInfo = `${process.env.REACT_APP_API_URL}/${id}`;
     navigator.clipboard.writeText(copyInfo);
@@ -380,6 +399,7 @@ export default class Email extends Component {
         <Button style={{padding: 5 }} type="primary"  onClick={this.handelSearchGeo}>
           Поиск
         </Button>
+        <div className="rusInputMap"></div>
         <Select
           style={{ width: "auto" }}
           className="col-xs-12"
@@ -646,20 +666,24 @@ export default class Email extends Component {
         title: "Выберете специализации.",
 
         content: (
+          <div className="rusInputMap">
           <Checkbox.Group
             options={this.specListToStr(this.state.specList)}
             onChange={this.changeCheckBoxSpec}
           />
+          </div>
         )
       },
       {
         title: "Географиеское расположение",
         content: (
           <>
+          <div className="rusInputMap">
             <Checkbox.Group
               options={this.state.mapList}
               onChange={this.changeCheckBoxGeo}
             />
+            </div>
           </>
         )
       }
@@ -919,7 +943,7 @@ export default class Email extends Component {
                     {this.state.current === steps.length - 1 && (
                       <Button
                         type="primary"
-                        onClick={() => message.success("Выполнено!")}
+                        onClick={() => this.SimpelSetingsToEmail()}
                       >
                         Завершить
                       </Button>
