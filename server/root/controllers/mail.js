@@ -1,6 +1,19 @@
 const EmailImg = require('../database/Images')
 const EmailSnipet = require('../database/EmailSnipet')
 const ContrAgent = require('../database/ContrAgent')
+const nodemailer = require('nodemailer');
+require("dotenv").config()
+
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user:`${process.env.EMAIL_LOGIN}`,
+      pass: `${process.env.EMAIL_PASSWORD}`
+    }
+});
+  
+
+
 
 
 exports.emailId = async (req, res,next,id) => {
@@ -123,7 +136,7 @@ exports.getDisign = async (req, res) => {
     return res.status(200).json(disign.disign)
 
 }
-exports.SimpelEmail = async (req, res) => {
+exports.SimpelEmail = async (req, res,next) => {
     
     let setting = req.body
 
@@ -134,24 +147,65 @@ exports.SimpelEmail = async (req, res) => {
     let requests = resultSimpelAgentGeo.map(geoData => ContrAgent.find({agentGeo:geoData})
     .then(data =>{ return (data)}));
     
-    let i 
+    let spec_coincidence 
+    let spec_coincidence_LIST = []
     Promise.all(requests)
       .then(responses => responses.map((result,i) =>{
           for(agent of result){ 
-        //1
-            if(agent.specialications !== "none"){
+            if( agent.specialications != "none" &&  agent.email != "none" &&  agent.email == ""){
                 for(spec of agent.specialications){
-                //    2
-                    i = resultSimpelAgentSpec.includes(spec) 
 
-                  
-
+                if(resultSimpelAgentSpec.includes(`${spec}`)){
+                    spec_coincidence_LIST.push(agent)
+                }                  
                 }
             }        
           }
+        
       }))
-    return res.status(200)
+
+// TODO валидации по повторениям
+
+    req.emailList = spec_coincidence_LIST
+    res.status(200).json({"status":"ok"})
+    return next()
 }
 exports.EmailingLists = async (req, res) => {
+    console.log(req.body)
+}
+async function   HTMLexpoter (html,agent){
     
+
+
+    return 
+}
+
+exports.EmailSending = async (req, res) =>{
+    let emailSendList =  req.emailList
+    let { html } = req.body
+    let MyLovingRexExp = /agentLinkToUnsubscribe/gi
+    let agentId 
+    // TODO
+
+
+    let finalyHtml = html.replace(MyLovingRexExp, `${process.env.ServerAdress}/unscribe/${agentId}`);
+    console.log(finalyHtml)
+// TODO валидация email регуляркой
+
+    // let mailOptions = {
+    //     from: `${user.email}`,
+    //     to: `${user.email}`,
+    //     subject: 'Sending Email using Node.js',
+    //     text: `${process.env.URL_CONFIRUM}${user._id}`
+    //   };
+      
+    // transporter.sendMail(mailOptions, function(error, info){
+    //     if (error) {
+    //       console.log(error);
+    //     } else {
+    //       console.log('Email sent: ' + info.response);
+    //     }
+    //   })
+
+
 }

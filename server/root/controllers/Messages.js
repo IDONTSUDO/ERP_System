@@ -38,7 +38,6 @@ exports.ChanelList = async (req, res) =>{
             console.log(data)
             
               let requests = data.map(one => Message.find({DialogId:one._id})
-            //   .last()
               .sort({'_id':-1}).limit(1)
               .then(data =>{ return ({message:data,dialog:one})}));
               

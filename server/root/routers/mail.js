@@ -9,8 +9,9 @@ const {
   SnipetsDelete,
   getDisign,
   SimpelEmail,
-  EmailingLists
-} = require("../controllers/mail.images")
+  EmailingLists,
+  EmailSending
+} = require("../controllers/mail")
 let ImagesMail = require("../database/Images")
 
 let multer  = require('multer')
@@ -41,7 +42,7 @@ router.post('/photos/upload', upload.single('email'), (req, res) => {
     }
 })
 router.post('/save/email/snipets',SaveEmailSnipet)
-router.post('/simpel/email',SimpelEmail)
+router.post('/simpel/email',SimpelEmail,EmailSending)
 router.post('/emailing/lists',EmailingLists)
 
 router.get('/get/email/snipet',getEmailSnipet)
