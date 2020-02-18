@@ -45,7 +45,7 @@ const StatisticsEveryDay = require("./routers/StatisticsEveryDay.js")
 const Messages = require("./routers/Message.js")
 const Integration = require("./routers/Integration.js")
 const StaticEnterprise = require('./routers/StatisticEnterprise.js') 
-
+const Tech = require("./routers/TechAgent.js")
 
 app.use(cookieParser())
 app.use(morgan('tiny'))
@@ -67,7 +67,7 @@ app.use("/",StatisticsEveryDay)
 app.use("/",Messages)
 app.use("/",Integration)
 app.use("/",StaticEnterprise)
-
+app.use("/",Tech)
 app.get('/docs', (req, res) => {
     fs.readFile('documentation/ApiDocs.json', (err, data) => {
         if (err) {
