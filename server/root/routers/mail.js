@@ -10,8 +10,10 @@ const {
   getDisign,
   SimpelEmail,
   EmailingLists,
-  EmailSending
+  EmailSending,
+  unscribe
 } = require("../controllers/mail")
+const {agentId} = require("../controllers/ContrAgent.js")
 let ImagesMail = require("../database/Images")
 
 let multer  = require('multer')
@@ -53,7 +55,15 @@ router.get('/get/disign/:snipetId',getDisign)
 router.delete('/images/del/:emailId',MailDeleteCollection)
 router.delete('/snipets/delete/:snipetId',SnipetsDelete)
 
+
+router.put('/unscribe/:agentId',unscribe)
+
 router.param('emailId',emailId)
 router.param('snipetId',SnipetId)
+router.param('agentId',agentId)
+
+
+
+
 
 module.exports = router

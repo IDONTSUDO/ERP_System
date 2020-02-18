@@ -13,7 +13,16 @@ let transporter = nodemailer.createTransport({
 });
   
 
+exports.unscribe = async (req, res) =>{
+    let agent = req.agent
 
+
+    agent.mailing = false
+    agent.save((err, result) => {
+        
+    })
+
+}
 
 
 exports.emailId = async (req, res,next,id) => {
@@ -31,7 +40,6 @@ exports.emailId = async (req, res,next,id) => {
 }
 
 exports.SnipetId = async (req, res,next,id) =>{
-    console.log(id)
 
     EmailSnipet.findById(id)
     .exec((err, result) => {
