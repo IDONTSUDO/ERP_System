@@ -85,10 +85,6 @@ const contrAgentSchema = new mongoose.Schema({
         type: String,
         default:"none"
     },
-    mailings:{
-        type:Boolean,
-        default:true  
-    },
     active:{type:Boolean,default:true}
 })
 module.exports = mongoose.model("Agent", contrAgentSchema)
