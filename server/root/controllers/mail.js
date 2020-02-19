@@ -17,9 +17,13 @@ exports.unscribe = async (req, res) =>{
     let agent = req.agent
 
 
-    agent.mailing = false
-    agent.save((err, result) => {
-        
+    agent.mailings = false
+    await agent.save((err, result) => {
+        if(err){
+            return res.status(400).json("err")
+        }else{
+            return res.status(200).json({"mailings":"false"})
+        }
     })
 
 }
