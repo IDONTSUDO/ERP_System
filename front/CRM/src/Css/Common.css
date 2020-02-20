@@ -4,6 +4,10 @@
 .ant-select-selection--multiple{
   width: 500px;
 }
+.toggle{
+  width:0px;
+  background-color: aquamarine;
+}
 .card_agent_st{
   position:absolute; 
 	bottom:90px;
@@ -17,6 +21,14 @@
 .btn_pad{
   position:absolute; /* добавили */
 	bottom:70px; /* добавили */
+}
+.treeview > .toggle {
+  pointer-events: all;
+  cursor: pointer;
+}
+.treeview > .toggle:hover {
+  color: #63b1de;
+  fill: #63b1de;
 }
 .rusInputMap{
   flex-direction: column;

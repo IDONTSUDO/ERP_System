@@ -137,7 +137,6 @@ export const readMyTodo = (userId) => {
             console.log(error)
         })
 }
-
 export const soloJob = (todoId) => {
 
     return fetch(`${process.env.REACT_APP_API_URL}/todo/${todoId}`, {
@@ -166,7 +165,6 @@ export const readComentList = (todoId) => {
             console.log(error)
         })
 }
-
 export const NewComent = (comment) => {
 
     return fetch(`${process.env.REACT_APP_API_URL}/comment/todo/`, {
@@ -186,7 +184,6 @@ export const NewComent = (comment) => {
             console.log(error)
         })
 }
-
 export const DeleteComment = (comment) => {
 
     return fetch(`${process.env.REACT_APP_API_URL}/delete/comment/${comment}`, {
@@ -222,7 +219,6 @@ export const NewNews = (payload) => {
             console.log(error)
         })
 }
-
 export const listNews = (id) => {
 
     return fetch(`${process.env.REACT_APP_API_URL}/worker/news`, {
@@ -322,8 +318,6 @@ export const GetAgentProfile = (agentId) => {
             console.log(err)
         })
 }
-
-
 export const AddManageForAgent = (tags, agentId) => {
     return fetch(`${process.env.REACT_APP_API_URL}/new/manage/agent/${agentId}`, {
         method: "POST",
@@ -336,7 +330,6 @@ export const AddManageForAgent = (tags, agentId) => {
         })
         .catch(err => console.log(err))
 }
-
 export const MyAgentList = (workerId) => {
     return fetch(`${process.env.REACT_APP_API_URL}/agent/manage/`, {
         method: "POST",
@@ -370,7 +363,6 @@ export const MyHistoryBeginer = (userId) => {
         })
         .catch(err => console.log(err))
 }
-
 export const MyHistoryComplete = (userId, page) => {
     return fetch(`${process.env.REACT_APP_API_URL}/my/history/complete/?page=${page}`, {
         method: "POST",
@@ -392,7 +384,6 @@ export const OneHistoryGet = (HistoryById) => {
         })
         .catch(err => console.log(err))
 }
-
 export const ChangeHistory = (DealId, status) => {
     return fetch(`${process.env.REACT_APP_API_URL}/change/history/${DealId}`, {
         method: "PUT",
@@ -641,7 +632,6 @@ export const DeleteManageAtAgent = (payload) => {
         })
         .catch(err => console.log(err))
 }
-
 export const MyDevice = (userBy) => {
     return fetch(`${process.env.REACT_APP_API_URL}/my/device/`, {
         method: "POST",
@@ -678,7 +668,6 @@ export const DeleteDevice = (device) => {
         })
         .catch(err => console.log(err))
 }
-
 export const NewNewsToComment = (payload) => {
     console.log(JSON.stringify({ payload }))
     return fetch(`${process.env.REACT_APP_API_URL}/new/news/coments`, {
@@ -795,8 +784,6 @@ export const AllStatistic = (userId) => {
             return err
         })
 }
-
-
 export const NewTodoCompleteStatistic = (statisticId) => {
     return fetch(`${process.env.REACT_APP_API_URL}/update/days/statistics/todo/complete`, {
         method: "POST",
@@ -965,7 +952,6 @@ export const NewSpecialication = (data) => {
             return err
         })
 }
-
 export const AllSpecList = () => {
     return fetch(`${process.env.REACT_APP_API_URL}/all/spec/agent`, {
         method: "GET",
@@ -1033,7 +1019,6 @@ export const SeacrhSpecAgnets = (spec) => {
         return err
     })
 }
-
 export const SearchGeoAgents = (geoList) => {
     return fetch(`${process.env.REACT_APP_API_URL}/get/geo/search`, {
         method: "POST",
@@ -1069,7 +1054,6 @@ export const integrationList = () => {
         return err
     })
 }
-
 export const agentStaticAtMail = () => {
     return fetch(`${process.env.REACT_APP_API_URL}/agnet/static/at/mail`, {
         method: "GET",
@@ -1081,7 +1065,6 @@ export const agentStaticAtMail = () => {
             console.log(error)
         })
 }
-
 export const agentStaticAtJob = () => {
     return fetch(`${process.env.REACT_APP_API_URL}/agnet/static/at/job`, {
         method: "GET",
@@ -1094,7 +1077,6 @@ export const agentStaticAtJob = () => {
         })
 
 }
-//
 export const agentStaticAtAll = () => {
     return fetch(`${process.env.REACT_APP_API_URL}/agnet/static/at/all`, {
         method: "GET",
@@ -1106,7 +1088,6 @@ export const agentStaticAtAll = () => {
             console.log(error)
         })
 }
-
 export const agentStaticAtTech = () => {
     return fetch(`${process.env.REACT_APP_API_URL}/agnet/static/at/tech/agent`, {
         method: "GET",
@@ -1129,7 +1110,7 @@ export const agentStatiAtManager = () => {
             console.log(error)
         })
 }
-export const SimpelEmailing = (settings,html) => {
+export const SimpelEmailing = (settings, html) => {
     return fetch(`${process.env.REACT_APP_API_URL}/simpel/email`, {
         method: "POST",
         headers: myHeaders,
@@ -1141,12 +1122,69 @@ export const SimpelEmailing = (settings,html) => {
             console.log(error)
         })
 }
-
 export const EmailingLists = (settings) => {
     return fetch(`${process.env.REACT_APP_API_URL}/emailing/lists`, {
         method: "POST",
         headers: myHeaders,
         body: JSON.stringify(settings)
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+export const GetTechList = () => {
+    return fetch(`${process.env.REACT_APP_API_URL}/get/spec/tech/all`, {
+        method: "GET",
+        headers: myHeaders,
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+export const NewTechCollect = (name) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/new/tech/collection`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify(name)
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+export const SaveTech = (name, techColId) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/save/tech/by/collection/${techColId}`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify(name)
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+export const GetNode = (id) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/get/node/${id}`, {
+        method: "GET",
+        headers: myHeaders,
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+export const NewNode = (name, id) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/save/tech/by/node/${id}`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify(name)
     }).then(response => {
         return response.json()
     })
