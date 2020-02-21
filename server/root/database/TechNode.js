@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
 const { ObjectId } = mongoose.Schema
 
-const TechSchema = new mongoose.Schema({
+const TechNodeSchema = new mongoose.Schema({
     name: {
         type: String
     },
-    type_tech:{
+    tech:{
         type:ObjectId
     }
 })
-module.exports = mongoose.model("Tech", TechSchema)
+module.exports = mongoose.model("TechNode", TechNodeSchema)

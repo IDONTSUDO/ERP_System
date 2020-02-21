@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon main.js",
     "debug": "NODE_ENV=dev  node --inspect ./main.js",
-    "log":"LOG=TRUE node ./main.js",
+    "log": "LOG=TRUE node ./main.js",
     "opt": "0x -o main.js",
     "prod": "node ./ci/cd.js"
   },
@@ -41,7 +41,7 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
-    "mongodb": "^3.3.5",
+    "mongodb": "^3.5.3",
     "mongoose": "^5.5.11",
     "mongoose-autopopulate": "^0.10.0",
     "morgan": "^1.9.1",
