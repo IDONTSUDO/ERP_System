@@ -2,8 +2,8 @@ const ContrAgent = require('../database/ContrAgent')
 const TodoAgent = require('../database/AgentTasks')
 const AgentStatistic = require('../database/AgentStatistic')
 const Specialisation = require('../database/Specialisations')
-
-
+const AgentCron = require('../database/CronTaskAtAgent')
+let moment = require('moment')
 const _ = require('lodash')
 
 exports.taskId = async (req, res, next, id) => {
@@ -199,7 +199,7 @@ exports.ManageAddAgent = async (req, res) => {
 
     agent = _.extend(agent, req.body)
 
-
+    var agentResult 
     await agent.save((err, result) => {
 
         if (err) {
@@ -207,9 +207,28 @@ exports.ManageAddAgent = async (req, res) => {
                 error: err
             })
         }
-
+        agentResult = result
         res.json(result)
     })
+    
+   
+    let PlaningDateMoment = new Date();
+    // +1 day
+    PlaningDateMoment.setDate(PlaningDateMoment.getDate() + 1);
+
+    let dateMoment = moment(PlaningDateMoment).format("YYYY-MM-DD");
+ 
+    for(let i of agentResult.tags){
+        let agent_cron = new AgentCron()
+        agent_cron.PlanningDate = dateMoment 
+        agent_cron.UserId = i
+        agent_cron.agent = agentResult
+        agent_cron.agentId = agentResult._id
+        await agent_cron.save()
+    }
+ 
+
+
 }
 exports.DeleteManagerForAgent = async (req, res) => {
     ContrAgent.findByIdAndUpdate(req.body.agentId, { $pull: { tags: req.body.workerId } }, { new: true }).exec(
@@ -495,6 +514,11 @@ exports.searchGeo = async (req, res) => {
                 return res.status(200).json(result)
             }
         })
+}
+
+exports.purposeManager = async (req, res) =>{
+    let agent = req.agent
+    
 }
 // TODO  [?] change agent not detect
 

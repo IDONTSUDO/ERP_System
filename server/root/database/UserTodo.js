@@ -58,6 +58,9 @@ const todoSchema = new mongoose.Schema({
     },
     names_workers_list:{
         type:Array
+    },
+    cronId:{
+        type:String
     }
 })
 

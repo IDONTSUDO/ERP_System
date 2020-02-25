@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import None from "../Components/None.jsx"
+import None from "../Components/None.jsx";
 import { MyAgentList, GetAgentProfile, ChangeAgent } from "../Api/Http.js";
 import {
   Button,
@@ -214,8 +214,15 @@ export default class MyAgent extends Component {
             {agentList.map((agent, i) => (
               <>
                 <div>
-                  <Card className="card-agent" styles={{ width: "auto", height: "autocomplete" }}>
-                  <Icon className="" style={{ fontSize: '35px', color: '#08c' }}  type="idcard" />
+                  <Card
+                    className="card-agent"
+                    styles={{ width: "auto", height: "autocomplete" }}
+                  >
+                    <Icon
+                      className=""
+                      style={{ fontSize: "35px", color: "#08c" }}
+                      type="idcard"
+                    />
                     <h5>{agent.name}</h5>
                     <div>{agent.email}</div>
                     {agent.status === "Друг" ? (
@@ -244,7 +251,7 @@ export default class MyAgent extends Component {
                       <>
                         <div>
                           <div style={{ padding: "5px" }}>
-                            <div  className="square-yellow card_agent_st"></div>
+                            <div className="square-yellow card_agent_st"></div>
                           </div>
                         </div>
                       </>
@@ -252,26 +259,21 @@ export default class MyAgent extends Component {
                       ""
                     )}
                     <div className="btn_pad">
-                    <Button
-
-className="agent_profile_btn"
-onClick={agentId => this.handleClick(agent._id, agentId)}
->
-
-Посмотреть профиль
-</Button>
+                      <Button
+                        className="agent_profile_btn"
+                        onClick={agentId =>
+                          this.handleClick(agent._id, agentId)
+                        }
+                      >
+                        Посмотреть профиль
+                      </Button>
                     </div>
                     <br />
-                   
                   </Card>
                 </div>
               </>
-         
-         ))}
-          
-                   
+            ))}
           </div>
-         
         </div>
         <Drawer
           width={640}
@@ -296,13 +298,16 @@ onClick={agentId => this.handleClick(agent._id, agentId)}
               </Row>
               <Row>
                 <Col span={12}>
-                  <DescriptionItem title="Телефон"
-                  
-                  content={<None tag={phone}></None>}/>
+                  <DescriptionItem
+                    title="Телефон"
+                    content={<None tag={phone}></None>}
+                  />
                 </Col>
                 <Col span={12}>
-                  <DescriptionItem title="Email" 
-                   content={<None tag={email}></None>}/> 
+                  <DescriptionItem
+                    title="Email"
+                    content={<None tag={email}></None>}
+                  />
                 </Col>
               </Row>
               <Row></Row>
@@ -330,7 +335,6 @@ onClick={agentId => this.handleClick(agent._id, agentId)}
                   <DescriptionItem
                     title="Актуальный адрес"
                     content={<None tag={actual_address}></None>}
-                   
                   />
                 </Col>
                 <Col span={12}>
@@ -364,23 +368,23 @@ onClick={agentId => this.handleClick(agent._id, agentId)}
               <p style={pStyle}>Контактные данные</p>
               <Row>
                 <Col span={12}>
-                  <DescriptionItem title="Email" 
-                  content={<None tag={email}></None>}
-                  
+                  <DescriptionItem
+                    title="Email"
+                    content={<None tag={email}></None>}
                   />
                 </Col>
                 <Col span={12}>
-                  <DescriptionItem title="Номер телефона"
-                     content={<None tag={phone}></None>}
-               />
+                  <DescriptionItem
+                    title="Номер телефона"
+                    content={<None tag={phone}></None>}
+                  />
                 </Col>
                 <Col span={12}>
                   <DescriptionItem title="Полезная информация" content={any} />
                 </Col>
               </Row>
 
-              <Row>
-              </Row>
+              <Row></Row>
               <Row>
                 <Col span={24}>
                   <button

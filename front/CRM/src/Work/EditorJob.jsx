@@ -11,7 +11,8 @@ import {
   Icon,
   DatePicker,
   Input,
-  Select
+  Select,
+  Spin
 } from "antd";
 import "suneditor/dist/css/suneditor.min.css";
 
@@ -42,6 +43,7 @@ export default class EditorJob extends Component {
       title: String,
       todoId: String,
       LonelyTodoTime: String,
+      loading:true
     };
     this.handleActionEditor = this.handleActionEditor.bind(this);
   }
@@ -135,7 +137,7 @@ export default class EditorJob extends Component {
           });
 
           let payload = {
-            JobArray,
+            JobArray
           };
           // РАБОТАЕТ НЕ ТРОЖЬ!
           TodoChangeComandList(todoId, payload).then(data => {
@@ -164,7 +166,13 @@ export default class EditorJob extends Component {
     });
   };
   handelChangeSoloWork = () => {
-    let { todoId, title, tags,names_workers_list,LonelyTodoTime } = this.state;
+    let {
+      todoId,
+      title,
+      tags,
+      names_workers_list,
+      LonelyTodoTime
+    } = this.state;
     let UsersArray = document.querySelectorAll(
       ".ant-select-selection__choice__content"
     );
@@ -172,7 +180,7 @@ export default class EditorJob extends Component {
     let DateItems = document.querySelectorAll(".ant-calendar-picker-input");
     let ActionArray = [];
     let description = "";
-    let validatedObject = []
+    let validatedObject = [];
     let re = /<div class="ql-editor" data-gramm="false" contenteditable="true">/gi;
     // UserAction.outerHTML.replace(re, "");
     UsersArray.forEach(function(user) {
@@ -181,17 +189,17 @@ export default class EditorJob extends Component {
     UserActions.forEach(function(act) {
       description = act.outerHTML.replace(re, "");
     });
-    
-    for(let i =0; i < tags.length; i++){
-      validatedObject.push({[names_workers_list[i]]:tags[i]})
+
+    for (let i = 0; i < tags.length; i++) {
+      validatedObject.push({ [names_workers_list[i]]: tags[i] });
     }
-    if(LonelyTodoTime === undefined){
-      console.log(200)
+    if (LonelyTodoTime === undefined) {
+      console.log(200);
     }
     let payload = {
       description,
       title
-    }
+    };
     TodoChangeComandList(todoId, payload).then(data => {
       if (data.err) {
         console.log(data.err);
@@ -199,14 +207,13 @@ export default class EditorJob extends Component {
         this.forceUpdate();
       }
     });
-  
   };
   handelDateChange = (date, dateString) => {
     // console.log(date, dateString);
     let time = moment(date)
-    .locale("ru")
-    .format("LL");
-    this.setState({LonelyTodoTime:time})
+      .locale("ru")
+      .format("LL");
+    this.setState({ LonelyTodoTime: time });
   };
   init = todoId => {
     soloJob(todoId).then(data => {
@@ -245,7 +252,7 @@ export default class EditorJob extends Component {
 
           let iterator = momentObjDatesOrComandDate[Symbol.iterator]();
 
-          this.setState({ momentComandDate: momentObjDatesOrComandDate });
+          this.setState({ momentComandDate: momentObjDatesOrComandDate,loading:false });
         }
       }
     });
@@ -332,32 +339,35 @@ export default class EditorJob extends Component {
       let date = moment(current, "LL", "ru");
       return (
         <>
-        <div className="hr_job_list">
+          <div className="hr_job_list">
+            <div className="editor_job_team_background">
+              <div className="jobs_timers" style={{ padding: "5px" }}>
+                {JobArray[obj].date}
+              </div>
 
-       
-          <div className="editor_job_team_background">
-            <div className="jobs_timers" style={{ padding: "5px" }}>
-              {JobArray[obj].date}
+              <DatePicker disabled={true} defaultValue={date} />
+
+              <Icon
+                onClick={userId =>
+                  this.handleClickEditedLonelyJob(
+                    `${JobArray[obj].user}`,
+                    userId
+                  )
+                }
+                theme="twoTone"
+                twoToneColor="#eb2f96"
+                type="delete"
+              />
+              <Link to={`/user/${JobArray[obj].user}`}>
+                <h5>{names_workers_list[i]} *</h5>
+              </Link>
+
+              <ReactQuill
+                value={JobArray[obj].action}
+                id={`workerAction${i}`}
+              />
             </div>
-         
-            <DatePicker disabled={true} defaultValue={date} />
-           
-            <Icon
-             
-              onClick={userId =>
-                this.handleClickEditedLonelyJob(`${JobArray[obj].user}`, userId)
-              }
-              theme="twoTone"
-              twoToneColor="#eb2f96"
-              type="delete"
-            />
-            <Link to={`/user/${JobArray[obj].user}`}>
-              <h5>{names_workers_list[i]} *</h5>
-            </Link>
-
-            <ReactQuill value={JobArray[obj].action} id={`workerAction${i}`} />
-          </div>
-          <div></div>
+            <div></div>
           </div>
         </>
       );
@@ -389,7 +399,11 @@ export default class EditorJob extends Component {
               <div className="new_jobs_list">
                 <ReactQuill value={description} />
               </div>
-              <DatePicker  disabled={true} onChange={this.handelDateChange} defaultValue={date} />
+              <DatePicker
+                disabled={true}
+                onChange={this.handelDateChange}
+                defaultValue={date}
+              />
               <Select
                 mode="multiple"
                 style={{ width: "100%" }}
@@ -435,22 +449,28 @@ export default class EditorJob extends Component {
     }
     return (
       <div className="postisitonRelativeSmeni">
-        {comand ? (
-          <div>
-            {this.renderJobArray(JobArray, names_workers_list)}
-            <Button onClick={this.handelCLick}>Изменить</Button>
-            <Button onClick={this.handelClickDelete} type="danger">
-              Удалить
-            </Button>
-          </div>
+        {this.state.loading ? (
+          <Spin size="large" />
         ) : (
           <>
-            {this.renderJobNoTeamArray(
-              tags,
-              names_workers_list,
-              description,
-              time,
-              title
+            {comand ? (
+              <div>
+                {this.renderJobArray(JobArray, names_workers_list)}
+                <Button onClick={this.handelCLick}>Изменить</Button>
+                <Button onClick={this.handelClickDelete} type="danger">
+                  Удалить
+                </Button>
+              </div>
+            ) : (
+              <>
+                {this.renderJobNoTeamArray(
+                  tags,
+                  names_workers_list,
+                  description,
+                  time,
+                  title
+                )}
+              </>
             )}
           </>
         )}

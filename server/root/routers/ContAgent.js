@@ -43,7 +43,10 @@ router.post('/new/spec/agent',NewSpec)
 router.post('/agent/search',requireSignin, SearchAgent )
 router.post('/new/agent/:workerById',requireSignin, NewAgent)
 router.post('/agent/manage/',requireSignin, getMyListAgent)
+
 router.post('/new/manage/agent/:agentId',requireSignin, ManageAddAgent)
+
+
 router.post('/get/contragent/date',AgentStates);
 router.post('/search/managing/director/to/email',SearchAgentEmail)
 router.post('/year/agent/todo/statistics',GetYearStatisticAgent)

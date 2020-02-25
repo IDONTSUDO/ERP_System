@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import None from "../Components/None.jsx";
 import { Link, Route } from "react-router-dom";
 import { ContrAgentList, SearchContrAgent } from "../Api/Http";
-import { Button, Modal, Icon, Card, Table, Divider } from "antd";
+import { Button, Modal, Icon, Card, Table, Divider,Spin } from "antd";
 import { isAuthenticated } from "../Api/Auth";
 import Error from "../Error/Error.jsx";
+import { string } from "prop-types";
 
 export default class AllAgent extends Component {
   constructor() {
@@ -14,7 +15,8 @@ export default class AllAgent extends Component {
       item: "",
       search: [],
       stripBg: "",
-      page: 1
+      page: 1,
+      loading:true
     };
   }
   componentDidMount() {
@@ -23,7 +25,7 @@ export default class AllAgent extends Component {
   LoadContrAgentList = page => {
     ContrAgentList(page)
       .then(data => {
-        this.setState({ agent: data });
+        this.setState({ agent: data,loading:false });
       })
       .catch(data => {
         console.log(data);
@@ -66,20 +68,18 @@ export default class AllAgent extends Component {
         key: "name",
         render: text => <a>{text}</a>
       },
-      // {
-      //   title: "Tags",
-      //   key: "tags",
-      //   dataIndex: "tags",
-      //   render: tags => (
-      //     <span>
-      //       {tags.map(tag => {
-      //         return <None tag={tag}></None>;
-      //       })}
-      //     </span>
-      //   )
-      // },
       {
-        title: "Action",
+        title: "Н",
+        key: "tags",
+        dataIndex: "tags",
+        render: tags => (
+          <>
+            {tags === "none" ? (<div className="square-red"></div>):(<div className="square-green"></div>)}
+          </>
+        )
+      },
+      {
+        title: "",
         key: "_id",
         render: (text, record) => (
           <span>
@@ -92,36 +92,13 @@ export default class AllAgent extends Component {
         )
       }
     ];
-
-    const data = [
-      {
-        key: "1",
-        name: "John Brown",
-        age: 32,
-        address: "New York No. 1 Lake Park",
-        tags: ["nice", "developer"]
-      },
-      {
-        key: "2",
-        name: "Jim Green",
-        age: 42,
-        address: "London No. 1 Lake Park",
-        tags: ["loser"]
-      },
-      {
-        key: "3",
-        name: "Joe Black",
-        age: 32,
-        address: "Sidney No. 1 Lake Park",
-        tags: ["cool", "teacher"]
-      }
-    ];
-
     const style = { backgroundColor: this.state.stripBg };
     return (
       <div className="postisitonRelativeSmeni">
+      {this.state.loading? (<Spin size="large" />):(
+        <>
         <div className="search_positon">
-          <div style={{ padding: "5px" }}></div>
+        <div style={{ padding: "5px" }}></div>
         </div>
         <div>
           <div style={{ padding: "5px" }}>
@@ -213,6 +190,8 @@ export default class AllAgent extends Component {
             </div>
           </div>
         </div>
+        </>
+      )}
       </div>
     );
   }

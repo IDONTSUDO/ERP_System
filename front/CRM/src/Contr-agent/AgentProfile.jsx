@@ -85,15 +85,18 @@ export default class AgentProfile extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
-      
         let workerList = [];
         for (let us of data) {
-         let ItsWorkerAtValid = ["Директор", "Управляющий", "Менеджер"].includes(us.role) 
-          if(ItsWorkerAtValid){
-            workerList.push(us)
+          let ItsWorkerAtValid = [
+            "Директор",
+            "Управляющий",
+            "Менеджер"
+          ].includes(us.role);
+          if (ItsWorkerAtValid) {
+            workerList.push(us);
           }
         }
-        this.setState({worker:workerList})
+        this.setState({ worker: workerList });
       }
     });
   }
@@ -251,32 +254,30 @@ export default class AgentProfile extends Component {
                 )}
               </Descriptions.Item>
             </Descriptions>
-
-            <Select
-              mode="multiple"
-              style={{ width: "max-content" }}
-              placeholder="Выберете исполнителей"
-              onChange={this.ChangeSelect}
-              optionLabelProp="label"
-              value={tags}
-              defaultActiveFirstOption={false}
-              allowClear={true}
-            >
-              {worker.map((workerOne, i = 1) => (
-                <Option value={workerOne.name} label={workerOne.name}>
-                  <span>{workerOne.name}</span>
-                </Option>
-              ))}
-            </Select>
- <Switch
-      checkedChildren={<Icon type="check" />}
-      unCheckedChildren={<Icon type="close" />}
-      defaultChecked
-    />
-            <Button onClick={this.clickSubmit}>Назначить</Button>
-            <Button>
-              <Link to={`/agent/tasks/${id}`}>Дела по контр агенту</Link>
-            </Button>
+            <div style={{ display: "flex" }}>
+              <Select
+                mode="multiple"
+                style={{ width: "max-content" }}
+                placeholder="Выберете исполнителей"
+                onChange={this.ChangeSelect}
+                optionLabelProp="label"
+                value={tags}
+                defaultActiveFirstOption={false}
+                allowClear={true}
+              >
+                {worker.map((workerOne, i = 1) => (
+                  <Option value={workerOne.name} label={workerOne.name}>
+                    <span>{workerOne.name}</span>
+                  </Option>
+                ))}
+              </Select>
+              <div style={{ padding: "5px" }}>
+                <Button onClick={this.clickSubmit}>Назначить</Button>
+                <Button>
+                  <Link to={`/agent/tasks/${id}`}>Дела по контр агенту</Link>
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

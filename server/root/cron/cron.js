@@ -1,7 +1,7 @@
 const cron = require('node-cron');
 const Todo = require('../database/UserTodo')
 const News = require('../database/News')
-
+const ManageTaskAtAgentCron = require('../database/CronTaskAtAgent')
 const StatisticsEveryDay = require('../database/StatisticsEveryDay')
 const UserStatistic = require('../database/UserStatistic.js')
 const moment = require('moment')
@@ -15,7 +15,7 @@ function CRON_STATISTIC() {
         if (err) {
           console.log("err", err)
         } else {
-         
+
           for (let value of result) {
             UserStatistic.findOneAndUpdate({ Userby: value.userBy }, { $push: { day: value }, }, function (error, success) {
               if (error) {
@@ -67,8 +67,8 @@ function CRON_USER_TODO() {
             link,
             worker_by
           }
-  
-        
+
+
           const news = new News(payload)
           news.dateCreated = Date.now()
           news.save().then(result => {
@@ -82,10 +82,39 @@ function CRON_USER_TODO() {
     })
 }
 
+function CRON_MANAGE_TASK_AT_AGENT() {
+  // cron.schedule('* * * * *', () => {
+  //   let PlaningDateMoment = new Date();
+  //   // +1 day
+  //   PlaningDateMoment.setDate(PlaningDateMoment.getDate() + 1);
 
-//TODO by manager: every week reminder to contr agent not filled
+  //   let dateMoment = moment(PlaningDateMoment).format("YYYY-MM-DD");
+  //   ManageTaskAtAgentCron.find({ PlanningDate: dateMoment }).then(data => {
+
+  //     let DateToday = Date.now()
+  //     let MomentTime = moment(DateToday).locale("ru").format("LL")
+  //     //  MomentTime day to
+
+
+  //     let titelTodo = "TESTING"
+  //     let descriptionTodo = "TESTING"
+
+  //     for (let agentCron of data) {
+    
+  //       let tod = new Todo()
+  //       tod.cronId = agentCron._id
+  //       tod.title = titelTodo
+  //       tod.description = descriptionTodo
+  //       tod.time = MomentTime
+  //       tod.tags =  agentCron.UserId[0]._id
+  //       tod.save()
+  //     }
+  //   })
+  // })
+}
 module.exports.Cron = function () {
   console.log("CRON START")
   CRON_USER_TODO()
   CRON_STATISTIC()
+  CRON_MANAGE_TASK_AT_AGENT()
 }
