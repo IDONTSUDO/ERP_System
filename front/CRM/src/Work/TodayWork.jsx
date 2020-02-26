@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {isAuthenticated} from "../Api/Auth"
 import {TodayWorkHTTP,MytodoComandItsDay} from '../Api/Http'
 import {Link} from 'react-router-dom'
-import { Button,Card,Badge,Spin } from 'antd'
+import { Button,Card,Badge,Spin,Icon, Popover } from 'antd'
 import Moment from "react-moment";
 import Error from "../Error/Error.jsx"
 
@@ -100,8 +100,7 @@ export default class TodayWork extends Component {
           <div className="postisitonRelativeSmeni">
           <div>
             <ul>
-             
-                <div className="container_button_job">
+              <div className="container_button_job">
                 <Button
                   onClick={this.returnSort}
                   className="square-return"
@@ -115,285 +114,329 @@ export default class TodayWork extends Component {
                   className="square-green"
                 ></Button>
                 <Button onClick={this.redSort} className="square-red"></Button>
-                </div>
-            
-             
+              </div>
+  
               <div className="container">
                 <div className="row">
-                {open ? (
-                <Spin size="large" />
-              ) : (
-                <>
-                {todos.map((tod, i) => (
-                  <>
-                    {tod.comand === true ? (
-                      <>
-                        {tod.importance === "Очень важное" ? (
-                          <>
-                            <div className="card-job-modile-style  todo-phone-red">
-                              <Card className="todo-red" key={i}>
-                              <Badge count={tod.JobArray.length}></Badge>
-                                <Link to={`/job/${tod._id}`}>
-                                  <div  className="todo-red-text">
-                                    {tod.title}
-                                  </div>
-                                
-                                </Link>
-                                {tod.JobArray.map((todoOne, i) => (
-                              <>
-                              {todoOne.user === userID + "IAMWORKED" ? (
-                                <>
-                                 <div style={{ color: "#ffffff" }}>
-                                 {todoOne.date}
-                                </div>
-                                </>
-                              ) : (
-                                <></>
-                              )}
-                              </>
-                            ))}
-                                {tod.status === "в работе"  ? (
-                                  <div style={{ color: "#ffffff" }}>
-                                    {tod.status}
-                                  </div>
-                                ) : (
-                                  ""
-                                )}
-                              </Card>
-                            </div>
-                          </>
-                        ) : (
-                          ""
-                        )}
-                        {tod.importance === "Средней важности" ? (
-                          <>
-                                                   <div className="card-job-modile-style  todo-phone-yellow">
-                              <Card className="todo-yellow" key={i}>
-                              <Badge  style={{ backgroundColor: '#ffff00', color: '#000000', boxShadow: '0 0 0 1px #000000 inset' }} count={tod.JobArray.length}></Badge>
-                                <Link to={`/job/${tod._id}`}>
-                                  <div className="todo-yellow-text">
-                                    {tod.title}
-                                    </div>
-                                </Link>
-                                {tod.JobArray.map((todoOne, i) => (
-                              <>
-                              {todoOne.user === userID  + "IAMWORKED"? (
-                                <>
-                                  <div>
-                                 {todoOne.date}
-                                </div>
-                                </>
-                              ) : (
-                                <></>
-                              )}
-                              </>
-                            ))}
-                                {tod.status === "в работе" ? (
-                                  <div >
-                                    {tod.status}
-                                  </div>
-                                ) : (
-                                  ""
-                                )}
-                              </Card>
-                            </div>
-                           
-                          
-                          </>
-                        ) : (
-                          ""
-                        )}
-    
+                  {open ? (
+                    <Spin size="large" />
+                  ) : (
+                    <>
+                      {todos.map((tod, i) => (
                         <>
-                          {tod.importance === "Не очень важное" ? (
+                          {/* {console.log(typeof tod.cronId)} */}
+                          {tod.cronId === undefined ? null : (
                             <>
-                              {tod.JobArray.map((todoOne, i) => (
-                                <>
-                                   <div className="card-job-modile-style  todo-phone-green">
-                              <Card className="todo-green" key={i}>
-                              <Badge style={{ backgroundColor: '#15b11a', color: '#000000', boxShadow: '0 0 0 1px #000000 inset' }} count={tod.JobArray.length}></Badge>
-                                <Link to={`/job/${tod._id}`}>
-                                  <div className="todo-green-text" >
+                              <div className="tod-cron-phone">
+                                <Card className="tod-cron">
+                                  <Link to={`/spec/job/${tod._id}`}>
+                                  <div className="todo-cron-text">
                                     {tod.title}
                                   </div>
-                                </Link>
-                                {tod.JobArray.map((todoOne, i) => (
-                              <>
-                              {todoOne.user === userID + "IAMWORKED" ? (
-                                <>
-                                  <div   >
-                                 {todoOne.date}
-                                </div>
-                                </>
-                              ) : (
-                                <></>
-                              )}
-                              </>
-                            ))}
-                                {tod.status === "в работе" ? (
-                                  <div>
+                                  <div  style={{ color: "#ffffff" }}>{tod.time}</div>
+                                  <div  style={{ color: "#ffffff" }}>
                                     {tod.status}
                                   </div>
+                                  <div>
+                                    <Popover
+                                      content={<><div>{tod.agent.full_name}</div></>}
+                                      title={<>{tod.agent.company}</>}
+                                      trigger="hover"
+                                    >
+                                      <Icon type="question" />
+                                    </Popover>
+                                  </div>
+                                  <div>{tod.date}</div>
+                                </Link>
+                                </Card>
+                              </div>
+                            </>
+                          )}
+                          {tod.comand === true ? (
+                            <>
+                              {tod.importance === "Очень важное" ? (
+                                <>
+                                  <div className="card-job-modile-style  todo-phone-red">
+                                    <Card className="todo-red" key={i}>
+                                      <Badge count={tod.JobArray.length}></Badge>
+                                      <Link to={`/job/${tod._id}`}>
+                                        <div className="todo-red-text">
+                                          {tod.title}
+                                        </div>
+                                      </Link>
+                                      {tod.JobArray.map((todoOne, i) => (
+                                        <>
+                                          {todoOne.user ===
+                                          userID + "IAMWORKED" ? (
+                                            <>
+                                              <div style={{ color: "#ffffff" }}>
+                                                {todoOne.date}
+                                              </div>
+                                            </>
+                                          ) : (
+                                            <></>
+                                          )}
+                                        </>
+                                      ))}
+                                      {tod.status === "в работе" ? (
+                                        <div style={{ color: "#ffffff" }}>
+                                          {tod.status}
+                                        </div>
+                                      ) : (
+                                        ""
+                                      )}
+                                    </Card>
+                                  </div>
+                                </>
+                              ) : (
+                                ""
+                              )}
+                              {tod.importance === "Средней важности" ? (
+                                <>
+                                  <div className="card-job-modile-style  todo-phone-yellow">
+                                    <Card className="todo-yellow" key={i}>
+                                      <Badge
+                                        style={{
+                                          backgroundColor: "#ffff00",
+                                          color: "#000000",
+                                          boxShadow: "0 0 0 1px #000000 inset"
+                                        }}
+                                        count={tod.JobArray.length}
+                                      ></Badge>
+                                      <Link to={`/job/${tod._id}`}>
+                                        <div className="todo-yellow-text">
+                                          {tod.title}
+                                        </div>
+                                      </Link>
+                                      {tod.JobArray.map((todoOne, i) => (
+                                        <>
+                                          {todoOne.user ===
+                                          userID + "IAMWORKED" ? (
+                                            <>
+                                              <div>{todoOne.date}</div>
+                                            </>
+                                          ) : (
+                                            <></>
+                                          )}
+                                        </>
+                                      ))}
+                                      {tod.status === "в работе" ? (
+                                        <div>{tod.status}</div>
+                                      ) : (
+                                        ""
+                                      )}
+                                    </Card>
+                                  </div>
+                                </>
+                              ) : (
+                                ""
+                              )}
+  
+                              <>
+                                {tod.importance === "Не очень важное" ? (
+                                  <>
+                                    {tod.JobArray.map((todoOne, i) => (
+                                      <>
+                                        <div className="card-job-modile-style  todo-phone-green">
+                                          <Card className="todo-green" key={i}>
+                                            <Badge
+                                              style={{
+                                                backgroundColor: "#15b11a",
+                                                color: "#000000",
+                                                boxShadow:
+                                                  "0 0 0 1px #000000 inset"
+                                              }}
+                                              count={tod.JobArray.length}
+                                            ></Badge>
+                                            <Link to={`/job/${tod._id}`}>
+                                              <div className="todo-green-text">
+                                                {tod.title}
+                                              </div>
+                                            </Link>
+                                            {tod.JobArray.map((todoOne, i) => (
+                                              <>
+                                                {todoOne.user ===
+                                                userID + "IAMWORKED" ? (
+                                                  <>
+                                                    <div>{todoOne.date}</div>
+                                                  </>
+                                                ) : (
+                                                  <></>
+                                                )}
+                                              </>
+                                            ))}
+                                            {tod.status === "в работе" ? (
+                                              <div>{tod.status}</div>
+                                            ) : (
+                                              ""
+                                            )}
+                                          </Card>
+                                        </div>
+                                      </>
+                                    ))}
+                                  </>
                                 ) : (
                                   ""
                                 )}
-                              </Card>
-                            </div>    
-                                </>
-                              ))}
+                              </>
+                            </>
+                          ) : (
+                            ""
+                          )}
+  
+                          {tod.importance === "Очень важное" &&
+                          tod.comand === false ? (
+                            <>
+                              <div className="card-job-modile-style  todo-phone-red">
+                                <Card className="todo-red" key={i}>
+                                  <Link to={`/job/${tod._id}`}>
+                                    <div className="todo-red-text">
+                                      {tod.title}
+                                    </div>
+                                  </Link>
+                                  {tod.status === "в работе" ? (
+                                    <div style={{ color: "#ffffff" }}>
+                                      {tod.status}
+                                    </div>
+                                  ) : (
+                                    ""
+                                  )}
+                                  <div style={{ color: "#ffffff" }}>
+                                    {tod.time}
+                                  </div>
+                                </Card>
+                              </div>
+                            </>
+                          ) : (
+                            ""
+                          )}
+                          {tod.importance === "Средней важности" &&
+                          tod.comand == false ? (
+                            <>
+                              <div className="card-job-modile-style  todo-phone-yellow">
+                                <Card className="todo-yellow" key={i}>
+                                  <Link to={`/job/${tod._id}`}>
+                                    <div className="todo-yellow-text">
+                                      {tod.title}
+                                    </div>
+                                  </Link>
+                                  {tod.status === "в работе" ? (
+                                    <div>{tod.status}</div>
+                                  ) : (
+                                    ""
+                                  )}
+                                  <div>{tod.time}</div>
+                                </Card>
+                              </div>
+                            </>
+                          ) : (
+                            ""
+                          )}
+                          {tod.importance === "Не очень важное" &&
+                          tod.comand === false ? (
+                            <>
+                              <div className="card-job-modile-style  todo-phone-green">
+                                <Card className="todo-green">
+                                  <Link to={`/job/${tod._id}`}>
+                                    <div className="todo-green-text">
+                                      {tod.title}
+                                    </div>
+                                  </Link>
+                                  {tod.status === "в работе" ? (
+                                    <div>{tod.status}</div>
+                                  ) : (
+                                    ""
+                                  )}
+                                  <div>{tod.time}</div>
+                                </Card>
+                              </div>
                             </>
                           ) : (
                             ""
                           )}
                         </>
-                      </>
-                    ) : (
-                      ""
-                    )}
-    
-                    {tod.importance === "Очень важное" &&
-                    tod.comand === false ? (
-                      <>
-                        <div className="card-job-modile-style  todo-phone-red">
-                          <Card className="todo-red" key={i}>
-                            <Link to={`/job/${tod._id}`}>
-                              <div  className="todo-red-text">{tod.title}</div>
-                            </Link>
-                            {tod.status === "в работе" ? (
-                              <div style={{ color: "#ffffff" }}>
-                                {tod.status}
+                      ))}
+                      {comand.map((tod, i) => (
+                        <>
+                          {tod.importance === "Очень важное" ? (
+                            <>
+                              <div className="card-job-modile-style  todo-phone-red">
+                                <Card className="todo-comand-red" key={i}>
+                                  <Link to={`/job/${tod._id}`}>
+                                    <h3 style={{ color: "#ffffff" }}>
+                                      {tod.title}
+                                    </h3>
+                                  </Link>
+                                  {tod.status === "в работе" ? (
+                                    <div style={{ color: "#ffffff" }}>
+                                      {tod.status}
+                                    </div>
+                                  ) : (
+                                    ""
+                                  )}
+                                  <div style={{ color: "#ffffff" }}>
+                                    {tod.time}
+                                  </div>
+                                </Card>
                               </div>
-                            ) : (
-                              ""
-                            )}
-                              <div  style={{ color: "#ffffff" }}>
-                              {tod.time}
-                                </div>
-                          </Card>
-                        </div>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                    {tod.importance === "Средней важности" &&
-                    tod.comand == false ? (
-                      <>
-                        <div className="card-job-modile-style  todo-phone-yellow">
-                          <Card className="todo-yellow" key={i}>
-                            <Link to={`/job/${tod._id}`}>
-                              <div className="todo-yellow-text">{tod.title}</div>
-                            </Link>
-                            {tod.status === "в работе" ? (
-                              <div>
-                                {tod.status}
+                            </>
+                          ) : (
+                            ""
+                          )}
+                          {tod.importance === "Средней важности" ? (
+                            <>
+                              <div className="card-job-modile-style  todo-phone-yellow">
+                                <Card className="todo-comand-yellow" key={i}>
+                                  <Link to={`/job/${tod._id}`}>
+                                    <h3 style={{ color: "#141412" }}>
+                                      {tod.title}
+                                    </h3>
+                                  </Link>
+                                  <div style={{ color: "#141412" }}>
+                                    {tod.time}
+                                  </div>
+                                  {tod.status === "в работе" ? (
+                                    <div className="todo-text-status-job">
+                                      {tod.status}
+                                    </div>
+                                  ) : (
+                                    ""
+                                  )}
+                                </Card>
                               </div>
-                            ) : (
-                              ""
-                            )}
-                              <div>
-                              {tod.time}
-                                </div>
-                            
-                          </Card>
-                        </div>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                    {tod.importance === "Не очень важное" &&
-                    tod.comand === false ? (
-                      <>
-                        <div className="card-job-modile-style  todo-phone-green">
-                          <Card className="todo-green">
-                            <Link to={`/job/${tod._id}`}>
-                              <div className="todo-green-text">{tod.title}</div>
-                            </Link>
-                            {tod.status === "в работе" ? (
-                              <div >
-                                {tod.status}
+                            </>
+                          ) : (
+                            ""
+                          )}
+                          {tod.importance === "Не очень важное" ? (
+                            <>
+                              <div className="card-job-modile-style  todo-phone-green">
+                                <Card className="todo-comand-green">
+                                  <Link to={`/job/${tod._id}`}>
+                                    <div className="todo-green-text">
+                                      {tod.title}
+                                    </div>
+                                  </Link>
+                                  {tod.status === "в работе" ? (
+                                    <div style={{ color: "#ffffff" }}>
+                                      {tod.status}
+                                    </div>
+                                  ) : (
+                                    ""
+                                  )}
+                                  <div style={{ color: "#ffffff" }}>
+                                    {tod.time}
+                                  </div>
+                                </Card>
                               </div>
-                            ) : (
-                              ""
-                            )}
-                            <div >{tod.time}</div>
-                          </Card>
-                        </div>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                  </>
-                ))}
-                {comand.map((tod, i) => (
-                  <>
-                    {tod.importance === "Очень важное" ? (
-                      <>
-                        <div className="card-job-modile-style  todo-phone-red">
-                          <Card className="todo-comand-red" key={i}>
-                            <Link to={`/job/${tod._id}`}>
-                              <h3 style={{ color: "#ffffff" }}>{tod.title}</h3>
-                            </Link>
-                            {tod.status === "в работе" ? (
-                              <div style={{ color: "#ffffff" }}>
-                                {tod.status}
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                            <div style={{ color: "#ffffff" }}>{tod.time}</div>
-                          </Card>
-                        </div>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                    {tod.importance === "Средней важности" ? (
-                      <>
-                        <div className="card-job-modile-style  todo-phone-yellow">
-                          <Card className="todo-comand-yellow" key={i}>
-                            <Link to={`/job/${tod._id}`}>
-                              <h3 style={{ color: "#141412" }}>{tod.title}</h3>
-                            </Link>
-                            <div style={{ color: "#141412" }}>{tod.time}</div>
-                            {tod.status === "в работе" ? (
-                              <div className="todo-text-status-job">
-                                {tod.status}
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </Card>
-                        </div>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                    {tod.importance === "Не очень важное" ? (
-                      <>
-                        <div className="card-job-modile-style  todo-phone-green">
-                          <Card className="todo-comand-green">
-                            <Link to={`/job/${tod._id}`}>
-                              <div className="todo-green-text" >{tod.title}</div>
-                            </Link>
-                            {tod.status === "в работе" ? (
-                              <div style={{ color: "#ffffff" }} >
-                                {tod.status}
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                            <div style={{ color: "#ffffff" }}>{tod.time}</div>
-                          </Card>
-                        </div>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                  </>
-                ))}
-                </>
-              )}
-                  
+                            </>
+                          ) : (
+                            ""
+                          )}
+                        </>
+                      ))}
+                    </>
+                  )}
                 </div>
               </div>
             </ul>

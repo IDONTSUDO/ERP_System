@@ -282,13 +282,7 @@ export default class NewAgent extends Component {
                   value={email}
                 />
               </div>
-            </form>
-          </div>
-          <div className="part2">
-            <div>
-              <div className="row">
-                <form>
-                  <div>
+              <div>
                     <label className="text-muted">ОГРН компании</label>
                     <input
                       className="form-control"
@@ -338,17 +332,15 @@ export default class NewAgent extends Component {
                       value={payment_account}
                     />
                   </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          <div style={{ padding: "10px" }}></div>
+                  <div style={{ padding: "10px" }}></div>
           <button
             className="btn btn-raised btn-primary"
             onClick={this.clickSubmit}
           >
             Создать
           </button>
+            </form>
+          </div>
         </div>
       </div>
     );

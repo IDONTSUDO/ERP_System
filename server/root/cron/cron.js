@@ -95,10 +95,16 @@ function CRON_MANAGE_TASK_AT_AGENT() {
   //     let MomentTime = moment(DateToday).locale("ru").format("LL")
   //     //  MomentTime day to
 
-
+  //     let status = "Прозвонить"
   //     let titelTodo = "TESTING"
   //     let descriptionTodo = "TESTING"
-
+    
+  //   let mounth = moment(DateToday)
+  //     .locale("ru")
+  //     .format("MM");
+  //   let year = moment(DateToday)
+  //     .locale("ru")
+  //     .format("YY");
   //     for (let agentCron of data) {
     
   //       let tod = new Todo()
@@ -107,6 +113,10 @@ function CRON_MANAGE_TASK_AT_AGENT() {
   //       tod.description = descriptionTodo
   //       tod.time = MomentTime
   //       tod.tags =  agentCron.UserId[0]._id
+  //       tod.status = status
+  //       tod.agent = agentCron.agent
+  //       tod.mounth = mounth
+  //       tod.year = year
   //       tod.save()
   //     }
   //   })

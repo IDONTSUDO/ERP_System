@@ -14,6 +14,9 @@ const agentHistorycomentSchema = new mongoose.Schema({
         type: String,
         ref: "TodoId"
     },
+    rate:{
+        type: Number
+    },
     created: {
         type: Date,
         default: Date.now

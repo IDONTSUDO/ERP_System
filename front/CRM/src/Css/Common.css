@@ -1,6 +1,9 @@
 .sun-editor .se-toolbar.se-toolbar-sticky {
   position: absolute;
 }
+.ant-rate{
+  padding: 13px;
+}
 br {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -87,6 +90,26 @@ br {
 .dropdown_contr_agent{
   width:200%;
   position:fixed;
+}
+.todo-cron-text{
+  font-size: 150%;
+  color: #f3f4f5;                                                     
+}
+.tod-cron-phone{
+  background: #26ecec9d;
+  padding: 5px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+.tod-cron{
+  padding: 5px;
+  background: #04ffffe0;
+  max-width: 100%;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+.tod-cron:hover {                           
+  -webkit-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  transform: scale(1.1);
 }
 .ant-select-selection--multiple{
   width:250px;

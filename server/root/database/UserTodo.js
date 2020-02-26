@@ -61,6 +61,9 @@ const todoSchema = new mongoose.Schema({
     },
     cronId:{
         type:String
+    },
+    agent:{
+        type:Object
     }
 })
 

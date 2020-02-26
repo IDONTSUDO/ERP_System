@@ -81,6 +81,21 @@ exports.myTodoItsDayQuality = async (req, res, next) => {
 
 
 }
+
+exports.MyTodoMouth = async (req, res) =>{
+    let {mounthTodo,user,yearTodo} = req.body
+    
+
+    TODO.find({tags:user, mounth:mounthTodo,year:yearTodo}).exec((err,todo) =>{
+        if(err){
+            return res.status(400).json({
+                error:err
+            })
+        }else{
+            res.json(todo)
+        }
+    })
+}
 exports.myTODO = async (req, res) => {
 
 

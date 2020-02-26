@@ -449,7 +449,7 @@ class Work extends React.Component {
     var filteredTime = newTimeArray.filter(function(el) {
       return el != undefined;
     });
-    console.log(filteredTime);
+   
     for (let k = 0; filteredTime.length > k; k++) {
       lastTimeArray.push(
         moment(filteredTime[k])
@@ -802,10 +802,13 @@ class Work extends React.Component {
                     >
                       Сроки Выполнения
                     </label>
+                    
+                    
                     <DatePicker
-                      onChange={this.onChangeworkerTime1}
+                      onChange={this.onChangeDate}
                       placeholder="Выберите дату"
                     />
+
                     <div class="form-group">
                       <label for="exampleFormControlSelect1">
                         Приоретет задачи

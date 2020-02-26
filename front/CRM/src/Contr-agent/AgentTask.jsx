@@ -57,7 +57,6 @@ class AgentTask extends Component {
                                 <div  className="todo-red-text">
                                   {tod.title}
                                 </div>
-                              
                               </Link>
                               {tod.JobArray.map((todoOne, i) => (
                             <>

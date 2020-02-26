@@ -1192,3 +1192,31 @@ export const NewNode = (name, id) => {
             console.log(error)
         })
 }
+export const MyTodoMount = (mounthTodo,user,yearTodo) =>{
+    let obj = {
+        mounthTodo,user,yearTodo
+    }
+    return fetch(`${process.env.REACT_APP_API_URL}/my/todo/mounth`,{
+        method:"POST",
+        headers: myHeaders,
+        body: JSON.stringify(obj)
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+export const NewComentSpecTodo = (result) =>{
+
+    return fetch(`${process.env.REACT_APP_API_URL}/new/comment/at/agent/spec`,{
+        method:"POST",
+        headers: myHeaders,
+        body: JSON.stringify(result)
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
