@@ -1135,7 +1135,7 @@ export const EmailingLists = (settings) => {
         })
 }
 export const GetTechList = () => {
-    return fetch(`${process.env.REACT_APP_API_URL}/get/spec/tech/all`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/get/tech/list`, {
         method: "GET",
         headers: myHeaders,
     }).then(response => {
@@ -1192,12 +1192,12 @@ export const NewNode = (name, id) => {
             console.log(error)
         })
 }
-export const MyTodoMount = (mounthTodo,user,yearTodo) =>{
+export const MyTodoMount = (mounthTodo, user, yearTodo) => {
     let obj = {
-        mounthTodo,user,yearTodo
+        mounthTodo, user, yearTodo
     }
-    return fetch(`${process.env.REACT_APP_API_URL}/my/todo/mounth`,{
-        method:"POST",
+    return fetch(`${process.env.REACT_APP_API_URL}/my/todo/mounth`, {
+        method: "POST",
         headers: myHeaders,
         body: JSON.stringify(obj)
     }).then(response => {
@@ -1207,12 +1207,49 @@ export const MyTodoMount = (mounthTodo,user,yearTodo) =>{
             console.log(error)
         })
 }
-export const NewComentSpecTodo = (result) =>{
+export const NewComentSpecTodo = (result) => {
 
-    return fetch(`${process.env.REACT_APP_API_URL}/new/comment/at/agent/spec`,{
-        method:"POST",
+    return fetch(`${process.env.REACT_APP_API_URL}/new/comment/at/agent/spec`, {
+        method: "POST",
         headers: myHeaders,
         body: JSON.stringify(result)
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+export const SaveCarAgent = (name) => {
+
+    return fetch(`${process.env.REACT_APP_API_URL}/save/tech/at/agent`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({name})
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+export const SaveNodeAtCar = (nodeid, name) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/save/node/at/agent/tech/${nodeid}`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({name})
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+export const SaveDetalAtNode = (nodeid, name) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/save/node/at/tech/node/${nodeid}`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({name})
     }).then(response => {
         return response.json()
     })

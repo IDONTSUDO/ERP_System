@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
 import { NewContrAgent } from "../Api/Http";
 import { notification, Icon } from "antd";
-import Error from "../Error/Error.jsx"
+import Error from "../Error/Error.jsx";
 
 export default class NewAgent extends Component {
   constructor() {
@@ -68,22 +68,21 @@ export default class NewAgent extends Component {
       //    isAuthenticated().token
       NewContrAgent(NewAgent, user).then(data => {
         if (data.error) this.setState({ error: data.error });
-        else
-        this.openNotificationAgentNew()
-          this.setState({
-            company: "",
-            full_name: "",
-            name: "",
-            phone: "",
-            INN: "",
-            general_director: "",
-            OGRN: "",
-            email: "",
-            any: "",
-            legal_address: "",
-            actual_address: "",
-            payment_account: ""
-          });
+        else this.openNotificationAgentNew();
+        this.setState({
+          company: "",
+          full_name: "",
+          name: "",
+          phone: "",
+          INN: "",
+          general_director: "",
+          OGRN: "",
+          email: "",
+          any: "",
+          legal_address: "",
+          actual_address: "",
+          payment_account: ""
+        });
       });
     }
   };
@@ -283,62 +282,62 @@ export default class NewAgent extends Component {
                 />
               </div>
               <div>
-                    <label className="text-muted">ОГРН компании</label>
-                    <input
-                      className="form-control"
-                      onChange={this.handleChange("OGRN")}
-                      type="text"
-                      style={{ width: "15em" }}
-                      value={OGRN}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-muted">
-                      Любая другая полезная информация
-                    </label>
-                    <textarea
-                      value={any}
-                      onChange={this.handleChange("any")}
-                      class="form-control"
-                      id="exampleFormControlTextarea1"
-                      rows="3"
-                    ></textarea>
-                  </div>
-                  <div>
-                    <label className="text-muted">Юридический адрес</label>
-                    <input
-                      className="form-control"
-                      onChange={this.handleChange("legal_address")}
-                      type="text"
-                      value={legal_address}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-muted">Фактический адрес</label>
-                    <input
-                      className="form-control"
-                      onChange={this.handleChange("actual_address")}
-                      type="text"
-                      value={actual_address}
-                    />
-                  </div>
+                <label className="text-muted">ОГРН компании</label>
+                <input
+                  className="form-control"
+                  onChange={this.handleChange("OGRN")}
+                  type="text"
+                  style={{ width: "15em" }}
+                  value={OGRN}
+                />
+              </div>
+              <div>
+                <label className="text-muted">
+                  Любая другая полезная информация
+                </label>
+                <textarea
+                  value={any}
+                  onChange={this.handleChange("any")}
+                  class="form-control"
+                  id="exampleFormControlTextarea1"
+                  rows="3"
+                ></textarea>
+              </div>
+              <div>
+                <label className="text-muted">Юридический адрес</label>
+                <input
+                  className="form-control"
+                  onChange={this.handleChange("legal_address")}
+                  type="text"
+                  value={legal_address}
+                />
+              </div>
+              <div>
+                <label className="text-muted">Фактический адрес</label>
+                <input
+                  className="form-control"
+                  onChange={this.handleChange("actual_address")}
+                  type="text"
+                  value={actual_address}
+                />
+              </div>
 
-                  <div>
-                    <label className="text-muted">Расчетный счет</label>
-                    <input
-                      className="form-control"
-                      onChange={this.handleChange("payment_account")}
-                      type="text"
-                      value={payment_account}
-                    />
-                  </div>
-                  <div style={{ padding: "10px" }}></div>
-          <button
-            className="btn btn-raised btn-primary"
-            onClick={this.clickSubmit}
-          >
-            Создать
-          </button>
+              <div>
+                <label className="text-muted">Расчетный счет</label>
+                <input
+                  className="form-control"
+                  onChange={this.handleChange("payment_account")}
+                  type="text"
+                  value={payment_account}
+                />
+              </div>
+              <div style={{ padding: "10px" }}></div>
+              <button
+                className="btn btn-raised btn-primary"
+                onClick={this.clickSubmit}
+              >
+                Создать
+              </button>
             </form>
           </div>
         </div>

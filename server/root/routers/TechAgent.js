@@ -1,25 +1,27 @@
 const express = require("express")
 const {
-    getAll, 
-    saveTechCollection,
-    SaveTechOntheBasisOfSpec,
-    TechColId,
-    SaveAtTechNode,
-    getTechNode,
-    Techid,
-    getTestPopulate
+    GetTechList,
+    SaveTechAtAgent,
+    techId,
+    SaveNodeAtTech,
+    TechNodesID,
+    SaveNodeAtNodeProperty
 } = require("../controllers/Tech")
 const { jwtTokenUserId, requireSignin } = require("../middleware/middleware.js")
 const router = express.Router({ mergeParams: true });
 
-router.get('/get/test',getTestPopulate)
-router.get('/get/spec/tech/all', getAll)
-router.post('/new/tech/collection', saveTechCollection)
-router.post('/save/tech/by/collection/:techColId', SaveTechOntheBasisOfSpec)
-router.post('/save/tech/by/node/:Techid', SaveAtTechNode)
-router.get('/get/node/:Techid',getTechNode)
 
-router.param('techColId',TechColId)
-router.param('Techid',Techid)
+router.get('/get/tech/list',GetTechList)
+
+router.post('/save/tech/at/agent',SaveTechAtAgent)
+router.post('/save/node/at/agent/tech/:techIdtest',SaveNodeAtTech)
+router.post('/save/node/at/tech/node/:technodes',SaveNodeAtNodeProperty)
+
+router.delete('/del/tech')
+router.delete('/del/node')
+router.delete('/del/node/prop')
+
+router.param('techIdtest',techId)
+router.param('technodes',TechNodesID)
 
 module.exports = router

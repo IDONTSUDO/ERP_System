@@ -21,6 +21,7 @@ export default class AllAgent extends Component {
   }
   componentDidMount() {
     this.LoadContrAgentList(this.state.page);
+
   }
   LoadContrAgentList = page => {
     ContrAgentList(page)

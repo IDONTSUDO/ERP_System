@@ -4,6 +4,21 @@
 .ant-rate{
   padding: 13px;
 }
+.toggle{
+  /* display: none; */
+}
+.detail{
+  cursor:pointer;
+  font-size: 25px;
+
+}
+.diplaySelect{
+  display:none;
+}
+.detail:focus{
+  color:#da1717;
+  background-color: red;
+}
 br {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
