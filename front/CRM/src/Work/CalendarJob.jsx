@@ -1,7 +1,35 @@
 import React, { Component } from 'react'
+
+
 import { Calendar, Badge } from 'antd';
+import {isAuthenticated} from "../Api/Auth"
+import {UserTodoYear} from "../Api/Http"
+import moment from "moment";
+
 
 export default class CalendarJob extends Component {
+  constructor(){
+    super()
+    this.state = {
+
+    }
+  }
+  componentDidMount(){
+    const user = this.props.match.params.userId;
+    let startDate = Date.now()
+    let year = moment(startDate)
+    .locale("ru")
+    .format("YY");
+    let dataFetch = {
+        year,
+        user
+    }
+    UserTodoYear(dataFetch).then(data =>{
+        console.log(data)
+    })
+  }
+  forceUpdate(){}
+
     render() {
         function getListData(value) {
             let listData;
@@ -46,7 +74,6 @@ export default class CalendarJob extends Component {
               </ul>
             );
           }
-          
           function getMonthData(value) {
             if (value.month() === 8) {
               return 1394;

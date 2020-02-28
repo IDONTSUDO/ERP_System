@@ -1257,3 +1257,51 @@ export const SaveDetalAtNode = (nodeid, name) => {
             console.log(error)
         })
 }
+export const DeleteAtTech = (id) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/del/tech/${id}`, {
+        method: "DELETE",
+        headers: myHeaders,
+
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+export const DeleteAtNode = (id) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/del/node/${id}`, {
+        method: "DELETE",
+        headers: myHeaders,
+
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+export const DeleteDetalAtNode = (id) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/del/node/prop/${id}`, {
+        method: "DELETE",
+        headers: myHeaders
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
+export const UserTodoYear = (data) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/my/todo/year`, {
+        method: "POST",
+        headers: myHeaders,
+        body:JSON.stringify(data)
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}

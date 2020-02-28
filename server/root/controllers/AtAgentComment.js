@@ -13,8 +13,8 @@ exports.newCommentAtAgent = async (req, res, next) => {
         agnCmt.agentID = agentID
         Todo.findById(taskId).then(data =>{
             
-    
-            data.remove()
+           
+            // data.remove()
     
     
             let {status,agentByTodo,tags,created,title,description,time,mounth,year} = data
@@ -39,8 +39,10 @@ exports.newCommentAtAgent = async (req, res, next) => {
         return res.status(400).json({"bad":"bad"})
     } 
 }
+exports.newTodoByAgent = async(req) =>{
 
-exports.agentUpdateStatistic = async (req, res) => {
+}
+exports.agentUpdateStatistic = async (req) => {
 
     let todoDestr = req.todo;
 

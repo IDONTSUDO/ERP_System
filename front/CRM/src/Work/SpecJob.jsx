@@ -65,7 +65,9 @@ class SpecJob extends Component {
       value: "",
       todoMounth: [],
       newTodoSetDate:undefined,
-      rate:undefined
+      rate:undefined,
+      dateSelect:undefined,
+      userIdView:undefined
     };
   }
   componentDidMount() {
@@ -90,25 +92,27 @@ class SpecJob extends Component {
       if (data.err) {
         this.setState({ err: true });
       } else {
-        this.setState({ todoMounth: data });
+        this.setState({ todoMounth: data,userIdView:user });
       }
     });
-    // mounthTodo,user,yearTodo
   }
   handelRateChaange = (e) =>{
     this.setState({rate:e})
   }
 
-
+  handelSelect = (momentDate) =>{
+    this.setState({dateSelect:momentDate})
+  }
   handleSubmit = () => {
-    let {value,rate,task} = this.state;
-    console.log(task.agent)
-    console.log(task.agent._id)
+    let {value,rate,task,dateSelect,userIdView} = this.state;
     if (!value) {
       let err = "коментария нет"
     return   this.openNoticationErrorValiid(err)
     }
-    
+    if(dateSelect === undefined){
+      let err = "Дата не выбрана"
+      return this.openNoticationErrorValiid(err)
+    }
     if(!rate){
       let err = "рейтинг не выставлен"
       return this.openNoticationErrorValiid(err)
@@ -116,9 +120,8 @@ class SpecJob extends Component {
       this.setState({
         submitting: true
       });
-
       let agentID = task.agent._id
-      let workerId = isAuthenticated().direct._id
+      let workerId = userIdView
       let taskId = task._id
       let body = {
         value,
@@ -132,13 +135,6 @@ class SpecJob extends Component {
         console.log(data)
       })
     }
-
-    
-
-
-
-
-
   };
   dateCellRender = value => {
     let time = moment(value)
@@ -213,6 +209,7 @@ class SpecJob extends Component {
                       fullscreen={true}
                       className="calendar_body"
                       onChange={this.calendarChange}
+                      onSelect={this.handelSelect}
                     />
                  
                     <Rate onChange={this.handelRateChaange}	 allowClear={false} defaultValue={3} />

@@ -5,7 +5,11 @@ const {
     techId,
     SaveNodeAtTech,
     TechNodesID,
-    SaveNodeAtNodeProperty
+    SaveNodeAtNodeProperty,
+    deletTech,
+    delNode,
+    delNodeProp,
+    nodeId
 } = require("../controllers/Tech")
 const { jwtTokenUserId, requireSignin } = require("../middleware/middleware.js")
 const router = express.Router({ mergeParams: true });
@@ -14,14 +18,16 @@ const router = express.Router({ mergeParams: true });
 router.get('/get/tech/list',GetTechList)
 
 router.post('/save/tech/at/agent',SaveTechAtAgent)
-router.post('/save/node/at/agent/tech/:techIdtest',SaveNodeAtTech)
-router.post('/save/node/at/tech/node/:technodes',SaveNodeAtNodeProperty)
+router.post('/save/node/at/agent/tech/:techId',SaveNodeAtTech)
+router.post('/save/node/at/tech/node/:technodId',SaveNodeAtNodeProperty)
 
-router.delete('/del/tech')
-router.delete('/del/node')
-router.delete('/del/node/prop')
+router.delete('/del/tech/:techId',deletTech)
+router.delete('/del/node/:technodId',delNode)
+router.delete('/del/node/prop/:nodeId',delNodeProp)
 
-router.param('techIdtest',techId)
-router.param('technodes',TechNodesID)
+
+router.param('nodeId',nodeId)
+router.param('techId',techId)
+router.param('technodId',TechNodesID)
 
 module.exports = router

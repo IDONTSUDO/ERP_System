@@ -12,7 +12,10 @@ import {
   GetNode,
   SaveCarAgent,
   SaveDetalAtNode,
-  SaveNodeAtCar
+  SaveNodeAtCar,
+  DeleteDetalAtNode,
+  DeleteAtNode,
+  DeleteAtTech
 } from "../Api/Http";
 import {
   Select,
@@ -30,7 +33,7 @@ import {
   Tag
 } from "antd";
 
-import { TweenOneGroup } from 'rc-tween-one';
+import { TweenOneGroup } from "rc-tween-one";
 
 import Erorr from "../Error/Error.jsx";
 
@@ -96,22 +99,22 @@ export default class EditContrAgent extends Component {
       carModel: false,
       NodeModal: false,
       DetalModal: false,
-      DetalName:"",
-      NodeName:"",
-      TechAgent:[],
-      CarName:"",
-      detalId:"",
-      NodeId:"",
-      loaderTech:false
+      DetalName: "",
+      NodeName: "",
+      TechAgent: [],
+      CarName: "",
+      detalId: "",
+      NodeId: "",
+      loaderTech: false
     };
   }
- handleClose = techRemove => {
+  handleClose = techRemove => {
     const TechAgent = this.state.TechAgent.filter(tech => tech !== techRemove);
     this.setState({ TechAgent });
   };
-  handleCancelDetalModal = () =>{
-    this.setState({DetalModal:false})
-  }
+  handleCancelDetalModal = () => {
+    this.setState({ DetalModal: false });
+  };
 
   init(id) {
     AllSpecList().then(data => {
@@ -127,7 +130,7 @@ export default class EditContrAgent extends Component {
         this.setState({ specialicationsToBase: specArray });
       }
     });
-   
+
     GetAgentProfile(id).then(data => {
       if (data.error) {
         this.setState({ error: true });
@@ -143,7 +146,7 @@ export default class EditContrAgent extends Component {
         this.setState({
           id: data._id,
           agentName: data.full_name,
-
+          TechAgent:data.TechAgent,
           open: false,
           name: data.name,
           full_name: data.full_name,
@@ -172,9 +175,11 @@ export default class EditContrAgent extends Component {
     this.init(agentID);
   }
   forceUpdate() {
+    this.setState({ loaderTech: true });
     GetTechList().then(responce => {
       this.setState({
-        loadNode: responce,loaderTech:false
+        loadNode: responce,
+        loaderTech: false
       });
     });
   }
@@ -189,50 +194,58 @@ export default class EditContrAgent extends Component {
     });
   };
   handleCancelCarModel = () => {
-    this.setState({ carModel: false,CarName:""});
+    this.setState({ carModel: false, CarName: "" });
   };
   handleOklCarModel = () => {
-    let {CarName} = this.state;
-    if(CarName.length === 0){
-      this.openNotificationValidationError()
-    }else{
-      let name = CarName
-      SaveCarAgent(name).then(data =>{
-        this.setState({ carModel: false,loaderTech:true,CarName:"" });
-        this.forceUpdate()
-      })
-
+    let { CarName } = this.state;
+    if (CarName.length === 0) {
+      this.openNotificationValidationError();
+    } else {
+      let name = CarName;
+      SaveCarAgent(name).then(data => {
+        this.setState({ carModel: false, loaderTech: true, CarName: "" });
+        this.forceUpdate();
+      });
     }
   };
-  handleOkDetalModal = () =>{
-    let  {DetalName,detalId} = this.state;
-    if(DetalName.length === 0){
-      this.openNotificationValidationError()
-    }else{
-      SaveDetalAtNode(detalId,DetalName).then(data=>{
-        this.setState({DetalModal:false,detalId:"",loaderTech:true,DetalName:""})
-        this.forceUpdate()
-      })
+  handleOkDetalModal = () => {
+    let { DetalName, detalId } = this.state;
+    if (DetalName.length === 0) {
+      this.openNotificationValidationError();
+    } else {
+      SaveDetalAtNode(detalId, DetalName).then(data => {
+        this.setState({
+          DetalModal: false,
+          detalId: "",
+          loaderTech: true,
+          DetalName: ""
+        });
+        this.forceUpdate();
+      });
     }
-  }
+  };
   onClose = () => {
     this.setState({
       visibleTreeDrawer: false
     });
   };
   handleOklNodeModal = () => {
-  let {NodeId,NodeName} = this.state;
-  if(NodeName.length === 0){
-    return this.openNotificationValidationError()
-  }else{
-    SaveNodeAtCar(NodeId,NodeName).then(data =>{
-      this.setState({ NodeModal: false,NodeId:"",NodeName:"",loaderTech:true });
-      this.forceUpdate()
-    })
-  }
-       
+    let { NodeId, NodeName } = this.state;
+    if (NodeName.length === 0) {
+      return this.openNotificationValidationError();
+    } else {
+      SaveNodeAtCar(NodeId, NodeName).then(data => {
+        this.setState({
+          NodeModal: false,
+          NodeId: "",
+          NodeName: "",
+          loaderTech: true
+        });
+        this.forceUpdate();
+      });
+    }
   };
-  
+
   handleCancelNodeModal = () => {
     this.setState({ NodeModal: false });
   };
@@ -289,13 +302,12 @@ export default class EditContrAgent extends Component {
     this.setState({ [name]: event.target.value });
   };
   AddingAgentTech = tech => {
-    
-    let {TechAgent} = this.state;
-    TechAgent.push(tech)
-    this.setState({TechAgent})
+    let { TechAgent } = this.state;
+    TechAgent.push(tech);
+    this.setState({ TechAgent });
     message.info("Техника добавлена.");
   };
-  
+
   deleteSpec = id => {
     this.setState({ openSpec: true });
     deleteSpecialisations(id).then(data => {
@@ -334,12 +346,11 @@ export default class EditContrAgent extends Component {
     );
     return sort[0];
   };
-  agentAddDetalList  = (name) =>{
-    console.log(name)
-      message.success('Добавлено, не забудь обновить!');
-  }
+  agentAddDetalList = name => {
+    message.success("Добавлено, не забудь обновить!");
+  };
   DetailNew = id => {
-    this.setState({DetalModal: true,detalId:id})
+    this.setState({ DetalModal: true, detalId: id });
   };
 
   handelClickChange = e => {
@@ -357,10 +368,12 @@ export default class EditContrAgent extends Component {
       full_name,
       name,
       general_director,
-      specialications
+      specialications,
+      TechAgent
     } = this.state;
 
     let payload = {
+      TechAgent,
       agentGeo,
       email,
       phone,
@@ -385,10 +398,9 @@ export default class EditContrAgent extends Component {
   NewCar = () => {
     this.setState({ carModel: true });
   };
-  // NodeModal,
+
   NodeNew = id => {
-    console.log("NodeName",id);
-    this.setState({ NodeModal: true,NodeId:id });
+    this.setState({ NodeModal: true, NodeId: id });
   };
   handleChangeAnyInput = name => event => {
     this.setState({ error: "" });
@@ -419,7 +431,6 @@ export default class EditContrAgent extends Component {
 
   nodLoader = id => {
     GetNode(id).then(data => {
-      console.log(data);
       if (data.err) {
         console.log(data.err);
       } else {
@@ -427,9 +438,27 @@ export default class EditContrAgent extends Component {
       }
     });
   };
+
+  deleteDetal = id => {
+    DeleteDetalAtNode(id).then(data => {
+      this.forceUpdate();
+    });
+  };
+  deletAtNode = id => {
+    this.setState({});
+    DeleteAtNode(id).then(data => {
+      this.forceUpdate();
+    });
+  };
+  deletedTech = id => {
+    DeleteAtTech(id).then(data => {
+      this.forceUpdate();
+    });
+  };
   TechMap = tech => {
     const tagElem = (
       <Tag
+      color="red"
         closable
         onClose={e => {
           e.preventDefault();
@@ -440,25 +469,16 @@ export default class EditContrAgent extends Component {
       </Tag>
     );
     return (
-      <span key={tech} style={{ display: 'inline-block' }}>
+      <span key={tech} style={{ display: "inline-block" }}>
         {tagElem}
       </span>
     );
   };
   render() {
     let { error, agentTechCollect } = this.state;
-    let techChild = this.state.TechAgent.map(this.TechMap) 
-    let config = (open, w, e, q) => ({
-      // onClick:(console.log(open,w,e,q)),
-      from: { height: 0, opacity: 0, transform: "translate3d(20px,0,0)" },
-      to: {
-        height: open ? "auto" : 0,
-        opacity: open ? 1 : 0,
-        transform: open ? "translate3d(0px,0,0)" : "translate3d(20px,0,0)"
-      }
-    });
+    let techChild = this.state.TechAgent.map(this.TechMap);
+   
 
-    const SpecialTree = props => <Tree {...props} springConfig={config} />;
 
     return (
       <div className="postisitonRelativeSmeni">
@@ -603,8 +623,7 @@ export default class EditContrAgent extends Component {
                       placeholder="Выберите область"
                       value={this.state.agentGeo}
                       onChange={this.handleSelectOblastChange}
-
-                    
+                      size="large"
                     >
                       {Rusmap.map(map => (
                         <Select.Option key={map.value} value={map.value}>
@@ -615,20 +634,23 @@ export default class EditContrAgent extends Component {
                   </div>
                 </div>
 
-                <div style={{left: "92px",top: "-14px",   position: "relative"}}  class="col-sm">
+                <div
+                  style={{ left: "92px", top: "-14px", position: "relative" }}
+                  class="col-sm"
+                >
                   <p></p>
                   <p>
                     <Icon className="ant-icon-pos" type="experiment" />{" "}
                     Специализация
                   </p>
                   <Select
+                    size="large"
                     className="col-xs-12"
                     mode="multiple"
                     style={{ width: "100%" }}
                     placeholder="Выберите область"
                     value={this.state.specialications}
                     onChange={this.handelChangeSpec}
-                  
                   >
                     {this.state.specialicationsToBase.map(map => (
                       <Select.Option key={map} value={map}>
@@ -636,27 +658,25 @@ export default class EditContrAgent extends Component {
                       </Select.Option>
                     ))}
                   </Select>
-                  <div style={{margin:"10px"}}>
-
-                  <Icon className="ant-icon-pos" type="bank" /> Техника
-                  <TweenOneGroup
-            enter={{
-              scale: 0.8,
-              opacity: 0,
-              type: 'from',
-              duration: 100,
-              onComplete: e => {
-                e.target.style = '';
-              },
-            }}
-            leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
-            appear={false}
-          >
-            {techChild}
-          </TweenOneGroup>
-
+                  <div style={{ margin: "10px" }}>
+                    <Icon className="ant-icon-pos" type="bank" /> Техника
+                    <TweenOneGroup
+                      enter={{
+                        scale: 0.8,
+                        opacity: 0,
+                        type: "from",
+                        duration: 100,
+                        onComplete: e => {
+                          e.target.style = "";
+                        }
+                      }}
+                      leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
+                      appear={false}
+                    >
+                      {techChild}
+                    </TweenOneGroup>
                   </div>
-                 
+
                   <Button type="primary" onClick={this.showDrawer}>
                     Open
                   </Button>
@@ -674,7 +694,7 @@ export default class EditContrAgent extends Component {
                       unCheckedChildren={<Icon type="close" />}
                       defaultChecked={false}
                     />
-                    <Tree content="Марки" type="Бренды" >
+                    <Tree content="Марки" type="Бренды">
                       {this.state.loadNode.map((node, i) => (
                         <>
                           <Tree
@@ -682,6 +702,7 @@ export default class EditContrAgent extends Component {
                               <>
                                 <Icon
                                   type="delete"
+                                  onClick={id => this.deletedTech(node._id, id)}
                                   style={{
                                     display: this.state.EditorRegim,
                                     fontSize: "23px",
@@ -692,7 +713,6 @@ export default class EditContrAgent extends Component {
                               </>
                             }
                             type="Машины"
-                            
                           >
                             {node.techNode.map((nod, i) => (
                               <>
@@ -700,6 +720,9 @@ export default class EditContrAgent extends Component {
                                   content={
                                     <>
                                       <Icon
+                                        onClick={id =>
+                                          this.deletAtNode(nod._id, id)
+                                        }
                                         type="delete"
                                         style={{
                                           display: this.state.EditorRegim,
@@ -711,17 +734,17 @@ export default class EditContrAgent extends Component {
                                     </>
                                   }
                                   type="Узел"
-                                  
                                 >
                                   <>
-
                                     {nod.tech.map((n, i) => (
                                       <>
-                                        
                                         <Tree
                                           content={
                                             <>
                                               <Icon
+                                                onClick={id =>
+                                                  this.deleteDetal(n._id, id)
+                                                }
                                                 type="delete"
                                                 style={{
                                                   display: this.state
@@ -730,37 +753,31 @@ export default class EditContrAgent extends Component {
                                                   color: "#f0112b"
                                                 }}
                                               />
-                                               <div onClick={(name) => (this.AddingAgentTech(n.name,name))} className="detail">{n.name}</div>
+                                              <div
+                                                onClick={name =>
+                                                  this.AddingAgentTech(
+                                                    n.name,
+                                                    name
+                                                  )
+                                                }
+                                                className="detail"
+                                              >
+                                                {n.name}
+                                              </div>
                                             </>
                                           }
                                           type="Деталь"
-                                          
-                                        >
-                                          {/* <Icon
-                                            onClick={id =>
-                                              this.DetailNew(n._id, id)
-                                            }
-                                            style={{ color: "#7532a8" }}
-                                            type="plus"
-                                          /> */}
-                                        </Tree>
-                                        {/* <Icon
-                                          onClick={id =>
-                                            this.DetailNew(n._id, id)
-                                          }
-                                          style={{ color: "#7532a8" }}
-                                          type="plus"
-                                        /> */}
+                                        ></Tree>
                                       </>
                                     ))}
 
-<Icon
-                                          onClick={id =>
-                                            this.DetailNew(nod._id, id)
-                                          }
-                                          style={{ color: "#13fc03" }}
-                                          type="plus"
-                                        /> 
+                                    <Icon
+                                      onClick={id =>
+                                        this.DetailNew(nod._id, id)
+                                      }
+                                      style={{ color: "#13fc03" }}
+                                      type="plus"
+                                    />
                                   </>
                                 </Tree>
                               </>
@@ -779,7 +796,6 @@ export default class EditContrAgent extends Component {
                         type="plus"
                       />
                     </Tree>
-                  
                   </Drawer>
                   <div style={{ padding: "5px" }}>
                     <Button
@@ -880,7 +896,11 @@ export default class EditContrAgent extends Component {
             </>
           ]}
         >
-          <Input size="large" onChange={this.handleChangeAnyInput("CarName")} placeholder="Введите текст" />
+          <Input
+            size="large"
+            onChange={this.handleChangeAnyInput("CarName")}
+            placeholder="Введите текст"
+          />
         </Modal>
         <Modal
           title="Добавить деталь к машине"
@@ -898,8 +918,12 @@ export default class EditContrAgent extends Component {
             </>
           ]}
         >
-         
-          <Input onChange={this.handleChangeAnyInput("DetalName")}   value={this.state.DetalName} size="large" placeholder="Введите текст" />
+          <Input
+            onChange={this.handleChangeAnyInput("DetalName")}
+            value={this.state.DetalName}
+            size="large"
+            placeholder="Введите текст"
+          />
         </Modal>
         <Modal
           title="Добавить узел к машине"
@@ -917,10 +941,13 @@ export default class EditContrAgent extends Component {
             </>
           ]}
         >
-          <Input  onChange={this.handleChangeAnyInput("NodeName")}  size="large" placeholder="Введите текст" />
+          <Input
+            onChange={this.handleChangeAnyInput("NodeName")}
+            size="large"
+            placeholder="Введите текст"
+          />
         </Modal>
       </div>
     );
   }
 }
-

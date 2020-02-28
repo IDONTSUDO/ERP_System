@@ -128,6 +128,13 @@ class MenuMain extends React.Component {
                               <span>Новое дело</span>
                             </Link>
                           </Menu.Item>
+                          <Menu.Item key="18">
+                            <Link to={`/job/at/year/${
+                                isAuthenticated().direct._id
+                              }`}>
+                              <span>Календарь дел</span>
+                            </Link>
+                          </Menu.Item>
                         </SubMenu>
                         {["Директор", "Управляющий", "Менеджер"].includes(
                           role

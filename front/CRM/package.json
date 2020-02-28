@@ -119,6 +119,8 @@
   },
   "scripts": {
     "dev": "node scripts/start.js",
+    "win":"node react-scripts start",
+
     "build": "node scripts/build.js",
     "deploy": "node scripts/build.js && firebase deploy",
     "test": "node scripts/test.js",

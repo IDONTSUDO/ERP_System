@@ -19,7 +19,8 @@ const {
     AssignedTask,
     AssiggnedTaskUserBy,
     DeletedTodo,
-    MyTodoMouth
+    MyTodoMouth,
+    MyTodoYear
 } = require("../controllers/todo.js")
 const {agentUpdateStatistic} = require("../controllers/ContrAgent")
 
@@ -34,7 +35,9 @@ router.get('/my/todo/soso/:workerSelectId', requireSignin, myTODO)
 router.get('/today/todo/:workerSelectId', requireSignin, myTodoItsDay)
 router.get('/today/todo/qulity/:workerSelectId',  myTodoItsDayQuality)
 
+// TODO [?] GET 
 
+router.post('/my/todo/year',MyTodoYear)
 router.post('/my/todo/mounth',MyTodoMouth)
 router.post('/assigned/task/userby',AssiggnedTaskUserBy)
 router.post('/get/assigned/todo', AssignedTask)

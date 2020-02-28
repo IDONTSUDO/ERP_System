@@ -23,7 +23,7 @@ import AgentTask from '../Contr-agent/AgentTask'
 import AgentTasks from '../Contr-agent/AgentTasks.jsx'
 import Task from "../Contr-agent/Task"
 
-
+import CalendarJob from '../Work/CalendarJob.jsx'
 import SpecJob from '../Work/SpecJob.jsx'
 import Work from '../Work/NewWork.jsx'
 import NewWorker from '../User/NewWorker.jsx'
@@ -94,9 +94,8 @@ const MainRouter = () => (
             <PrivateRoute exact path="/message" component={MessageList} />
             <PrivateRoute exact path="/mailing" component={Mail} />
             <PrivateRoute exact path="/spec/job/:specId" component={SpecJob}/>
-
+            <PrivateRoute exact path="/job/at/year/:userId" component={CalendarJob}/>
             <PrivateRoute exact path="/control/agent" component={ControlAgents}/>
-
         </Switch>
     </div>
 )

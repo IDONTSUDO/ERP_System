@@ -123,7 +123,7 @@ exports.SearchAgent = async (req, res) => {
         .catch(e => console.error(e))
 }
 exports.searchSpec = async (req, res) => {
-    console.log(req.body)
+  
     let specList = req.body
 
     // let re = /"/gi;
@@ -139,7 +139,7 @@ exports.searchSpec = async (req, res) => {
                 return res.status(200).json(result)
             }
         })
-    // return res.status(200).json()
+ 
 }
 exports.SearchAgentEmail = async (req, res) => {
 
@@ -209,23 +209,26 @@ exports.ManageAddAgent = async (req, res) => {
         }
         agentResult = result
         res.json(result)
+
+        
+        let PlaningDateMoment = new Date();
+        // +1 day
+        PlaningDateMoment.setDate(PlaningDateMoment.getDate() + 1);
+    
+        let dateMoment = moment(PlaningDateMoment).format("YYYY-MM-DD");
+        console.log("AGENT     :",agentResult)
+        for(let i of agentResult.tags){
+            let agent_cron = new AgentCron()
+            agent_cron.PlanningDate = dateMoment 
+            agent_cron.UserId = i
+            agent_cron.agent = agentResult
+            agent_cron.agentId = agentResult._id
+            agent_cron.save()
+        }
     })
     
    
-    let PlaningDateMoment = new Date();
-    // +1 day
-    PlaningDateMoment.setDate(PlaningDateMoment.getDate() + 1);
-
-    let dateMoment = moment(PlaningDateMoment).format("YYYY-MM-DD");
- 
-    for(let i of agentResult.tags){
-        let agent_cron = new AgentCron()
-        agent_cron.PlanningDate = dateMoment 
-        agent_cron.UserId = i
-        agent_cron.agent = agentResult
-        agent_cron.agentId = agentResult._id
-        await agent_cron.save()
-    }
+   
  
 
 
@@ -485,7 +488,8 @@ exports.GetYearStatisticAgent = async (req, res) => {
 
     AgentStatistic.findOne({ agentBy: agentId }).then((result, err) => {
         if (err) {
-            return res.status(400).json({ err })
+            let resultsErr = []
+            return res.status(400).json(resultsErr)
         } else {
             return res.status(200).json(result)
         }
@@ -518,6 +522,10 @@ exports.searchGeo = async (req, res) => {
 
 exports.purposeManager = async (req, res) =>{
     let agent = req.agent
+    
+}
+
+exports.addAgentAtManager = async (req,res) =>{
     
 }
 // TODO  [?] change agent not detect

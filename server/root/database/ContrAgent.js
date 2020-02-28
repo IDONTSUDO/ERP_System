@@ -57,7 +57,7 @@ const contrAgentSchema = new mongoose.Schema({
         type:Array,
         default:"none"
     },
-    tech:{ //техника 
+    TechAgent:{ //техника 
         type:Array,
         default:"none"
     },

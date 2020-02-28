@@ -4,6 +4,17 @@ let TechNodes = require("../database/Tech/TechNodes")
 
 
 
+exports.nodeId = async (req, res, next, id) => {
+
+    NodeProperty.findById(id).select(" _id ")
+        .exec((err, node) => {
+            if (err || !node) {
+                return res.status(400).json({ error: "Node at prop not found!" })
+            }
+            req.nodeprop = node
+            next()
+        })
+}
 exports.techId = async (req, res, next, id) => {
 
     TechAgent.findById(id).select(" _id ")
@@ -104,13 +115,27 @@ exports.SaveTechAtAgent = async (req, res) => {
 
 
 
+exports.deletTech = async (req,res) =>{
+   let  techAgent = req.techAgent 
+   await TechAgent.findByIdAndRemove(techAgent._id)
+    .exec((err,result) =>{ 
+        return  res.status(200).json({result})
+    })
+}
 
+exports.delNodeProp = async (req,res) =>{
+    let node = req.nodeprop
+    
+    await NodeProperty.findByIdAndRemove(node._id)
+    .exec((err,result) =>{ 
+        return res.status(200).json({result})
+    })
+}
 
-
-
-
-
-
-
-
-
+exports.delNode = async (req,res) =>{
+    let nodes =  req.nodes 
+    await TechNodes.findByIdAndRemove(nodes._id)
+    .exec((err,result) =>{ 
+        return  res.status(200).json({result})
+    })
+}
