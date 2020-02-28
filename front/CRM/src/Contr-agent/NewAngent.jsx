@@ -1,13 +1,17 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
 import { NewContrAgent } from "../Api/Http";
-import { notification, Icon } from "antd";
+
+import { notification, Icon, Steps, Button, message, Input } from "antd";
 import Error from "../Error/Error.jsx";
+
+const { Step } = Steps;
 
 export default class NewAgent extends Component {
   constructor() {
     super();
     this.state = {
+      currentStep: 0,
       open: false,
       user: "",
       company: "",
@@ -23,7 +27,9 @@ export default class NewAgent extends Component {
       actual_address: "",
       payment_account: "",
       loading: false,
-      error: ""
+      error: "",
+      requre_input:"#ff1100",
+      inputQality:[]
     };
   }
   componentDidMount() {
@@ -86,6 +92,15 @@ export default class NewAgent extends Component {
       });
     }
   };
+  nextStep() {
+    const currentStep = this.state.currentStep + 1;
+    this.setState({ currentStep });
+  }
+
+  prevStep() {
+    const currentStep = this.state.currentStep - 1;
+    this.setState({ currentStep });
+  }
   isValid = () => {
     const {
       name,
@@ -195,7 +210,11 @@ export default class NewAgent extends Component {
       icon: <Icon type="frown" style={{ color: "#108ee9" }} />
     });
   }
-
+  inputQalityPlus = ()=>{
+    let inputQality = this.state.inputQality
+    inputQality.push("1")
+    this.setState({inputQality})
+  }
   render() {
     const {
       company,
@@ -212,9 +231,186 @@ export default class NewAgent extends Component {
       payment_account,
       error
     } = this.state;
+
+    const steps = [
+      {
+        title: "Компания",
+        content: (
+          <div className="">
+            <div className="row justify-content-between">
+              <div className="col-8">
+                {" "}
+                <Input
+                  size="large"
+                  className="input_new_agent requre_input"
+                  placeholder="Название"
+                />
+                <Input
+                  className="input_new_agent"
+                  style={{borderColor:this.state.requre_input}}
+                  size="large"
+                  placeholder="ИНН/КПП"
+                />{" "}
+                <div className="input_helper">
+
+               <div>
+               <Input
+                 className="input_new_agent "
+                  size="large"
+                  placeholder="Подразделения (филиалы)"
+                />
+                <Input
+                 className="input_new_agent"
+                  size="large"
+                  placeholder="Геолокация филиала"
+                />
+               </div>
+              {this.state.inputQality.map((qa,i) =>(
+                <>
+                <Input
+                 className="input_new_agent"
+                  size="large"
+                  placeholder="Подразделения (филиалы)"
+                />
+                 <Input
+                 id={i}
+                 className="input_new_agent"
+                  size="large"
+                  placeholder="Геолокация филиала"
+                />
+                </>
+        ))}
+                
+                <Icon
+                                                onClick={inputQality =>
+                                                  this.inputQalityPlus(this.state.inputQality,inputQality )
+                                                }
+                                                className="input_new_agent"
+                                                type="plus"
+                                                style={{
+                                                  fontSize: "23px",
+                                                  color: "#f0112b"
+                                                }}
+                                              />
+                
+                </div>
+              </div>{" "}
+            </div>
+          </div>
+        )
+      },
+      {
+        title: "Комментарии",
+        content: (
+          <div className="">
+            <div className="row justify-content-between">
+              <div className="col-8">
+                {" "}
+                <Input
+                  size="large"
+                  className="input_new_agent requre_input"
+                  placeholder=" Описание компании:"
+                />
+                <Input
+                  className="input_new_agent"
+                  style={{borderColor:this.state.requre_input}}
+                  size="large"
+                  placeholder=" Какая техника, станки, производство:"
+                />{" "}
+                <div className="input_helper">
+
+               <div>
+               <Input
+                 className="input_new_agent "
+                  size="large"
+                  placeholder="Какая техника, станки, производство:"
+                />
+               
+               </div>
+              {/* {this.state.inputQality.map((qa,i) =>(
+                <>
+                <Input
+                 className="input_new_agent"
+                  size="large"
+                  placeholder="Подразделения (филиалы)"
+                />
+                 <Input
+                 id={i}
+                 className="input_new_agent"
+                  size="large"
+                  placeholder="Геолокация филиала"
+                />
+                </>
+        ))} */}
+                
+                <Icon
+                                                onClick={inputQality =>
+                                                  this.inputQalityPlus(this.state.inputQality,inputQality )
+                                                }
+                                                className="input_new_agent"
+                                                type="plus"
+                                                style={{
+                                                  fontSize: "23px",
+                                                  color: "#f0112b"
+                                                }}
+                                              />
+                
+                </div>
+              </div>{" "}
+            </div>
+          </div>
+        )
+      },
+      {
+        title: "Адрес, контакты",
+        content: "Last-content"
+      },
+      {
+        title: "Контактные лица",
+        content: "Last-content"
+      },
+      {
+        title: "Начало работы с клиентом",
+        content: "Last-content"
+      },
+      {
+        title: "Особые пометки",
+        content: "Last-content"
+      }
+    ];
     return (
       <div className="postisitonRelativeSmeni">
-        {error.length !== 0 ? this.openNotificationErrorValidation() : ""}
+        <div>
+          <Steps current={this.state.currentStep}>
+            {steps.map(item => (
+              <Step key={item.title} title={item.title} />
+            ))}
+          </Steps>
+          <div className="steps-content">
+            {steps[this.state.currentStep].content}
+          </div>
+          <div className="steps-action">
+            {this.state.currentStep < steps.length - 1 && (
+              <Button type="primary" onClick={() => this.nextStep()}>
+                Следующий шаг
+              </Button>
+            )}
+            {this.state.currentStep === steps.length - 1 && (
+              <Button
+                type="primary"
+                onClick={() => message.success("Processing complete!")}
+              >
+                Done
+              </Button>
+            )}
+            {this.state.currentStep > 0 && (
+              <Button style={{ marginLeft: 8 }} onClick={() => this.prevStep()}>
+                Previous
+              </Button>
+            )}
+          </div>
+        </div>
+        {/* {error.length !== 0 ? this.openNotificationErrorValidation() : ""}
         <div className="container">
           <div className="row">
             <form>
@@ -340,7 +536,7 @@ export default class NewAgent extends Component {
               </button>
             </form>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }

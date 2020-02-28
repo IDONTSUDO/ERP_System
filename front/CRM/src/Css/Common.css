@@ -10,7 +10,6 @@
 .detail{
   cursor:pointer;
   font-size: 25px;
-
 }
 .diplaySelect{
   display:none;
@@ -18,6 +17,20 @@
 .detail:focus{
   color:#da1717;
   background-color: red;
+}
+.requre_input{
+  border-color: #ff1100;
+  
+}
+.input_helper{
+  /* padding:5px; */
+}
+.input_new_agent{
+  width: 65%;
+  float: left;
+  clear: left;
+  padding:5px;
+  margin:5px;
 }
 br {
   -webkit-touch-callout: none;
@@ -1289,4 +1302,18 @@ nav {
 }
 .ant-table-thead > tr > th, .ant-table-tbody > tr > td{
   width: 300px;
+}
+.container-bootstrap{
+  width: 100%;
+  padding-right: 15px;
+  /* padding-left: 15px; */
+  margin-right: auto;
+  /* margin-left: auto; */
+}
+.content{
+      /* margin-top: 50px; */
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+  
 }
