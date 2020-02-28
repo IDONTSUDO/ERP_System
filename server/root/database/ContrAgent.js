@@ -1,9 +1,23 @@
 const mongoose = require('mongoose')
 const { ObjectId } = mongoose.Schema
 const contrAgentSchema = new mongoose.Schema({
+    // физ. лицо/юр. лицо/ИП
     company: {
         type: String,
         default:"none"
+    },
+
+    // Подразделения (филиалы) и их местонахождения:
+    branches:{
+        type:Object
+    },
+    // Компании относящиеся к данному контрагенту (партнеры):
+    partners:{
+        type:Array
+    },
+    //  Какая техника, станки, производство:
+    production:{
+        type:Array
     },
     full_name: {
         type: String,
@@ -25,6 +39,7 @@ const contrAgentSchema = new mongoose.Schema({
         type: String,
         default:"none"
     },
+    // ИНН/КПП
     INN: {
         type: String,
         default:"none"
@@ -41,6 +56,7 @@ const contrAgentSchema = new mongoose.Schema({
         type: String,
         default:"none"
     },
+    // Подразделения (филиалы) и их местонахождения:
     agentGeo:{
         type:Array,
         default:"none"
@@ -69,22 +85,31 @@ const contrAgentSchema = new mongoose.Schema({
         type: ObjectId,
         ref: "User"
     },
+    // любая другая полезная информация
     any: {
         type: String,
         default:"none"
     },
+    // юр адрес
     legal_address: {
         type: String,
         default:"none"
     },
+    // актуальный адрес
     actual_address: {
         type: String,
         default:"none"
     },
+    // платежные данные
     payment_account: {
         type: String,
         default:"none"
     },
+    // пометки особенности
+    tagging_features:{
+        type:String
+    },
+
     active:{type:Boolean,default:true}
 })
 module.exports = mongoose.model("Agent", contrAgentSchema)
