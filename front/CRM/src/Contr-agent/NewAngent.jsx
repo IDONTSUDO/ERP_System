@@ -1,12 +1,43 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
-import { NewContrAgent } from "../Api/Http";
+import {
+  NewContrAgent,
+  NewSpecialication,
+  AllSpecList,
+  deleteSpecialisations,
+  GetTechList,
+  GetNode,
+  SaveCarAgent,
+  SaveDetalAtNode,
+  SaveNodeAtCar,
+  DeleteDetalAtNode,
+  DeleteAtNode,
+  DeleteAtTech
+} from "../Api/Http";
+import Rusmap from "../helper/RUSSIAN_MAP.js";
+import Tree from "react-animated-tree";
+import { EditOutlined } from "@ant-design/icons";
 
-import { notification, Icon, Steps, Button, message, Input } from "antd";
+import {
+  notification,
+  Icon,
+  Steps,
+  Button,
+  message,
+  Input,
+  Select,
+  Tag,
+  Checkbox,
+  Drawer
+} from "antd";
 import Error from "../Error/Error.jsx";
+const { TextArea } = Input;
+const CheckboxGroup = Checkbox.Group;
 
 const { Step } = Steps;
 
+const plainOptions = ["Viber", "WhatsAp", "Почта", "Telegram", "Звонки"];
+const defaultCheckedList = [];
 export default class NewAgent extends Component {
   constructor() {
     super();
@@ -28,13 +59,37 @@ export default class NewAgent extends Component {
       payment_account: "",
       loading: false,
       error: "",
-      requre_input:"#ff1100",
-      inputQality:[]
+      requre_input: "#ff1100",
+      inputQality: [],
+      checkedList: defaultCheckedList,
+      visibleSpecDriwer: false,
+      visibleTechDriwer: false,
+      specialicationsToBase: [],
+      specialicationsToBaseEditors: [],
+      loadNode: [],
+      peopelQality: [],
+      editorRegim: false
     };
   }
   componentDidMount() {
     const userId = isAuthenticated().direct._id;
-    this.setState({ user: userId });
+    AllSpecList().then(data => {
+      if (data.err) {
+        console.log(data.err);
+      } else {
+        let specArray = [];
+        for (let i of data) {
+          specArray.push(i.data);
+        }
+        this.setState({ specialicationsToBaseEditors: data });
+        this.setState({ specialicationsToBase: specArray, user: userId });
+      }
+    });
+    GetTechList().then(responce => {
+      this.setState({
+        loadNode: responce
+      });
+    });
   }
   handleChange = name => event => {
     this.setState({ error: "" });
@@ -210,11 +265,50 @@ export default class NewAgent extends Component {
       icon: <Icon type="frown" style={{ color: "#108ee9" }} />
     });
   }
-  inputQalityPlus = ()=>{
-    let inputQality = this.state.inputQality
-    inputQality.push("1")
-    this.setState({inputQality})
-  }
+
+  peopelQalityPlus = () => {
+    let peopelQality = this.state.peopelQality;
+    peopelQality.push("1");
+    this.setState({ peopelQality });
+  };
+
+  editorRegimSwitcher = () => {
+    let { editorRegim } = this.state;
+    if (editorRegim === true) {
+      this.setState({ editorRegim: false });
+    } else {
+      this.setState({ editorRegim: true });
+    }
+  };
+
+  showDrawerTechDriwer = () => {
+    this.setState({
+      visibleTechDriwer: true
+    });
+  };
+
+  onCloseTechDriwer = () => {
+    this.setState({
+      visibleTechDriwer: false
+    });
+  };
+  showDrawerSpecDriwer = () => {
+    this.setState({
+      visibleSpecDriwer: true
+    });
+  };
+
+  onCloseSpecDriwer = () => {
+    this.setState({
+      visibleSpecDriwer: false
+    });
+  };
+
+  inputQalityPlus = () => {
+    let inputQality = this.state.inputQality;
+    inputQality.push("1");
+    this.setState({ inputQality });
+  };
   render() {
     const {
       company,
@@ -241,58 +335,76 @@ export default class NewAgent extends Component {
               <div className="col-8">
                 {" "}
                 <Input
+                  addonBefore={<div className="required-start">*</div>}
                   size="large"
                   className="input_new_agent requre_input"
                   placeholder="Название"
                 />
                 <Input
                   className="input_new_agent"
-                  style={{borderColor:this.state.requre_input}}
+                  addonBefore={<div className="required-start">*</div>}
                   size="large"
                   placeholder="ИНН/КПП"
                 />{" "}
                 <div className="input_helper">
+                  <div>
+                    <Input
+                      className="input_new_agent "
+                      placeholder="Подразделения (филиалы)"
+                    />
+                    <Select
+                      style={{ width: "auto" }}
+                      className="input_new_agent"
+                      mode="multiple"
+                      // style={{ width: "100%" }}
+                      placeholder="Выберите гео расположение"
+                      value={this.state.agentGeo}
+                      // onChange={this.handleSelectOblastChange}
+                    >
+                      {Rusmap.map(map => (
+                        <Select.Option key={map.value} value={map.value}>
+                          {map.value}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </div>
+                  {this.state.inputQality.map((qa, i) => (
+                    <>
+                      <Input
+                        className="input_new_agent"
+                        size="large"
+                        placeholder="Подразделения (филиалы)"
+                      />
+                      <Select
+                        style={{ width: "auto" }}
+                        className="input_new_agent"
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="Выберите гео расположение"
+                        value={this.state.agentGeo}
+                        // onChange={this.handleSelectOblastChange}
+                        size="large"
+                      >
+                        {Rusmap.map(map => (
+                          <Select.Option key={map.value} value={map.value}>
+                            {map.value}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </>
+                  ))}
 
-               <div>
-               <Input
-                 className="input_new_agent "
-                  size="large"
-                  placeholder="Подразделения (филиалы)"
-                />
-                <Input
-                 className="input_new_agent"
-                  size="large"
-                  placeholder="Геолокация филиала"
-                />
-               </div>
-              {this.state.inputQality.map((qa,i) =>(
-                <>
-                <Input
-                 className="input_new_agent"
-                  size="large"
-                  placeholder="Подразделения (филиалы)"
-                />
-                 <Input
-                 id={i}
-                 className="input_new_agent"
-                  size="large"
-                  placeholder="Геолокация филиала"
-                />
-                </>
-        ))}
-                
-                <Icon
-                                                onClick={inputQality =>
-                                                  this.inputQalityPlus(this.state.inputQality,inputQality )
-                                                }
-                                                className="input_new_agent"
-                                                type="plus"
-                                                style={{
-                                                  fontSize: "23px",
-                                                  color: "#f0112b"
-                                                }}
-                                              />
-                
+                  <Icon
+                    onClick={inputQality =>
+                      this.inputQalityPlus(this.state.inputQality, inputQality)
+                    }
+                    className="input_new_agent"
+                    type="plus"
+                    style={{
+                      fontSize: "31px",
+                      color: "#8BC34A"
+                    }}
+                  />
                 </div>
               </div>{" "}
             </div>
@@ -308,53 +420,33 @@ export default class NewAgent extends Component {
                 {" "}
                 <Input
                   size="large"
-                  className="input_new_agent requre_input"
+                  className="input_new_agent"
+                  addonBefore={<div className="required-start">*</div>}
                   placeholder=" Описание компании:"
                 />
-                <Input
-                  className="input_new_agent"
-                  style={{borderColor:this.state.requre_input}}
-                  size="large"
-                  placeholder=" Какая техника, станки, производство:"
-                />{" "}
                 <div className="input_helper">
-
-               <div>
-               <Input
-                 className="input_new_agent "
-                  size="large"
-                  placeholder="Какая техника, станки, производство:"
-                />
-               
-               </div>
-              {/* {this.state.inputQality.map((qa,i) =>(
-                <>
-                <Input
-                 className="input_new_agent"
-                  size="large"
-                  placeholder="Подразделения (филиалы)"
-                />
-                 <Input
-                 id={i}
-                 className="input_new_agent"
-                  size="large"
-                  placeholder="Геолокация филиала"
-                />
-                </>
-        ))} */}
-                
-                <Icon
-                                                onClick={inputQality =>
-                                                  this.inputQalityPlus(this.state.inputQality,inputQality )
-                                                }
-                                                className="input_new_agent"
-                                                type="plus"
-                                                style={{
-                                                  fontSize: "23px",
-                                                  color: "#f0112b"
-                                                }}
-                                              />
-                
+                  <div>
+                    <Button
+                      onClick={this.showDrawerTechDriwer}
+                      className="input_new_agent "
+                      size="large"
+                    >
+                      техника
+                    </Button>
+                    <div className="proizvostvo_pos">
+                      <Tag>TagTagTagTagTagTag</Tag>
+                    </div>
+                    <Button
+                      onClick={this.showDrawerSpecDriwer}
+                      className="input_new_agent "
+                      size="large"
+                    >
+                      Специализация
+                    </Button>
+                    <div className="proizvostvo_pos">
+                      <Tag>Tag 1</Tag>
+                    </div>
+                  </div>
                 </div>
               </div>{" "}
             </div>
@@ -362,24 +454,177 @@ export default class NewAgent extends Component {
         )
       },
       {
-        title: "Адрес, контакты",
-        content: "Last-content"
+        title: "Адрес/контакты",
+        content: (
+          <>
+            <div className="row justify-content-between">
+              <div className="col-8">
+                <Input
+                  size="large"
+                  className="input_new_agent "
+                  placeholder=" Юридический адрес:"
+                />
+                <Input
+                  size="large"
+                  className="input_new_agent "
+                  placeholder="Фактический адрес:"
+                />
+                <Input
+                  size="large"
+                  className="input_new_agent "
+                  placeholder="Почтовый адрес:"
+                />
+                <Input
+                  size="large"
+                  className="input_new_agent "
+                  placeholder="Сайт:"
+                />
+                <Input
+                  size="large"
+                  className="input_new_agent "
+                  placeholder="Инстаграм:"
+                />{" "}
+                <Input
+                  size="large"
+                  className="input_new_agent"
+                  placeholder="Общий тел:"
+                />
+              </div>
+            </div>
+          </>
+        )
       },
       {
         title: "Контактные лица",
-        content: "Last-content"
+        content: (
+          <>
+            {/* Должность, ФИО, контакты (телефон, почта). Комментарий с описанием особенности работы с данным человеком */}
+
+            <div className="row justify-content-between">
+              <div className="col-8">
+                <Input
+                  size="large"
+                  className="input_new_agent "
+                  placeholder="Должность:"
+                />
+                <Input
+                  size="large"
+                  className="input_new_agent "
+                  placeholder="ФИО:"
+                />
+                <Input
+                  size="large"
+                  className="input_new_agent "
+                  placeholder="телефон:"
+                />
+
+                <CheckboxGroup
+                  options={plainOptions}
+                  value={this.state.checkedList}
+                  // onChange={this.onChange}
+                />
+                {this.state.peopelQality.map((prop, i) => (
+                  <>
+                    <Input
+                      size="large"
+                      className="input_new_agent "
+                      placeholder="Должность:"
+                    />
+                    <Input
+                      size="large"
+                      className="input_new_agent "
+                      placeholder="ФИО:"
+                    />
+                    <Input
+                      size="large"
+                      className="input_new_agent "
+                      placeholder="телефон:"
+                    />
+
+                    <CheckboxGroup
+                      options={plainOptions}
+                      value={this.state.checkedList}
+                    />
+                  </>
+                ))}
+
+                <TextArea
+                  className="input_new_agent "
+                  placeholder="Особенности работы"
+                  allowClear
+                />
+                <Icon
+                  onClick={peopelQality =>
+                    this.peopelQalityPlus(this.state.peopelQality, peopelQality)
+                  }
+                  className="input_new_agent"
+                  type="plus"
+                  style={{
+                    fontSize: "31px",
+                    color: "#8BC34A"
+                  }}
+                />
+              </div>
+            </div>
+          </>
+        )
       },
       {
-        title: "Начало работы с клиентом",
-        content: "Last-content"
+        title: "Начало работ",
+        content: (
+          <>
+            <div className="row justify-content-between">
+              <div className="col-8">
+                <Input
+                  size="large"
+                  className="input_new_agent"
+                  addonBefore={<div className="required-start">*</div>}
+                  placeholder="Откуда пришел клиент :"
+                />
+                <Input
+                  size="large"
+                  className="input_new_agent"
+                  addonBefore={<div className="required-start">*</div>}
+                  placeholder=" Как начиналась с ним работа:"
+                />
+              </div>
+            </div>
+          </>
+        )
       },
       {
         title: "Особые пометки",
-        content: "Last-content"
+        content: (
+          <>
+            <div className="row justify-content-between">
+              <div className="col-8">
+                <TextArea
+                  className="input_new_agent"
+                  placeholder=" Индивидуальные условия работы с клиентом:"
+                  allowClear
+                />
+                <Input
+                  size="large"
+                  className="input_new_agent"
+                  addonBefore={<div className="required-start">*</div>}
+                  placeholder="Индивидуальные условия работы с клиентом:"
+                />
+                <Input
+                  size="large"
+                  className="input_new_agent"
+                  addonBefore={<div className="required-start">*</div>}
+                  placeholder="Характер предлагаемой цены для клиента:"
+                />
+              </div>
+            </div>
+          </>
+        )
       }
     ];
+    let { editorRegim } = this.state;
+
     return (
-      <div className="postisitonRelativeSmeni">
+      <div className="email_main_pos">
         <div>
           <Steps current={this.state.currentStep}>
             {steps.map(item => (
@@ -410,133 +655,181 @@ export default class NewAgent extends Component {
             )}
           </div>
         </div>
-        {/* {error.length !== 0 ? this.openNotificationErrorValidation() : ""}
-        <div className="container">
-          <div className="row">
-            <form>
-              <div>
-                <label className="text-muted">Название компании</label>
-                <input
-                  className="form-control"
-                  onChange={this.handleChange("company")}
-                  type="text"
-                  value={company}
-                />
-              </div>
-              <div>
-                <label className="text-muted">Полное имя компании</label>
-                <input
-                  className="form-control"
-                  onChange={this.handleChange("full_name")}
-                  type="text"
-                  value={full_name}
-                />
-              </div>
-              <div>
-                <label className="text-muted">Телефон</label>
-                <input
-                  className="form-control"
-                  onChange={this.handleChange("phone")}
-                  type="number"
-                  value={phone}
-                />
-              </div>
-              <div>
-                <label className="text-muted">Короткое имя компании</label>
-                <input
-                  className="form-control"
-                  onChange={this.handleChange("name")}
-                  type="text"
-                  value={name}
-                />
-              </div>
-              <div>
-                <label className="text-muted">Генеральный директор</label>
-                <input
-                  className="form-control"
-                  onChange={this.handleChange("general_director")}
-                  type="text"
-                  value={general_director}
-                />
-              </div>
-              <div>
-                <label className="text-muted">ИНН компании</label>
-                <input
-                  className="form-control"
-                  onChange={this.handleChange("INN")}
-                  type="text"
-                  value={INN}
-                />
-              </div>
-              <div>
-                <label className="text-muted">Email</label>
-                <input
-                  className="form-control"
-                  onChange={this.handleChange("email")}
-                  type="text"
-                  value={email}
-                />
-              </div>
-              <div>
-                <label className="text-muted">ОГРН компании</label>
-                <input
-                  className="form-control"
-                  onChange={this.handleChange("OGRN")}
-                  type="text"
-                  style={{ width: "15em" }}
-                  value={OGRN}
-                />
-              </div>
-              <div>
-                <label className="text-muted">
-                  Любая другая полезная информация
-                </label>
-                <textarea
-                  value={any}
-                  onChange={this.handleChange("any")}
-                  class="form-control"
-                  id="exampleFormControlTextarea1"
-                  rows="3"
-                ></textarea>
-              </div>
-              <div>
-                <label className="text-muted">Юридический адрес</label>
-                <input
-                  className="form-control"
-                  onChange={this.handleChange("legal_address")}
-                  type="text"
-                  value={legal_address}
-                />
-              </div>
-              <div>
-                <label className="text-muted">Фактический адрес</label>
-                <input
-                  className="form-control"
-                  onChange={this.handleChange("actual_address")}
-                  type="text"
-                  value={actual_address}
-                />
-              </div>
+        <Drawer
+          title="Техника"
+          width="900"
+          placement="right"
+          closable={false}
+          onClose={this.onCloseTechDriwer}
+          visible={this.state.visibleTechDriwer}
+        >
+          <Tree content="Марки" type="Бренды">
+            {this.state.loadNode.map((node, i) => (
+              <>
+                <Tree
+                  content={
+                    <>
+                      <Icon
+                        type="delete"
+                        onClick={id => this.deletedTech(node._id, id)}
+                        style={{
+                          display: this.state.EditorRegim,
+                          fontSize: "23px",
+                          color: "#f0112b"
+                        }}
+                      />
+                      {node.name}
+                    </>
+                  }
+                  type="Машины"
+                >
+                  {node.techNode.map((nod, i) => (
+                    <>
+                      <Tree
+                        content={
+                          <>
+                            <Icon
+                              onClick={id => this.deletAtNode(nod._id, id)}
+                              type="delete"
+                              style={{
+                                display: this.state.EditorRegim,
+                                fontSize: "23px",
+                                color: "#f0112b"
+                              }}
+                            />
+                            {nod.name}
+                          </>
+                        }
+                        type="Узел"
+                      >
+                        <>
+                          {nod.tech.map((n, i) => (
+                            <>
+                              <Tree
+                                content={
+                                  <>
+                                    <Icon
+                                      onClick={id =>
+                                        this.deleteDetal(n._id, id)
+                                      }
+                                      type="delete"
+                                      style={{
+                                        display: this.state.EditorRegim,
+                                        fontSize: "23px",
+                                        color: "#f0112b"
+                                      }}
+                                    />
+                                    <div
+                                      onClick={name =>
+                                        this.AddingAgentTech(n.name, name)
+                                      }
+                                      className="detail"
+                                    >
+                                      {n.name}
+                                    </div>
+                                  </>
+                                }
+                                type="Деталь"
+                              ></Tree>
+                            </>
+                          ))}
 
-              <div>
-                <label className="text-muted">Расчетный счет</label>
-                <input
-                  className="form-control"
-                  onChange={this.handleChange("payment_account")}
-                  type="text"
-                  value={payment_account}
-                />
+                          <Icon
+                            onClick={id => this.DetailNew(nod._id, id)}
+                            style={{ color: "#13fc03" }}
+                            type="plus"
+                          />
+                        </>
+                      </Tree>
+                    </>
+                  ))}
+                  <Icon
+                    onClick={id => this.NodeNew(node._id, id)}
+                    style={{ color: "#13fc03" }}
+                    type="plus"
+                  />
+                </Tree>
+              </>
+            ))}
+            <Icon
+              onClick={() => this.NewCar()}
+              style={{ color: "rgb(27, 125, 3)" }}
+              type="plus"
+            />
+          </Tree>
+        </Drawer>
+        <Drawer
+          title={     <>
+          
+          Специализация
+          {editorRegim ? (
+            <>
+              <Input
+                placeholder="Новая специализация"
+              ></Input>
+            </>
+          ) : null}
+          {editorRegim ? (
+            <>
+              <Button>Добавить</Button>
+            </>
+          ) : null}</>}
+          placement="right"
+          width="900"
+          closable={false}
+          onClose={this.onCloseSpecDriwer}
+          visible={this.state.visibleSpecDriwer}
+        >
+          <div className="specListsEditor">
+            <Select
+              className="col-xs-12"
+              mode="multiple"
+              style={{ width: "100%" }}
+              placeholder="Выберите специализацию"
+              value={this.state.specialications}
+              onChange={this.handelChangeSpec}
+            >
+              {this.state.specialicationsToBase.map(map => (
+                <Select.Option key={map} value={map}>
+                  {map}
+                </Select.Option>
+              ))}
+            </Select>
+            <Button
+              onClick={regim =>
+                this.editorRegimSwitcher(this.state.editorRegim, regim)
+              }
+              style={
+                this.state.editorRegim ? { color: "red" } : { color: "blue" }
+              }
+            >
+              Редактировать
+              <EditOutlined />
+            </Button>
+            <div>
+              <div className="editor_regim">
+                <div className="row">
+                  <div className="col">
+                    {editorRegim ? (
+                      <>
+                        {this.state.specialicationsToBaseEditors.map(
+                          (editors, i) => (
+                            <>
+                            <div className="editor_list">
+                            <div>{editors.data}</div>
+                              <Icon className="delete_ant_icon" style={{color:"red"}} type="delete" />
+                            </div>
+                            </>
+                          )
+                        )}
+                      </>
+                    ) : null}
+                  </div>
+                </div>
               </div>
-              <div style={{ padding: "10px" }}></div>
-              <button
-                className="btn btn-raised btn-primary"
-                onClick={this.clickSubmit}
-              >
-                Создать
-              </button>
-            </form>
+            </div>
           </div>
-        </div> */}
+        </Drawer>
       </div>
     );
   }

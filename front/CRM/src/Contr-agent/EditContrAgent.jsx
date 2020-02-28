@@ -648,7 +648,7 @@ export default class EditContrAgent extends Component {
                     className="col-xs-12"
                     mode="multiple"
                     style={{ width: "100%" }}
-                    placeholder="Выберите область"
+                    placeholder="Выберите специализацию"
                     value={this.state.specialications}
                     onChange={this.handelChangeSpec}
                   >

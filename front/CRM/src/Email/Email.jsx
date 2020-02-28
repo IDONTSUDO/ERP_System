@@ -565,15 +565,7 @@ export default class Email extends Component {
       icon: <Icon type="frown" style={{ color: "#108ee9" }} />
     });
   };
-  // onSelectChange = selectedRowKeys => {
-  //   console.log('selectedRowKeys changed: ', selectedRowKeys);
-  //   this.setState({ selectedRowKeys });
-  /**
-   *
-   *
-   * @returns
-   * @memberof Email
-   */
+
   render() {
     let { errors } = this.state;
 

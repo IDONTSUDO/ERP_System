@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@ant-design/colors": "^3.2.2",
+    "@ant-design/icons": "^4.0.0",
     "@antv/g2": "^3.5.12",
     "@babel/core": "7.5.5",
     "@babel/plugin-proposal-decorators": "^7.8.3",
@@ -119,8 +120,7 @@
   },
   "scripts": {
     "dev": "node scripts/start.js",
-    "win":"node react-scripts start",
-
+    "win": "node react-scripts start",
     "build": "node scripts/build.js",
     "deploy": "node scripts/build.js && firebase deploy",
     "test": "node scripts/test.js",

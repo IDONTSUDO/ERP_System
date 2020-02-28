@@ -25,11 +25,33 @@
 .input_helper{
   /* padding:5px; */
 }
+
+.proizvostvo_pos{ 
+  position: relative;
+  display: flex;
+  margin: 20px;
+  left: 20px;
+  bottom: -45px;
+  width: max-content;
+}
+.required-start{
+  color: red;
+  font-size: 12px;
+  font-weight: bold;
+}
+.specListsEditor{
+  display: inline-flex;
+    
+}
+.ant-steps-item-title{
+  font-size: 11px;
+  padding-right:1px;
+}
 .input_new_agent{
   width: 65%;
   float: left;
   clear: left;
-  padding:5px;
+  /* padding:5px; */
   margin:5px;
 }
 br {
@@ -225,6 +247,7 @@ br {
 }
 .delete_ant_icon{
   float: left;
+  margin: 5px;
 }
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
@@ -1316,4 +1339,13 @@ nav {
       justify-content: flex-start;
       align-items: center;
   
+}
+.editor_regim{
+  position: relative;
+  top: 63px;
+  left: -422%;
+}
+.editor_list{
+  display: inline-flex;
+  padding: 2px;
 }
