@@ -1343,7 +1343,7 @@ nav {
 .editor_regim{
   position: relative;
   top: 63px;
-  left: -422%;
+  display: table-caption;
 }
 .editor_list{
   display: inline-flex;
@@ -1375,3 +1375,7 @@ nav {
 .container-job {
     max-width: 540px;
 }}
+
+.ant-steps-item-title{
+  padding-right: 19px
+}

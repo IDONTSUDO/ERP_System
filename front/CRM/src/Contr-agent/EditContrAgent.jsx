@@ -37,19 +37,7 @@ import { TweenOneGroup } from "rc-tween-one";
 
 import Erorr from "../Error/Error.jsx";
 
-const treeStyles = {
-  position: "absolute",
-  top: 40,
-  left: 40,
-  color: "white",
-  fill: "white",
-  width: "100%"
-};
 
-const typeStyles = {
-  fontSize: "40em",
-  verticalAlign: "middle"
-};
 
 export default class EditContrAgent extends Component {
   constructor(props) {
