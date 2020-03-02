@@ -20,7 +20,7 @@ export default class TodayWork extends Component {
         }
     }
     componentDidMount(){
-        const user = this.props.match.params.userId
+        const user = isAuthenticated().direct._id
         this.setState({userID:user})
         this.init(user)
 
@@ -54,7 +54,7 @@ export default class TodayWork extends Component {
             })
     }
     returnSort = () => {
-        const user = this.props.match.params.userId
+      const user = isAuthenticated().direct._id
         this.init(user)
     }
     yellowSort = ()=>{
@@ -97,7 +97,8 @@ export default class TodayWork extends Component {
         const {todos,userID,comand,open} = this.state
         
         return (
-          <div className="postisitonRelativeSmeni">
+          // postisitonRelativeSmeni
+          <div className="">
           <div>
             <ul>
               <div className="container_button_job">
@@ -116,7 +117,7 @@ export default class TodayWork extends Component {
                 <Button onClick={this.redSort} className="square-red"></Button>
               </div>
   
-              <div className="container">
+              <div className="container-job">
                 <div className="row">
                   {open ? (
                     <Spin size="large" />

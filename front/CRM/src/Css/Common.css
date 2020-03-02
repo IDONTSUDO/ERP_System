@@ -247,7 +247,7 @@ br {
 }
 .delete_ant_icon{
   float: left;
-  margin: 5px;
+  margin: 5px;  
 }
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
@@ -1349,3 +1349,29 @@ nav {
   display: inline-flex;
   padding: 2px;
 }
+
+.container-job{
+  display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 40px;
+}
+@media (min-width: 1200px){
+.container-job {
+    max-width: 1140px;
+}
+}
+
+@media (min-width: 992px){
+.container-job {
+    max-width: 960px;
+}
+}
+@media (min-width: 768px){
+.container-job {
+    max-width: 720px;
+}}
+@media (min-width: 576px){
+.container-job {
+    max-width: 540px;
+}}

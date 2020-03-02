@@ -3,7 +3,12 @@ import { isAuthenticated } from "../Api/Auth";
 import { readMyTodo, MyTodoGetComandWorked } from "../Api/Http";
 import { Link } from "react-router-dom";
 import { Spin } from "antd";
-import { Button, Card, Badge, Calendar, Icon, Popover } from "antd";
+import { Button, Card, Badge, Icon, Popover,Tabs  } from "antd";
+import CalendarJob from "./CalendarJob"
+import TodayWork from "./TodayWork"
+import moment from "moment";
+
+const { TabPane } = Tabs;
 
 export default class MyWork extends Component {
   constructor() {
@@ -38,6 +43,7 @@ export default class MyWork extends Component {
         for (let i = 0; data.todos.length > i; i++) {
           TodoArray.push(data.todos[i]);
         }
+
         let userfindString;
 
         userfindString = userId + "IAMWORKED";
@@ -108,7 +114,16 @@ export default class MyWork extends Component {
     console.log(todo);
     return (
       <div className="postisitonRelativeSmeni">
-        <div>
+         <Tabs  type="card">
+           {/* onChange={callback} */}
+    <TabPane tab="Дела на сегодня" key="1">
+    <TodayWork/>
+    </TabPane>
+    <TabPane tab="Календарь дел" key="2">
+    <CalendarJob/>
+    </TabPane>
+    <TabPane tab="Все дела" key="3">
+    <div>
           <ul>
             <div className="container_button_job">
               <Button
@@ -126,7 +141,7 @@ export default class MyWork extends Component {
               <Button onClick={this.redSort} className="square-red"></Button>
             </div>
 
-            <div className="container">
+            <div className="container-job">
               <div className="row">
                 {open ? (
                   <Spin size="large" />
@@ -134,7 +149,6 @@ export default class MyWork extends Component {
                   <>
                     {todos.map((tod, i) => (
                       <>
-                        {/* {console.log(typeof tod.cronId)} */}
                         {tod.cronId === undefined ? null : (
                           <>
                             <div className="tod-cron-phone">
@@ -451,6 +465,8 @@ export default class MyWork extends Component {
             </div>
           </ul>
         </div>
+    </TabPane>
+  </Tabs>
       </div>
     );
   }

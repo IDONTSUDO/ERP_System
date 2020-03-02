@@ -15,12 +15,17 @@ export default class CalendarJob extends Component {
     }
   }
   componentDidMount(){
-    const user = this.props.match.params.userId;
+    const user = isAuthenticated().direct._id
     let startDate = Date.now()
+
+    let mounthTodo = moment(startDate)
+    .locale("ru")
+    .format("MM");
     let year = moment(startDate)
     .locale("ru")
     .format("YY");
     let dataFetch = {
+      mounthTodo,
         year,
         user
     }
@@ -91,7 +96,7 @@ export default class CalendarJob extends Component {
           }
           
         return (
-            <div>
+            <div className="">
                   <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
             </div>
         )

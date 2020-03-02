@@ -28,7 +28,8 @@ import {
   Select,
   Tag,
   Checkbox,
-  Drawer
+  Drawer,
+  Calendar
 } from "antd";
 import Error from "../Error/Error.jsx";
 const { TextArea } = Input;
@@ -252,6 +253,9 @@ export default class NewAgent extends Component {
       icon: <Icon type="frown" style={{ color: "#108ee9" }} />
     });
   }
+  onPanelChange = () =>{
+    
+  }
   openNotificationAgentNew() {
     notification.open({
       message: "Новый контр агент создан",
@@ -297,7 +301,13 @@ export default class NewAgent extends Component {
       visibleSpecDriwer: true
     });
   };
-
+  onChange = checkedList => {
+    this.setState({
+      checkedList,
+      indeterminate: !!checkedList.length && checkedList.length < plainOptions.length,
+      checkAll: checkedList.length === plainOptions.length,
+    });
+  };
   onCloseSpecDriwer = () => {
     this.setState({
       visibleSpecDriwer: false
@@ -615,6 +625,8 @@ export default class NewAgent extends Component {
                   addonBefore={<div className="required-start">*</div>}
                   placeholder="Характер предлагаемой цены для клиента:"
                 />
+                {isAuthenticated().direct.role === "Менеджер" ?( <Calendar fullscreen={false} onPanelChange={this.onPanelChange} />):(null)}
+
               </div>
             </div>
           </>
@@ -643,14 +655,14 @@ export default class NewAgent extends Component {
             {this.state.currentStep === steps.length - 1 && (
               <Button
                 type="primary"
-                onClick={() => message.success("Processing complete!")}
+                onClick={() => message.success("Агент зарегестрирован!")}
               >
-                Done
+                Зарегестрировать
               </Button>
             )}
             {this.state.currentStep > 0 && (
               <Button style={{ marginLeft: 8 }} onClick={() => this.prevStep()}>
-                Previous
+                Назад
               </Button>
             )}
           </div>

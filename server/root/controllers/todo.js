@@ -83,7 +83,9 @@ exports.myTodoItsDayQuality = async (req, res, next) => {
 }
 
 exports.MyTodoMouth = async (req, res) =>{
+  
     let {mounthTodo,user,yearTodo} = req.body
+
     let mounthTodoPlusOne = parseInt(mounthTodo, 10) + 1;
     let mounthTodoPlusOneStr  = 0 + mounthTodoPlusOne.toString()
     TODO.find({$or:[{tags:user, mounth:mounthTodo,year:yearTodo},{tags:user, mounth:mounthTodoPlusOneStr,year:yearTodo}]}).exec((err,todo) =>{
@@ -93,13 +95,13 @@ exports.MyTodoMouth = async (req, res) =>{
             })
             
         }else{
+            console.log(todo)
             res.json(todo)
         }
     })
 }
 exports.MyTodoYear = async(req,res) =>{
-    let {year,user} = req.body
-    console.log(year,user)
+    let {year,user,mounthTodo} = req.body
     TODO.find({$and:[{tags:user, mounth:mounthTodo,year:yearTodo},{tags:user, mounth:mounthTodoPlusOneStr,year:yearTodo}]}).exec((err,todo) =>{
         if(err){
             return res.status(400).json({

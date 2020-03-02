@@ -102,11 +102,6 @@ class MenuMain extends React.Component {
                             </>
                           }
                         >
-                          <Menu.Item key="16">
-                            <Link to={`/today/${isAuthenticated().direct._id}`}>
-                              <span>Дела на сегодня</span>{" "}
-                            </Link>
-                          </Menu.Item>
                           <Menu.Item key="17">
                             <Link
                               to={`/user/work/${isAuthenticated().direct._id}`}
@@ -126,13 +121,6 @@ class MenuMain extends React.Component {
                           <Menu.Item key="18">
                             <Link to="/create/work">
                               <span>Новое дело</span>
-                            </Link>
-                          </Menu.Item>
-                          <Menu.Item key="18">
-                            <Link to={`/job/at/year/${
-                                isAuthenticated().direct._id
-                              }`}>
-                              <span>Календарь дел</span>
                             </Link>
                           </Menu.Item>
                         </SubMenu>
@@ -282,7 +270,7 @@ class MenuMain extends React.Component {
                               {["Директор", "Управляющий"].includes(
                               role
                             ) ? (
-                              <Menu.Item key="12">
+                              <Menu.Item key="92">
                                 <Link to="/control/agent">
                                   <span>Управление контр-агентами</span>
                                 </Link>

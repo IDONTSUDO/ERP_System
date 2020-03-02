@@ -414,6 +414,8 @@ class Work extends React.Component {
     let SortOfArray = [];
     let tired = []; //массив с юзер айди
     let NoHope = [];
+    let timeToNotFormat = []
+    
     var posted_by = isAuthenticated().direct._id;
 
     timeArray.push(
@@ -428,7 +430,6 @@ class Work extends React.Component {
       workerTime8,
       workerTime9
     );
-
     newArray.push(
       workerJob0,
       workerJob1,
@@ -449,7 +450,8 @@ class Work extends React.Component {
     var filteredTime = newTimeArray.filter(function(el) {
       return el != undefined;
     });
-   
+    timeToNotFormat = filteredTime
+    console.log(timeToNotFormat)
     for (let k = 0; filteredTime.length > k; k++) {
       lastTimeArray.push(
         moment(filteredTime[k])
@@ -535,11 +537,10 @@ class Work extends React.Component {
       let payload;
       let agentByTodo = [];
       agentByTodo.push(agent, agentId);
-      console.log(agentByTodo)
       if (agentByTodo[1] === undefined) {
         payload = {
           names_workers_list,
-          
+          timeToNotFormat,
           link,
           worker_by,
           eventNews,
@@ -554,6 +555,7 @@ class Work extends React.Component {
       } else {
         payload = {
           names_workers_list,
+          timeToNotFormat,
           link,
           worker_by,
           eventNews,

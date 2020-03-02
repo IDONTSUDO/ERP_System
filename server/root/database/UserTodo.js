@@ -27,6 +27,9 @@ const todoSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    timeToNotFormat:{
+        type:Array
+    },
     time: {
         type: String,
     },
