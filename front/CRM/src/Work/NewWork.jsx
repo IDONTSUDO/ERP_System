@@ -154,8 +154,7 @@ class Work extends React.Component {
     }
     return true;
   };
-  onChangeworkerTime0 = (date, dateString) => {
-    console.log(date, dateString);
+  onChangeworkerTime0 = (date, dateString) => {    
     this.setState({ workerTime0: date });
   };
   onChangeworkerTime1 = (date, dateString) => {
@@ -451,12 +450,16 @@ class Work extends React.Component {
       return el != undefined;
     });
     timeToNotFormat = filteredTime
-    console.log(timeToNotFormat)
+ let diff = []
+    
     for (let k = 0; filteredTime.length > k; k++) {
       lastTimeArray.push(
         moment(filteredTime[k])
           .locale("ru")
           .format("LL")
+      );
+      diff.push(
+        moment(filteredTime[k]).toDate()
       );
     }
 
@@ -550,7 +553,8 @@ class Work extends React.Component {
           comand,
           importance,
           title,
-          jobNews
+          jobNews,
+          diff
         };
       } else {
         payload = {
@@ -566,7 +570,8 @@ class Work extends React.Component {
           importance,
           title,
           jobNews,
-          agentByTodo
+          agentByTodo,
+          diff
         };
       }
 

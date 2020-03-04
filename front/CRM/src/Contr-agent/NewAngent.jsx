@@ -895,6 +895,7 @@ export default class NewAgent extends Component {
             <div className="row justify-content-between">
               <div className="col-8">
                 <TextArea
+                style={{width:"100%"}}
                   className="input_new_agent"
                   value={this.state.individual_conditions_job}
                   onChange={this.handleChange("individual_conditions_job")}

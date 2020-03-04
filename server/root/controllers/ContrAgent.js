@@ -571,7 +571,7 @@ exports.AgentAtTodoCron = async (req, res, next) => {
 };
 exports.AgentAtPeopel = async (req, res, next) => {
   let { AgentPeopel } = req.body;
-console.log(AgentPeopel)
+
   if (AgentPeopel.bio.length > 0) {
     let agnHum = new AgentHuman(AgentPeopel);
     await agnHum.save((err, result) => {
