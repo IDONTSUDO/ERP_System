@@ -14,6 +14,9 @@ const agentTasksSchema = new mongoose.Schema({
     agentByTodo:{
         type:Array
     },
+    diff:{
+        type:Array
+    },
     mounth:{
         type:String
     },

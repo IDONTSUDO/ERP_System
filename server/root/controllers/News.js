@@ -30,7 +30,7 @@ exports.newNews = async (req, res, next) => {
         })
     }else{
         for (let i = 0; i < users.length; i++) {
-            console.log(users[i])
+          
             const news = new NEWS(payload)
             news.NewsTO = users[i].user
             news.dateCreated = Date.now()
@@ -45,16 +45,15 @@ exports.newNews = async (req, res, next) => {
 }
 
 exports.NewTodoo = async (req, res, next) => {
-    console.log("NEW TODO")
+    
     const todo = new TODO(req.body)
     todo.postedBy = req.worker
-
     todo.save().then(result => {
         req.result._id
         next()
     })
     const news = new NEWS(req.body)
-    console.log("PAYLOAD TO NEW TODO", news)
+    
     news.save().then(result => {
         req.new = result._id
         next()
@@ -62,7 +61,7 @@ exports.NewTodoo = async (req, res, next) => {
 }
 exports.SetNews = async (req, res, next) => {
    
-    console.log("NEWS LIST")
+    
     let users = req.newsUser
 
     for (let i = 0; users.length > i; i++) {

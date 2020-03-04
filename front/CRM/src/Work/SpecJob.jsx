@@ -1,7 +1,12 @@
 import React, { Component } from "react";
-import { soloJob, MyTodoMount,NewComentSpecTodo } from "../Api/Http.js";
+import {
+  soloJob,
+  MyTodoMount,
+  NewComentSpecTodo,
+  GetAgentMountAndYear
+} from "../Api/Http.js";
 import { isAuthenticated } from "../Api/Auth";
-
+import Localisation from "../helper/LocalisationCalendar.json";
 
 import {
   Icon,
@@ -19,20 +24,29 @@ import {
   notification
 } from "antd";
 
-
 import moment from "moment";
-import Localisation from "../helper/LocalisationCalendar.json";
 
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 
 const CommentList = ({ comments }) => (
-  <List
-    dataSource={comments}
-    header={`${comments.length} ${comments.length > 1 ? "replies" : "reply"}`}
-    itemLayout="horizontal"
-    renderItem={props => <Comment {...props} />}
-  />
+  <>
+    <List
+      dataSource={comments}
+      header={`Всего:${comments.length}`}
+      itemLayout="horizontal"
+      renderItem={item => (
+<>
+        {item.status === "system" ? (<></>):(<><div className="bg-item-spec-job">
+          <div>Статус: {item.status}</div>
+          <div dangerouslySetInnerHTML={{ __html: item.description }} />
+          <div>{item.name_posted}</div>
+          <div>Описание:{item.title}</div>
+        </div></>)}
+       </>
+      )}
+    />
+  </>
 );
 let today = moment(Date.now());
 
@@ -64,21 +78,35 @@ class SpecJob extends Component {
       submitting: false,
       value: "",
       todoMounth: [],
-      newTodoSetDate:undefined,
-      rate:undefined,
-      dateSelect:undefined,
-      userIdView:undefined
+      newTodoSetDate: undefined,
+      rate: undefined,
+      dateSelect: undefined,
+      userIdView: undefined,
+      agent: [],
+      todosAtAgent: []
     };
   }
   componentDidMount() {
     let specId = this.props.match.params.specId;
+    let agentId;
     soloJob(specId).then(data => {
       if (data.err) {
         this.setState({ err: true });
       } else {
-        this.setState({ task: data });
+        agentId = data.agent._id;
+        this.setState({ task: data, agent: data.agent });
+        let Mounth = moment()
+          .locale("ru")
+          .format("MM");
+        let Year = moment()
+          .locale("ru")
+          .format("YY");
+        GetAgentMountAndYear(agentId, Year, Mounth).then(agentData => {
+          this.setState({ comments: agentData, open: false });
+        });
       }
     });
+
     let startdate = Date.now();
     let user = isAuthenticated().direct._id;
     let mounthTodo = moment(startdate)
@@ -92,48 +120,48 @@ class SpecJob extends Component {
       if (data.err) {
         this.setState({ err: true });
       } else {
-        this.setState({ todoMounth: data,userIdView:user });
+        this.setState({ todoMounth: data, userIdView: user });
       }
     });
   }
-  handelRateChaange = (e) =>{
-    this.setState({rate:e})
-  }
+  handelRateChaange = e => {
+    this.setState({ rate: e });
+  };
 
-  handelSelect = (momentDate) =>{
-    this.setState({dateSelect:momentDate})
-  }
+  handelSelect = momentDate => {
+    this.setState({ dateSelect: momentDate });
+  };
   handleSubmit = () => {
-    let {value,rate,task,dateSelect,userIdView} = this.state;
+    let { value, rate, task, dateSelect, userIdView } = this.state;
     if (!value) {
-      let err = "коментария нет"
-    return   this.openNoticationErrorValiid(err)
+      let err = "коментария нет";
+      return this.openNoticationErrorValiid(err);
     }
-    if(dateSelect === undefined){
-      let err = "Дата не выбрана"
-      return this.openNoticationErrorValiid(err)
+    if (dateSelect === undefined) {
+      let err = "Дата не выбрана";
+      return this.openNoticationErrorValiid(err);
     }
-    if(!rate){
-      let err = "рейтинг не выставлен"
-      return this.openNoticationErrorValiid(err)
-    }else{
+    if (!rate) {
+      let err = "рейтинг не выставлен";
+      return this.openNoticationErrorValiid(err);
+    } else {
       this.setState({
         submitting: true
       });
-      let agentID = task.agent._id
-      let workerId = userIdView
-      let taskId = task._id
+      let agentID = task.agent._id;
+      let workerId = userIdView;
+      let taskId = task._id;
       let body = {
         value,
         rate,
         agentID,
         workerId,
-        taskId,
-      }
-      
-      NewComentSpecTodo(body).then(data =>{
-        console.log(data)
-      })
+        taskId
+      };
+
+      NewComentSpecTodo(body).then(data => {
+        console.log(data);
+      });
     }
   };
   dateCellRender = value => {
@@ -144,22 +172,19 @@ class SpecJob extends Component {
     const listData = this.state.todoMounth;
 
     let days = moment(today).diff(value, "days");
-  
+
     let itemQuality = 0;
     let timeInteration;
-  
-    
-    listData.map((item, i) => (time === item.time ? (itemQuality++) : null));
-   
+
+    listData.map((item, i) => (time === item.time ? itemQuality++ : null));
+
     return (
       <ul className="events">
-        
-        {itemQuality === 0 ? null :(
+        {itemQuality === 0 ? null : (
           <>
-          <Badge status="error" text={itemQuality} />
-        
+            <Badge status="error" text={itemQuality} />
           </>
-          )}
+        )}
       </ul>
     );
   };
@@ -168,24 +193,23 @@ class SpecJob extends Component {
     this.setState({ [name]: event.target.value });
   };
   monthCellRender = () => {};
-  calendarChange = (e) =>{
-   let data = moment(e)
-    .locale("ru")
-    .format("LL");
-    this.setState({newTodoSetDate:data})
-
-  }
+  calendarChange = e => {
+    let data = moment(e)
+      .locale("ru")
+      .format("LL");
+    this.setState({ newTodoSetDate: data });
+  };
   handleChange = e => {
     this.setState({
-      value: e.target.value,
+      value: e.target.value
     });
   };
-  openNoticationErrorValiid = (err) =>{
+  openNoticationErrorValiid = err => {
     notification.open({
-      message:`${err}`,
+      message: `${err}`,
       icon: <Icon type="frown" style={{ color: "#108ee9" }} />
     });
-  }
+  };
   render() {
     const { comments, submitting, value } = this.state;
 
@@ -196,10 +220,12 @@ class SpecJob extends Component {
           <Tabs defaultActiveKey="1">
             <TabPane tab="Коментарий" key="1">
               <Comment
-              
                 content={
                   <>
                     <Calendar
+                      // headerRender={(<><h1>Ваш график дел</h1></>)}
+                      locale={Localisation}
+                      mode="month"
                       dateCellRender={this.dateCellRender}
                       monthCellRender={this.monthCellRender}
                       validRange={[
@@ -211,8 +237,12 @@ class SpecJob extends Component {
                       onChange={this.calendarChange}
                       onSelect={this.handelSelect}
                     />
-                 
-                    <Rate onChange={this.handelRateChaange}	 allowClear={false} defaultValue={3} />
+
+                    <Rate
+                      onChange={this.handelRateChaange}
+                      allowClear={false}
+                      defaultValue={3}
+                    />
                     <Editor
                       onChange={this.handleChange}
                       onSubmit={this.handleSubmit}
@@ -223,12 +253,10 @@ class SpecJob extends Component {
                 }
               />
             </TabPane>
-            <TabPane tab="Прошлые коментарии" key="2">
+            <TabPane tab="Прошлая активность" key="2">
               {comments.length > 0 && <CommentList comments={comments} />}
             </TabPane>
-            <TabPane tab="Агент" key="3">
-  
-            </TabPane>
+            <TabPane tab="Агент" key="3"></TabPane>
           </Tabs>
         </div>
       </div>

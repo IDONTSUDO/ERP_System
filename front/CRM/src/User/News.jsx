@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import Error from "../Error/Error.jsx";
 
-
+import CharAgent from '../Components/ChartAgent.jsx'
 export default class News extends Component {
   constructor() {
     super();
@@ -49,6 +49,7 @@ export default class News extends Component {
     return (
       <div className="postisitonRelativeSmeni">
         <div className="container">
+          <CharAgent/>
           <div className="row">
             {error ? <Error></Error> : null}
             <div style={{ padding: "20px" }}>

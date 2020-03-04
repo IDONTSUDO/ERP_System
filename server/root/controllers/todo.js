@@ -95,7 +95,6 @@ exports.MyTodoMouth = async (req, res) =>{
             })
             
         }else{
-            console.log(todo)
             res.json(todo)
         }
     })

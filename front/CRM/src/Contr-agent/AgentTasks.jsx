@@ -22,7 +22,6 @@ class AgentTasks extends Component {
   }
   componentDidMount() {
     let agentId = this.props.match.params.agentId;
-
     let Mounth = moment()
       .locale("ru")
       .format("MM");
@@ -87,9 +86,8 @@ class AgentTasks extends Component {
 
   getMonthData = value => {
     let { yearStatistic } = this.state;
-    // console.log( yearStatistic);
-    // console.log(typeof yearStatistic)
-    console.log(value.month());
+
+
     if (value.month() === 0) {
       return yearStatistic[1];
     }

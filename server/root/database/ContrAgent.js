@@ -9,7 +9,7 @@ const contrAgentSchema = new mongoose.Schema({
 
   // Подразделения (филиалы) и их местонахождения:
   branches: {
-    type: Object
+    type: ObjectId
   },
   // Компании относящиеся к данному контрагенту (партнеры):
   partners: {
@@ -27,7 +27,7 @@ const contrAgentSchema = new mongoose.Schema({
   },
   // Должность, ФИО, контакты (телефон, почта). Комментарий с описанием особенности работы с данным человеком
   Contact_faces:{
-    type:Array
+    type:ObjectId
   },
 
   Getting_started_with:{
@@ -127,7 +127,24 @@ const contrAgentSchema = new mongoose.Schema({
   tagging_features: {
     type: String
   },
-
-  active: { type: Boolean, default: true }
+  company_desription:{
+    type:String
+  },
+  active: { type: Boolean, default: true },
+  WhereFromClient: {type:String},
+  work_begin_with_him:{type:String},
+  individual_conditions_job:{type:String},
+  pay_character:{type:String},
+  Human:{
+    type:ObjectId
+  },
+  Office:{
+    type:ObjectId
+  }
 });
 module.exports = mongoose.model("Agent", contrAgentSchema);
+
+
+
+
+

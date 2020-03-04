@@ -13,7 +13,9 @@ import {
   DeleteDetalAtNode,
   DeleteAtNode,
   DeleteAtTech,
-  manage_list
+  manage_list,
+  NewAgentAddRegulatoryPosition,
+  NewAgentAddManager
 } from "../Api/Http";
 import Rusmap from "../helper/RUSSIAN_MAP.js";
 import Tree from "react-animated-tree";
@@ -103,10 +105,10 @@ export default class NewAgent extends Component {
       manageAdd: [],
       userRole: undefined,
       company_desription:"",
-      common_phone:undefined,
+      phone:undefined,
       instagram:undefined,
       site:undefined,
-      email_main:undefined,
+      email:undefined,
       legal_address:undefined,
       company_desription:undefined,
       mail_at_peopel:undefined,
@@ -115,9 +117,15 @@ export default class NewAgent extends Component {
       features_job:undefined,
       position:undefined,
       pay_character:undefined,
-      individual_conditions_job:undefined
+      individual_conditions_job:undefined,
+      work_begin_with_him:undefined,
+      tags:[],
+      branch_officeGeo:[]
     };
   }
+
+
+
   componentDidMount() {
     const userId = isAuthenticated().direct._id;
     const userRole = isAuthenticated().direct.role;
@@ -162,40 +170,82 @@ export default class NewAgent extends Component {
   handelAddingToMager = (managListTo) =>{
     let {manageList} = this.state
     let tags = [] 
+    let msg
     for(let i of manageList){
-      if(i.name === manageList){
-        tags.push(i._id)
+      for(let im of managListTo){
+        if(im === i.name){
+          tags.push(i)
+        }
       }
     }
     this.setState({manageAdd:managListTo,tags:tags})
 
   }
   newAgentClick = () =>{
-    let {position,features_job,bio,phoneAt_peopel,mail_at_peopel,checkedList} = this.state;
-    let {branch_office,agentGeo,agentGeo0,agentGeo1,agentGeo2,agentGeo3,branch_office1,branch_office2,branch_office3} = this.state
-    let FilteredOfice = []
+    let {position,features_job,bio,phoneAt_peopel,mail_at_peopel,checkedList,userRole,tags} = this.state;
+    let {branch_office,agentGeo,branch_officeGeo} = this.state
+    let FilteredOfice 
     let FilteredGeo = []
+    let {manageAdd,specialications,TechMap,name ,full_name,INN,company_desription,legal_address,actual_address,email,site,instagram,phone,WhereFromClient,work_begin_with_him,individual_conditions_job, pay_character} = this.state
+    let msg
+    if(name.length === 0){
+      msg = "Имя является обязатльным параметром"
+      this.openNotificationValidationError(msg)
+    }
+    if(full_name.length === 0){
+      msg = "Полное имя является обязатльным параметром"
+      this.openNotificationValidationError(msg)
+    }
+    if(INN.length === 0){
+      msg = "Введите ИНН "
+      this.openNotificationValidationError(msg)
+    }
+    if(company_desription.length === 0){
+      msg = "Описание компании не найдено, похоже вы забыли его добавить"
+      this.openNotificationValidationError(msg)
+    }
+    if(WhereFromClient.length === 0){
+      msg = "Откуда пришел клиент, не заполненно"
+      this.openNotificationValidationError(msg)
+    }
+    if(work_begin_with_him.length === 0){
+      msg = "Как началась работа с клиентом, не заполненно"
+      this.openNotificationValidationError(msg)
+    }
+    let postedBy = isAuthenticated().direct._id
 
-
-
-    FilteredOfice.push(branch_office,branch_office1,branch_office2,branch_office3)
-    FilteredGeo.push(agentGeo0,agentGeo,agentGeo1,agentGeo2,agentGeo3)
-    
-
-
-    console.log("its ofice",FilteredOfice)
-    console.log("its geo",FilteredGeo)
-  
-    
-
-
+    let newAgent = {agentGeo,manageAdd,specialications,postedBy,TechMap,name,tags ,full_name,INN,company_desription,legal_address,actual_address,email,site,instagram,phone,WhereFromClient,work_begin_with_him,individual_conditions_job, pay_character}
+    let AgentFeatus 
+    FilteredGeo.push(branch_officeGeo)
+    if(branch_office === undefined){
+      AgentFeatus = undefined
+    }else{
+      AgentFeatus = {
+        branch_office:branch_office,
+        officeGeo:branch_officeGeo
+      }
+    }
     let AgentPeopel = {
       position,features_job,bio,phoneAt_peopel,mail_at_peopel,checkedList
     }
+    let resultValid = ["Директор", "Управляющий"].includes(userRole);
+    if(resultValid){
+      let body = {
+        AgentFeatus,
+        AgentPeopel,
+        newAgent,
 
+      }
+      NewAgentAddRegulatoryPosition(body).then(data =>{
+        message.success("Агент зарегестрирован!")
+      })
+    }else{
+      let managerId = isAuthenticated().direct._id   
 
-    message.success("Агент зарегестрирован!")
-  }
+    
+    }
+  
+}
  
   handleChange = name => event => {
     this.setState({ error: "" });
@@ -484,9 +534,9 @@ export default class NewAgent extends Component {
       checkAll: checkedList.length === plainOptions.length,
     });
   }
-  openNotificationValidationError() {
+  openNotificationValidationError(msg) {
     notification.open({
-      message: "Ошибка валидации",
+      message: `${msg}`,
       icon: <Icon type="frown" style={{ color: "#108ee9" }} />
     });
   }
@@ -501,8 +551,10 @@ export default class NewAgent extends Component {
     this.setState({ TechAgent });
   };
 
-  
-  TechMap = tech => {
+  handleSelectOblastbranch_officeGeo = (branch_officeGeo) =>{
+    this.setState({branch_officeGeo})
+  }
+    TechMap = tech => {
     const tagElem = (
       <Tag
         color="geekblue"
@@ -566,6 +618,22 @@ export default class NewAgent extends Component {
                   placeholder="Полное имя"
                   onChange={this.handleChange("full_name")}
                 />
+               <Select
+                      style={{ width: "auto" }}
+                      className="input_new_agent"
+                      mode="multiple"
+                      size="large"
+                      placeholder="Выберите гео расположение котрагента"
+                      value={this.state.agentGeo}
+                      onChange={this.handleSelectOblastChange}
+                    >
+                      {Rusmap.map(map => (
+                        <Select.Option key={map.value} value={map.value}>
+                          {map.value}
+                        </Select.Option>
+                      ))}
+                    </Select> 
+                
                 <Input
                   className="input_new_agent"
                   addonBefore={<div className="required-start">*</div>}
@@ -573,21 +641,22 @@ export default class NewAgent extends Component {
                   placeholder="ИНН/КПП"
                   onChange={this.handleChange("INN")}
                 />{" "}
+                  <hr className="input_new_agent"/>
                 <div className="input_helper">
                   <div>
                     <Input
                       className="input_new_agent "
                       placeholder="Подразделения (филиалы)"
-                      value={this.state.branches_ofice}
-                      onChange={this.handleChange("branches_ofice")}
+                      value={this.state.branch_office}
+                      onChange={this.handleChange("branch_office")}
                     />
                     <Select
                       style={{ width: "auto" }}
                       className="input_new_agent"
                       mode="multiple"
-                      placeholder="Выберите гео расположение"
-                      value={this.state.agentGeo}
-                      onChange={this.handleSelectOblastChange}
+                      placeholder="Выберите гео расположение подразделения "
+                      value={this.state.branch_officeGeo}
+                      onChange={this.handleSelectOblastbranch_officeGeo}
                     >
                       {Rusmap.map(map => (
                         <Select.Option key={map.value} value={map.value}>
@@ -609,6 +678,7 @@ export default class NewAgent extends Component {
             <div className="row justify-content-between">
               <div className="col-8">
                 {" "}
+             
                 <Input
                   size="large"
                   value={this.state.company_desription}
@@ -647,6 +717,7 @@ export default class NewAgent extends Component {
           <>
             <div className="row justify-content-between">
               <div className="col-8">
+                
                 <Input
                   size="large"
                   value={this.state.legal_address}
@@ -666,11 +737,12 @@ export default class NewAgent extends Component {
 
                 <Input
                   size="large"
-                  value={this.state.email_main}
-                  onChange={this.handleChange("email_main")}
+                  value={this.state.email}
+                  onChange={this.handleChange("email")}
                   className="input_new_agent "
                   placeholder="Email:"
                 />
+                  
                 <Input
                   size="large"
                   value={this.state.site}
@@ -687,8 +759,8 @@ export default class NewAgent extends Component {
                 />{" "}
                 <Input
                   size="large"
-                  value={this.state.common_phone}
-                  onChange={this.handleChange("common_phone")}
+                  value={this.state.phone}
+                  onChange={this.handleChange("phone")}
                   className="input_new_agent"
                   placeholder="Общий тел:"
                 />
@@ -774,6 +846,7 @@ export default class NewAgent extends Component {
                   addonBefore={<div className="required-start">*</div>}
                   placeholder=" Как начиналась с ним работа:"
                 />
+                 
                 {["Менеджер"].includes(userRole) ? (
                   <>
                     <div className="input_new_agent site-calendar-demo-card">

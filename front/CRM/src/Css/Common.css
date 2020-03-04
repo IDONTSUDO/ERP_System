@@ -1379,3 +1379,8 @@ nav {
 .ant-steps-item-title{
   padding-right: 19px
 }
+.bg-item-spec-job{
+  background: whitesmoke;
+  border: 3px solid #002140;
+
+}

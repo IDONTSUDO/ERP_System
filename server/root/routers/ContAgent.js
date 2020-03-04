@@ -24,12 +24,21 @@ const {
     changeAgentProfile,
     searchSpec,
     searchGeo,
-    addAgentAtManager } = require("../controllers/ContrAgent")
+    addAgentAtManager,
+    NewAgentAtRegularoryPosition,
+    AgentAtPeopel,
+    AgentAtBrachOfice,
+    AgentAtNewManagerTodo,
+    finalyAgentSave } = require("../controllers/ContrAgent")
     
 const { workerById } = require("../controllers/Company")
 const {requireSignin} = require("../middleware/middleware.js")
 
 const router = express.Router({mergeParams: true});
+
+// /regulatory/position/add/agent
+// /manage/add/agent
+// NewAgentAtRegularoryPosition,addAgentAtManager
 
 
 router.get('/agent/list',requireSignin, AllAgent )
@@ -46,15 +55,12 @@ router.post('/new/agent/:workerById',requireSignin, NewAgent)
 router.post('/agent/manage/',requireSignin, getMyListAgent)
 router.post('/agent/new/at/manager/',addAgentAtManager)
 router.post('/new/manage/agent/:agentId',requireSignin, ManageAddAgent)
-
-
 router.post('/get/contragent/date',AgentStates);
 router.post('/search/managing/director/to/email',SearchAgentEmail)
 router.post('/year/agent/todo/statistics',GetYearStatisticAgent)
 router.post('/year/on/mounth/todo/agent/todo',GetYearAndMountStatistichAgent)
 router.post('/get/spec/agents',searchSpec)
-
-
+router.post('/regulatory/position/add/agent',NewAgentAtRegularoryPosition,AgentAtPeopel,AgentAtBrachOfice,AgentAtNewManagerTodo,finalyAgentSave)
 router.delete('/delete/manage/agent/:workerById',requireSignin, DeleteManagerForAgent)
 router.delete('/delete/spec/:specid',RemoveSpec)
 

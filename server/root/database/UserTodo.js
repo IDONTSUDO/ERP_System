@@ -67,6 +67,9 @@ const todoSchema = new mongoose.Schema({
     },
     agent:{
         type:Object
+    },
+    Date:{
+        type:Date
     }
 })
 

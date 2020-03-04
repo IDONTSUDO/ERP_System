@@ -83,44 +83,47 @@ function CRON_USER_TODO() {
 }
 
 function CRON_MANAGE_TASK_AT_AGENT() {
-  // cron.schedule('* * * * *', () => {
-  //   let PlaningDateMoment = new Date();
-  //   // +1 day
-  //   PlaningDateMoment.setDate(PlaningDateMoment.getDate() + 1);
+  cron.schedule('0 2 * * *', () => {
+    let PlaningDateMoment = new Date();
+    // +1 day
+    PlaningDateMoment.setDate(PlaningDateMoment.getDate());
 
-  //   let dateMoment = moment(PlaningDateMoment).format("YYYY-MM-DD");
-  //   ManageTaskAtAgentCron.find({ PlanningDate: dateMoment }).then(data => {
+    let dateMoment = moment(PlaningDateMoment).format("YYYY-MM-DD");
+    ManageTaskAtAgentCron.find({ PlanningDate: dateMoment }).then(data => {
+        
+      let DateToday = Date.now()
+      let MomentTime = moment(DateToday).locale("ru").format("LL")
+      //  MomentTime day to
 
-  //     let DateToday = Date.now()
-  //     let MomentTime = moment(DateToday).locale("ru").format("LL")
-  //     //  MomentTime day to
-
-  //     let status = "Прозвонить"
-  //     let titelTodo = "TESTING"
-  //     let descriptionTodo = "TESTING"
+      let status = "system"
+      let titelTodo = "TESTING"
+      let descriptionTodo = "TESTING"
     
-  //   let mounth = moment(DateToday)
-  //     .locale("ru")
-  //     .format("MM");
-  //   let year = moment(DateToday)
-  //     .locale("ru")
-  //     .format("YY");
-  //     for (let agentCron of data) {
-    
-  //       let tod = new Todo()
-  //       tod.cronId = agentCron._id
-  //       tod.title = titelTodo
-  //       tod.description = descriptionTodo
-  //       tod.time = MomentTime
-  //       tod.tags =  agentCron.UserId[0]._id
-  //       tod.status = status
-  //       tod.agent = agentCron.agent
-  //       tod.mounth = mounth
-  //       tod.year = year
-  //       tod.save()
-  //     }
-  //   })
-  // })
+    let mounth = moment(DateToday)
+      .locale("ru")
+      .format("MM");
+    let year = moment(DateToday)
+      .locale("ru")
+      .format("YY");
+    for (let agentCron of data) {
+        let tod = new Todo()
+        tod.cronId = agentCron._id
+        tod.title = titelTodo
+        tod.description = descriptionTodo
+        tod.time = MomentTime
+        tod.tags =  agentCron.UserId[0]._id
+        tod.status = status
+        tod.agent = agentCron.agent
+        tod.mounth = mounth
+        tod.year = year
+        tod.Date = new Date()
+        tod.save()
+      }
+    for(let i of data)
+    ManageTaskAtAgentCron.remove({_id:i._id}).then(data => console.log(data)) 
+    })
+   
+  })
 }
 module.exports.Cron = function () {
   console.log("CRON START")

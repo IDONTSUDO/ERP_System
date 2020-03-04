@@ -1305,3 +1305,27 @@ export const UserTodoYear = (data) =>{
             console.log(error)
         })
 }
+export const NewAgentAddManager = (data) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/agent/new/at/manager/`, {
+        method: "POST",
+        headers: myHeaders,
+        body:JSON.stringify(data)
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+export const NewAgentAddRegulatoryPosition = (data) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/regulatory/position/add/agent`, {
+        method: "POST",
+        headers: myHeaders,
+        body:JSON.stringify(data)
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
