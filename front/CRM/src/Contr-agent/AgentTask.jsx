@@ -30,6 +30,9 @@ class AgentTask extends Component {
       
     });
   }
+
+
+
   render() {
  
       const {todos,userID,open} = this.state
@@ -84,6 +87,7 @@ class AgentTask extends Component {
                       ) : (
                         ""
                       )}
+                    
                       {tod.importance === "Средней важности" ? (
                         <>
                                                  <div className="card-job-modile-style  todo-phone-yellow">
@@ -169,7 +173,6 @@ class AgentTask extends Component {
                   ) : (
                     ""
                   )}
-  
                   {tod.importance === "Очень важное" &&
                   tod.comand === false ? (
                     <>

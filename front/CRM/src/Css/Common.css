@@ -734,7 +734,15 @@ br {
   height: 1em;
   background: yellow;
 }
+.job-main-content{
+  position: relative;
+  padding: 3em 0em 0em 3em;
+  left: 50px;
+  width: 100%;  
+}
 .todo-yellow {
+  width: 190px;
+
   padding: 5px;
   background: #fff30fc0;
   max-width: 100%;
@@ -742,6 +750,8 @@ br {
   /* box-shadow: inset 5em 1em gold; */
 }
 .todo-red {
+  width: 190px;
+
   padding: 5px;
   background: #f72d2dc9;
   max-width: 100%;
@@ -795,6 +805,7 @@ br {
   transform: scale(1.1);
 }
 .todo-green {
+  width: 190px;
   padding: 5px;
   background: #15b11ac4;
   max-width: 100%;
@@ -807,6 +818,7 @@ br {
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 .todo-phone-yellow {
+
   background: #fff30f86;
   padding: 5px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -1383,4 +1395,67 @@ nav {
   background: whitesmoke;
   border: 3px solid #002140;
 
+}
+.img-icon{
+  width: 85px;
+  position: relative;
+}
+
+.img-icon h5 {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+.ant-fullcalendar-fullscreen .ant-fullcalendar-month, .ant-fullcalendar-fullscreen .ant-fullcalendar-date{
+  height: 100px;
+}
+#root{
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+::-webkit-scrollbar{
+  width:12px;
+}
+::-webkit-scrollbar-thumb{
+  border-width:1px 1px 1px 2px;
+  border-color: rgba(68, 22, 196, 0.534);
+  background-color: rgb(170, 170, 170);
+}
+::-webkit-scrollbar-thumb:hover{
+  border-width: 1px 1px 1px 2px;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab );
+	background-size: 400% 400%;
+	-webkit-animation: gradientBG 10s ease infinite;
+	        animation: gradientBG 10s ease infinite;
+}
+::-webkit-scrollbar-track{
+  border-width:0;
+}
+::-webkit-scrollbar-track:hover{
+  border-left: solid 1px #aaa;
+  background-color: #eee;
+}
+@-webkit-keyframes gradientBG {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+@keyframes gradientBG {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }

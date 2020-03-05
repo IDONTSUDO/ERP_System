@@ -215,7 +215,9 @@ class Work extends React.Component {
           }
         }
       }
-
+      let diff = []
+      let diffStartDate = moment(startDate).toDate()
+      diff.push(diffStartDate)
       let time = moment(startDate)
         .locale("ru")
         .format("LL");
@@ -268,7 +270,8 @@ class Work extends React.Component {
           time,
           worker_by,
           tags,
-          names_workers_list
+          names_workers_list,
+          diff
         };
       } else {
         payload = {
@@ -287,7 +290,8 @@ class Work extends React.Component {
           worker_by,
           tags,
           agentByTodo,
-          names_workers_list
+          names_workers_list,
+          diff
         };
       }
 

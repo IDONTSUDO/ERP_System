@@ -83,10 +83,10 @@ function CRON_USER_TODO() {
 }
 
 function CRON_MANAGE_TASK_AT_AGENT() {
-  cron.schedule('0 2 * * *', () => {
+  cron.schedule('* * * * *', () => {
     let PlaningDateMoment = new Date();
     // +1 day
-    PlaningDateMoment.setDate(PlaningDateMoment.getDate());
+    PlaningDateMoment.setDate(PlaningDateMoment.getDate() +1);
 
     let dateMoment = moment(PlaningDateMoment).format("YYYY-MM-DD");
     ManageTaskAtAgentCron.find({ PlanningDate: dateMoment }).then(data => {
@@ -96,7 +96,6 @@ function CRON_MANAGE_TASK_AT_AGENT() {
       //  MomentTime day to
 
       let status = "system"
-      let titelTodo = "TESTING"
       let descriptionTodo = "TESTING"
     
     let mounth = moment(DateToday)
@@ -108,7 +107,7 @@ function CRON_MANAGE_TASK_AT_AGENT() {
     for (let agentCron of data) {
         let tod = new Todo()
         tod.cronId = agentCron._id
-        tod.title = titelTodo
+        tod.title = agentCron.agent.name
         tod.description = descriptionTodo
         tod.time = MomentTime
         tod.tags =  agentCron.UserId[0]._id
@@ -116,6 +115,7 @@ function CRON_MANAGE_TASK_AT_AGENT() {
         tod.agent = agentCron.agent
         tod.mounth = mounth
         tod.year = year
+        tod.importance = "Очень важное"
         tod.Date = new Date()
         tod.save()
       }
