@@ -970,7 +970,8 @@ br {
 }
 
 .news-width{
-  max-width: auto;
+  /* max-width:  auto; */
+  width: 90vh;
 }
 .alert-new-comment {
   position: relative;

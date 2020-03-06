@@ -88,7 +88,6 @@ exports.NewsDelete = async (req, res) => {
 }
 exports.readNews = async (req, res) => {
     let worker = req.body.id
-    console.log(worker)
     NEWS.find({ NewsTO: worker  })
         .exec((err, news) => {
             if (err) {

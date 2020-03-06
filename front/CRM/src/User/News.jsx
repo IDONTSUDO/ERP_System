@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
 import { listNews, UpdateNews, OneNewsDelete } from "../Api/Http";
-import { Badge } from "antd";
+import { Badge, Popover, Button } from "antd";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import Error from "../Error/Error.jsx";
 
-import CharAgent from '../Components/ChartAgent.jsx'
+import CharAgent from "../Components/ChartAgent.jsx";
 export default class News extends Component {
   constructor() {
     super();
@@ -27,13 +27,13 @@ export default class News extends Component {
       } else {
         var reversedData = data.reverse();
         this.setState({ newsList: reversedData });
-        
+
         var NewsArray = [];
-        
+
         for (var i = 0; data.length > i; i++) {
           NewsArray.push(data[i]._id);
         }
-        
+
         UpdateNews(NewsArray);
       }
     });
@@ -49,25 +49,52 @@ export default class News extends Component {
     return (
       <div className="postisitonRelativeSmeni">
         <div className="container">
-          <CharAgent/>
+          <CharAgent />
           <div className="row">
             {error ? <Error></Error> : null}
             <div style={{ padding: "20px" }}>
               {newsList.map((news, i) => (
                 <>
-                {news.eventNews === "Не выполененое дело" ? (
+                  {news.eventNews === "Новый Агент" ? (
                     <>
-                      <div  className="news-width  security">
-                        <div>{news.descriptionArray.map((user,i) =>(
-                          <div className="user-list">
-                          {user}
-                          </div>
-                        ))} </div>
+                      <div className="news-width  alert-complete-status">
+                        <div style={{color:"#fff"}}>{news.description}</div>
+                        <Popover
+                          content={
+                            <>
+                              <div>Имя:<b>{news.agent.name}</b></div>
+                              <div>Специализация:</div>
+                              {news.agent.specialications.map((spec, i) => (
+                                <div><b>{spec}  </b></div>
+                              ))}
+                              <div>Закрпелен:{news.agent.tags.map((tag,i) =>(
+                                <>
+                                <b> {tag.name}</b> 
+                                </>
+                              )
+                              )}</div>
+                            </>
+                          }
+                          title="Агент"
+                        >
+                          <Button ghost>Подробности</Button>
+                        </Popover>
+                      </div>
+                    </>
+                  ) : (
+                    ""
+                  )}
+                  {news.eventNews === "Не выполененое дело" ? (
+                    <>
+                      <div className="news-width  security">
+                        <div>
+                          {news.descriptionArray.map((user, i) => (
+                            <div className="user-list">{user}</div>
+                          ))}{" "}
+                        </div>
                         <div>Не выполененое дело</div>
                         <Link to={`/job/${news.link}`}>
-                          <h5 style={{ color: "black" }}>
-                            Посмотреть дело *
-                          </h5>
+                          <h5 style={{ color: "black" }}>Посмотреть дело *</h5>
                         </Link>
                       </div>
                     </>
@@ -76,7 +103,7 @@ export default class News extends Component {
                   )}
                   {news.eventNews === "warning" ? (
                     <>
-                      <div  className="news-width  security">
+                      <div className="news-width  security">
                         <div>{news.description}</div>
                         <Link to={`/security/${userID}`}>
                           <h5 style={{ color: "black" }}>
@@ -91,18 +118,23 @@ export default class News extends Component {
                   {news.eventNews === "Выполнено" ? (
                     <>
                       <div style={{ padding: "5px" }}>
-                        <div className="news-width news_width alert-complete-status" key={i}>
-                         
-
+                        <div
+                          className="news-width news_width alert-complete-status"
+                          key={i}
+                        >
                           <h6>
                             <strong>{news.eventNews}</strong>
                           </h6>
                           <div className="">
-                          <div dangerouslySetInnerHTML={{ __html: news.description }} />
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: news.description
+                              }}
+                            />
                             <Link to={`/user/${news.posted_by}`}>
-                            <div  style={{ padding: "5px",color:"black" }}>
-                              Выполнил: {news.name_posted} *
-                            </div>
+                              <div style={{ padding: "5px", color: "black" }}>
+                                Выполнил: {news.name_posted} *
+                              </div>
                             </Link>
                           </div>
                           <Moment fromNow>{news.dateCreated}</Moment>
@@ -112,19 +144,24 @@ export default class News extends Component {
                   ) : (
                     ""
                   )}
-                   {news.eventNews === "вам пришло новое дело" ? (
+                  {news.eventNews === "вам пришло новое дело" ? (
                     <>
-                      <div  style={{ padding: "5px" }}>
-                        <div className="news-width news_width alert-redirect-todo" key={i}>
-                         
-
+                      <div style={{ padding: "5px" }}>
+                        <div
+                          className="news-width news_width alert-redirect-todo"
+                          key={i}
+                        >
                           <h6>
                             <strong>{news.eventNews}</strong>
                           </h6>
                           <div className="">
-                          <div dangerouslySetInnerHTML={{ __html: news.description }} />
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: news.description
+                              }}
+                            />
                           </div>
-                          <Moment  fromNow>{news.dateCreated}</Moment>
+                          <Moment fromNow>{news.dateCreated}</Moment>
                         </div>
                       </div>
                     </>
@@ -141,7 +178,6 @@ export default class News extends Component {
                           <Link className="link" to={`${news.link}`}>
                             <strong>{news.eventNews} *</strong>
                           </Link>
-                      
                         </div>
                       </div>
                     </>
@@ -166,7 +202,11 @@ export default class News extends Component {
                               <strong>{news.eventNews} *</strong>
                             </h6>
                           </Link>
-                          <div dangerouslySetInnerHTML={{ __html: news.description }} />
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: news.description
+                            }}
+                          />
                           <Moment fromNow>{news.dateCreated}</Moment>
                         </div>
                       </div>
@@ -209,7 +249,11 @@ export default class News extends Component {
                           {news.comand === false ? (
                             <div className="news_width SoloTodoBorder">
                               <div>Подробности</div>
-                              <div dangerouslySetInnerHTML={{ __html: news.description }} />
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: news.description
+                                }}
+                              />
                               <div>{news.time}</div>
                             </div>
                           ) : (
@@ -230,9 +274,11 @@ export default class News extends Component {
                                         <div>Подробности</div>
 
                                         <div style={{ padding: "5px" }}>
-
-                                        <div dangerouslySetInnerHTML={{ __html: news.action}} />
-                                        
+                                          <div
+                                            dangerouslySetInnerHTML={{
+                                              __html: news.action
+                                            }}
+                                          />
                                         </div>
                                         <div style={{ padding: "5px" }}>
                                           {news.date}

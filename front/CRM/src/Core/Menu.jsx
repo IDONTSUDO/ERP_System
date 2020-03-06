@@ -256,7 +256,7 @@ class MenuMain extends React.Component {
                                 <span>Мои контр агенты</span>
                               </Link>
                             </Menu.Item>
-                            {["Директор", "Управляющий", "Бухгалтер"].includes(
+                            {["Директор", "Управляющий", "Бухгалтер", "Менеджер"].includes(
                               role
                             ) ? (
                               <Menu.Item key="12">

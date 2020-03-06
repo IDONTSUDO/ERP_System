@@ -55,17 +55,17 @@ export default class NewAgent extends Component {
       open: false,
       user: "",
       company: "",
-      name: "",
-      full_name: "",
-      phone: "",
-      INN: "",
-      general_director: "",
-      OGRN: "",
-      email: "",
-      any: "",
-      legal_address: "",
-      actual_address: "",
-      payment_account: "",
+      name: undefined,
+      full_name: undefined,
+      phone: undefined,
+      INN: undefined,
+      general_director: undefined,
+      OGRN: undefined,
+      email: undefined,
+      any: undefined,
+      legal_address: undefined,
+      actual_address: undefined,
+      payment_account: undefined,
       loading: false,
       error: "",
       requre_input: "#ff1100",
@@ -120,7 +120,14 @@ export default class NewAgent extends Component {
       individual_conditions_job:undefined,
       work_begin_with_him:undefined,
       tags:[],
-      branch_officeGeo:[]
+      branch_officeGeo:[],
+      time:undefined,
+      mounth:undefined,
+      year:undefined,
+      tags:[],
+      status:undefined,
+      importance:undefined,
+      description:undefined
     };
   }
 
@@ -241,8 +248,17 @@ export default class NewAgent extends Component {
       })
     }else{
       let managerId = isAuthenticated().direct._id   
-
-    
+      console.log(managerId)
+      let { agentGeo,manageAdd,specialications,postedBy,TechMap,name,tags ,full_name,INN,company_desription,legal_address,actual_address,email,site,instagram,phone,WhereFromClient,work_begin_with_him,individual_conditions_job, pay_character } = this.state
+      // agent
+      let {} = this.state
+      // agentfeaturs
+      
+      let {time,mounth,year,status,importance,description} = this.state
+      // todo
+      let {} = this.state
+      //agent human                                                                   
+      
     }
   
 }
@@ -276,7 +292,23 @@ export default class NewAgent extends Component {
       icon: <Icon type="frown" style={{ color: "#108ee9" }} />
     });
   }
-  onPanelChange = () => {};
+  onPanelChange = (momentObj) => {
+    let time = moment(momentObj)
+        .locale("ru")
+        .format("LL");
+    let mounth = moment(momentObj)
+        .locale("ru")
+        .format("MM");
+    let year = moment(momentObj)
+        .locale("ru")
+        .format("YY");
+    let tags = []
+    let status ="system"
+    let importance  =  "Очень важное"
+    let description  = "TESTING"  
+    tags.push(isAuthenticated().direct._id)
+    this.setState({time:time,mounth:mounth,year:year,tags:tags,status:status,importance:importance,description:description})
+  };
   openNotificationAgentNew() {
     notification.open({
       message: "Новый контр агент создан",
@@ -573,9 +605,6 @@ export default class NewAgent extends Component {
       </span>
     );
   };
-  onPanelChange = (value, mode) => {
-    console.log(value, mode);
-  };
   render() {
     let techChild = this.state.TechAgent.map(this.TechMap);
 
@@ -857,7 +886,7 @@ export default class NewAgent extends Component {
                           moment(Date.now()).add("days", 10)
                         ]}
                         fullscreen={false}
-                        onPanelChange={this.onPanelChange}
+                        onSelect={this.onPanelChange}
                       />
                     </div>
                   </>
@@ -910,12 +939,6 @@ export default class NewAgent extends Component {
                   addonBefore={<div className="required-start">*</div>}
                   placeholder="Характер предлагаемой цены для клиента:"
                 />
-                {isAuthenticated().direct.role === "Менеджер" ? (
-                  <Calendar
-                    fullscreen={false}
-                    onPanelChange={this.onPanelChange}
-                  />
-                ) : null}
               </div>
             </div>
           </>

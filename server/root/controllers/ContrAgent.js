@@ -5,6 +5,8 @@ const Specialisation = require("../database/Specialisations");
 const AgentCron = require("../database/CronTaskAtAgent");
 const AgentHuman = require("../database/AgentPeopel");
 const AgentOffice = require("../database/AgentOffice");
+const Company = require("../database/Company");
+const News = require("../database/News");
 let moment = require("moment");
 const _ = require("lodash");
 
@@ -552,6 +554,9 @@ exports.purposeManager = async (req, res) => {
 exports.addAgentAtManager = async (req, res) => {};
 exports.NewAgentAtRegularoryPosition = async (req, res, next) => {
   let { newAgent } = req.body;
+  if (newAgent.tags.length === 0) {
+    delete newAgent.tags;
+  }
   let agn = new ContrAgent(newAgent);
 
   await agn.save((err, result) => {
@@ -561,7 +566,7 @@ exports.NewAgentAtRegularoryPosition = async (req, res, next) => {
       });
     }
 
-    res.status(200);
+    res.status(200).json({ ok: "ok" });
     req.agent = result;
     return next();
   });
@@ -634,29 +639,21 @@ exports.finalyAgentSave = async (req, res, next) => {
       { $push: { Office: Office } },
       { new: true }
     ).exec((err, result) => {
-      if (err) {
-       return null
-      } else {
-        return null
+      if (Office !== undefined) {
+        ContrAgent.findByIdAndUpdate(
+          agent._id,
+          { $push: { Human: Human } },
+          { new: true }
+        ).exec((err, result) => {
+          return next()
+        });
       }
-    });
-  }
-  if (Office !== undefined) {
-    ContrAgent.findByIdAndUpdate(
-      agent._id,
-      { $push: { Human: Human } },
-      { new: true }
-    ).exec((err, result) => {
-      if (err) {
-        return null
-      } else {
-        return null
-      }
+
     });
   }
 };
 
-exports.AgentStatistic = async (req, res) => {
+exports.StatisticNewAgent = async (req, res, next) => {
   let agent = req.agent;
 
   let year = moment()
@@ -666,5 +663,50 @@ exports.AgentStatistic = async (req, res) => {
   agnStat.agentBy = agent._id;
   agnStat.year = year;
   agnStat.save();
-  next();
+  return next();
+};
+exports.NewRegulatoryPositionAtRegulatoriNews = (req,res,next) => {
+  let RegulatoryHuman = [];
+  let FinalyNewsPeopel = []
+  let { newAgent } = req.body;
+  
+  Company.find({ role: "Директор" })
+  .select(" _id")
+  .then(data => {
+    RegulatoryHuman.push(data);
+    Company.find({ role: "Управляющий" })
+    .select(" _id ")
+    .then(data => {
+      RegulatoryHuman.push(data);
+      for(humanDirect of RegulatoryHuman[0]){
+        if(newAgent.postedBy != humanDirect._id){
+          FinalyNewsPeopel.push(humanDirect._id)
+        }
+       
+      }
+      for(humanRegulat of RegulatoryHuman[1]){
+        if(newAgent.postedBy != humanRegulat._id){
+          FinalyNewsPeopel.push(humanRegulat._id)
+        }
+      }
+      ContrAgent.find({}).count().exec((err, result) =>{
+        console.log(result)
+        for(let newsPeopel of FinalyNewsPeopel){
+          // console.log(newsPeopel)
+          let news = new News()
+          news.NewsTO
+    
+          let description = `Добавление нового контр агента.  Агентов всего: ${result}` 
+          let eventNews = "Новый Агент"
+        
+          news.NewsTO = newsPeopel
+          news.worker_by = newsPeopel
+          news.agent = newAgent
+          news.description = description
+          news.eventNews  = eventNews
+          news.save()
+        }
+      }) 
+    });
+  });
 };

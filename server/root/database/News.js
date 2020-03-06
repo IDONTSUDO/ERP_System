@@ -18,6 +18,9 @@ const NewsSchema = new mongoose.Schema({
   comand:{
     type: Boolean 
   },
+  agent:{
+    type:Object
+  },
   worker_by_solo_task: {
     type: Array
   },
