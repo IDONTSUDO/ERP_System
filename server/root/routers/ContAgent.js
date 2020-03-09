@@ -31,17 +31,15 @@ const {
   AgentAtNewManagerTodo,
   finalyAgentSave,
   StatisticNewAgent,
-  NewRegulatoryPositionAtRegulatoriNews
+  NewRegulatoryPositionAtRegulatoriNews,
+  AgentAtTodo,
+  GoodNewsByRegulatorPositiom
 } = require("../controllers/ContrAgent");
-
+// /agent/new/at/manager/
 const { workerById } = require("../controllers/Company");
 const { requireSignin } = require("../middleware/middleware.js");
 
 const router = express.Router({ mergeParams: true });
-
-// /regulatory/position/add/agent
-// /manage/add/agent
-// NewAgentAtRegularoryPosition,addAgentAtManager
 
 router.get("/agent/list", requireSignin, AllAgent);
 router.get("/agent/:agentId", requireSignin, getAgentProfile);
@@ -55,7 +53,17 @@ router.post("/new/spec/agent", NewSpec);
 router.post("/agent/search", requireSignin, SearchAgent);
 router.post("/new/agent/:workerById", requireSignin, NewAgent);
 router.post("/agent/manage/", requireSignin, getMyListAgent);
-router.post("/agent/new/at/manager/", addAgentAtManager);
+
+router.post(
+  "/agent/new/at/manager/",
+  addAgentAtManager,
+  AgentAtPeopel,
+  AgentAtBrachOfice,
+  finalyAgentSave,
+  AgentAtTodo,
+  GoodNewsByRegulatorPositiom
+);
+
 router.post("/new/manage/agent/:agentId", requireSignin, ManageAddAgent);
 router.post("/get/contragent/date", AgentStates);
 router.post("/search/managing/director/to/email", SearchAgentEmail);

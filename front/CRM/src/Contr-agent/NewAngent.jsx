@@ -189,76 +189,136 @@ export default class NewAgent extends Component {
 
   }
   newAgentClick = () =>{
-    let {position,features_job,bio,phoneAt_peopel,mail_at_peopel,checkedList,userRole,tags} = this.state;
-    let {branch_office,agentGeo,branch_officeGeo} = this.state
-    let FilteredOfice 
-    let FilteredGeo = []
-    let {manageAdd,specialications,TechMap,name ,full_name,INN,company_desription,legal_address,actual_address,email,site,instagram,phone,WhereFromClient,work_begin_with_him,individual_conditions_job, pay_character} = this.state
-    let msg
-    if(name.length === 0){
-      msg = "Имя является обязатльным параметром"
-      this.openNotificationValidationError(msg)
-    }
-    if(full_name.length === 0){
-      msg = "Полное имя является обязатльным параметром"
-      this.openNotificationValidationError(msg)
-    }
-    if(INN.length === 0){
-      msg = "Введите ИНН "
-      this.openNotificationValidationError(msg)
-    }
-    if(company_desription.length === 0){
-      msg = "Описание компании не найдено, похоже вы забыли его добавить"
-      this.openNotificationValidationError(msg)
-    }
-    if(WhereFromClient.length === 0){
-      msg = "Откуда пришел клиент, не заполненно"
-      this.openNotificationValidationError(msg)
-    }
-    if(work_begin_with_him.length === 0){
-      msg = "Как началась работа с клиентом, не заполненно"
-      this.openNotificationValidationError(msg)
-    }
-    let postedBy = isAuthenticated().direct._id
-
-    let newAgent = {agentGeo,manageAdd,specialications,postedBy,TechMap,name,tags ,full_name,INN,company_desription,legal_address,actual_address,email,site,instagram,phone,WhereFromClient,work_begin_with_him,individual_conditions_job, pay_character}
-    let AgentFeatus 
-    FilteredGeo.push(branch_officeGeo)
-    if(branch_office === undefined){
-      AgentFeatus = undefined
-    }else{
-      AgentFeatus = {
-        branch_office:branch_office,
-        officeGeo:branch_officeGeo
-      }
-    }
-    let AgentPeopel = {
-      position,features_job,bio,phoneAt_peopel,mail_at_peopel,checkedList
-    }
-    let resultValid = ["Директор", "Управляющий"].includes(userRole);
+    let resultValid = ["Директор", "Управляющий"].includes(this.state.userRole);
     if(resultValid){
+      let {position,features_job,bio,phoneAt_peopel,mail_at_peopel,checkedList,tags} = this.state;
+      let {branch_office,agentGeo,branch_officeGeo} = this.state
+      let FilteredOfice 
+      let FilteredGeo = []
+      let {manageAdd,specialications,TechMap,name ,full_name,INN,company_desription,legal_address,actual_address,email,site,instagram,phone,WhereFromClient,work_begin_with_him,individual_conditions_job, pay_character} = this.state
+      let msg
+      if(name.length === 0){
+        msg = "Имя является обязатльным параметром"
+        this.openNotificationValidationError(msg)
+      }
+      if(full_name.length === 0){
+        msg = "Полное имя является обязатльным параметром"
+        this.openNotificationValidationError(msg)
+      }
+      if(INN.length === 0){
+        msg = "Введите ИНН "
+        this.openNotificationValidationError(msg)
+      }
+      if(company_desription.length === 0){
+        msg = "Описание компании не найдено, похоже вы забыли его добавить"
+        this.openNotificationValidationError(msg)
+      }
+      if(WhereFromClient.length === 0){
+        msg = "Откуда пришел клиент, не заполненно"
+        this.openNotificationValidationError(msg)
+      }
+      if(work_begin_with_him.length === 0){
+        msg = "Как началась работа с клиентом, не заполненно"
+        this.openNotificationValidationError(msg)
+      }
+      let postedBy = isAuthenticated().direct._id
+  
+      let newAgent = {agentGeo,manageAdd,specialications,postedBy,TechMap,name,tags ,full_name,INN,company_desription,legal_address,actual_address,email,site,instagram,phone,WhereFromClient,work_begin_with_him,individual_conditions_job, pay_character}
+      let AgentFeatus 
+      FilteredGeo.push(branch_officeGeo)
+      if(branch_office === undefined){
+        AgentFeatus = undefined
+      }else{
+        AgentFeatus = {
+          branch_office:branch_office,
+          officeGeo:branch_officeGeo
+        }
+      }
+      let AgentPeopel = {
+        position,features_job,bio,phoneAt_peopel,mail_at_peopel,checkedList
+      }
+      let whoAdd = {
+        name:isAuthenticated().direct.name,
+        _id:isAuthenticated().direct._id
+      }
       let body = {
         AgentFeatus,
         AgentPeopel,
         newAgent,
-
+        whoAdd
       }
       NewAgentAddRegulatoryPosition(body).then(data =>{
         message.success("Агент зарегестрирован!")
       })
     }else{
       let managerId = isAuthenticated().direct._id   
-      console.log(managerId)
-      let { agentGeo,manageAdd,specialications,postedBy,TechMap,name,tags ,full_name,INN,company_desription,legal_address,actual_address,email,site,instagram,phone,WhereFromClient,work_begin_with_him,individual_conditions_job, pay_character } = this.state
+      
+      let { agentGeo,manageAdd,specialications,postedBy,TechMap,name ,full_name,INN,company_desription,legal_address,actual_address,email,site,instagram,phone,WhereFromClient,work_begin_with_him,individual_conditions_job, pay_character } = this.state
       // agent
-      let {} = this.state
+      let {branch_office,branch_officeGeo} = this.state
       // agentfeaturs
-      
-      let {time,mounth,year,status,importance,description} = this.state
+      let {time,mounth,year,status,importance,description,tags} = this.state
       // todo
-      let {} = this.state
-      //agent human                                                                   
-      
+      let {position,features_job,bio,phoneAt_peopel,mail_at_peopel,checkedList,userRole} = this.state;
+      //agent human
+      let msg 
+      if(name.length === 0){
+        msg = "Имя является обязатльным параметром"
+        this.openNotificationValidationError(msg)
+      }
+      if(full_name.length === 0){
+        msg = "Полное имя является обязатльным параметром"
+        this.openNotificationValidationError(msg)
+      }
+      if(INN.length === 0){
+        msg = "Введите ИНН "
+        this.openNotificationValidationError(msg)
+      }
+      if(company_desription.length === 0){
+        msg = "Описание компании не найдено, похоже вы забыли его добавить"
+        this.openNotificationValidationError(msg)
+      }
+      if(WhereFromClient.length === 0){
+        msg = "Откуда пришел клиент, не заполненно"
+        this.openNotificationValidationError(msg)
+      }
+      if(work_begin_with_him.length === 0){
+        msg = "Как началась работа с клиентом, не заполненно"
+        this.openNotificationValidationError(msg)
+      }
+      if(tags.length === 0){
+        msg = "Вы не выбрали дату для начала работы с клиентом"
+        this.openNotificationValidationError(msg)
+      }
+      let newAgent = {agentGeo,manageAdd,specialications,postedBy,TechMap,name,tags ,full_name,INN,company_desription,legal_address,actual_address,email,site,instagram,phone,WhereFromClient,work_begin_with_him,individual_conditions_job, pay_character}
+      let AgentFeatus 
+      if(branch_office === undefined){
+        AgentFeatus = {}
+      }else{
+        AgentFeatus = {
+          branch_office,agentGeo,branch_officeGeo
+        }
+      }
+      let AgentPeopel = {
+        position,features_job,bio,phoneAt_peopel,mail_at_peopel,checkedList
+      }
+      let todo  = {
+        time,mounth,year,status,importance,description,tags
+      }
+      let whoAdd = {
+        name:isAuthenticated().direct.name,
+        _id:isAuthenticated().direct._id
+      }
+      let body = { 
+        newAgent,
+        AgentPeopel,
+        AgentFeatus,
+        todo,
+        whoAdd
+      }
+      NewAgentAddManager(body).then(data => {
+        message.success("Агент зарегестрирован!")
+      })
     }
   
 }
@@ -306,7 +366,7 @@ export default class NewAgent extends Component {
     let status ="system"
     let importance  =  "Очень важное"
     let description  = "TESTING"  
-    tags.push(isAuthenticated().direct._id)
+    tags.push(isAuthenticated().direct._id,isAuthenticated().direct.name)
     this.setState({time:time,mounth:mounth,year:year,tags:tags,status:status,importance:importance,description:description})
   };
   openNotificationAgentNew() {
@@ -638,6 +698,8 @@ export default class NewAgent extends Component {
                   size="large"
                   className="input_new_agent requre_input"
                   placeholder="Название"
+                  value={this.state.name}
+                  
                   onChange={this.handleChange("name")}
                 />
                  <Input
@@ -645,6 +707,7 @@ export default class NewAgent extends Component {
                   size="large"
                   className="input_new_agent requre_input"
                   placeholder="Полное имя"
+                  value={this.state.full_name}
                   onChange={this.handleChange("full_name")}
                 />
                <Select
@@ -668,6 +731,7 @@ export default class NewAgent extends Component {
                   addonBefore={<div className="required-start">*</div>}
                   size="large"
                   placeholder="ИНН/КПП"
+                  value={this.state.INN}                  
                   onChange={this.handleChange("INN")}
                 />{" "}
                   <hr className="input_new_agent"/>

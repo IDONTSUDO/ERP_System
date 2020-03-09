@@ -5,8 +5,6 @@ import { Badge, Popover, Button } from "antd";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import Error from "../Error/Error.jsx";
-
-import CharAgent from "../Components/ChartAgent.jsx";
 export default class News extends Component {
   constructor() {
     super();
@@ -47,9 +45,8 @@ export default class News extends Component {
 
     let userID = isAuthenticated().direct._id;
     return (
-      <div className="postisitonRelativeSmeni">
+      <div className="email_main_pos">
         <div className="container">
-          <CharAgent />
           <div className="row">
             {error ? <Error></Error> : null}
             <div style={{ padding: "20px" }}>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Calendar, Badge,Popover,Switch,Modal, Button  } from "antd";
+import { Calendar, Badge, Popover, Switch, Modal, Button } from "antd";
 import { isAuthenticated } from "../Api/Auth";
 import { UserTodoYear } from "../Api/Http";
 import DefaultProfile from "../Assets/default.png";
@@ -10,10 +10,11 @@ import {
   UserOutlined,
   PhoneOutlined,
   WhatsAppOutlined,
-  CoffeeOutlined,
-
+  CoffeeOutlined
 } from "@ant-design/icons";
 import moment from "moment";
+import Localisation from "../helper/LocalisationCalendar.json";
+
 let today = moment(Date.now());
 
 export default class CalendarJob extends Component {
@@ -22,12 +23,11 @@ export default class CalendarJob extends Component {
     this.state = {
       todosCalendar: [],
       SelectDatedTodo: [],
-      editorBorder:"",
-      switchCalendarEditor:false,
+      editorBorder: "",
+      switchCalendarEditor: false,
       visibleNewTodo: false,
-      SelectDay:"",
-      title:"",
-      
+      SelectDay: "",
+      title: ""
     };
   }
   componentDidMount() {
@@ -52,20 +52,19 @@ export default class CalendarJob extends Component {
   forceUpdate() {}
   showModal = () => {
     this.setState({
-      visibleNewTodo: true,
+      visibleNewTodo: true
     });
   };
 
   hideModal = () => {
     this.setState({
-      visibleNewTodo: false,
+      visibleNewTodo: false
     });
   };
   handleAction = name => event => {
     this.setState({ error: "" });
     this.setState({ [name]: event.target.value });
   };
-
 
   getListData = value => {
     let listData;
@@ -142,16 +141,16 @@ export default class CalendarJob extends Component {
   }
   onSelectDate = dateSelect => {
     let todoDate = moment(dateSelect)
-    .locale("ru")
-    .format("LL");
-    
-    this.setState({SelectDay:todoDate})
-    if(this.state.switchCalendarEditor){
-      this.showModal()
-    }else{
+      .locale("ru")
+      .format("LL");
+
+    this.setState({ SelectDay: todoDate });
+    if (this.state.switchCalendarEditor) {
+      this.showModal();
+    } else {
       const listData = this.state.todosCalendar;
       let time = moment(dateSelect).format("L");
-  
+
       let SelectDatedTodo = [];
       listData.map((todo, i) =>
         time === moment(todo.diff[0]).format("L")
@@ -171,67 +170,76 @@ export default class CalendarJob extends Component {
     ) : null;
   };
 
-  renderPopoverSystem = (todo) =>{
-    console.log(todo)
-  }
-  switchCalendarEditor = (switchCalendarEditor) =>{
-    this.setState({switchCalendarEditor:switchCalendarEditor})
-    if(switchCalendarEditor === true){
-      this.setState({editorBorder:"calendar-edit"})
-    }else{
-      this.setState({editorBorder:"0px"})
+  renderPopoverSystem = todo => {
+    return (
+      <>
+        <div>Имя:{todo.agentByTodo[0].name}</div>
+        <div>Телефон:{todo.agentByTodo[0].phone}</div>
+        <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
+      </>
+    );
+  };
+  switchCalendarEditor = switchCalendarEditor => {
+    this.setState({ switchCalendarEditor: switchCalendarEditor });
+    if (switchCalendarEditor === true) {
+      this.setState({ editorBorder: "calendar-edit" });
+    } else {
+      this.setState({ editorBorder: "0px" });
     }
-  }
+  };
   render() {
     return (
-      <div  className={this.state.editorBorder}>
+      <div className={this.state.editorBorder}>
         <div className>
           {this.state.SelectDatedTodo.map((todo, i) => (
             <>
-            {todo.status === "system" ? (<>
-              <Popover
-                Popover
-                content={<>{this.renderPopoverSystem(todo)}</>}
-                title="Title"
-              >
-               <WhatsAppOutlined
-                style={{
-                  fontSize: "50px",
-                  color: "#1a1717",
-                  marfin: "5px"
-                }}
-              />
-              </Popover>
-            
-            </>):(<>
-              <Popover
-                Popover
-                content={<>{this.renderPopoverSolo(todo)}</>}
-                title="Title"
-              >
-               <UserOutlined
-                style={{
-                  fontSize: "50px",
-                  color: "#1a1717",
-                  marfin: "5px"
-                }}
-              />
-              </Popover>
-
-            </>)}
+              {todo.status === "system" ? (
+                <>
+                  <Popover
+                    Popover
+                    content={<>{this.renderPopoverSystem(todo)}</>}
+                    title="Задача"
+                  >
+                    <WhatsAppOutlined
+                      style={{
+                        fontSize: "50px",
+                        color: "#1a1717",
+                        marfin: "5px"
+                      }}
+                    />
+                  </Popover>
+                </>
+              ) : (
+                <>
+                  <Popover
+                    Popover
+                    content={<>{this.renderPopoverSolo(todo)}</>}
+                    title="Задача"
+                  >
+                    <UserOutlined
+                      style={{
+                        fontSize: "50px",
+                        color: "#1a1717",
+                        marfin: "5px"
+                      }}
+                    />
+                  </Popover>
+                </>
+              )}
             </>
           ))}
           <hr />
           <hr />
         </div>
         <div className="leftpos">
-        <Switch defaultChecked={false} onChange={this.switchCalendarEditor} />
+          <Switch defaultChecked={false} onChange={this.switchCalendarEditor} />
         </div>
         <Calendar
           dateCellRender={this.dateCellRender}
           monthCellRender={this.monthCellRender}
           onSelect={this.onSelectDate}
-          style={{width:"90%"}}
+          style={{ width: "90%" }}
+          locale={Localisation}
         />
         <Modal
           title="Новое задача"
@@ -241,32 +249,29 @@ export default class CalendarJob extends Component {
           okText="Создать"
           cancelText="Отменить"
         >
-          <p>Выбранная дата:  {this.state.SelectDay}</p>
-
+          <p>Выбранная дата: {this.state.SelectDay}</p>
 
           <input
-                        value={this.state.title}
-                        onChange={this.handleAction("title")}
-                        type="text"
-                        class="form-control"
-                      />
-                        <div class="form-group">
-                      <label for="exampleFormControlSelect1">
-                        Приоретет задачи
-                      </label>
-                      <select
-                        onChange={this.handleAction("importance")}
-                        class="form-control"
-                      >
-                        <option>Выберите приоретет</option>
-                        <option>Очень важное</option>
-                        <option>Средней важности</option>
-                        <option>Не очень важное</option>
-                      </select>
-                    </div>
+            value={this.state.title}
+            onChange={this.handleAction("title")}
+            type="text"
+            class="form-control"
+          />
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">Приоретет задачи</label>
+            <select
+              onChange={this.handleAction("importance")}
+              class="form-control"
+            >
+              <option>Выберите приоретет</option>
+              <option>Очень важное</option>
+              <option>Средней важности</option>
+              <option>Не очень важное</option>
+            </select>
+          </div>
           <ReactQuill
-                          // onChange={this.handleActionEditor("description")}
-                      />
+          // onChange={this.handleActionEditor("description")}
+          />
         </Modal>
       </div>
     );

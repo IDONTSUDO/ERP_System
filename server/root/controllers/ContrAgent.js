@@ -6,6 +6,7 @@ const AgentCron = require("../database/CronTaskAtAgent");
 const AgentHuman = require("../database/AgentPeopel");
 const AgentOffice = require("../database/AgentOffice");
 const Company = require("../database/Company");
+const Todo = require("../database/UserTodo");
 const News = require("../database/News");
 let moment = require("moment");
 const _ = require("lodash");
@@ -551,7 +552,24 @@ exports.purposeManager = async (req, res) => {
   let agent = req.agent;
 };
 
-exports.addAgentAtManager = async (req, res) => {};
+exports.addAgentAtManager = async (req, res, next) => {
+  let { newAgent } = req.body;
+
+  let agn = new ContrAgent(newAgent);
+
+  await agn.save((err, result) => {
+    if (err) {
+      return res.status(400).json({
+        error: err
+      });
+    }
+    res.status(200).json({ ok: "ok" });
+    req.agent = result;
+    return next();
+  });
+};
+// AgentAtPeopel,AgentAtBrachOfice
+
 exports.NewAgentAtRegularoryPosition = async (req, res, next) => {
   let { newAgent } = req.body;
   if (newAgent.tags.length === 0) {
@@ -606,7 +624,17 @@ exports.AgentAtBrachOfice = async (req, res, next) => {
   } else {
     return next();
   }
-  // AgentOffice
+};
+exports.AgentAtTodo = async (req, res, next) => {
+  let { todo } = req.body;
+  let agent = req.agent
+  console.log(agent)
+  let tod = new Todo(todo);
+  tod.title = agent.name;
+  tod.agentByTodo = agent
+  tod.save().then(data => {
+    return next()
+  });
 };
 exports.AgentAtNewManagerTodo = async (req, res, next) => {
   let agent = req.agent;
@@ -645,10 +673,9 @@ exports.finalyAgentSave = async (req, res, next) => {
           { $push: { Human: Human } },
           { new: true }
         ).exec((err, result) => {
-          return next()
+          return next();
         });
       }
-
     });
   }
 };
@@ -665,48 +692,94 @@ exports.StatisticNewAgent = async (req, res, next) => {
   agnStat.save();
   return next();
 };
-exports.NewRegulatoryPositionAtRegulatoriNews = (req,res,next) => {
-  let RegulatoryHuman = [];
-  let FinalyNewsPeopel = []
-  let { newAgent } = req.body;
-  
+exports.GoodNewsByRegulatorPositiom = (req, res, next) => {
+  let FinalyNewsPeopel = [];
+  let { newAgent, whoAdd } = req.body;
   Company.find({ role: "Директор" })
-  .select(" _id")
-  .then(data => {
-    RegulatoryHuman.push(data);
-    Company.find({ role: "Управляющий" })
     .select(" _id ")
     .then(data => {
-      RegulatoryHuman.push(data);
-      for(humanDirect of RegulatoryHuman[0]){
-        if(newAgent.postedBy != humanDirect._id){
-          FinalyNewsPeopel.push(humanDirect._id)
-        }
+      FinalyNewsPeopel.push(data);
+      Company.find({ role: "Управляющий" })
+        .select(" _id ")
+        .then(results => {
+          FinalyNewsPeopel.push(results);
        
-      }
-      for(humanRegulat of RegulatoryHuman[1]){
-        if(newAgent.postedBy != humanRegulat._id){
-          FinalyNewsPeopel.push(humanRegulat._id)
-        }
-      }
-      ContrAgent.find({}).count().exec((err, result) =>{
-        console.log(result)
-        for(let newsPeopel of FinalyNewsPeopel){
-          // console.log(newsPeopel)
-          let news = new News()
-          news.NewsTO
-    
-          let description = `Добавление нового контр агента.  Агентов всего: ${result}` 
-          let eventNews = "Новый Агент"
-        
-          news.NewsTO = newsPeopel
-          news.worker_by = newsPeopel
-          news.agent = newAgent
-          news.description = description
-          news.eventNews  = eventNews
-          news.save()
-        }
-      }) 
+          ContrAgent.find({})
+          .count()
+          .exec((err, result) => {
+            for (let newsHuman of FinalyNewsPeopel[0]) {
+              let news = new News();
+              let description = `Добавление нового контр агента.  Агентов всего: ${result}`;
+              let eventNews = "Новый Агент";
+
+              news.NewsTO = newsHuman;
+              news.NewsTO = newsHuman._id;
+              news.agent = newAgent;
+              news.description = description;
+              news.eventNews = eventNews;
+              news.newsFrom = whoAdd
+              news.save();
+            }
+            for (let newsHuman of FinalyNewsPeopel[1]) {
+              let news = new News();
+              let description = `Добавление нового контр агента.  Агентов всего: ${result}`;
+              let eventNews = "Новый Агент";
+
+              news.NewsTO = newsHuman._id;
+              news.worker_by = newsHuman;
+              news.agent = newAgent;
+              news.description = description;
+              news.eventNews = eventNews;
+              news.newsFrom = whoAdd
+              news.save();
+            }
+          })
+        });
     });
-  });
+};
+exports.NewRegulatoryPositionAtRegulatoriNews = (req, res, next) => {
+  let RegulatoryHuman = [];
+  let FinalyNewsPeopel = [];
+  let { newAgent } = req.body;
+
+  Company.find({ role: "Директор" })
+    .select(" _id")
+    .then(data => {
+      RegulatoryHuman.push(data);
+      Company.find({ role: "Управляющий" })
+        .select(" _id ")
+        .then(data => {
+          RegulatoryHuman.push(data);
+          for (humanDirect of RegulatoryHuman[0]) {
+            if (newAgent.postedBy != humanDirect._id) {
+              FinalyNewsPeopel.push(humanDirect._id);
+            }
+          }
+          for (humanRegulat of RegulatoryHuman[1]) {
+            if (newAgent.postedBy != humanRegulat._id) {
+              FinalyNewsPeopel.push(humanRegulat._id);
+            }
+          }
+          ContrAgent.find({})
+            .count()
+            .exec((err, result) => {
+              console.log(result);
+              for (let newsPeopel of FinalyNewsPeopel) {
+                // console.log(newsPeopel)
+                let news = new News();
+                news.NewsTO;
+
+                let description = `Добавление нового контр агента.  Агентов всего: ${result}`;
+                let eventNews = "Новый Агент";
+
+                news.NewsTO = newsPeopel;
+                news.worker_by = newsPeopel;
+                news.agent = newAgent;
+                news.description = description;
+                news.eventNews = eventNews;
+                news.save();
+              }
+            });
+        });
+    });
 };

@@ -67,7 +67,15 @@ export default class TodayWork extends Component {
       </>
     ));
   };
-  renderPopoverSystem = todo => {};
+  renderPopoverSystem = todo => {
+    return (
+      <>
+      <div>Имя:{todo.agentByTodo[0].name}</div>
+      <div>Телефон:{todo.agentByTodo[0].phone}</div>
+      <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
+      </>
+    )
+  };
   renderPopoverSolo = todo => {
     return (
       <>

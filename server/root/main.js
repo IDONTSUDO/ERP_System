@@ -47,6 +47,7 @@ const Integration = require("./routers/Integration.js")
 const StaticEnterprise = require('./routers/StatisticEnterprise.js') 
 const Tech = require("./routers/TechAgent.js")
 const ComentAtAgent = require("./routers/ComentAtAgent.js")
+const AgentHuman = require('./routers/HumanAgent')
 app.use(cookieParser())
 app.use(morgan('tiny'))
 app.use(bodyParser.json())
@@ -69,6 +70,7 @@ app.use("/",Integration)
 app.use("/",StaticEnterprise)
 app.use("/",Tech)
 app.use("/",ComentAtAgent)
+app.use('/',AgentHuman)
 app.get('/docs', (req, res) => {
     fs.readFile('documentation/ApiDocs.json', (err, data) => {
         if (err) {

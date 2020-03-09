@@ -72,6 +72,7 @@ const MainRouter = () => (
             <PrivateRoute exact path="/job/:todoId" component={Job} />
             <PrivateRoute exact path="/today/:userId" component={TodayWork} />
 
+
             <PrivateRoute exact path="/all/agent" component={AllAgent} />
             <PrivateRoute exact path="/my/agent/:userId" component={MyAgent} />
             <PrivateRoute exact path="/new/agent" component={NewAgent} />
@@ -80,8 +81,8 @@ const MainRouter = () => (
             <PrivateRoute exact path="/agent/tasks/:agentId" component={AgentTasks}/>
             <PrivateRoute exact path="/agent/task/:agentId/:month/:year" component={AgentTask}/>
             <PrivateRoute exact path="/agent/task/:taskId" component={Task}/>
-            
-            
+
+
             <PrivateRoute exact path="/edit/job/:jobid" component={EditorJob} />
             <PrivateRoute exact path="/todo/assign/user/:userBy" component={TodoAssignUserBy} />
             <PrivateRoute exact path="/new/deal/:userId" component={NewDeal} />

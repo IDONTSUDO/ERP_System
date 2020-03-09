@@ -1329,3 +1329,51 @@ export const NewAgentAddRegulatoryPosition = (data) =>{
             console.log(error)
         })
 }
+
+export const AgentAtHuman = (agentId) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/get/agent/human${agentId}`, {
+        method: "GET",
+        headers: myHeaders
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+export const AgentNewHuman = (data,agentId) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/agent/new/human${agentId}`, {
+        method: "POST",
+        headers: myHeaders,
+        body:JSON.stringify(data)
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}
+export const AgentEditHuman = (data,humanId) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/agent/edit/human${humanId}`, {
+        method: "POST",
+        headers: myHeaders,
+        body:JSON.stringify(data)
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+} 
+
+export const userActive = (userId) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/user/active/${userId}`, {
+        method: "GET",
+        headers: myHeaders,
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}

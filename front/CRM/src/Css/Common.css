@@ -971,7 +971,7 @@ br {
 
 .news-width{
   /* max-width:  auto; */
-  width: 90vh;
+  width: 79vmin;
 }
 .alert-new-comment {
   position: relative;
@@ -1459,4 +1459,31 @@ nav {
 	100% {
 		background-position: 0% 50%;
 	}
+}
+.agentChart{
+  width: 550px;
+  height: 550px;
+}
+.agent-profile-info{
+
+}
+.agent-profile-info div{
+  font-size: 20px;
+    color: black 
+}
+.activiti-list{
+  overflow-y: scroll;
+  width: 50vh;
+  height: 387px;
+}
+
+.activiti-list::-webkit-scrollbar{
+  width:12px; 
+}
+.activiti-list::-webkit-scrollbar-thumb:hover{
+  border-width: 1px 1px 1px 2px;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab );
+	background-size: 400% 400%;
+	-webkit-animation: gradientBG 10s ease infinite;
+	        animation: gradientBG 10s ease infinite;
 }

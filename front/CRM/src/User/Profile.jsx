@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
 import { Redirect, Link } from "react-router-dom";
 import { Spin, Typography } from "antd";
-import { read, AllStatistic } from "../Api/Http";
+import { read, AllStatistic, userActive } from "../Api/Http";
 import DefaultProfile from "../Assets/default.png";
 
 import Error from "../Error/Error.jsx";
-import { Button } from "antd";
+import { Button, Timeline } from "antd";
 import Moment from "react-moment";
 import { ResponsiveCalendar } from "@nivo/calendar";
 import Online from "./Online.jsx";
@@ -33,26 +33,13 @@ class Profile extends Component {
       }
     });
     AllStatistic(userId).then(data => {
-      let total_installment = 0
+      let total_installment = 0;
       // console.log(typeof data)
-      if(data === "Not found"){
-        this.setState({browserCalendar: false, open:false})
-      }else{
-        this.setState({ static: data, open:false})
+      if (data === "Not found") {
+        this.setState({ browserCalendar: false, open: false });
+      } else {
+        this.setState({ static: data, open: false });
       }
-      // data === String ? (
-      //   this.setState({browserCalendar: false, open:false})
-      // ):(
-      //   this.setState({ static: data, open:false})
-      // )
-      
-      // if (data.hasOwnProperty('day')) {
-        // this.setState({ static: data, open:false});
-      // }else{
-
-        // this.setState({ browserCalendar: false, open:false});
-      // }
-     
     });
   };
   initNotCalendar = userId => {
@@ -87,7 +74,9 @@ class Profile extends Component {
     const userId = props.match.params.userId;
     this.init(userId);
   }
-
+  calendarClick = e => {
+    console.log(e);
+  };
   render() {
     const { redirectToSignin, user, open, error, browserCalendar } = this.state;
     const photoUrl = user._id
@@ -101,7 +90,6 @@ class Profile extends Component {
     let minimalDateYear = `${curr_year}-01-01`;
     let maximumDateYear = `${curr_year}-12-31`;
     let data = this.state.static;
-
     return (
       <div>
         <div>
@@ -140,6 +128,36 @@ class Profile extends Component {
                         </div>
                       </div>
                     </div>
+                    <div className="activiti-list">
+                      <Timeline>
+                        <Timeline.Item color="green">
+                          Create a services site 2015-09-01
+                        </Timeline.Item>
+                        <Timeline.Item color="green">
+                          Create a services site 2015-09-01
+                        </Timeline.Item>
+                        <Timeline.Item color="red">
+                          <p>Solve initial network problems 1</p>
+                          <p>Solve initial network problems 2</p>
+                          <p>Solve initial network problems 3 2015-09-01</p>
+                        </Timeline.Item>
+                        <Timeline.Item>
+                          <p>Technical testing 1</p>
+                          <p>Technical testing 2</p>
+                          <p>Technical testing 3 2015-09-01</p>
+                        </Timeline.Item>
+                        <Timeline.Item color="gray">
+                          <p>Technical testing 1</p>
+                          <p>Technical testing 2</p>
+                          <p>Technical testing 3 2015-09-01</p>
+                        </Timeline.Item>
+                        <Timeline.Item color="gray">
+                          <p>Technical testing 1</p>
+                          <p>Technical testing 2</p>
+                          <p>Technical testing 3 2015-09-01</p>
+                        </Timeline.Item>
+                      </Timeline>
+                    </div>
                     {browserCalendar ? (
                       <>
                         <div className="profile_statistic" id="footer">
@@ -150,6 +168,7 @@ class Profile extends Component {
                               data={data}
                               from={minimalDateYear}
                               to={maximumDateYear}
+                              onClick={this.calendarClick}
                               emptyColor="#eeeeee"
                               colors={[
                                 "#61cdbb",

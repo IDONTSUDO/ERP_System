@@ -12,6 +12,9 @@ const NewsSchema = new mongoose.Schema({
   time:{
     type:String
   },
+  newsFrom:{
+    type:Object
+  },
   eventNews: {
     type: String,
   },//тип события
