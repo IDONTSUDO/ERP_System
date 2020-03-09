@@ -31,29 +31,14 @@ class MenuMain extends React.Component {
     if (isAuthenticated() == false) {
       return false;
     } else {
-      // isOnline();
       var userId = isAuthenticated().direct._id;
       var userRole = isAuthenticated().direct.role;
       this.setState({ role: userRole });
-
-      // MyTodoComandQuality(userId).then(data => {
-      //   if (data.error) {
-      //   } else {
-      //     this.setState({ getComandTodo: data, role: userRole });
-      //     MyTodoTodyQuality(userId).then(data => {
-      //       if (data.error) {
-      //       } else {
-      //         this.setState({ SoloTodoToday: data });
-      //       }
-      //     });
-      //   }
-      // });
     }
     this.setState({ window_width: window.innerWidth });
   }
   render() {
     const { window_width, SoloTodoToday, role } = this.state;
-    console.log(window_width);
     return (
       <>
         {window_width > "665" ? (
@@ -177,12 +162,6 @@ class MenuMain extends React.Component {
                               <span>Предприятие</span>
                             </Link>
                           </Menu.Item>
-                          {/* <Menu.Item key="3">
-                            <Link to={`/company/statistic`}>
-                              <span>Статистика</span>
-                            </Link>
-                          </Menu.Item> */}
-
                           {["Директор", "Управляющий", "Бухгалтер"].includes(
                             role
                           ) ? (
@@ -256,20 +235,21 @@ class MenuMain extends React.Component {
                                 <span>Мои контр агенты</span>
                               </Link>
                             </Menu.Item>
-                            {["Директор", "Управляющий", "Бухгалтер", "Менеджер"].includes(
-                              role
-                            ) ? (
+                            {[
+                              "Директор",
+                              "Управляющий",
+                              "Бухгалтер",
+                              "Менеджер"
+                            ].includes(role) ? (
                               <Menu.Item key="12">
                                 <Link to="/new/agent">
-                                  <span>Создать нового </span>
+                                  <span>Добавить нового</span>
                                 </Link>
                               </Menu.Item>
                             ) : (
                               ""
                             )}
-                              {["Директор", "Управляющий"].includes(
-                              role
-                            ) ? (
+                            {["Директор", "Управляющий"].includes(role) ? (
                               <Menu.Item key="92">
                                 <Link to="/control/agent">
                                   <span>Управление контр-агентами</span>
@@ -278,78 +258,27 @@ class MenuMain extends React.Component {
                             ) : (
                               ""
                             )}
-                            {/* {["Директор", "Управляющий", "Бухгалтер"].includes(
-                            role
-                          ) ? (
-                            <Menu.Item key="23">
-                            <Link to="/mailing">
-                              <span>Email рассылка</span>
-                            </Link>
-                          </Menu.Item>
-                           <SubMenu
-                          key="sub9"
-                          title={
-                            <>
-                              <span>
-                              <Icon type="mail" />
-                                <span>Mail</span>
-                              </span>
-                            </>
-                          }
-                        >
-                         <Menu.Item key="23">
-                            <Link to="/mailing">
-                              <span>Email рассылка</span>
-                            </Link>
-                          </Menu.Item>
-                       
-                        </SubMenu>          
-                          ) : (
-                            ""
-                          )} */}
                           </SubMenu>
                         ) : (
                           ""
                         )}
-                        {/* <SubMenu
-                          key="sub9"
-                          title={
-                            <>
-                              <span>
-                              <Icon type="message" />
-                                <span>Сообщения</span>
-                              </span>
-                            </>
-                          }
-                        >
-                          <Menu.Item key="22">
-                            <Link to="/message">
-                              <span>Сообщения</span>
-                            </Link>
-                          </Menu.Item>
-                       
-                        </SubMenu>                           */}
-                        
+
                         <SubMenu
                           key="sub9"
                           title={
                             <>
                               <span>
                                 <Icon type="mail" />
-
                                 <span>Mail рассылка</span>
                               </span>
                             </>
                           }
                         >
-                            <Menu.Item key="23">
+                          <Menu.Item key="23">
                             <Link to="/mailing">
                               <span>Email рассылка</span>
                             </Link>
                           </Menu.Item>
-
-
-                         
                         </SubMenu>
                         <SubMenu
                           key="sub30"
@@ -369,13 +298,10 @@ class MenuMain extends React.Component {
                             </Link>
                           </Menu.Item>
                           <Menu.Item key="41">
-                          <Link to="/enterprise/statistic">
+                            <Link to="/enterprise/statistic">
                               <span>Статистика предпрития</span>
                             </Link>
                           </Menu.Item>
-
-
-                         
                         </SubMenu>
                       </Menu>
                     </Sider>
@@ -394,7 +320,3 @@ class MenuMain extends React.Component {
 }
 
 export default MenuMain;
-
-{
-  /* <Icon type="bar-chart" /> */
-}

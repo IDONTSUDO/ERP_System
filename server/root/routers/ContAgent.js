@@ -61,6 +61,7 @@ router.post(
   AgentAtBrachOfice,
   finalyAgentSave,
   AgentAtTodo,
+  StatisticNewAgent,
   GoodNewsByRegulatorPositiom
 );
 

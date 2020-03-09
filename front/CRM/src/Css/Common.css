@@ -1487,3 +1487,10 @@ nav {
 	-webkit-animation: gradientBG 10s ease infinite;
 	        animation: gradientBG 10s ease infinite;
 }
+.agentnew_front{
+  font-size: 15px;
+  color: #000000;
+}
+.ant-checkbox-group-item + .ant-checkbox-group-item{
+  margin-bottom: 13px
+}

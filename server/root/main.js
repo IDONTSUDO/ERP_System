@@ -22,7 +22,7 @@ let timeFind = moment().locale("ru").format("MM");
 
 Promise.promisifyAll(require("mongoose"));
 Cron()
-mongoose.connect(`mongodb://localhost/svarog-crm-system`,{ useUnifiedTopology: true,  useNewUrlParser: true,  useCreateIndex :  true ,  }).then(() => console.log("DB Conected"))
+mongoose.connect(`mongodb://localhost/svarog-crm-system`,{ useUnifiedTopology: true,  useNewUrlParser: true,  useCreateIndex :  true ,  poolSize: 10  }).then(() => console.log("DB Conected"))
 mongoose.connection.on('error', err => {
     console.log(`DB connection error: ${err.message}`)
 })
