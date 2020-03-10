@@ -1,5 +1,5 @@
 config:
-  target: 'http://localhost:8080'
+  target: 'https://arm.david7.xyz/'
   phases:
     - duration: 60
       arrivalRate: 190
@@ -9,16 +9,4 @@ config:
 scenarios:
   - name: "Search and buy"
     flow:
-      - post:
-          url: "/search"
-          body: "kw={{ keywords }}"
-          capture:
-            json: "$.results[0].id"
-            as: "id"
-      - get:
-          url: "/agent/list"
-      - think: 3
-      - post:
-          url: "/cart"
-          json:
-            productId: "{{ id }}"                                                                                 
+      

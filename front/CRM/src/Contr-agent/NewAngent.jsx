@@ -124,7 +124,6 @@ export default class NewAgent extends Component {
       time: undefined,
       mounth: undefined,
       year: undefined,
-      tags: [],
       status: undefined,
       importance: undefined,
       description: undefined,
@@ -490,7 +489,11 @@ export default class NewAgent extends Component {
     let status = "system";
     let importance = "Очень важное";
     let description = "TESTING";
-    tags.push(isAuthenticated().direct._id, isAuthenticated().direct.name);
+    let user = {
+      _id:isAuthenticated().direct._id,
+      name:isAuthenticated().direct.name
+    }
+    tags.push(user);
     this.setState({
       time: time,
       mounth: mounth,

@@ -17,6 +17,7 @@ function CRON_STATISTIC() {
         } else {
 
           for (let value of result) {
+            if(value)
             UserStatistic.findOneAndUpdate({ Userby: value.userBy }, { $push: { day: value }, }, function (error, success) {
               if (error) {
                 console.log(error);

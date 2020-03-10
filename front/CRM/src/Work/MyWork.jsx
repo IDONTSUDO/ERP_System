@@ -180,7 +180,7 @@ export default class MyWork extends Component {
       .format("YY");
     return (
       <div style={{ overflowY: "scroll" }} className="job-main-content">
-        <Tabs defaultActiveKey="1">
+        <Tabs defaultActiveKey="2">
           <TabPane tab="Все дела" key="1">
             {open === true ? (
               <>
@@ -209,7 +209,7 @@ export default class MyWork extends Component {
                   </div>
                 </ui>
 
-                <div style={{ display: "block" }} className="container">
+                <div style={{ display: "block",marginBottom: "34px" }} className="container">
                   <div className="row">
                     {todos.map((comTodo, i) => (
                       <>

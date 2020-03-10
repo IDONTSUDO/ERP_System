@@ -32,13 +32,8 @@ import {
   Switch,
   Tag
 } from "antd";
-
 import { TweenOneGroup } from "rc-tween-one";
-
 import Erorr from "../Error/Error.jsx";
-
-
-
 export default class EditContrAgent extends Component {
   constructor(props) {
     super(props);

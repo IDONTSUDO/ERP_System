@@ -24,8 +24,6 @@ import moment from "moment";
 import ReactQuill from "react-quill";
 import { debounce } from "debounce";
 
-
-
 import "react-quill/dist/quill.snow.css";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -33,9 +31,6 @@ import "react-datepicker/dist/react-datepicker.css";
 const { Option, OptGroup } = Select;
 
 const { TabPane } = Tabs;
-
-
-
 
 class Work extends React.Component {
   constructor(props) {
@@ -154,7 +149,7 @@ class Work extends React.Component {
     }
     return true;
   };
-  onChangeworkerTime0 = (date, dateString) => {    
+  onChangeworkerTime0 = (date, dateString) => {
     this.setState({ workerTime0: date });
   };
   onChangeworkerTime1 = (date, dateString) => {
@@ -215,9 +210,9 @@ class Work extends React.Component {
           }
         }
       }
-      let diff = []
-      let diffStartDate = moment(startDate).toDate()
-      diff.push(diffStartDate)
+      let diff = [];
+      let diffStartDate = moment(startDate).toDate();
+      diff.push(diffStartDate);
       let time = moment(startDate)
         .locale("ru")
         .format("LL");
@@ -417,8 +412,8 @@ class Work extends React.Component {
     let SortOfArray = [];
     let tired = []; //массив с юзер айди
     let NoHope = [];
-    let timeToNotFormat = []
-    
+    let timeToNotFormat = [];
+
     var posted_by = isAuthenticated().direct._id;
 
     timeArray.push(
@@ -453,18 +448,16 @@ class Work extends React.Component {
     var filteredTime = newTimeArray.filter(function(el) {
       return el != undefined;
     });
-    timeToNotFormat = filteredTime
- let diff = []
-    
+    timeToNotFormat = filteredTime;
+    let diff = [];
+
     for (let k = 0; filteredTime.length > k; k++) {
       lastTimeArray.push(
         moment(filteredTime[k])
           .locale("ru")
           .format("LL")
       );
-      diff.push(
-        moment(filteredTime[k]).toDate()
-      );
+      diff.push(moment(filteredTime[k]).toDate());
     }
 
     var filtered = newArray.filter(function(el) {
@@ -656,12 +649,11 @@ class Work extends React.Component {
       }
     }
   };
-  DebounceSearch = (emaiFind, role,item) =>{
+  DebounceSearch = (emaiFind, role, item) => {
     if (item.length > 1) {
       if (emaiFind) {
         switch (role) {
           case "Директор":
-           
             SearchAgentEmail(item).then(data => {
               if (data.err) {
                 this.openNotificationError();
@@ -711,7 +703,7 @@ class Work extends React.Component {
             });
             break;
           case "Менеджер":
-            MyAgentList(isAuthenticated.user._id).then(data => {
+            MyAgentList(isAuthenticated().direct._id).then(data => {
               if (data.err) {
                 this.openNotificationError();
               } else {
@@ -722,18 +714,14 @@ class Work extends React.Component {
           default:
         }
       }
-  }
+    }
 
-  // 
-
-
-
-  
-  }  
+    //
+  };
 
   handleChangeSearchAgent = item => {
     let { emaiFind, role } = this.state;
- this.DebounceSearch(emaiFind, role,item)
+    this.DebounceSearch(emaiFind, role, item);
   };
   handleCancelSearchInputAgent = e => {
     console.log(e);
@@ -813,8 +801,7 @@ class Work extends React.Component {
                     >
                       Сроки Выполнения
                     </label>
-                    
-                    
+
                     <DatePicker
                       onChange={this.onChangeDate}
                       placeholder="Выберите дату"
@@ -876,7 +863,7 @@ class Work extends React.Component {
                         filterOption={false}
                         allowClear={true}
                         onCancel={this.handleCancelSearchInputAgent}
-                        onSearch={debounce(this.handleChangeSearchAgent,450)}
+                        onSearch={debounce(this.handleChangeSearchAgent, 450)}
                         onChange={this.handelInputChangeAgent}
                         notFoundContent={null}
                       >
@@ -956,7 +943,10 @@ class Work extends React.Component {
                             filterOption={false}
                             allowClear={true}
                             onCancel={this.handleCancelSearchInputAgent}
-                            onSearch={debounce(this.handleChangeSearchAgent,450)}
+                            onSearch={debounce(
+                              this.handleChangeSearchAgent,
+                              450
+                            )}
                             onChange={this.handelInputChangeAgent}
                             notFoundContent={null}
                           >

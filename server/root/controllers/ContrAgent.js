@@ -627,10 +627,11 @@ exports.AgentAtBrachOfice = async (req, res, next) => {
 };
 exports.AgentAtTodo = async (req, res, next) => {
   let { todo } = req.body;
-  let agent = req.agent
-  console.log(agent)
+
+  let agent = req.agent  
   let tod = new Todo(todo);
   tod.title = agent.name;
+  tod.tags = agent.tags[0]._id
   tod.agentByTodo = agent
   tod.save().then(data => {
     return next()

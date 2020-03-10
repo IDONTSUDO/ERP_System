@@ -1365,11 +1365,11 @@ export const AgentEditHuman = (data,humanId) =>{
             console.log(error)
         })
 } 
-
 export const userActive = (userId) =>{
-    return fetch(`${process.env.REACT_APP_API_URL}/user/active/${userId}`, {
-        method: "GET",
+    return fetch(`${process.env.REACT_APP_API_URL}/user/active/`, {
+        method: "POST",
         headers: myHeaders,
+        body:JSON.stringify({userId})
     }).then(response => {
         return response.json()
     })

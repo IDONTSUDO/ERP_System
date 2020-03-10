@@ -5,10 +5,18 @@ import {
   NewComentSpecTodo,
   GetAgentMountAndYear
 } from "../Api/Http.js";
-import { Link } from "react-router-dom";
+import { Link,Redirect } from "react-router-dom";
 import { isAuthenticated } from "../Api/Auth";
-import { ResponsivePieCanvas } from "@nivo/pie";
+// import { ResponsivePieCanvas } from "@nivo/pie";
 import Localisation from "../helper/LocalisationCalendar.json";
+import DefaultProfile from "../Assets/default.png";
+import {
+  TeamOutlined,
+  UserOutlined,
+  PhoneOutlined,
+  WhatsAppOutlined,
+  CoffeeOutlined
+} from "@ant-design/icons";
 import None from "../Components/None.jsx";
 import {
   Icon,
@@ -32,31 +40,6 @@ import moment from "moment";
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 
-const CommentList = ({ comments }) => (
-  <>
-    <List
-      dataSource={comments}
-      header={`Всего:${comments.length}`}
-      itemLayout="horizontal"
-      renderItem={item => (
-        <>
-          {item.status === "system" ? (
-            <></>
-          ) : (
-            <>
-              <div className="bg-item-spec-job">
-                <div>Статус: {item.status}</div>
-                <div dangerouslySetInnerHTML={{ __html: item.description }} />
-                <div>{item.name_posted}</div>
-                <div>Описание:{item.title}</div>
-              </div>
-            </>
-          )}
-        </>
-      )}
-    />
-  </>
-);
 let today = moment(Date.now());
 
 const Editor = ({ onChange, onSubmit, submitting, value }) => (
@@ -93,7 +76,12 @@ class SpecJob extends Component {
       userIdView: undefined,
       agent: [],
       todosAtAgent: [],
-      peopelLoader:false
+      peopelLoader: false,
+      SelectDatedTodo: [],
+      editorSwitcher: false,
+      comentEditId: "",
+      description: "",
+      EditCommentLoad: false
     };
   }
   componentDidMount() {
@@ -137,12 +125,27 @@ class SpecJob extends Component {
   handelRateChaange = e => {
     this.setState({ rate: e });
   };
-
+  handelAnyChange = name => event => {
+    this.setState({ error: "" });
+    this.setState({ [name]: event.target.value });
+  };
   handelSelect = momentDate => {
     this.setState({ dateSelect: momentDate });
   };
   handleSubmit = () => {
-    let { value, rate, task, dateSelect, userIdView } = this.state;
+    let {
+      value,
+      rate,
+      task,
+      dateSelect,
+      userIdView,
+      agent,
+      SelectDay,
+      diff,
+      year,
+      mounth,
+      time
+    } = this.state;
     if (!value) {
       let err = "коментария нет";
       return this.openNoticationErrorValiid(err);
@@ -158,15 +161,40 @@ class SpecJob extends Component {
       this.setState({
         submitting: true
       });
-      let agentID = task.agent._id;
+      let agentID = agent._id;
       let workerId = userIdView;
       let taskId = task._id;
+      let description = value;
+      let posted_by = isAuthenticated().direct._id;
+      let name_posted = isAuthenticated().direct.name;
+      let importance = "Очень важное";
+      let tags = [isAuthenticated().direct._id];
+      task._id = undefined;
+      let user = {
+        _id: isAuthenticated().direct._id,
+        name: isAuthenticated().direct.name
+      };
+      let newTodo = {
+        SelectDay,
+        diff,
+        year,
+        mounth,
+        time,
+        description,
+        rate,
+        tags,
+        importance,
+        name_posted,
+        posted_by
+      };
       let body = {
-        value,
+        user,
+        task,
         rate,
         agentID,
         workerId,
-        taskId
+        taskId,
+        newTodo
       };
 
       NewComentSpecTodo(body).then(data => {
@@ -175,24 +203,58 @@ class SpecJob extends Component {
     }
   };
   dateCellRender = value => {
+    const listData = this.state.todoMounth;
+
+    let days = moment().diff(value, "days");
+
+    let itemQuality = 0;
+    let jobArray = 0;
+    let SoloTodo = 0;
+    let systemTodo = 0;
+    let timeInteration;
     let time = moment(value)
       .locale("ru")
       .format("LL");
-
-    const listData = this.state.todoMounth;
-
-    let days = moment(today).diff(value, "days");
-
-    let itemQuality = 0;
-    let timeInteration;
-
-    listData.map((item, i) => (time === item.time ? itemQuality++ : null));
-
+    listData.map((item, i) =>
+      time === item.time
+        ? (itemQuality++,
+          item.JobArray.length != 0 ? jobArray++ : SoloTodo++,
+          item.status === "system" ? systemTodo++ : null)
+        : null
+    );
     return (
       <ul className="events">
+        {systemTodo === 0 ? null : (
+          <>
+            <PhoneOutlined />
+          </>
+        )}
+        {jobArray === 0 ? null : (
+          <>
+            <TeamOutlined />
+          </>
+        )}
+        {SoloTodo === 0 ? null : (
+          <>
+            <UserOutlined />
+          </>
+        )}
         {itemQuality === 0 ? null : (
           <>
-            <Badge status="error" text={itemQuality} />
+            <Badge
+              status={
+                days >= 1
+                  ? "red"
+                  : days >= 1
+                  ? "yellow"
+                  : days > -6
+                  ? "yellow"
+                  : days <= -6
+                  ? "green"
+                  : null
+              }
+              text={itemQuality}
+            />
           </>
         )}
       </ul>
@@ -203,16 +265,63 @@ class SpecJob extends Component {
     this.setState({ [name]: event.target.value });
   };
   monthCellRender = () => {};
+
   calendarChange = e => {
     let data = moment(e)
       .locale("ru")
       .format("LL");
+    let todoDate = moment(e)
+      .locale("ru")
+      .format("LL");
+    let time = moment(e)
+      .locale("ru")
+      .format("LL");
+    let mounth = moment(e)
+      .locale("ru")
+      .format("MM");
+    let year = moment(e)
+      .locale("ru")
+      .format("YY");
+
+    let diff = [];
+    diff.push(moment(e).toDate());
+    this.setState({
+      SelectDay: todoDate,
+      diff: diff,
+      year: year,
+      mounth: mounth,
+      time: time
+    });
+    if (this.state.switchCalendarEditor) {
+      this.showModal();
+    } else {
+      const listData = this.state.todoMounth;
+      let time = moment(e).format("L");
+
+      let SelectDatedTodo = [];
+      listData.map((todo, i) =>
+        time === moment(todo.diff[0]).format("L")
+          ? SelectDatedTodo.push(todo)
+          : null
+      );
+      this.setState({ SelectDatedTodo: SelectDatedTodo });
+    }
     this.setState({ newTodoSetDate: data });
   };
   handleChange = e => {
     this.setState({
       value: e.target.value
     });
+  };
+  editorComments = (id, data) => {
+    this.setState({ description: data });
+    this.setState({ comentEditId: id });
+    let { editorSwitcher } = this.state;
+    if (editorSwitcher === false) {
+      this.setState({ editorSwitcher: true });
+    } else {
+      this.setState({ editorSwitcher: true });
+    }
   };
   openNoticationErrorValiid = err => {
     notification.open({
@@ -221,133 +330,88 @@ class SpecJob extends Component {
     });
   };
   changePodPanel = tabsActiveNum => {
-    if(tabsActiveNum === "2"){
-      this.setState({peopelLoader:true})
-
+    if (tabsActiveNum === "2") {
+      this.setState({ peopelLoader: true });
     }
-
   };
+  renderPopoverSystem = todo => {
+    return (
+      <>
+        <div>Имя:{todo.agentByTodo[0].name}</div>
+        <div>Телефон:{todo.agentByTodo[0].phone}</div>
+        <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
+      </>
+    );
+  };
+  renderPopoverSolo = todo => {
+    return (
+      <>
+        {" "}
+        <img
+          className="img-icon"
+          src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
+          onError={i => (i.target.src = `${DefaultProfile}`)}
+        />
+        <div>{todo.title}</div>
+        <div dangerouslySetInnerHTML={{ __html: todo.description }} />
+      </>
+    );
+  };
+  changePanel = key => {
+    if (key === "2") {
+      console.log(key);
+    }
+  };
+  EditComment = () => {};
   render() {
     const { comments, submitting, value, agent } = this.state;
-    let data = [
-      {
-        id: "css",
-        label: "css",
-        value: 309,
-        color: "hsl(18, 70%, 50%)"
-      },
-      {
-        id: "php",
-        label: "php",
-        value: 19,
-        color: "hsl(272, 70%, 50%)"
-      },
-      {
-        id: "rust",
-        label: "rust",
-        value: 181,
-        color: "hsl(178, 70%, 50%)"
-      },
-      {
-        id: "ruby",
-        label: "ruby",
-        value: 76,
-        color: "hsl(235, 70%, 50%)"
-      },
-      {
-        id: "sass",
-        label: "sass",
-        value: 323,
-        color: "hsl(214, 70%, 50%)"
-      },
-      {
-        id: "go",
-        label: "go",
-        value: 46,
-        color: "hsl(41, 70%, 50%)"
-      },
-      {
-        id: "make",
-        label: "make",
-        value: 205,
-        color: "hsl(210, 70%, 50%)"
-      },
-      {
-        id: "haskell",
-        label: "haskell",
-        value: 385,
-        color: "hsl(113, 70%, 50%)"
-      },
-      {
-        id: "elixir",
-        label: "elixir",
-        value: 245,
-        color: "hsl(134, 70%, 50%)"
-      },
-      {
-        id: "c",
-        label: "c",
-        value: 526,
-        color: "hsl(355, 70%, 50%)"
-      },
-      {
-        id: "python",
-        label: "python",
-        value: 344,
-        color: "hsl(316, 70%, 50%)"
-      },
-      {
-        id: "lisp",
-        label: "lisp",
-        value: 508,
-        color: "hsl(7, 70%, 50%)"
-      },
-      {
-        id: "java",
-        label: "java",
-        value: 182,
-        color: "hsl(50, 70%, 50%)"
-      },
-      {
-        id: "javascript",
-        label: "javascript",
-        value: 573,
-        color: "hsl(288, 70%, 50%)"
-      },
-      {
-        id: "scala",
-        label: "scala",
-        value: 524,
-        color: "hsl(222, 70%, 50%)"
-      },
-      {
-        id: "erlang",
-        label: "erlang",
-        value: 305,
-        color: "hsl(199, 70%, 50%)"
-      },
-      {
-        id: "hack",
-        label: "hack",
-        value: 398,
-        color: "hsl(108, 70%, 50%)"
-      },
-      {
-        id: "stylus",
-        label: "stylus",
-        value: 395,
-        color: "hsl(4, 70%, 50%)"
-      }
-    ];
+
     return (
       <div className="email_main_pos">
         <div>
           <Icon type="question" />
-          <Tabs defaultActiveKey="1">
+          <Tabs onChange={this.changePanel} defaultActiveKey="1">
             <TabPane tab="Коментарий" key="1">
               <Comment
                 content={
                   <>
+                    {this.state.SelectDatedTodo.map((todo, i) => (
+                      <>
+                        {todo.status === "system" ? (
+                          <>
+                            <Popover
+                              Popover
+                              content={<>{this.renderPopoverSystem(todo)}</>}
+                              title="Задача"
+                            >
+                              <WhatsAppOutlined
+                                style={{
+                                  fontSize: "30px",
+                                  color: "#673AB7",
+                                  marfin: "5px"
+                                }}
+                              />
+                            </Popover>
+                          </>
+                        ) : (
+                          <>
+                            <Popover
+                              Popover
+                              content={<>{this.renderPopoverSolo(todo)}</>}
+                              title="Задача"
+                            >
+                              <UserOutlined
+                                style={{
+                                  fontSize: "30px",
+                                  color: "#03A9F4",
+                                  marfin: "5px"
+                                }}
+                              />
+                            </Popover>
+                          </>
+                        )}
+                      </>
+                    ))}
                     <Calendar
                       // headerRender={(<><h1>Ваш график дел</h1></>)}
                       locale={Localisation}
@@ -380,10 +444,66 @@ class SpecJob extends Component {
               />
             </TabPane>
             <TabPane tab="Прошлая активность" key="2">
-              {comments.length > 0 && <CommentList comments={comments} />}
+              <List
+                dataSource={comments}
+                header={`Всего:${comments.length}`}
+                itemLayout="horizontal"
+                renderItem={item => (
+                  <div className="comment-and-todo-list">
+                    {item.status === "system" ? (
+                      <div>
+                        <Comment
+                          actions={[
+                            <span
+                              onClick={id =>
+                                this.editorComments(
+                                  item._id,
+                                  item.description,
+                                  id
+                                )
+                              }
+                              key="comment-nested-reply-to"
+                            >
+                              редактировать
+                            </span>
+                          ]}
+                          author={<a>{item.user.name}</a>}
+                          avatar={
+                            <Link to={`/user/${item.user._id}`}>
+                              <Avatar
+                                src={`${process.env.REACT_APP_API_URL}/user/photo/${item.user._id}?`}
+                                alt={item.user.name}
+                              />
+                            </Link>
+                          }
+                          content={<p>{item.description}</p>}
+                        ></Comment>
+                        <Rate
+                          disabled={true}
+                          allowClear={false}
+                          defaultValue={item.rate}
+                        />
+                      </div>
+                    ) : (
+                      <>
+                        <div className="bg-item-spec-job">
+                          <div>Статус: {item.status}</div>
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: item.description
+                            }}
+                          />
+                          <div>{item.name_posted}</div>
+                          <div>Описание:{item.title}</div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+              />
             </TabPane>
             <TabPane tab="Агент" key="3">
-              <Tabs  onChange={this.changePodPanel} type="card">
+              <Tabs onChange={this.changePodPanel} type="card">
                 <TabPane tab="Профиль" key="1">
                   <div className="agent-profile-info">
                     {/* font-size: 20px;
@@ -424,26 +544,15 @@ class SpecJob extends Component {
                   </div>
                 </TabPane>
                 <TabPane tab="Люди" key="2">
-                {this.state.peopelLoader ? (  <Spin style={{margin:" 8px"}} size="large" />):(<>
-                
-                
-                
-                
-
-
-
-
-
-
-
-
-                  
-                </>)}
-
+                  {this.state.peopelLoader ? (
+                    <Spin style={{ margin: " 8px" }} size="large" />
+                  ) : (
+                    <></>
+                  )}
                 </TabPane>
                 <TabPane tab="Статистика" key="3">
                   <div className="agentChart">
-                    <ResponsivePieCanvas
+                    {/* <ResponsivePieCanvas
                       data={data}
                       margin={{ top: 40, right: 200, bottom: 40, left: 80 }}
                       pixelRatio={1}
@@ -552,13 +661,34 @@ class SpecJob extends Component {
                           symbolShape: "circle"
                         }
                       ]}
-                    />
+                    /> */}
                   </div>
                 </TabPane>
               </Tabs>
             </TabPane>
           </Tabs>
         </div>
+        {this.state.editorSwitcher ? (
+          <>
+            <Form.Item>
+              <TextArea
+                rows={4}
+                onChange={this.handelAnyChange("description")}
+                value={this.state.description}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button
+                htmlType="submit"
+                loading={this.state.EditCommentLoad}
+                onClick={this.EditComment}
+                type="primary"
+              >
+                Редактировать
+              </Button>
+            </Form.Item>
+          </>
+        ) : null}
       </div>
     );
   }

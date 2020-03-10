@@ -7,6 +7,9 @@ const agentTasksSchema = new mongoose.Schema({
     description: {
         type: String
     },
+    user:{
+        type:Object
+    },
     status: {
         type: String,
         default: "в работе"
@@ -54,6 +57,9 @@ const agentTasksSchema = new mongoose.Schema({
     },
     names_workers_list:{
         type:Array
+    },
+    rate:{
+        type:Number
     }
 })
 

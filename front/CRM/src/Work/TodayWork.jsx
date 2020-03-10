@@ -70,11 +70,11 @@ export default class TodayWork extends Component {
   renderPopoverSystem = todo => {
     return (
       <>
-      <div>Имя:{todo.agentByTodo[0].name}</div>
-      <div>Телефон:{todo.agentByTodo[0].phone}</div>
-      <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
+        <div>Имя:{todo.agentByTodo[0].name}</div>
+        <div>Телефон:{todo.agentByTodo[0].phone}</div>
+        <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
       </>
-    )
+    );
   };
   renderPopoverSolo = todo => {
     return (
@@ -117,7 +117,10 @@ export default class TodayWork extends Component {
     const { todos, userID, comand, open } = this.state;
 
     return (
-      <div style={{ display: "block" }} className="container">
+      <div
+        style={{ display: "block", marginBottom: "34px" }}
+        className="container"
+      >
         <div className="row">
           {todos.map((todo, i) => (
             <>
@@ -125,45 +128,50 @@ export default class TodayWork extends Component {
                 <>
                   <div className="card-job-modile-style  todo-phone-yellow">
                     <Card className="todo-yellow">
-                      <div
-                        style={{
-                          color: "rgb(0, 0, 0)",
-                          fontWeight: "bolder",
-                          fontSize: "20px"
-                        }}
+                      <Link
+                        to={
+                          todo.status === "system"
+                            ? `/spec/job/${todo._id}`
+                            : `/job/${todo._id}`
+                        }
                       >
-                        {this.renderImortance(todo.importance)}
-                      </div>
-                      <div style={{ color: "rgb(0, 0, 0)" }}>
-                            {todo.date}
-                          </div>
-                      <h5
-                        style={{
-                          color: "rgb(0, 0, 0)",
-                          wordBreak: "break-word"
-                        }}
-                      >
-                          
-                        {todo.title}
-                      </h5>
-                      <div style={{ color: "rgb(0, 0, 0)" }}>{todo.date}</div>
-                      {todo.status === "system" ? (
-                        <>
-                          <Popover
-                            Popover
-                            content={<>{this.renderPopoverSolo(todo)}</>}
-                            title="Задача"
-                          >
-                            <TeamOutlined
-                              style={{
-                                fontSize: "32px",
-                                color: "rgb(0, 0, 0)",
-                                marfin: "5px"
-                              }}
-                            />
-                          </Popover>
-                        </>
-                      ) : null}
+                        <div
+                          style={{
+                            color: "rgb(0, 0, 0)",
+                            fontWeight: "bolder",
+                            fontSize: "20px"
+                          }}
+                        >
+                          {this.renderImortance(todo.importance)}
+                        </div>
+                        <div style={{ color: "rgb(0, 0, 0)" }}>{todo.time}</div>
+                        <h5
+                          style={{
+                            color: "rgb(0, 0, 0)",
+                            wordBreak: "break-word"
+                          }}
+                        >
+                          {todo.title}
+                        </h5>
+                        <div style={{ color: "rgb(0, 0, 0)" }}>{todo.date}</div>
+                        {todo.status === "system" ? (
+                          <>
+                            <Popover
+                              Popover
+                              content={<>{this.renderPopoverSolo(todo)}</>}
+                              title="Задача"
+                            >
+                              <TeamOutlined
+                                style={{
+                                  fontSize: "32px",
+                                  color: "rgb(0, 0, 0)",
+                                  marfin: "5px"
+                                }}
+                              />
+                            </Popover>
+                          </>
+                        ) : null}
+                      </Link>
                     </Card>
                   </div>
                 </>
@@ -173,43 +181,53 @@ export default class TodayWork extends Component {
                     <>
                       <div className="card-job-modile-style  todo-phone-yellow">
                         <Card className="todo-yellow">
-                          <div
-                            style={{
-                              color: "rgb(0, 0, 0)",
-                              fontWeight: "bolder",
-                              fontSize: "20px"
-                            }}
+                          <Link
+                            to={
+                              tod.status === "system"
+                                ? `/spec/job/${todo._id}`
+                                : `/job/${todo._id}`
+                            }
                           >
-                            {this.renderImortance(todo.importance)}
-                          </div>
-                          <h5
-                            style={{
-                              color: "rgb(0, 0, 0)",
-                              wordBreak: "break-word"
-                            }}
-                          >
-                            {todo.title}
-                          </h5>
-                          <div style={{ color: "rgb(0, 0, 0)" }}>
-                            {todo.date}
-                          </div>
-                          {todo.status === "system" ? (
-                            <>
-                              <Popover
-                                Popover
-                                content={<>{this.renderPopoverComand(todo)}</>}
-                                title="Задача"
-                              >
-                                <TeamOutlined
-                                  style={{
-                                    fontSize: "32px",
-                                    color: "rgb(0, 0, 0)",
-                                    marfin: "5px"
-                                  }}
-                                />
-                              </Popover>
-                            </>
-                          ) : null}
+                            <div
+                              style={{
+                                color: "rgb(0, 0, 0)",
+                                fontWeight: "bolder",
+                                fontSize: "20px"
+                              }}
+                            >
+                              {this.renderImortance(todo.importance)}
+                            </div>
+                            <h5
+                              style={{
+                                color: "rgb(0, 0, 0)",
+                                wordBreak: "break-word"
+                              }}
+                            >
+                              {todo.title}
+                            </h5>
+                            <div style={{ color: "rgb(0, 0, 0)" }}>
+                              {todo.date}
+                            </div>
+                            {todo.status === "system" ? (
+                              <>
+                                <Popover
+                                  Popover
+                                  content={
+                                    <>{this.renderPopoverComand(todo)}</>
+                                  }
+                                  title="Задача"
+                                >
+                                  <TeamOutlined
+                                    style={{
+                                      fontSize: "32px",
+                                      color: "rgb(0, 0, 0)",
+                                      marfin: "5px"
+                                    }}
+                                  />
+                                </Popover>
+                              </>
+                            ) : null}
+                          </Link>
                         </Card>
                       </div>
                     </>

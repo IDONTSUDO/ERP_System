@@ -1,10 +1,21 @@
 import React, { Component } from "react";
 
-import { Calendar, Badge, Popover, Switch, Modal, Button } from "antd";
+import {
+  Calendar,
+  Badge,
+  Popover,
+  Switch,
+  Modal,
+  Button,
+  notification,
+  Icon,
+  message
+} from "antd";
 import { isAuthenticated } from "../Api/Auth";
-import { UserTodoYear } from "../Api/Http";
+import { UserTodoYear, NewTodo, list } from "../Api/Http";
 import DefaultProfile from "../Assets/default.png";
 import ReactQuill from "react-quill";
+import { Link } from "react-router-dom";
 import {
   TeamOutlined,
   UserOutlined,
@@ -27,8 +38,15 @@ export default class CalendarJob extends Component {
       switchCalendarEditor: false,
       visibleNewTodo: false,
       SelectDay: "",
-      title: ""
+      title: "",
+      importance: undefined,
+      description: undefined,
+      diff: [],
+      time: undefined,
+      mounth: undefined,
+      year: undefined
     };
+    this.handleActionEditor = this.handleActionEditor.bind(this);
   }
   componentDidMount() {
     const user = isAuthenticated().direct._id;
@@ -56,9 +74,28 @@ export default class CalendarJob extends Component {
     });
   };
 
+  handleActionEditor = name => event => {
+    this.setState({ error: "" });
+    this.setState({ [name]: event });
+  };
   hideModal = () => {
+    let input = document.getElementById("select_id");
+    let ql_elem = document.querySelector(".ql-editor").children;
+    input.innerHTML = "";
+    input.innerText = "";
+    input.value = "";
+    for (let elem of ql_elem) {
+      elem.remove();
+    }
     this.setState({
-      visibleNewTodo: false
+      visibleNewTodo: false,
+      diff: undefined,
+      year: undefined,
+      mounth: undefined,
+      time: undefined,
+      title: undefined,
+      importance: undefined,
+      description: undefined
     });
   };
   handleAction = name => event => {
@@ -66,40 +103,10 @@ export default class CalendarJob extends Component {
     this.setState({ [name]: event.target.value });
   };
 
-  getListData = value => {
-    let listData;
-    switch (value.date()) {
-      case 8:
-        listData = [
-          { type: "warning", content: "This is warning event." },
-          { type: "success", content: "This is usual event." }
-        ];
-        break;
-      case 10:
-        listData = [
-          { type: "warning", content: "This is warning event." },
-          { type: "success", content: "This is usual event." },
-          { type: "error", content: "This is error event." }
-        ];
-        break;
-      case 15:
-        listData = [
-          { type: "warning", content: "This is warning event" },
-          { type: "success", content: "This is very long usual event。。...." },
-          { type: "error", content: "This is error event 1." },
-          { type: "error", content: "This is error event 2." },
-          { type: "error", content: "This is error event 3." },
-          { type: "error", content: "This is error event 4." }
-        ];
-        break;
-      default:
-    }
-    return listData || [];
-  };
+  getListData = value => {};
   renderPopoverSolo = todo => {
     return (
       <>
-        {" "}
         <img
           className="img-icon"
           src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
@@ -111,40 +118,87 @@ export default class CalendarJob extends Component {
     );
   };
   dateCellRender = value => {
+    const listData = this.state.todosCalendar;
+
+    let days = moment().diff(value, "days");
+
+    let itemQuality = 0;
+    let jobArray = 0;
+    let SoloTodo = 0;
+    let systemTodo = 0;
+    let timeInteration;
     let time = moment(value)
       .locale("ru")
       .format("LL");
-
-    const listData = this.state.todosCalendar;
-
-    let days = moment(today).diff(value, "days");
-
-    let itemQuality = 0;
-    let timeInteration;
-
-    listData.map((item, i) => (time === item.time ? itemQuality++ : null));
-
+    listData.map((item, i) =>
+      time === item.time
+        ? (itemQuality++,
+          item.JobArray.length != 0 ? jobArray++ : SoloTodo++,
+          item.status === "system" ? systemTodo++ : null)
+        : null
+    );
     return (
       <ul className="events">
+        {systemTodo === 0 ? null : (
+          <>
+            <PhoneOutlined />
+          </>
+        )}
+        {jobArray === 0 ? null : (
+          <>
+            <TeamOutlined />
+          </>
+        )}
+        {SoloTodo === 0 ? null : (
+          <>
+            <UserOutlined />
+          </>
+        )}
         {itemQuality === 0 ? null : (
           <>
-            <Badge status="error" text={itemQuality} />
+            <Badge
+              status={
+                days >= 1
+                  ? "red"
+                  : days >= 1
+                  ? "yellow"
+                  : days > -6
+                  ? "yellow"
+                  : days <= -6
+                  ? "green"
+                  : null
+              }
+              text={itemQuality}
+            />
           </>
         )}
       </ul>
     );
   };
-  getMonthData(value) {
-    if (value.month() === 8) {
-      return 1394;
-    }
-  }
+  getMonthData(value) {}
   onSelectDate = dateSelect => {
     let todoDate = moment(dateSelect)
       .locale("ru")
       .format("LL");
+    let time = moment(dateSelect)
+      .locale("ru")
+      .format("LL");
+    let mounth = moment(dateSelect)
+      .locale("ru")
+      .format("MM");
+    let year = moment(dateSelect)
+      .locale("ru")
+      .format("YY");
 
-    this.setState({ SelectDay: todoDate });
+    let diff = [];
+    diff.push(moment(dateSelect).toDate());
+    this.setState({
+      SelectDay: todoDate,
+      diff: diff,
+      year: year,
+      mounth: mounth,
+      time: time
+    });
     if (this.state.switchCalendarEditor) {
       this.showModal();
     } else {
@@ -161,7 +215,7 @@ export default class CalendarJob extends Component {
     }
   };
   monthCellRender = value => {
-    const num = this.getMonthData(value);
+    const num = this.getMonthData(this.state.todosCalendar);
     return num ? (
       <div className="notes-month">
         <section>{num}</section>
@@ -169,7 +223,69 @@ export default class CalendarJob extends Component {
       </div>
     ) : null;
   };
-
+  NewTodo = () => {
+    let {
+      diff,
+      year,
+      mounth,
+      time,
+      title,
+      importance,
+      description
+    } = this.state;
+    // todo
+    let msg;
+    if (title === undefined) {
+      msg = "Заголовок обязателен";
+      return this.openNotificationValidationError(msg);
+    }
+    if (importance === undefined) {
+      msg = "Вы не выставили важность дела";
+      return this.openNotificationValidationError(msg);
+    }
+    if (description === undefined) {
+      msg = "Описание является обязательным параметром";
+      return this.openNotificationValidationError(msg);
+    }
+    let tags = [isAuthenticated().direct._id];
+    let user = {
+      _id: isAuthenticated().direct._id
+    };
+    let posted_by = isAuthenticated().direct._id;
+    let name_posted = isAuthenticated().direct.name;
+    let comand = false;
+    let names_workers_list = [isAuthenticated().direct.name];
+    let todo = {
+      posted_by,
+      name_posted,
+      comand,
+      names_workers_list,
+      diff,
+      year,
+      mounth,
+      time,
+      title,
+      importance,
+      description,
+      tags
+    };
+    NewTodo(todo, user).then(data => {
+      let { todosCalendar } = this.state;
+      todosCalendar.push(data);
+      this.setState({
+        diff: undefined,
+        year: undefined,
+        mounth: undefined,
+        time: undefined,
+        title: undefined,
+        importance: undefined,
+        description: undefined,
+        tags: []
+      });
+      this.hideModal();
+      message.success("Новое дело создано!");
+    });
+  };
   renderPopoverSystem = todo => {
     return (
       <>
@@ -187,49 +303,61 @@ export default class CalendarJob extends Component {
       this.setState({ editorBorder: "0px" });
     }
   };
+  openNotificationValidationError(msg) {
+    notification.open({
+      message: `${msg}`,
+      icon: <Icon type="frown" style={{ color: "#108ee9" }} />
+    });
+  }
   render() {
     return (
       <div className={this.state.editorBorder}>
         <div className>
           {this.state.SelectDatedTodo.map((todo, i) => (
             <>
-              {todo.status === "system" ? (
-                <>
-                  <Popover
-                    Popover
-                    content={<>{this.renderPopoverSystem(todo)}</>}
-                    title="Задача"
-                  >
-                    <WhatsAppOutlined
-                      style={{
-                        fontSize: "50px",
-                        color: "#1a1717",
-                        marfin: "5px"
-                      }}
-                    />
-                  </Popover>
-                </>
-              ) : (
-                <>
-                  <Popover
-                    Popover
-                    content={<>{this.renderPopoverSolo(todo)}</>}
-                    title="Задача"
-                  >
-                    <UserOutlined
-                      style={{
-                        fontSize: "50px",
-                        color: "#1a1717",
-                        marfin: "5px"
-                      }}
-                    />
-                  </Popover>
-                </>
-              )}
+              <Link
+                to={
+                  todo.status === "system"
+                    ? `/spec/job/${todo._id}`
+                    : `/job/${todo._id}`
+                }
+              >
+                {todo.status === "system" ? (
+                  <>
+                    <Popover
+                      Popover
+                      content={<>{this.renderPopoverSystem(todo)}</>}
+                      title="Задача"
+                    >
+                      <WhatsAppOutlined
+                        style={{
+                          fontSize: "50px",
+                          color: "rgb(103, 58, 183)",
+                          marfin: "5px"
+                        }}
+                      />
+                    </Popover>
+                  </>
+                ) : (
+                  <>
+                    <Popover
+                      Popover
+                      content={<>{this.renderPopoverSolo(todo)}</>}
+                      title="Задача"
+                    >
+                      <UserOutlined
+                        style={{
+                          fontSize: "50px",
+                          color: "rgb(3, 169, 244)",
+                          marfin: "5px"
+                        }}
+                      />
+                    </Popover>
+                  </>
+                )}
+              </Link>
             </>
           ))}
-          <hr />
-          <hr />
         </div>
         <div className="leftpos">
           <Switch defaultChecked={false} onChange={this.switchCalendarEditor} />
@@ -242,16 +370,16 @@ export default class CalendarJob extends Component {
           locale={Localisation}
         />
         <Modal
-          title="Новое задача"
+          title="Новая задача"
           visible={this.state.visibleNewTodo}
-          onOk={this.hideModal}
+          onOk={this.NewTodo}
           onCancel={this.hideModal}
           okText="Создать"
           cancelText="Отменить"
         >
           <p>Выбранная дата: {this.state.SelectDay}</p>
-
           <input
+            id="select_id"
             value={this.state.title}
             onChange={this.handleAction("title")}
             type="text"
@@ -269,9 +397,7 @@ export default class CalendarJob extends Component {
               <option>Не очень важное</option>
             </select>
           </div>
-          <ReactQuill
-          // onChange={this.handleActionEditor("description")}
-          />
+          <ReactQuill onChange={this.handleActionEditor("description")} />
         </Modal>
       </div>
     );

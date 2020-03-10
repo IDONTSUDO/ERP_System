@@ -1494,3 +1494,13 @@ nav {
 .ant-checkbox-group-item + .ant-checkbox-group-item{
   margin-bottom: 13px
 }
+.comment-and-todo-list{
+  /* background-color: #cac7c78c; */
+  border-radius: 4px;
+}
+.comment-agent-list{
+  background-color: #1982e4cc;
+  color: white;
+  margin: 4px;
+  font-size: 17px;
+}

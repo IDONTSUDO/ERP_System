@@ -85,7 +85,6 @@ exports.myTodoItsDayQuality = async (req, res, next) => {
 exports.MyTodoMouth = async (req, res) =>{
   
     let {mounthTodo,user,yearTodo} = req.body
-    console.log("TODO MOUNTH",req.body)
     TODO.find({$or:[{tags:user, mounth:mounthTodo,year:yearTodo}]}).exec((err,todo) =>{
         if(err){
             return res.status(400).json({
@@ -98,9 +97,8 @@ exports.MyTodoMouth = async (req, res) =>{
     })
 }
 exports.MyTodoYear = async(req,res) =>{
-    console.log(req.body)
     let {year,user,mounthTodo} = req.body
-    TODO.find({$and:[{tags:user, mounth:mounthTodo,year:year},{tags:user, mounth:mounthTodo,year:year}]}).exec((err,todo) =>{
+    TODO.find({tags:user, mounth:mounthTodo,year:year}).exec((err,todo) =>{
         if(err){
             return res.status(400).json({
                 error:err
@@ -176,9 +174,7 @@ exports.NewTodoUserAwesome = async (req, res) => {
     todo.postedBy = req.worker
 
     todo.save().then(result => {
-        res.status(200).json({
-            "result": "создано!"
-        })
+        res.status(200).json(result)
     })
 
 }
