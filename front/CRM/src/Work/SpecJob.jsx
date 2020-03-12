@@ -32,7 +32,8 @@ import {
   Calendar,
   Tabs,
   notification,
-  Spin
+  Spin,
+  Skeleton
 } from "antd";
 
 import moment from "moment";
@@ -81,7 +82,8 @@ class SpecJob extends Component {
       editorSwitcher: false,
       comentEditId: "",
       description: "",
-      EditCommentLoad: false
+      EditCommentLoad: false,
+      open:true
     };
   }
   componentDidMount() {
@@ -369,7 +371,8 @@ class SpecJob extends Component {
     return (
       <div className="email_main_pos">
         <div>
-          <Icon type="question" />
+        <Skeleton paragraph={{ rows: 20 }} active loading={this.state.open}>
+        <Icon type="question" />
           <Tabs onChange={this.changePanel} defaultActiveKey="1">
             <TabPane tab="Коментарий" key="1">
               <Comment
@@ -667,6 +670,7 @@ class SpecJob extends Component {
               </Tabs>
             </TabPane>
           </Tabs>
+        </Skeleton>
         </div>
         {this.state.editorSwitcher ? (
           <>

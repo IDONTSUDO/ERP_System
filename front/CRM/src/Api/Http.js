@@ -1377,3 +1377,15 @@ export const userActive = (userId) =>{
             console.log(error)
         })
 }
+export const UserActiveMounthAndYear = (data) =>{
+    return fetch(`${process.env.REACT_APP_API_URL}/user/active/mounth`, {
+        method: "POST",
+        headers: myHeaders,
+        body:JSON.stringify(data)
+    }).then(response => {
+        return response.json()
+    })
+        .catch(error => {
+            console.log(error)
+        })
+}

@@ -331,7 +331,7 @@ export default class CalendarJob extends Component {
                     >
                       <WhatsAppOutlined
                         style={{
-                          fontSize: "50px",
+                          fontSize: "30px",
                           color: "rgb(103, 58, 183)",
                           marfin: "5px"
                         }}
@@ -347,7 +347,7 @@ export default class CalendarJob extends Component {
                     >
                       <UserOutlined
                         style={{
-                          fontSize: "50px",
+                          fontSize: "30px",
                           color: "rgb(3, 169, 244)",
                           marfin: "5px"
                         }}
@@ -359,6 +359,7 @@ export default class CalendarJob extends Component {
             </>
           ))}
         </div>
+        <hr/>
         <div className="leftpos">
           <Switch defaultChecked={false} onChange={this.switchCalendarEditor} />
         </div>

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
-import { readMyTodo, MyTodoGetComandWorked } from "../Api/Http";
+import { readMyTodo, MyTodoGetComandWorked, } from "../Api/Http";
 import { Link } from "react-router-dom";
-import { Button, Card, Badge, Icon, Popover, Tabs, Spin } from "antd";
+import { Button, Card, Badge, Icon, Popover, Tabs, Spin, Skeleton } from "antd";
 import {
   TeamOutlined,
   UserOutlined,
@@ -184,7 +184,11 @@ export default class MyWork extends Component {
           <TabPane tab="Все дела" key="1">
             {open === true ? (
               <>
-                <Spin size="large" />
+                <Skeleton
+                  paragraph={{ rows: 15 }}
+                  active
+                  loading={true}
+                ></Skeleton>
               </>
             ) : (
               <>
@@ -209,7 +213,10 @@ export default class MyWork extends Component {
                   </div>
                 </ui>
 
-                <div style={{ display: "block",marginBottom: "34px" }} className="container">
+                <div
+                  style={{ display: "block", marginBottom: "34px" }}
+                  className="container"
+                >
                   <div className="row">
                     {todos.map((comTodo, i) => (
                       <>
@@ -221,7 +228,7 @@ export default class MyWork extends Component {
                                 {moment().diff(
                                   moment(comTodo.diff[0]),
                                   "days"
-                                ) <= -9 ? (
+                                ) <= -6 ? (
                                   <>
                                     <div
                                       style={{
@@ -311,7 +318,7 @@ export default class MyWork extends Component {
                                 ) : moment().diff(
                                     moment(comTodo.diff[i]),
                                     "days"
-                                  ) >= -3 ? (
+                                  ) > -6 ? (
                                   <>
                                     {" "}
                                     <div

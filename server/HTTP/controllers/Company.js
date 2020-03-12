@@ -6,7 +6,9 @@ const UserSecurity = require('../database/Security')
 const UserStatistic = require('../database/UserStatistic')
 const ManagePriced = require('../database/ManagePrice')
 const Subscriber = require('../database/Subscriber')
+const UserActiveMount = require('../database/ActivitiUserMounth')
 const geoip = require('geoip-lite');
+const moment = require('moment')
 
 exports.workerSelectId = async (req, res, next, id) => {
     
@@ -53,8 +55,20 @@ exports.Newworker = async (req, res, next) => {
         error: "Email is taken"
     })
     const worker =  new Worker(req.body)
+
+
+    let Year = moment()
+      .locale("ru")
+      .format("YY");
+
     worker.save().then((worker) => {
         req.worker = worker._id
+        let activeStat = UserActiveMount()
+        activeStat.year = Year
+        activeStat.userId = worker._id
+        activeStat.save()
+
+        
         { { ["Директор", "Управляющий", "Менеджер"].includes(worker.role) ? ManagePriced.create({ userBy: worker._id }, function (err, small) { if (err) return handleError(err) }) : {} } }
         next()
     })

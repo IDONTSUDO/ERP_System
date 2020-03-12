@@ -99,3 +99,9 @@ exports.userActive = async (req, res) => {
       return res.status(200).json(data);
     });
 };
+exports.userActiveMouthAndYear = async (req,res) =>{
+  let {userId,Year,Mounth} = req.body
+  TodoAgents.find({tags:userId,year:Year,mounth:Mounth}).then(data =>{
+    return res.status(200).json(data)
+  })
+}

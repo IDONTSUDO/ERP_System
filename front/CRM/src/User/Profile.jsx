@@ -1,16 +1,28 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
 import { Redirect, Link } from "react-router-dom";
-import { Spin, Typography } from "antd";
-import { read, AllStatistic, userActive } from "../Api/Http";
+import { Spin, Typography, Popover, Skeleton } from "antd";
+import {
+  read,
+  AllStatistic,
+  userActive,
+  UserActiveMounthAndYear
+} from "../Api/Http";
 import DefaultProfile from "../Assets/default.png";
+import moment from "moment";
 
 import Error from "../Error/Error.jsx";
 import { Button, Timeline } from "antd";
 import Moment from "react-moment";
 import { ResponsiveCalendar } from "@nivo/calendar";
 import Online from "./Online.jsx";
-
+import {
+  TeamOutlined,
+  UserOutlined,
+  PhoneOutlined,
+  WhatsAppOutlined,
+  CoffeeOutlined
+} from "@ant-design/icons";
 const { Text } = Typography;
 
 class Profile extends Component {
@@ -21,10 +33,14 @@ class Profile extends Component {
       open: true,
       error: false,
       static: [],
-      browserCalendar: false
+      browserCalendar: false,
+      activUser: [],
+      loading: true,
+      userId: ""
     };
   }
   init = userId => {
+    this.setState({ userId: userId });
     read(userId).then(data => {
       if (data.error) {
         this.setState({ error: true });
@@ -34,14 +50,13 @@ class Profile extends Component {
     });
     AllStatistic(userId).then(data => {
       let total_installment = 0;
-      // console.log(typeof data)
       if (data === "Not found") {
         this.setState({ browserCalendar: false, open: false });
       } else {
         this.setState({ static: data, open: false });
-        userActive(userId).then(data =>{
-          console.log(data)
-        })
+        userActive(userId).then(data => {
+          this.setState({ activUser: data, loading: false });
+        });
       }
     });
   };
@@ -78,7 +93,22 @@ class Profile extends Component {
     this.init(userId);
   }
   calendarClick = e => {
-    console.log(e);
+    this.setState({ loading: true });
+    let { userId } = this.state;
+    let Mounth = moment(e.date)
+      .locale("ru")
+      .format("MM");
+    let Year = moment(e.date)
+      .locale("ru")
+      .format("YY");
+    let Body = {
+      userId,
+      Year,
+      Mounth
+    };
+    UserActiveMounthAndYear(Body).then(data => {
+      this.setState({ loading: false, activUser: data });
+    });
   };
   render() {
     const { redirectToSignin, user, open, error, browserCalendar } = this.state;
@@ -92,6 +122,20 @@ class Profile extends Component {
     let curr_year = d.getFullYear();
     let minimalDateYear = `${curr_year}-01-01`;
     let maximumDateYear = `${curr_year}-12-31`;
+    const RussianLocalisation = [
+      "Январь",
+      "Февраль",
+      "Март",
+      "Апрель",
+      "Май",
+      "Июнь",
+      "Июль",
+      "Август",
+      "Сентябрь",
+      "Октябрь",
+      "Ноябрь",
+      "Декабрь"
+    ];
     let data = this.state.static;
     return (
       <div>
@@ -133,32 +177,31 @@ class Profile extends Component {
                     </div>
                     <div className="activiti-list">
                       <Timeline>
-                        <Timeline.Item color="green">
-                          TODO TODO TODO TODO 2015-09-01
-                        </Timeline.Item>
-                        <Timeline.Item color="green">
-                        TODO TODO TODO TODO 2015-09-01
-                        </Timeline.Item>
-                        <Timeline.Item color="red">
-                          <p>  TODO TODO TODO TODO 1</p>
-                          <p>   TODO TODO TODO TODO2</p>
-                          <p>   TODO TODO TODO TODO 3 2015-09-01</p>
-                        </Timeline.Item>
-                        <Timeline.Item>
-                          <p>  TODO TODO TODO TODO 1  2015-09-01</p>
-                          <p>   TODO TODO TODO TODO 2  2015-09-01</p>
-                          <p>  TODO TODO TODO TODO 3 2015-09-01</p>
-                        </Timeline.Item>
-                        <Timeline.Item color="gray">
-                          <p>  TODO TODO TODO TODO 1  2015-09-01</p>
-                          <p>  TODO TODO TODO TODO 2  2015-09-01</p>
-                          <p> TODO TODO TODO TODO 3 2015-09-01</p>
-                        </Timeline.Item>
-                        <Timeline.Item color="gray">
-                          <p>  TODO TODO TODO TODO 1</p>
-                          <p>  TODO TODO TODO TODO 2</p>
-                          <p>   TODO TODO TODO TODO  3 2015-09-01</p>
-                        </Timeline.Item>
+                        <Skeleton
+                          paragraph={{ rows: 15 }}
+                          active
+                          loading={this.state.loading}
+                        >
+                          <div>
+                            {this.state.activUser.map((active, i) => (
+                              <>
+                                <Popover content={<></>} title="Title">
+                                  <Timeline.Item
+                                    style={{ margin: "5px" }}
+                                    dot={
+                                      <UserOutlined
+                                        style={{ fontSize: "16px" }}
+                                      />
+                                    }
+                                    color="blue"
+                                  >
+                                    {active.title}
+                                  </Timeline.Item>
+                                </Popover>
+                              </>
+                            ))}
+                          </div>
+                        </Skeleton>
                       </Timeline>
                     </div>
                     {browserCalendar ? (
@@ -169,6 +212,9 @@ class Profile extends Component {
                             <ResponsiveCalendar
                               className="dSnone"
                               data={data}
+                              monthLegend={(year, month) =>
+                                RussianLocalisation[month]
+                              }
                               from={minimalDateYear}
                               to={maximumDateYear}
                               onClick={this.calendarClick}

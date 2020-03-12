@@ -374,7 +374,7 @@ class Work extends React.Component {
   };
   clickSubmitExtedensJob = event => {
     event.preventDefault();
-    const {
+    let {
       tags,
       worker,
       workerJob0,
@@ -463,7 +463,6 @@ class Work extends React.Component {
     var filtered = newArray.filter(function(el) {
       return el != "";
     });
-
     for (let i = 0; tags.length > i; i++) {
       if (i === 0) {
         userValidArray.push(tags[0] + "IAMWORKED");
@@ -481,7 +480,7 @@ class Work extends React.Component {
       }
       i++;
     }
-
+  
     for (let ar1 = 0; tags.length > ar1; ar1++) {
       for (let ar2 = 0; SortOfArray.length > ar2; ar2++) {
         if (tags[ar1] === SortOfArray[ar2]) {
@@ -489,7 +488,7 @@ class Work extends React.Component {
         }
       }
     }
-
+    
     for (let i = 0; tired.length > i; i++) {
       if (i == 0) {
         NoHope.push(tired[0] + "IAMWORKED");
@@ -525,7 +524,7 @@ class Work extends React.Component {
         action: filtered[index]
       };
     });
-
+    tags = tired
     if (this.validateDinamicJobs(JobArray)) {
       let comand = true;
 
@@ -551,7 +550,8 @@ class Work extends React.Component {
           importance,
           title,
           jobNews,
-          diff
+          diff,
+          tags
         };
       } else {
         payload = {
@@ -568,7 +568,8 @@ class Work extends React.Component {
           title,
           jobNews,
           agentByTodo,
-          diff
+          diff,
+          tags
         };
       }
 

@@ -206,50 +206,36 @@ exports.TodoChange = async (req, res,next) => {
   
     todo.updated = Date.now()
    
-    
-    if (todo.agentByTodo[1] !== undefined) {
-      
-        if (todo.status === "Выполнено") {
-            let cloneJobArray = _.cloneDeep(todo.JobArray)
-            let cloneagentByTodo = _.cloneDeep(todo.agentByTodo)
-            
-            let { status,name_posted,  timeComand,  tags, names_workers_list, posted_by, comand, importance, title, description, time, created,year,mounth } = todo
+   
+    if (todo.status === "Выполнено") {
+        let cloneJobArray = _.cloneDeep(todo.JobArray)
+        let cloneagentByTodo = _.cloneDeep(todo.agentByTodo)
+        
+        let { status,name_posted,  timeComand,  tags, names_workers_list, posted_by, comand, importance, title, description, time, created,year,mounth } = todo
 
-            let todosAgent = {  status,name_posted, timeComand,  tags, names_workers_list, posted_by, comand, importance, title, description, time, created,year,mounth }
-            todosAgent.agentByTodo = cloneagentByTodo
-            todosAgent.JobArray  = cloneJobArray
-            const todoagents = new TODOAGENT(todosAgent)
+        let todosAgent = {  status,name_posted, timeComand,  tags, names_workers_list, posted_by, comand, importance, title, description, time, created,year,mounth }
+        todosAgent.agentByTodo = cloneagentByTodo
+        todosAgent.JobArray  = cloneJobArray
+        const todoagents = new TODOAGENT(todosAgent)
 
-       
-            todoagents.save().then(result => {
+   
+        todoagents.save().then(result => {
 
-                todo.expireAt = Date.now()
+            todo.expireAt = Date.now()
 
-                todo.save((err, result) => {
-
-                    if (err) {
-                        return res.status(400).json({
-                            error: err
-                        })
-                    }
-                   
-                    res.json(result)
-                    
-                    return next()
-                })
-            })
-        } else {
-            await todo.save((err, result) => {
+            todo.save((err, result) => {
 
                 if (err) {
                     return res.status(400).json({
                         error: err
                     })
                 }
-    
+               
                 res.json(result)
+                
+                return next()
             })
-        }
+        })
     } else {
         await todo.save((err, result) => {
 
