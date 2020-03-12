@@ -9,10 +9,16 @@ import {
   Button,
   notification,
   Icon,
-  message
+  message,
+  Avatar
 } from "antd";
 import { isAuthenticated } from "../Api/Auth";
-import { UserTodoYear, NewTodo, list } from "../Api/Http";
+import {
+  UserTodoYear,
+  NewTodo,
+  list,
+  MyTodoGetComandWorked
+} from "../Api/Http";
 import DefaultProfile from "../Assets/default.png";
 import ReactQuill from "react-quill";
 import { Link } from "react-router-dom";
@@ -64,7 +70,34 @@ export default class CalendarJob extends Component {
       user
     };
     UserTodoYear(dataFetch).then(data => {
-      this.setState({ todosCalendar: data });
+      let TodoArray = [];
+      let DifferDate;
+
+      TodoArray = data;
+
+      // this.setState({ todosCalendar: data });
+      let userfindString;
+      userfindString = user + "IAMWORKED";
+
+      this.setState({ userID: userfindString });
+      MyTodoGetComandWorked(userfindString).then(data => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          for (let int = 0; data.result.length > int; int++) {
+            data.result[int].JobArray.map((job, i) =>
+              job.user === userfindString
+                ? ((data.result[int].time = moment(data.result[int].diff[i])
+                    .locale("ru")
+                    .format("LL")),
+                  "days")
+                : null
+            );
+            TodoArray.push(data.result[int]);
+            this.setState({ todosCalendar: TodoArray });
+          }
+        }
+      });
     });
   }
   forceUpdate() {}
@@ -102,18 +135,21 @@ export default class CalendarJob extends Component {
     this.setState({ error: "" });
     this.setState({ [name]: event.target.value });
   };
-
   getListData = value => {};
   renderPopoverSolo = todo => {
     return (
       <>
-        <img
-          className="img-icon"
-          src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
-          onError={i => (i.target.src = `${DefaultProfile}`)}
-        />
         <div>{todo.title}</div>
         <div dangerouslySetInnerHTML={{ __html: todo.description }} />
+        <hr />
+        <div>
+          <span style={{ marginRight: "15px" }}>От:</span>
+          <Link to={`/user/${todo.posted_by}`}>
+            <Avatar
+              src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
+            />
+          </Link>
+        </div>
       </>
     );
   };
@@ -295,6 +331,46 @@ export default class CalendarJob extends Component {
       </>
     );
   };
+  renderPopoverTeam = todo => {
+    return (
+      <>
+        {todo.JobArray.map((job, i) => (
+          <>
+            {job.user.length === 33 ? (
+              <Link to={`/user/${job.user.slice(0, -9)}`}>
+                <Avatar
+                  src={`${
+                    process.env.REACT_APP_API_URL
+                  }/user/photo/${job.user.slice(0, -9)}?`}
+                  shape="square"
+                />
+              </Link>
+            ) : (
+              <Link to={`/user/${job.user}`}>
+                <Avatar
+                  src={`${process.env.REACT_APP_API_URL}/user/photo/${job.user}?`}
+                  shape="square"
+                />
+              </Link>
+            )}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: job.action
+              }}
+            ></div>
+            <div>{job.date}</div>
+            <hr />
+          </>
+        ))}
+        <div>
+          <span style={{ marginRight: "15px" }}>От:</span>
+          <Avatar
+            src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
+          />
+        </div>
+      </>
+    );
+  };
   switchCalendarEditor = switchCalendarEditor => {
     this.setState({ switchCalendarEditor: switchCalendarEditor });
     if (switchCalendarEditor === true) {
@@ -340,26 +416,46 @@ export default class CalendarJob extends Component {
                   </>
                 ) : (
                   <>
-                    <Popover
-                      Popover
-                      content={<>{this.renderPopoverSolo(todo)}</>}
-                      title="Задача"
-                    >
-                      <UserOutlined
-                        style={{
-                          fontSize: "30px",
-                          color: "rgb(3, 169, 244)",
-                          marfin: "5px"
-                        }}
-                      />
-                    </Popover>
+                    {todo.JobArray.length === 0 ? (
+                      <>
+                        <Popover
+                          Popover
+                          content={<>{this.renderPopoverSolo(todo)}</>}
+                          title="Задача"
+                        >
+                          <UserOutlined
+                            style={{
+                              fontSize: "30px",
+                              color: "rgb(3, 169, 244)",
+                              marfin: "5px"
+                            }}
+                          />
+                        </Popover>
+                      </>
+                    ) : (
+                      <>
+                        <Popover
+                          Popover
+                          content={<>{this.renderPopoverTeam(todo)}</>}
+                          title="Задача"
+                        >
+                          <TeamOutlined
+                            style={{
+                              fontSize: "30px",
+                              color: "rgb(3, 169, 244)",
+                              marfin: "5px"
+                            }}
+                          />
+                        </Popover>
+                      </>
+                    )}
                   </>
                 )}
               </Link>
             </>
           ))}
         </div>
-        <hr/>
+        <hr />
         <div className="leftpos">
           <Switch defaultChecked={false} onChange={this.switchCalendarEditor} />
         </div>

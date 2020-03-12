@@ -14,7 +14,8 @@ import {
   CoffeeOutlined,
   MessageOutlined,
   NotificationOutlined,
-  UsergroupAddOutlined
+  UsergroupAddOutlined,
+  FrownOutlined
 } from "@ant-design/icons";
 
 export default class News extends Component {
@@ -23,7 +24,8 @@ export default class News extends Component {
     this.state = {
       userId: "",
       newsList: [],
-      error: false
+      error: false,
+      loadingNews:true
     };
   }
   componentDidMount() {
@@ -36,10 +38,8 @@ export default class News extends Component {
         console.log(data.error);
       } else {
         var reversedData = data.reverse();
-        this.setState({ newsList: reversedData });
-
+        this.setState({ newsList: reversedData,loadingNews:false});
         var NewsArray = [];
-
         for (var i = 0; data.length > i; i++) {
           NewsArray.push(data[i]._id);
         }
@@ -53,23 +53,22 @@ export default class News extends Component {
     OneNewsDelete();
   };
   render() {
-    {
-      /* /* "Новый коментарий" */
-      /* Назначено новое дело"jobNews */
-      /* "Новый Агент" */
-      /* "вам пришло новое дело" */
-    }
+
     const { newsList, error } = this.state;
     let err = false;
     let userID = isAuthenticated().direct._id;
+    let noNews = {
+      emptyText:(<div>Нет новых новостей<FrownOutlined  style={{fontSize:"32px",marginRight:"5px"}}/></div>)
+    }
     return (
       <div className="news_pos">
         {error ? <Error></Error> : null}
         <div style={{ padding: "20px" }}>
-          <Skeleton paragraph={{ rows: 20 }} active loading={false}>
+          <Skeleton paragraph={{ rows: 20 }} active loading={this.state.loadingNews}>
             <List
-              locale="Новых новостей нет"
+              // locale="Новых новостей нет"
               itemLayout="horizontal"
+              locale={noNews}
               dataSource={newsList}
               renderItem={item => (
                 <List.Item>

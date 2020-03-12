@@ -185,6 +185,7 @@ export default class NewAgent extends Component {
     this.setState({ manageAdd: managListTo, tags: tags });
   };
   newAgentClick = () => {
+    let whoAdd
     let resultValid = ["Директор", "Управляющий"].includes(this.state.userRole);
     if (resultValid) {
       let {
@@ -220,6 +221,10 @@ export default class NewAgent extends Component {
         pay_character
       } = this.state;
       let msg;
+      whoAdd = {
+        name: isAuthenticated().direct.name,
+        _id: isAuthenticated().direct._id
+      };
       if (name.length === 0) {
         msg = "Имя является обязатльным параметром";
         this.openNotificationValidationError(msg);
@@ -428,7 +433,7 @@ export default class NewAgent extends Component {
         tags,
         diff
       };
-      let whoAdd = {
+      whoAdd = {
         name: isAuthenticated().direct.name,
         _id: isAuthenticated().direct._id
       };
@@ -441,6 +446,27 @@ export default class NewAgent extends Component {
       };
       NewAgentAddManager(body).then(data => {
         message.success("Агент зарегестрирован!");
+        this.setState({        
+          OGRN:"",
+          agentGeo:"",
+          manageAdd:"",
+          postedBy:"",
+          TechMa:[],
+          name:"",
+          full_name:"",
+          INN:"",
+          company_desription:"",
+          legal_address:"",
+          actual_address:"",
+          email:"",
+          site:"",
+          instagram:"",
+          phone:"",
+          WhereFromClient:"",
+          work_begin_with_him:"",
+          individual_conditions_job:"",
+          pay_character:" "
+        })
       });
     }
   };

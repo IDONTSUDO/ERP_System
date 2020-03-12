@@ -366,5 +366,4 @@ exports.DeletedTodo = async (req, res) => {
         }
         res.json({ message: "User delete!" })
     })
-
 }

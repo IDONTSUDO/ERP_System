@@ -35,6 +35,7 @@ export default class TodayWork extends Component {
     let TodoArray = [];
     TodayWorkHTTP(user)
       .then(data => {
+        console.log("SOLO ",data)
         if (data.error) {
           this.setState({ redirectToSignin: true });
         } else {
@@ -45,6 +46,7 @@ export default class TodayWork extends Component {
           MytodoComandItsDay(userId).then(data => {
             if (data.error) {
             } else {
+              console.log(data)
               for (let i = 0; data.length > i; i++) {
                 TodoArray.push(data[i]);
               }
@@ -115,135 +117,137 @@ export default class TodayWork extends Component {
 
   render() {
     const { todos, userID, comand, open } = this.state;
-
+    // console.log(todos)
     return (
       <div
         style={{ display: "block", marginBottom: "34px" }}
         className="container"
       >
         <div className="row">
-          <Skeleton paragraph={{ rows: 20 }} active loading={this.state.open}>
-            {todos.map((todo, i) => (
+        {todos.map((todo, i) => (
               <>
-                {todo.JobArray.length === 0 ? (
-                  <>
-                    <div className="card-job-modile-style  todo-phone-yellow">
-                      <Card className="todo-yellow">
-                        <Link
-                          to={
-                            todo.status === "system"
-                              ? `/spec/job/${todo._id}`
-                              : `/job/${todo._id}`
-                          }
-                        >
-                          <div
-                            style={{
-                              color: "rgb(0, 0, 0)",
-                              fontWeight: "bolder",
-                              fontSize: "20px"
-                            }}
-                          >
-                            {this.renderImortance(todo.importance)}
-                          </div>
-                          <div style={{ color: "rgb(0, 0, 0)" }}>
-                            {todo.time}
-                          </div>
-                          <h5
-                            style={{
-                              color: "rgb(0, 0, 0)",
-                              wordBreak: "break-word"
-                            }}
-                          >
-                            {todo.title}
-                          </h5>
-                          <div style={{ color: "rgb(0, 0, 0)" }}>
-                            {todo.date}
-                          </div>
-                          {todo.status === "system" ? (
-                            <>
-                              <Popover
-                                Popover
-                                content={<>{this.renderPopoverSolo(todo)}</>}
-                                title="Задача"
-                              >
-                                <TeamOutlined
-                                  style={{
-                                    fontSize: "32px",
-                                    color: "rgb(0, 0, 0)",
-                                    marfin: "5px"
-                                  }}
-                                />
-                              </Popover>
-                            </>
-                          ) : null}
-                        </Link>
-                      </Card>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    {todo.JobArray.map((tod, i) => (
-                      <>
-                        <div className="card-job-modile-style  todo-phone-yellow">
-                          <Card className="todo-yellow">
-                            <Link
-                              to={
-                                tod.status === "system"
-                                  ? `/spec/job/${todo._id}`
-                                  : `/job/${todo._id}`
-                              }
-                            >
-                              <div
-                                style={{
-                                  color: "rgb(0, 0, 0)",
-                                  fontWeight: "bolder",
-                                  fontSize: "20px"
-                                }}
-                              >
-                                {this.renderImortance(todo.importance)}
-                              </div>
-                              <h5
-                                style={{
-                                  color: "rgb(0, 0, 0)",
-                                  wordBreak: "break-word"
-                                }}
-                              >
-                                {todo.title}
-                              </h5>
-                              <div style={{ color: "rgb(0, 0, 0)" }}>
-                                {todo.date}
-                              </div>
-                              {todo.status === "system" ? (
-                                <>
-                                  <Popover
-                                    Popover
-                                    content={
-                                      <>{this.renderPopoverComand(todo)}</>
-                                    }
-                                    title="Задача"
-                                  >
-                                    <TeamOutlined
-                                      style={{
-                                        fontSize: "32px",
-                                        color: "rgb(0, 0, 0)",
-                                        marfin: "5px"
-                                      }}
-                                    />
-                                  </Popover>
-                                </>
-                              ) : null}
-                            </Link>
-                          </Card>
-                        </div>
-                      </>
-                    ))}
-                  </>
-                )}
+                {console.log(todo.JobArray.length)}
               </>
             ))}
+          <Skeleton paragraph={{ rows: 20 }} active loading={this.state.open}>
           </Skeleton>
         </div>
       </div>
     );
   }
 }
+// {todo.JobArray.length === 0 ? (
+//   <>
+//   {console.log(todo)}
+//     <div className="card-job-modile-style  todo-phone-yellow">
+//       <Card className="todo-yellow">
+//         <Link
+//           to={
+//             todo.status === "system"
+//               ? `/spec/job/${todo._id}`
+//               : `/job/${todo._id}`
+//           }
+//         >
+//           <div
+//             style={{
+//               color: "rgb(0, 0, 0)",
+//               fontWeight: "bolder",
+//               fontSize: "20px"
+//             }}
+//           >
+//             {this.renderImortance(todo.importance)}
+//           </div>
+//           <div style={{ color: "rgb(0, 0, 0)" }}>
+//             {todo.time}
+//           </div>
+//           <h5
+//             style={{
+//               color: "rgb(0, 0, 0)",
+//               wordBreak: "break-word"
+//             }}
+//           >
+//             {todo.title}
+//           </h5>
+//           <div style={{ color: "rgb(0, 0, 0)" }}>
+//             {todo.date}
+//           </div>
+//           {todo.status === "system" ? (
+//             <>
+//               <Popover
+//                 Popover
+//                 content={<>{this.renderPopoverSolo(todo)}</>}
+//                 title="Задача"
+//               >
+//                 <TeamOutlined
+//                   style={{
+//                     fontSize: "32px",
+//                     color: "rgb(0, 0, 0)",
+//                     marfin: "5px"
+//                   }}
+//                 />
+//               </Popover>
+//             </>
+//           ) : null}
+//         </Link>
+//       </Card>
+//     </div>
+//   </>
+// ) : (
+//   <>
+//     {todo.JobArray.map((tod, i) => (
+//       <>
+//         <div className="card-job-modile-style  todo-phone-yellow">
+//           <Card className="todo-yellow">
+//             <Link
+//               to={
+//                 tod.status === "system"
+//                   ? `/spec/job/${todo._id}`
+//                   : `/job/${todo._id}`
+//               }
+//             >
+//               <div
+//                 style={{
+//                   color: "rgb(0, 0, 0)",
+//                   fontWeight: "bolder",
+//                   fontSize: "20px"
+//                 }}
+//               >
+//                 {this.renderImortance(todo.importance)}
+//               </div>
+//               <h5
+//                 style={{
+//                   color: "rgb(0, 0, 0)",
+//                   wordBreak: "break-word"
+//                 }}
+//               >
+//                 {todo.title}
+//               </h5>
+//               <div style={{ color: "rgb(0, 0, 0)" }}>
+//                 {todo.date}
+//               </div>
+//               {todo.status === "system" ? (
+//                 <>
+//                   <Popover
+//                     Popover
+//                     content={
+//                       <>{this.renderPopoverComand(todo)}</>
+//                     }
+//                     title="Задача"
+//                   >
+//                     <TeamOutlined
+//                       style={{
+//                         fontSize: "32px",
+//                         color: "rgb(0, 0, 0)",
+//                         marfin: "5px"
+//                       }}
+//                     />
+//                   </Popover>
+//                 </>
+//               ) : null}
+//             </Link>
+//           </Card>
+//         </div>
+//       </>
+//     ))}
+//   </>
+// )}

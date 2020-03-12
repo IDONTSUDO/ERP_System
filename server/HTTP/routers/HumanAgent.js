@@ -8,7 +8,7 @@ const {
 } = require("../controllers/AgentAtHuman.js")
 const {
     agentId
-  } = require("../controllers/ContrAgent");
+} = require("../controllers/ContrAgent");
 
 const router = express.Router({ mergeParams: true });
 
