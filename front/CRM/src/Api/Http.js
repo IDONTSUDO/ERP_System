@@ -322,7 +322,7 @@ export const AddManageForAgent = (tags, agentId) => {
     return fetch(`${process.env.REACT_APP_API_URL}/new/manage/agent/${agentId}`, {
         method: "POST",
         headers: myHeaders,
-        body: JSON.stringify({ tags })
+        body: JSON.stringify(tags)
 
     })
         .then(responce => {

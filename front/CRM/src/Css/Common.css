@@ -1587,3 +1587,6 @@ nav {
   left: -10px;
 }
 .ant-avatar {left: -13px}
+.leftpos{
+  display: flex;
+}

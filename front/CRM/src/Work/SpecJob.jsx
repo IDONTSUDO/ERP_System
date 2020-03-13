@@ -448,6 +448,7 @@ class SpecJob extends Component {
             </TabPane>
             <TabPane tab="Прошлая активность" key="2">
               <List
+              
                 dataSource={comments}
                 header={`Всего:${comments.length}`}
                 itemLayout="horizontal"
@@ -456,6 +457,7 @@ class SpecJob extends Component {
                     {item.status === "system" ? (
                       <div>
                         <Comment
+                        style={{margin: "4%"}}
                           actions={[
                             <span
                               onClick={id =>

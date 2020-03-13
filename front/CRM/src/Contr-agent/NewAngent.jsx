@@ -292,10 +292,6 @@ export default class NewAgent extends Component {
         mail_at_peopel,
         checkedList
       };
-      let whoAdd = {
-        name: isAuthenticated().direct.name,
-        _id: isAuthenticated().direct._id
-      };
       let body = {
         AgentFeatus,
         AgentPeopel,

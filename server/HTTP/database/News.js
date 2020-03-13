@@ -53,6 +53,7 @@ const NewsSchema = new mongoose.Schema({
   date:{
    type:Date 
   },
+  whoAdd:{type:Object},
   expireAt: {
     type: Date,
     index: { expires: '5m' },

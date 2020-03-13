@@ -17,6 +17,7 @@ class AssignedTask extends Component {
   }
   init = userId => {
     MyAssignedTodo(userId).then(data => {
+      console.log(data)
       if (data.error) {
         this.setState({ error: true });
       } else {

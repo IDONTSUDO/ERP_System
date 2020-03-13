@@ -42,7 +42,8 @@ export default class AgentProfile extends Component {
       legal_address: "",
       actual_address: "",
       payment_account: "",
-      redirectTo: false
+      redirectTo: false,
+      TagsStart:[]
     };
   }
 
@@ -63,7 +64,6 @@ export default class AgentProfile extends Component {
           INN: data.INN,
           general_director: data.general_director,
           OGRN: data.OGRN,
-          // tags: data.tags,
           any: data.any,
           legal_address: data.legal_address,
           actual_address: data.actual_address,
@@ -73,11 +73,12 @@ export default class AgentProfile extends Component {
         if (data.tags === "none") {
           this.setState({ tags: undefined });
         } else {
+          console.log(data.tags)
           data.tags.map(tag => {
             TagsArray.push(tag.name);
           });
 
-          this.setState({ tags: TagsArray });
+          this.setState({ tags: TagsArray,TagsStart:TagsArray });
         }
       }
     });
@@ -122,26 +123,48 @@ export default class AgentProfile extends Component {
   clickSubmit = event => {
     event.preventDefault();
     this.setState({ loading: true });
-    const { tags, id, worker } = this.state;
-    const token = isAuthenticated().token;
-    let userArray = [];
-
-    for (let i = 0; tags.length > i; i++) {
-      for (let user of worker) {
-        if (user.name === tags[i]) {
-          userArray.push({ name: user.name, _id: user._id });
+    let msg 
+    const { tags, id, worker,TagsStart } = this.state;
+    if(tags.length > 1){
+      msg = "Нельзя назначить больше одного менеджера агенту"
+      return this.openNotificationValid(msg)
+    }else{
+      let UserExit = []
+      let FinalySortUser = []
+      const token = isAuthenticated().token;
+      let userArray = [];
+      if(tags[0] === TagsStart[0]){
+        msg = "Этот менеджер уже был назначен"
+        return this.openNotificationValid(msg)
+      }else{
+        for (let i = 0; tags.length > i; i++) {
+          for (let user of worker) {
+            if (user.name === tags[i]) {
+              userArray.push({ name: user.name, _id: user._id });
+            }
+          }
         }
-      }
-    }
+        for(let i = 0; TagsStart.length > i; i++){
+          for (let user of worker) {
+            if (user.name === TagsStart[i]) {
+              UserExit.push({ name: user.name, _id: user._id });
+            }
+          }
+        }
 
-    AddManageForAgent(userArray, id, token).then(data => {
-      if (data.error) {
-        this.openNotificationError();
-      } else {
-        this.openNotificationNewUserList();
-        this.forceUpdate();
       }
-    });
+      let body ={
+        UserExit,userArray
+      }
+      AddManageForAgent(body,id).then(data => {
+        if (data.error) {
+          this.openNotificationError();
+        } else {
+          this.openNotificationNewUserList();
+          this.forceUpdate();
+        }
+      });
+    }
   };
 
   forceUpdate() {
@@ -186,6 +209,12 @@ export default class AgentProfile extends Component {
       icon: <Icon type="frown" style={{ color: "#108ee9" }} />
     });
   }
+  openNotificationValid(msg) {
+    notification.open({
+      message: `${msg}`,
+      icon: <Icon type="frown" style={{ color: "#108ee9" }} />
+    });
+  }
   openNotificationNewUserList() {
     notification.open({
       message: "Назначено",
@@ -193,6 +222,7 @@ export default class AgentProfile extends Component {
     });
   }
   ChangeSelect = inputData => {
+
     this.setState({ tags: inputData });
   };
   render() {
@@ -257,6 +287,8 @@ export default class AgentProfile extends Component {
             <div style={{ display: "flex" }}>
               <Select
                 mode="multiple"
+                // maxTagTextLength={1}
+
                 style={{ width: "max-content" }}
                 placeholder="Выберете исполнителей"
                 onChange={this.ChangeSelect}

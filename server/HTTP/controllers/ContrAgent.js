@@ -161,7 +161,6 @@ exports.AllAgent = async (req, res) => {
       return (
         ContrAgent.find()
           .skip((currentPage - 1) * perPage)
-          // .select('_id name')
           .limit(perPage)
       );
     })
@@ -185,12 +184,50 @@ exports.ChangeAgent = async (req, res) => {
     res.json(result);
   });
 };
-exports.ManageAddAgent = async (req, res) => {
+exports.UserAddAgentNews = async (req, res) => {
+  let { userArray } = req.body;
+  if (userArray.length != 0) {
+    let newNewsAtToJoinAgent = new News();
+    newNewsAtToJoinAgent.worker_by = [userArray[0]._id];
+    newNewsAtToJoinAgent.description = "Вам добавили Агента";
+    newNewsAtToJoinAgent.eventNews = "Агент";
+    await newNewsAtToJoinAgent.save((err, result) => {
+      console.log(err, result);
+      return next();
+    });
+  } else {
+    return;
+  }
+};
+
+exports.UserDeleteAtAgentNews = async (req, res) => {
+  let { UserExit, userArray } = req.body;
+
+  if (UserExit.length != 0) {
+    let news = new News();
+    news.worker_by = [{user:UserExit[0]._id}];
+    news.description = "С вас сняли контр агента";
+    news.eventNews = "Агент";
+    await news.save((err, result) => {
+      Todo.deleteMany({
+        agentByTodo: { $elemMatch: { _id: req.agent._id } },
+        status: "system",
+        tags: [UserExit[0]._id]
+      })
+        .select("_id ")
+        .then(data => {
+        console.log(data)
+        });
+    });
+  } else {
+    return next();
+  }
+};
+exports.ManageAddAgent = async (req, res, next) => {
+  let { userArray } = req.body;
   let agent = req.agent;
-  agent.tags = req.body.tags;
-
-  agent = _.extend(agent, req.body);
-
+  let tags = userArray;
+  agent.tags = tags;
   var agentResult;
   await agent.save((err, result) => {
     if (err) {
@@ -202,19 +239,19 @@ exports.ManageAddAgent = async (req, res) => {
     res.json(result);
 
     let PlaningDateMoment = new Date();
-    // +1 day
     PlaningDateMoment.setDate(PlaningDateMoment.getDate() + 1);
 
     let dateMoment = moment(PlaningDateMoment).format("YYYY-MM-DD");
-    // console.log("AGENT     :",agentResult)
-    for (let i of agentResult.tags) {
-      let agent_cron = new AgentCron();
-      agent_cron.PlanningDate = dateMoment;
-      agent_cron.UserId = i;
-      agent_cron.agent = agentResult;
-      agent_cron.agentId = agentResult._id;
-      agent_cron.save();
-    }
+
+    let agent_cron = new AgentCron();
+    console.log("SUKA DA TI ZAEBLO BLEAT", agentResult.tags[0]);
+    agent_cron.PlanningDate = dateMoment;
+    agent_cron.UserId = [agentResult.tags[0]];
+    agent_cron.agent = agentResult;
+    agent_cron.agentId = agentResult._id;
+    agent_cron.save();
+    req.agent = agentResult;
+    return next();
   });
 };
 exports.DeleteManagerForAgent = async (req, res) => {
@@ -519,7 +556,6 @@ exports.GetYearStatisticAgent = async (req, res) => {
 };
 exports.GetYearAndMountStatistichAgent = async (req, res) => {
   let { agentId, Year, Mounth } = req.body;
-  console.log(agentId, Year, Mounth);
   TodoAgent.find({
     year: Year,
     mounth: Mounth,
@@ -594,19 +630,22 @@ exports.AgentAtTodoCron = async (req, res, next) => {
 };
 exports.AgentAtPeopel = async (req, res, next) => {
   let { AgentPeopel } = req.body;
-
-  if (AgentPeopel.bio.length > 0) {
-    let agnHum = new AgentHuman(AgentPeopel);
-    await agnHum.save((err, result) => {
-      if (err) {
-        return null;
-      }
-
-      req.peopelId = result._id;
-      return next();
-    });
-  } else {
+  if (AgentPeopel.bio === undefined) {
     return next();
+  } else {
+    if (AgentPeopel.bio.length > 0) {
+      let agnHum = new AgentHuman(AgentPeopel);
+      await agnHum.save((err, result) => {
+        if (err) {
+          return null;
+        }
+
+        req.peopelId = result._id;
+        return next();
+      });
+    } else {
+      return next();
+    }
   }
 };
 exports.AgentAtBrachOfice = async (req, res, next) => {
@@ -628,24 +667,25 @@ exports.AgentAtBrachOfice = async (req, res, next) => {
 exports.AgentAtTodo = async (req, res, next) => {
   let { todo } = req.body;
 
-  let agent = req.agent  
+  let agent = req.agent;
   let tod = new Todo(todo);
   tod.title = agent.name;
-  tod.tags = agent.tags[0]._id
-  tod.agentByTodo = agent
+  tod.tags = agent.tags[0]._id;
+  tod.agentByTodo = agent;
   tod.save().then(data => {
-    return next()
+    return next();
   });
 };
 exports.AgentAtNewManagerTodo = async (req, res, next) => {
   let agent = req.agent;
-  let agnCron = new AgentCron();
+  console.log(agent.tags);
   if (agent.tags.length > 0) {
     let PlaningDateMoment = new Date();
     PlaningDateMoment.setDate(PlaningDateMoment.getDate() + 1);
     let dateMoment = moment(PlaningDateMoment).format("YYYY-MM-DD");
 
     for (let i of agent.tags) {
+      let agnCron = new AgentCron();
       agnCron.PlanningDate = dateMoment;
       agnCron.UserId = { _id: i._id, name: i.name };
       agnCron.agent = agent;
@@ -704,45 +744,45 @@ exports.GoodNewsByRegulatorPositiom = (req, res, next) => {
         .select(" _id ")
         .then(results => {
           FinalyNewsPeopel.push(results);
-       
+
           ContrAgent.find({})
-          .count()
-          .exec((err, result) => {
-            for (let newsHuman of FinalyNewsPeopel[0]) {
-              let news = new News();
-              let description = `Добавление нового контр агента.  Агентов всего: ${result}`;
-              let eventNews = "Новый Агент";
+            .count()
+            .exec((err, result) => {
+              for (let newsHuman of FinalyNewsPeopel[0]) {
+                let news = new News();
+                let description = `Добавление нового контр агента.  Агентов всего: ${result}`;
+                let eventNews = "Новый Агент";
 
-              news.NewsTO = newsHuman;
-              news.NewsTO = newsHuman._id;
-              news.agent = newAgent;
-              news.description = description;
-              news.eventNews = eventNews;
-              news.newsFrom = whoAdd
-              news.save();
-            }
-            for (let newsHuman of FinalyNewsPeopel[1]) {
-              let news = new News();
-              let description = `Добавление нового контр агента.  Агентов всего: ${result}`;
-              let eventNews = "Новый Агент";
+                news.NewsTO = newsHuman;
+                news.NewsTO = newsHuman._id;
+                news.agent = newAgent;
+                news.description = description;
+                news.eventNews = eventNews;
+                news.newsFrom = whoAdd;
+                news.save();
+              }
+              for (let newsHuman of FinalyNewsPeopel[1]) {
+                let news = new News();
+                let description = `Добавление нового контр агента.  Агентов всего: ${result}`;
+                let eventNews = "Новый Агент";
 
-              news.NewsTO = newsHuman._id;
-              news.worker_by = newsHuman;
-              news.agent = newAgent;
-              news.description = description;
-              news.eventNews = eventNews;
-              news.newsFrom = whoAdd
-              news.save();
-            }
-          })
+                news.NewsTO = newsHuman._id;
+                news.worker_by = newsHuman;
+                news.agent = newAgent;
+                news.description = description;
+                news.eventNews = eventNews;
+                news.newsFrom = whoAdd;
+                news.save();
+              }
+            });
         });
     });
 };
 exports.NewRegulatoryPositionAtRegulatoriNews = (req, res, next) => {
   let RegulatoryHuman = [];
   let FinalyNewsPeopel = [];
-  let { newAgent } = req.body;
-
+  let { newAgent, whoAdd } = req.body;
+  let agent = req.agent;
   Company.find({ role: "Директор" })
     .select(" _id")
     .then(data => {
@@ -764,18 +804,15 @@ exports.NewRegulatoryPositionAtRegulatoriNews = (req, res, next) => {
           ContrAgent.find({})
             .count()
             .exec((err, result) => {
-              console.log(result);
               for (let newsPeopel of FinalyNewsPeopel) {
-                // console.log(newsPeopel)
                 let news = new News();
                 news.NewsTO;
-
                 let description = `Добавление нового контр агента.  Агентов всего: ${result}`;
                 let eventNews = "Новый Агент";
-
+                news.whoAdd = whoAdd;
                 news.NewsTO = newsPeopel;
                 news.worker_by = newsPeopel;
-                news.agent = newAgent;
+                news.agent = agent;
                 news.description = description;
                 news.eventNews = eventNews;
                 news.save();

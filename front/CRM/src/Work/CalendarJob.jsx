@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import None from "../Components/None.jsx"
 
 import {
   Calendar,
@@ -10,7 +11,11 @@ import {
   notification,
   Icon,
   message,
-  Avatar
+  Avatar,
+  Input,
+  Select,
+  Checkbox,
+  Drawer
 } from "antd";
 import { isAuthenticated } from "../Api/Auth";
 import {
@@ -27,7 +32,9 @@ import {
   UserOutlined,
   PhoneOutlined,
   WhatsAppOutlined,
-  CoffeeOutlined
+  CoffeeOutlined,
+  SearchOutlined,
+  MailOutlined
 } from "@ant-design/icons";
 import moment from "moment";
 import Localisation from "../helper/LocalisationCalendar.json";
@@ -50,7 +57,8 @@ export default class CalendarJob extends Component {
       diff: [],
       time: undefined,
       mounth: undefined,
-      year: undefined
+      year: undefined,
+      agentFind:false
     };
     this.handleActionEditor = this.handleActionEditor.bind(this);
   }
@@ -94,9 +102,14 @@ export default class CalendarJob extends Component {
                 : null
             );
             TodoArray.push(data.result[int]);
-            this.setState({ todosCalendar: TodoArray });
           }
-        }
+          this.setState({ todosCalendar: TodoArray });
+          TodoArray.map((todo,i) =>(
+            todo.status === "system" ? (
+              console.log(todo.agentByTodo)
+            ):(null)
+          ))
+        } 
       });
     });
   }
@@ -169,8 +182,11 @@ export default class CalendarJob extends Component {
     listData.map((item, i) =>
       time === item.time
         ? (itemQuality++,
-          item.JobArray.length != 0 ? jobArray++ : SoloTodo++,
-          item.status === "system" ? systemTodo++ : null)
+          item.JobArray.length != 0
+            ? jobArray++
+            : item.status === "system"
+            ? systemTodo++
+            : SoloTodo++)
         : null
     );
     return (
@@ -210,6 +226,14 @@ export default class CalendarJob extends Component {
         )}
       </ul>
     );
+  };
+  onClose = () => {
+    this.setState({
+      agentFind: false,
+    });
+  };
+  switchAgentFind =  agentFind => {
+    this.setState({ agentFind: agentFind });
   };
   getMonthData(value) {}
   onSelectDate = dateSelect => {
@@ -328,6 +352,7 @@ export default class CalendarJob extends Component {
         <div>Имя:{todo.agentByTodo[0].name}</div>
         <div>Телефон:{todo.agentByTodo[0].phone}</div>
         <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
+        <div>Email:{todo.agentByTodo[0].email}</div>
       </>
     );
   };
@@ -342,7 +367,7 @@ export default class CalendarJob extends Component {
                   src={`${
                     process.env.REACT_APP_API_URL
                   }/user/photo/${job.user.slice(0, -9)}?`}
-                  shape="square"
+                  shape="square" 
                 />
               </Link>
             ) : (
@@ -457,7 +482,10 @@ export default class CalendarJob extends Component {
         </div>
         <hr />
         <div className="leftpos">
+          
           <Switch defaultChecked={false} onChange={this.switchCalendarEditor} />
+
+          <Switch defaultChecked={false}  style={{backgroundColor:"#001529bf"}}onChange={this.switchAgentFind} />
         </div>
         <Calendar
           dateCellRender={this.dateCellRender}
@@ -496,6 +524,24 @@ export default class CalendarJob extends Component {
           </div>
           <ReactQuill onChange={this.handleActionEditor("description")} />
         </Modal>
+        <Drawer
+          title="Поиск"
+          placement="right"
+          closable={false}
+          onClose={this.onClose}
+          visible={this.state.agentFind}
+          getContainer={false}
+          width={500}
+        >
+          <Input
+                placeholder="Поиск по агентам"
+                prefix={<SearchOutlined className="site-form-item-icon" />}
+                suffix={
+                  <Checkbox>@</Checkbox>
+                }
+          
+          ></Input>
+        </Drawer>
       </div>
     );
   }

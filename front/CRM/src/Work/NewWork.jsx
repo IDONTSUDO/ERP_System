@@ -201,6 +201,7 @@ class Work extends React.Component {
       } = this.state;
 
       let tagsArray = [];
+
       let names_workers_list = tags;
 
       for (let index = 0; tags.length > index; index++) {
@@ -238,7 +239,7 @@ class Work extends React.Component {
       var worker_job_news = tags.filter(function(el) {
         return el != posted_by;
       });
-
+      
       let worker_by = worker_job_news.map((user, index) => {
         return {
           user: user

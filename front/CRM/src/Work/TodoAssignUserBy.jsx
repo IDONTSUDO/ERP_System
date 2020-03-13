@@ -33,42 +33,6 @@ class TodoAssignUserBy extends Component {
       }
     });
   };
-  returnSort = async () => {
-    this.setState({ open: true });
-    let userId = isAuthenticated().direct._id;
-    this.init(userId);
-  };
-  yellowSort = () => {
-    const { todos } = this.state;
-    var YellowSortArray = [];
-    for (let i = 0; todos.length > i; i++) {
-      if (todos[i].importance === "Средней важности") {
-        console.log(todos[i].importance);
-        YellowSortArray.push(todos[i]);
-      }
-    }
-    this.setState({ todos: YellowSortArray });
-  };
-  greenSort = () => {
-    const { todos } = this.state;
-    var GreenSortArray = [];
-    for (let i = 0; todos.length > i; i++) {
-      if (todos[i].importance === "Не очень важное") {
-        GreenSortArray.push(todos[i]);
-      }
-    }
-    this.setState({ todos: GreenSortArray });
-  };
-  redSort = () => {
-    const { todos } = this.state;
-    var RedSortArray = [];
-    for (let i = 0; todos.length > i; i++) {
-      if (todos[i].importance === "Очень важное") {
-        RedSortArray.push(todos[i]);
-      }
-    }
-    this.setState({ todos: RedSortArray });
-  };
   render() {
     
     const { todos, userID, open } = this.state;

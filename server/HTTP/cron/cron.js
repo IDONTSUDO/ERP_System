@@ -101,7 +101,7 @@ function CRON_MANAGE_TASK_AT_AGENT() {
 
       let status = "system";
       let descriptionTodo = "TESTING";
-
+      let diffDate = moment(DateToday).toDate();
       let mounth = moment(DateToday)
         .locale("ru")
         .format("MM");
@@ -116,11 +116,12 @@ function CRON_MANAGE_TASK_AT_AGENT() {
         tod.time = MomentTime;
         tod.tags = agentCron.UserId[0]._id;
         tod.status = status;
-        tod.agent = agentCron.agent;
+        tod.agentByTodo = agentCron.agent;
         tod.mounth = mounth;
         tod.year = year;
         tod.importance = "Очень важное";
         tod.Date = new Date();
+        tod.diff = [diffDate]
         tod.save();
       }
       for (let i of data)

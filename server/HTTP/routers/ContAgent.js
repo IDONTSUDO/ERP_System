@@ -33,7 +33,8 @@ const {
   StatisticNewAgent,
   NewRegulatoryPositionAtRegulatoriNews,
   AgentAtTodo,
-  GoodNewsByRegulatorPositiom
+  GoodNewsByRegulatorPositiom,
+  UserDeleteAtAgentNews,UserAddAgentNews
 } = require("../controllers/ContrAgent");
 // /agent/new/at/manager/
 const { workerById } = require("../controllers/Company");
@@ -65,7 +66,12 @@ router.post(
   GoodNewsByRegulatorPositiom
 );
 
-router.post("/new/manage/agent/:agentId", requireSignin, ManageAddAgent);
+router.post(
+  "/new/manage/agent/:agentId",
+  ManageAddAgent,
+  UserDeleteAtAgentNews,
+  UserAddAgentNews
+);
 router.post("/get/contragent/date", AgentStates);
 router.post("/search/managing/director/to/email", SearchAgentEmail);
 router.post("/year/agent/todo/statistics", GetYearStatisticAgent);

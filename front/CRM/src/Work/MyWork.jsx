@@ -67,6 +67,7 @@ export default class MyWork extends Component {
             for (let i = 0; data.result.length > i; i++) {
               TodoArray.push(data.result[i]);
             }
+            
             this.setState({ todos: TodoArray });
             this.setState({ open: false });
           }
@@ -212,7 +213,6 @@ export default class MyWork extends Component {
                     ></Button>
                   </div>
                 </ui>
-
                 <div
                   style={{ display: "block", marginBottom: "34px" }}
                   className="container"
@@ -365,9 +365,9 @@ export default class MyWork extends Component {
                                                 Popover
                                                 content={
                                                   <>
-                                                    {this.renderPopoverSystem(
+                                                    {/* {this.renderPopoverSystem(
                                                       comTodo
-                                                    )}
+                                                    )} */}
                                                   </>
                                                 }
                                                 title="Задача"
@@ -446,7 +446,6 @@ export default class MyWork extends Component {
                                       <div style={{ color: "#ffffff" }}>
                                         {comTodo.time}
                                       </div>
-
                                       {comTodo.status === "system" ? (
                                         <>
                                           <Popover
@@ -696,7 +695,6 @@ export default class MyWork extends Component {
                                               <div style={{ color: "#ffffff" }}>
                                                 {tod.date}
                                               </div>
-
                                               {comTodo.comand ? (
                                                 <>
                                                   <Popover
@@ -769,7 +767,6 @@ export default class MyWork extends Component {
 //       ) >= -1 ? (
 //       <div>div</div>
 //     ) : null}
-
 //     {/* {moment().diff(moment(comTodo.diff[i])) <= -4 ?(<div>div</div>):(null)} */}
 //     {/* {moment().diff(moment(comTodo.diff[i])) <= -2 ?(<>div</>):(null)} */}
 //   </>
