@@ -1,7 +1,6 @@
 const express = require('express')
 const app = express()
 const port = 8080
-const {logger} = require('./log/logger.js')
 const mongoose = require('mongoose')
 const morgan = require('morgan')
 require("dotenv").config()
@@ -18,15 +17,18 @@ const moment = require('moment')
 
 
 
-let timeFind = moment().locale("ru").format("MM");
 
 Promise.promisifyAll(require("mongoose"));
 Cron()
-mongoose.connect(`mongodb://localhost/svarog-crm-system`,{ useUnifiedTopology: true,  useNewUrlParser: true,  useCreateIndex :  true ,  poolSize: 10  }).then(() => console.log("DB Conected"))
+mongoose.connect(`mongodb://localhost/${process.env.DATABASE}`,{ useUnifiedTopology: true,  useNewUrlParser: true,  useCreateIndex :  true ,  poolSize: 10  }).then(() =>  console.log(`Server connect to Database ${process.env.DATABASE}`))
 mongoose.connection.on('error', err => {
     console.log(`DB connection error: ${err.message}`)
 })
-mongoose.set('debug', true)
+if(`${process.env.DEBUG_Mode}` === "true"){
+    mongoose.set("debug", true);
+    app.use(morgan('tiny'))
+
+}
 mongoose.Promise = Promise;
 
 
@@ -49,7 +51,6 @@ const Tech = require("./routers/TechAgent.js")
 const ActiveUser = require("./routers/ActiveUsers.js")
 const AgentHuman = require('./routers/HumanAgent')
 app.use(cookieParser())
-app.use(morgan('tiny'))
 app.use(bodyParser.json())
 app.use(expressValidator())
 app.use(cors())

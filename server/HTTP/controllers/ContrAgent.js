@@ -158,11 +158,9 @@ exports.AllAgent = async (req, res) => {
     .countDocuments()
     .then(count => {
       totalItems = count;
-      return (
-        ContrAgent.find()
-          .skip((currentPage - 1) * perPage)
-          .limit(perPage)
-      );
+      return ContrAgent.find()
+        .skip((currentPage - 1) * perPage)
+        .limit(perPage);
     })
     .then(agents => {
       res.status(200).json(agents);
@@ -205,7 +203,7 @@ exports.UserDeleteAtAgentNews = async (req, res) => {
 
   if (UserExit.length != 0) {
     let news = new News();
-    news.worker_by = [{user:UserExit[0]._id}];
+    news.worker_by = [{ user: UserExit[0]._id }];
     news.description = "С вас сняли контр агента";
     news.eventNews = "Агент";
     await news.save((err, result) => {
@@ -216,7 +214,7 @@ exports.UserDeleteAtAgentNews = async (req, res) => {
       })
         .select("_id ")
         .then(data => {
-        console.log(data)
+          console.log(data);
         });
     });
   } else {
@@ -820,4 +818,23 @@ exports.NewRegulatoryPositionAtRegulatoriNews = (req, res, next) => {
             });
         });
     });
+};
+exports.agentDontManager = async (req, res) => {
+  const currentPage = req.query.page || 1;
+  const perPage = 50;
+  var totalItems;
+
+  const agents = await ContrAgent.find({tags:"none"})
+
+    .countDocuments()
+    .then(count => {
+      totalItems = count;
+      return ContrAgent.find({tags:"none"})
+        .skip((currentPage - 1) * perPage)
+        .limit(perPage);
+    })
+    .then(agents => {
+      res.status(200).json(agents);
+    })
+    .catch(err => console.log(err));
 };
