@@ -2,7 +2,16 @@ import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
 import { TodayWorkHTTP, MytodoComandItsDay } from "../Api/Http";
 import { Link } from "react-router-dom";
-import { Button, Card, Badge, Spin, Icon, Popover, Skeleton,Avatar } from "antd";
+import {
+  Button,
+  Card,
+  Badge,
+  Spin,
+  Icon,
+  Popover,
+  Skeleton,
+  Avatar
+} from "antd";
 import Moment from "react-moment";
 import Error from "../Error/Error.jsx";
 import {
@@ -102,7 +111,7 @@ export default class TodayWork extends Component {
           </>
         ))}
         <div>
-          <span style={{ marginRight: "15px" }}>От:</span>
+          <span style={{ marginRight: "15px" }}></span>
           <Avatar
             src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
           />
@@ -117,7 +126,7 @@ export default class TodayWork extends Component {
         <div dangerouslySetInnerHTML={{ __html: todo.description }} />
         <hr />
         <div>
-          <span style={{ marginRight: "15px" }}>От:</span>
+          <span style={{ marginRight: "15px" }}></span>
           <Link to={`/user/${todo.posted_by}`}>
             <Avatar
               src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
@@ -192,7 +201,7 @@ export default class TodayWork extends Component {
                       <>
                         <Popover
                           Popover
-                          // content={<>{this.renderPopoverSystem(todo)}</>}
+                          content={<>{this.renderPopoverSystem(todo)}</>}
                           title="Задача"
                         >
                           <WhatsAppOutlined

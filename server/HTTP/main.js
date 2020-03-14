@@ -11,7 +11,7 @@ const fs = require('fs')
 const cors = require('cors')
 const Fawn = require('fawn')
 const PUBLISHER = require('./socket/publisher.js')
-const {Cron} = require('./cron/cron.js')
+
 const Promise = require("bluebird");
 const moment = require('moment')
 
@@ -19,7 +19,7 @@ const moment = require('moment')
 
 
 Promise.promisifyAll(require("mongoose"));
-Cron()
+
 mongoose.connect(`mongodb://localhost/${process.env.DATABASE}`,{ useUnifiedTopology: true,  useNewUrlParser: true,  useCreateIndex :  true ,  poolSize: 10  }).then(() =>  console.log(`Server connect to Database ${process.env.DATABASE}`))
 mongoose.connection.on('error', err => {
     console.log(`DB connection error: ${err.message}`)

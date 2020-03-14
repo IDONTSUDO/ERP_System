@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import None from "../Components/None.jsx"
+import None from "../Components/None.jsx";
 
 import {
   Calendar,
@@ -15,7 +15,10 @@ import {
   Input,
   Select,
   Checkbox,
-  Drawer
+  Drawer,
+  Tabs,
+  Skeleton,
+  List
 } from "antd";
 import { isAuthenticated } from "../Api/Auth";
 import {
@@ -34,13 +37,14 @@ import {
   WhatsAppOutlined,
   CoffeeOutlined,
   SearchOutlined,
-  MailOutlined
+  MailOutlined,
+  FrownOutlined
 } from "@ant-design/icons";
 import moment from "moment";
 import Localisation from "../helper/LocalisationCalendar.json";
 
 let today = moment(Date.now());
-
+const { TabPane } = Tabs;
 export default class CalendarJob extends Component {
   constructor() {
     super();
@@ -58,7 +62,11 @@ export default class CalendarJob extends Component {
       time: undefined,
       mounth: undefined,
       year: undefined,
-      agentFind:false
+      agentFind: false,
+      visibelCalendar: "block",
+      visibelTwoCalendar: "none",
+      TodoPostedList: [],
+      SystemTodo: []
     };
     this.handleActionEditor = this.handleActionEditor.bind(this);
   }
@@ -104,12 +112,29 @@ export default class CalendarJob extends Component {
             TodoArray.push(data.result[int]);
           }
           this.setState({ todosCalendar: TodoArray });
-          TodoArray.map((todo,i) =>(
-            todo.status === "system" ? (
-              console.log(todo.agentByTodo)
-            ):(null)
-          ))
-        } 
+          let postedTodoList = [];
+          let userAr = [];
+          TodoArray.map((todo, i) =>
+            // postedTodoList.push({name:todo.name_posted}),
+            todo.name_posted != undefined ? userAr.push(todo.name_posted) : null
+          );
+          var result = {};
+
+          userAr.forEach(function(a) {
+            if (result[a] != undefined) ++result[a];
+            else result[a] = 1;
+          });
+
+          Object.keys(result).map(obj =>
+            postedTodoList.push({ quality: result[obj], name: obj })
+          );
+          this.setState({ TodoPostedList: postedTodoList });
+          let TodoAgents = [];
+          TodoArray.map((todo, i) =>
+            todo.status === "system" ? TodoAgents.push(todo) : null
+          );
+          this.setState({ SystemTodo: TodoAgents });
+        }
       });
     });
   }
@@ -156,7 +181,7 @@ export default class CalendarJob extends Component {
         <div dangerouslySetInnerHTML={{ __html: todo.description }} />
         <hr />
         <div>
-          <span style={{ marginRight: "15px" }}>От:</span>
+          <span style={{ marginRight: "15px" }}></span>
           <Link to={`/user/${todo.posted_by}`}>
             <Avatar
               src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
@@ -229,11 +254,16 @@ export default class CalendarJob extends Component {
   };
   onClose = () => {
     this.setState({
-      agentFind: false,
+      agentFind: false
     });
   };
-  switchAgentFind =  agentFind => {
+  switchAgentFind = agentFind => {
     this.setState({ agentFind: agentFind });
+    if (agentFind) {
+      this.setState({ visibelTwoCalendar: "block", visibelCalendar: "none" });
+    } else {
+      this.setState({ visibelTwoCalendar: "none", visibelCalendar: "block" });
+    }
   };
   getMonthData(value) {}
   onSelectDate = dateSelect => {
@@ -356,6 +386,31 @@ export default class CalendarJob extends Component {
       </>
     );
   };
+  renderPopoverAgent = todo => {
+    return (
+      <>
+        <div>Имя:{todo.agentByTodo[0].name}</div>
+        <div>Телефон:{todo.agentByTodo[0].phone}</div>
+        <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
+        <div>Email:{todo.agentByTodo[0].email}</div>
+        <div>Индивидуальные условия:{todo.agentByTodo[0].individual_conditions_job}</div>
+        <div>Откуда пришел:{todo.agentByTodo[0].work_begin_with_him}</div>
+      </>
+    );
+  };
+  helperSearchTodoByAgeregate = name => {
+    let { todosCalendar } = this.state;
+    let results = todosCalendar.filter(el => el.name_posted === name);
+    this.setState({ SelectDatedTodo: results });
+  };
+  helperAgentAgregateClick = todo =>{
+    let { SystemTodo } = this.state;
+    
+    let results = SystemTodo.filter(el =>     el.agentByTodo[0]._id ===  todo.agentByTodo[0]._id);
+    this.setState({SelectDatedTodo:results})
+
+  }
+  helperTodoByAgregateAgents = () => {};
   renderPopoverTeam = todo => {
     return (
       <>
@@ -367,7 +422,7 @@ export default class CalendarJob extends Component {
                   src={`${
                     process.env.REACT_APP_API_URL
                   }/user/photo/${job.user.slice(0, -9)}?`}
-                  shape="square" 
+                  shape="square"
                 />
               </Link>
             ) : (
@@ -388,7 +443,7 @@ export default class CalendarJob extends Component {
           </>
         ))}
         <div>
-          <span style={{ marginRight: "15px" }}>От:</span>
+          <span style={{ marginRight: "15px" }}></span>
           <Avatar
             src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
           />
@@ -411,6 +466,22 @@ export default class CalendarJob extends Component {
     });
   }
   render() {
+    let noTodo = {
+      emptyText: (
+        <div>
+          Вам никто не назначил дел{" "}
+          <FrownOutlined style={{ fontSize: "32px", marginRight: "5px" }} />
+        </div>
+      )
+    };
+    let noSystemTodo = {
+      emptyText: (
+        <div>
+          Нету дел по агентам{" "}
+          <FrownOutlined style={{ fontSize: "32px", marginRight: "5px" }} />
+        </div>
+      )
+    };
     return (
       <div className={this.state.editorBorder}>
         <div className>
@@ -482,18 +553,74 @@ export default class CalendarJob extends Component {
         </div>
         <hr />
         <div className="leftpos">
-          
           <Switch defaultChecked={false} onChange={this.switchCalendarEditor} />
 
-          <Switch defaultChecked={false}  style={{backgroundColor:"#001529bf"}}onChange={this.switchAgentFind} />
+          <Switch
+            defaultChecked={false}
+            style={{ backgroundColor: "#001529bf" }}
+            onChange={this.switchAgentFind}
+          />
         </div>
         <Calendar
           dateCellRender={this.dateCellRender}
           monthCellRender={this.monthCellRender}
           onSelect={this.onSelectDate}
-          style={{ width: "90%" }}
+          style={{ width: "90%", display: this.state.visibelCalendar }}
           locale={Localisation}
         />
+
+        <Tabs
+          style={{ display: this.state.visibelTwoCalendar }}
+          defaultActiveKey="2"
+        >
+          <TabPane tab="Поиск по агенту" key="1">
+            <List
+              size="small"
+              bordered
+              locale={noSystemTodo}
+              dataSource={this.state.SystemTodo}
+              renderItem={item => (
+                <List.Item>
+                  <Popover
+                    Popover
+                    content={<>{this.renderPopoverAgent(item)}</>}
+                    title="Агент"
+                  >
+                    <h5
+                      style={{cursor:"pointer"}}
+                      onClick={todo =>
+                        this.helperAgentAgregateClick(item, todo)
+                      }
+                    >
+                      {item.title}
+                    </h5>
+                  </Popover>
+                </List.Item>
+              )}
+            />
+          </TabPane>
+          <TabPane tab="Поиск по назначенному делу" key="2">
+            <List
+              size="small"
+              bordered
+              locale={noTodo}
+              dataSource={this.state.TodoPostedList}
+              renderItem={item => (
+                <List.Item>
+                  <h5
+                   style={{cursor:"pointer"}}
+                    onClick={name =>
+                      this.helperSearchTodoByAgeregate(item.name, name)
+                    }
+                  >
+                    {item.name}
+                  </h5>
+                  <h5 style={{ color: "#1890ff" }}>{item.quality}</h5>
+                </List.Item>
+              )}
+            />
+          </TabPane>
+        </Tabs>
         <Modal
           title="Новая задача"
           visible={this.state.visibleNewTodo}
@@ -524,24 +651,6 @@ export default class CalendarJob extends Component {
           </div>
           <ReactQuill onChange={this.handleActionEditor("description")} />
         </Modal>
-        <Drawer
-          title="Поиск"
-          placement="right"
-          closable={false}
-          onClose={this.onClose}
-          visible={this.state.agentFind}
-          getContainer={false}
-          width={500}
-        >
-          <Input
-                placeholder="Поиск по агентам"
-                prefix={<SearchOutlined className="site-form-item-icon" />}
-                suffix={
-                  <Checkbox>@</Checkbox>
-                }
-          
-          ></Input>
-        </Drawer>
       </div>
     );
   }

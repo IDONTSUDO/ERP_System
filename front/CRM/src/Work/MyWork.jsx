@@ -742,7 +742,7 @@ export default class MyWork extends Component {
             )}
           </TabPane>
           <TabPane tab="Календарь" key="2">
-            <div style={{ width: "90%" }} className="container">
+            <div style={{ width: "90%",    display: "block" }} className="container">
               <CalendarJob />
             </div>
           </TabPane>

@@ -1590,3 +1590,9 @@ nav {
 .leftpos{
   display: flex;
 }
+.ant-table-thead > tr > th, .ant-table-tbody > tr > td{
+  background-color: #ffffff;
+}
+.ant-fullcalendar-fullscreen .ant-fullcalendar-month, .ant-fullcalendar-fullscreen .ant-fullcalendar-date{
+  /* width: 40px; */
+}

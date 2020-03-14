@@ -6,12 +6,13 @@ const mongoose = require("mongoose");
 const Promise = require("bluebird");
 const cron = require("node-cron");
 require("dotenv").config();
-
+const ActiveUserWeekDay = require("./database/ActiveUserWeekDay.js")
 const Todo = require(`./database/UserTodo`);
 const News = require(`./database/News`);
 const ManageTaskAtAgentCron = require(`./database/CronTaskAtAgent`);
 const StatisticsEveryDay = require(`./database/StatisticsEveryDay`);
 const UserStatistic = require(`./database/UserStatistic.js`);
+const Comapany = require("./database/Company.js")
 const moment = require("moment");
 
 mongoose
@@ -22,7 +23,7 @@ mongoose
     poolSize: 10
   })
   .then(() =>
-    console.log(`Server connect to Database ${process.env.DATABASE}`)
+    console.log(`CRON connect to Database ${process.env.DATABASE}`)
   );
 mongoose.connection.on("error", err => {
   console.log(`DB connection error: ${err.message}`);
@@ -37,7 +38,7 @@ function CRON_STATISTIC() {
   dateTime = moment(dateTime).format("YYYY-MM-DD");
   cron.schedule(
     // 0 1 * * *
-    "* * * * *",
+    "0 1 * * *",
     () => {
       console.log(200);
       StatisticsEveryDay.find({ day: dateTime }).exec((err, result) => {
@@ -77,7 +78,7 @@ function CRON_USER_TODO() {
     .format("LL");
 
   cron.schedule(
-    "* * * * *",
+    "0 1 * * *",
     () => {
       Todo.find({ time: timeFind, comand: false }).exec((err, result) => {
         if (err) {
@@ -115,7 +116,7 @@ function CRON_USER_TODO() {
 }
 
 function CRON_MANAGE_TASK_AT_AGENT() {
-  cron.schedule("* * * * *", () => {
+  cron.schedule("0 1 * * *", () => {
     let PlaningDateMoment = new Date();
     // +1 day
     PlaningDateMoment.setDate(PlaningDateMoment.getDate() + 1);
@@ -159,8 +160,34 @@ function CRON_MANAGE_TASK_AT_AGENT() {
     });
   });
 }
+function everyWeekUserActive() {
+    cron.schedule("* * * * *", () => {
+        // Ищет всех кто состоит в компании и возвращает их ObjectId
+        let WEEK = moment().isoWeek()
 
+        let YEAR = moment()
+        .locale("ru")
+        .format("YY");
+       
+        Comapany.find({})
+        .select(" _id name")
+        .then(data =>{
+            console.log(data)
+            for(i of data){
+                console.log(i)
+                let Active = new ActiveUserWeekDay()
+                Active.userId = i._id
+                Active.name = i.name
+                Active.week = WEEK 
+                Active.year = YEAR
+                Active.save()
+            }
+        })
+    })
+}
+everyWeekUserActive()
 CRON_MANAGE_TASK_AT_AGENT();
 CRON_STATISTIC();
 CRON_USER_TODO();
-app.listen(port, () => console.log(`Server listening on  localhost:${port}!`));
+app.listen(port, () => console.log(`CRON START on localhost:${port}!`));
+
