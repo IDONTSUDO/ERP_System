@@ -1,7 +1,8 @@
 let Todo = require("../database/UserTodo.js");
 let AgentComent = require("../database/Comments.js");
 let TodoAgents = require("../database/AgentTasks.js");
-let AgentStatistic = require("../database/AgentStatistic");
+let AgentStatistic = require("../database/Statistics/AgentStatistic");
+let ActiveUserWeek = require("../database/Statistics/ActiveUserWeekDay")
 exports.newCommentAtAgent = async (req, res, next) => {
   let { taskId, value, rate, agentID, workerId, newTodo, task,user } = req.body;
  
@@ -103,5 +104,18 @@ exports.userActiveMouthAndYear = async (req,res) =>{
   let {userId,Year,Mounth} = req.body
   TodoAgents.find({tags:userId,year:Year,mounth:Mounth}).then(data =>{
     return res.status(200).json(data)
+  })
+}
+exports.activeHelper = async (req,res) =>{
+  let {  WeekNum,year,userId} = req.body
+
+  ActiveUserWeek.find({year:year,week:WeekNum,userId:userId})
+  .select(" _id week year ")
+  .then(data =>{
+    if(data[0] != undefined){
+      return res.status(200).json(data[0])
+    }else{
+      // TODO
+    }
   })
 }

@@ -2,7 +2,7 @@
 // И это рудимент прошлого.Который можно исправить, но зачем? Работает не трожь.
 const Direct = require('../database/Company')
 //пользовательская статистика
-const UserStatistic = require('../database/UserStatistic')
+const UserStatistic = require('../database/Statistics/UserStatistic')
 //девайсы с которых зашел юзер
 const UserDevice = require('../database/Devises')
 //для создания записей  юзер агентами, и айпи входа в систему

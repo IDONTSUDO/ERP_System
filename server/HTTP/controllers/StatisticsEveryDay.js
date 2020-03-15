@@ -1,5 +1,5 @@
-let StatisticsEveryDayAll = require('../database/StatisticsEveryDay')
-let Statistic = require('../database/UserStatistic.js')
+let StatisticsEveryDayAll = require('../database/Statistics/StatisticsEveryDay')
+let Statistic = require('../database/Statistics/UserStatistic.js')
 let dateFormat = require('dateformat');
 let moment = require('moment')
 

@@ -1,7 +1,7 @@
 
 let parser = require('fast-xml-parser');
 let Integration = require('../database/Integration.js')
-let AgentStatistic = require('../database/AgentStatistic.js')
+let AgentStatistic = require('../database/Statistics/AgentStatistic.js')
 let ContrAgent = require('../database/ContrAgent.js')
 let request = require('request');
 let rp = require('request-promise');

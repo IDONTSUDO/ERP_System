@@ -1,6 +1,6 @@
 const ContrAgent = require("../database/ContrAgent");
 const TodoAgent = require("../database/AgentTasks");
-const AgentStatistic = require("../database/AgentStatistic");
+const AgentStatistic = require("../database/Statistics/AgentStatistic");
 const Specialisation = require("../database/Specialisations");
 const AgentCron = require("../database/CronTaskAtAgent");
 const AgentHuman = require("../database/AgentPeopel");
