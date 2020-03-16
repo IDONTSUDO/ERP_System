@@ -35,7 +35,8 @@ const {
   AgentAtTodo,
   GoodNewsByRegulatorPositiom,
   UserDeleteAtAgentNews,UserAddAgentNews,
-  agentDontManager
+  agentDontManager,
+  NewNewsToManager
 } = require("../controllers/ContrAgent");
 // /agent/new/at/manager/
 const { workerById } = require("../controllers/Company");
@@ -84,6 +85,7 @@ router.post(
   AgentAtPeopel,
   AgentAtBrachOfice,
   AgentAtNewManagerTodo,
+  NewNewsToManager,
   StatisticNewAgent,
   NewRegulatoryPositionAtRegulatoriNews,
   finalyAgentSave

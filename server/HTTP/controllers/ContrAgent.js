@@ -10,6 +10,9 @@ const Todo = require("../database/UserTodo");
 const News = require("../database/News");
 let moment = require("moment");
 const _ = require("lodash");
+const {
+  Worker, isMainThread, parentPort, workerData
+} = require('worker_threads');
 
 exports.taskId = async (req, res, next, id) => {
   TodoAgent.findById(id).exec((err, result) => {
@@ -73,7 +76,7 @@ exports.NewSpec = async (req, res) => {
   const spec = new Specialisation(req.body);
 
   await spec.save((err, result) => {
-    // console.log(err)
+   
     if (err) {
       return res.status(400).json({
         error: err
@@ -191,14 +194,13 @@ exports.UserAddAgentNews = async (req, res) => {
     newNewsAtToJoinAgent.eventNews = "Агент";
     await newNewsAtToJoinAgent.save((err, result) => {
       console.log(err, result);
-      return next();
     });
   } else {
     return;
   }
 };
 
-exports.UserDeleteAtAgentNews = async (req, res) => {
+exports.UserDeleteAtAgentNews = async (req, res,next) => {
   let { UserExit, userArray } = req.body;
 
   if (UserExit.length != 0) {
@@ -215,6 +217,7 @@ exports.UserDeleteAtAgentNews = async (req, res) => {
         .select("_id ")
         .then(data => {
           console.log(data);
+          return next()
         });
     });
   } else {
@@ -242,7 +245,6 @@ exports.ManageAddAgent = async (req, res, next) => {
     let dateMoment = moment(PlaningDateMoment).format("YYYY-MM-DD");
 
     let agent_cron = new AgentCron();
-    console.log("SUKA DA TI ZAEBLO BLEAT", agentResult.tags[0]);
     agent_cron.PlanningDate = dateMoment;
     agent_cron.UserId = [agentResult.tags[0]];
     agent_cron.agent = agentResult;
@@ -606,6 +608,7 @@ exports.addAgentAtManager = async (req, res, next) => {
 
 exports.NewAgentAtRegularoryPosition = async (req, res, next) => {
   let { newAgent } = req.body;
+  console.log(req.body)
   if (newAgent.tags.length === 0) {
     delete newAgent.tags;
   }
@@ -633,6 +636,7 @@ exports.AgentAtPeopel = async (req, res, next) => {
   } else {
     if (AgentPeopel.bio.length > 0) {
       let agnHum = new AgentHuman(AgentPeopel);
+      agnHum.AgentBy = req.agent._id
       await agnHum.save((err, result) => {
         if (err) {
           return null;
@@ -647,15 +651,17 @@ exports.AgentAtPeopel = async (req, res, next) => {
   }
 };
 exports.AgentAtBrachOfice = async (req, res, next) => {
-  let { AgentFeatus } = req.body;
+  let { AgentFeatus, } = req.body;
+  
 
   if (AgentFeatus !== undefined) {
     let AgentBranch = new AgentOffice(AgentFeatus);
+    AgentBranch.AgentBy = req.agent._id
     await AgentBranch.save((err, result) => {
       if (err) {
         return null;
       }
-      req.OfficeId = result._id;
+
       return next();
     });
   } else {
@@ -699,22 +705,20 @@ exports.finalyAgentSave = async (req, res, next) => {
   let agent = req.agent;
   let Human = req.peopelId;
   let Office = req.OfficeId;
-
   if (Human !== undefined) {
     ContrAgent.findByIdAndUpdate(
       agent._id,
       { $push: { Office: Office } },
       { new: true }
+    )
+  }
+  if (Office !== undefined) {
+    ContrAgent.findByIdAndUpdate(
+      agent._id,
+      { $push: { Human: Human } },
+      { new: true }
     ).exec((err, result) => {
-      if (Office !== undefined) {
-        ContrAgent.findByIdAndUpdate(
-          agent._id,
-          { $push: { Human: Human } },
-          { new: true }
-        ).exec((err, result) => {
-          return next();
-        });
-      }
+      return next();
     });
   }
 };
@@ -753,7 +757,7 @@ exports.GoodNewsByRegulatorPositiom = (req, res, next) => {
 
                 news.NewsTO = newsHuman;
                 news.NewsTO = newsHuman._id;
-                news.agent = newAgent;
+                news.agent = req.agent;
                 news.description = description;
                 news.eventNews = eventNews;
                 news.newsFrom = whoAdd;
@@ -781,6 +785,7 @@ exports.NewRegulatoryPositionAtRegulatoriNews = (req, res, next) => {
   let FinalyNewsPeopel = [];
   let { newAgent, whoAdd } = req.body;
   let agent = req.agent;
+  let dateCreated = Date.now()
   Company.find({ role: "Директор" })
     .select(" _id")
     .then(data => {
@@ -808,6 +813,7 @@ exports.NewRegulatoryPositionAtRegulatoriNews = (req, res, next) => {
                 let description = `Добавление нового контр агента.  Агентов всего: ${result}`;
                 let eventNews = "Новый Агент";
                 news.whoAdd = whoAdd;
+                news.dateCreated = dateCreated;
                 news.NewsTO = newsPeopel;
                 news.worker_by = newsPeopel;
                 news.agent = agent;
@@ -838,3 +844,20 @@ exports.agentDontManager = async (req, res) => {
     })
     .catch(err => console.log(err));
 };
+exports.NewNewsToManager = async (req,res,next) =>{
+  let agent = req.agent
+ 
+  if(agent.tags === "none"){
+
+    return next()
+  }else{
+
+      let news =  new News()
+      news.NewsTO = agent.tags[0]._id
+      news.eventNews = "Вам назначили агента"
+      news.agent = agent
+      console.log(news)
+      news.save()
+    return next()
+  }
+}

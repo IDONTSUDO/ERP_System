@@ -4,7 +4,8 @@ const {
     StatisticMailingAgent,
     StatisticJobAtAgent,
     StatisticAgentDatabase,
-    StatisticTechAgent
+    StatisticTechAgent,
+    statisticManagerAtAgents
 } = require("../controllers/StatisticEnterprise.js")
 const {jwtTokenUserId,requireSignin} = require("../middleware/middleware.js")
 
@@ -16,6 +17,6 @@ router.get('/agnet/static/at/job',StatisticJobAtAgent)
 router.get('/agnet/static/at/all',StatisticAgentDatabase)
 router.get('/agnet/static/at/tech/agent',StatisticTechAgent)
 router.get('/agent/static/at/manger',StatisticManageAtAgent)
-
+router.get('/agent/at/manager/statistic',statisticManagerAtAgents)
 
 module.exports = router

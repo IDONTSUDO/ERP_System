@@ -4,11 +4,11 @@
   "description": "A node js api",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon main.js",
+    "dev": "nodemon --experimental-worker  main.js",
     "debug": "NODE_ENV=dev  node --inspect ./main.js",
     "log": "LOG=TRUE node ./main.js",
     "opt": "0x -o main.js",
-    "prod": "node ./ci/cd.js"
+    "prod": "node --experimental-worker main.js "
   },
   "author": "IDONTSUDO",
   "license": "WTFP",
