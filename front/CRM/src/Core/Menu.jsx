@@ -262,47 +262,60 @@ class MenuMain extends React.Component {
                         ) : (
                           ""
                         )}
+                        {["Директор", "Управляющий"].includes(role) ? (
+                          <SubMenu
+                            key="sub9"
+                            title={
+                              <>
+                                <span>
+                                  <Icon type="mail" />
+                                  <span>Mail рассылка</span>
+                                </span>
+                              </>
+                            }
+                          >
+                            <Menu.Item key="92">
+                              <Link to="/mailing">
+                                <span>Email рассылки</span>
+                              </Link>
+                            </Menu.Item>
+                            
+                          </SubMenu>
+                        ) : (
+                          ""
+                        )}
 
-                        <SubMenu
-                          key="sub9"
-                          title={
-                            <>
-                              <span>
-                                <Icon type="mail" />
-                                <span>Mail рассылка</span>
-                              </span>
-                            </>
-                          }
-                        >
-                          <Menu.Item key="23">
-                            <Link to="/mailing">
-                              <span>Email рассылка</span>
-                            </Link>
-                          </Menu.Item>
-                        </SubMenu>
-                        <SubMenu
-                          key="sub30"
-                          title={
-                            <>
-                              <span>
-                                <Icon type="bar-chart" />
-
-                                <span>Mail</span>
-                              </span>
-                            </>
-                          }
-                        >
-                          <Menu.Item key="99">
-                            <Link to="/contr/agent/statistic">
-                              <span>Статистика контр агентов</span>
-                            </Link>
-                          </Menu.Item>
-                          <Menu.Item key="41">
-                            <Link to="/enterprise/statistic">
-                              <span>Статистика предпрития</span>
-                            </Link>
-                          </Menu.Item>
-                        </SubMenu>
+                        {["Директор", "Управляющий"].includes(role) ? (
+                          <SubMenu
+                            key="sub123"
+                            title={
+                              <>
+                                <span>
+                                  <Icon type="bar-chart" />
+                                  <span>Mail</span>
+                                </span>
+                              </>
+                            }
+                          >
+                            <Menu.Item key="99">
+                              <Link to="/contr/agent/statistic">
+                                <span>Статистика контр агентов</span>
+                              </Link>
+                            </Menu.Item>
+                            <Menu.Item key="41">
+                              <Link to="/enterprise/statistic">
+                                <span>Статистика предпрития</span>
+                              </Link>
+                            </Menu.Item>
+                            <Menu.Item key="42">
+                              <Link to="/manage/at/agent">
+                                <span>Менеджеры</span>
+                              </Link>
+                            </Menu.Item>
+                          </SubMenu>
+                        ) : (
+                          ""
+                        )}
                       </Menu>
                     </Sider>
                   </Layout>

@@ -31,9 +31,11 @@ exports.newTodoByAgent = async (req) => {
   let {newTodo} = req.body
   let agent =  req.agent 
   Agent.findById(agent).then(data =>{
+   
     let todos = new Todo(newTodo)
-    todos.agentByTodo = data
+    todos.agentByTodo = [data]
     todos.status = "system"
+    todos.title = data.name
     todos.save()
   })
 

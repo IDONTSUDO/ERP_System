@@ -15,7 +15,8 @@ import {
   UserOutlined,
   PhoneOutlined,
   WhatsAppOutlined,
-  CoffeeOutlined
+  CoffeeOutlined,
+  FrownOutlined,
 } from "@ant-design/icons";
 import None from "../Components/None.jsx";
 import {
@@ -33,7 +34,8 @@ import {
   Tabs,
   notification,
   Spin,
-  Skeleton
+  Skeleton,
+  Result
 } from "antd";
 
 import moment from "moment";
@@ -83,7 +85,8 @@ class SpecJob extends Component {
       comentEditId: "",
       description: "",
       EditCommentLoad: false,
-      open:true
+      open:true,
+      redirectToNews:false
     };
   }
   componentDidMount() {
@@ -201,6 +204,7 @@ class SpecJob extends Component {
 
       NewComentSpecTodo(body).then(data => {
         console.log(data);
+        this.setState({redirectToNews:true})
       });
     }
   };
@@ -220,8 +224,11 @@ class SpecJob extends Component {
     listData.map((item, i) =>
       time === item.time
         ? (itemQuality++,
-          item.JobArray.length != 0 ? jobArray++ : SoloTodo++,
-          item.status === "system" ? systemTodo++ : null)
+          item.JobArray.length != 0
+            ? jobArray++
+            : item.status === "system"
+            ? systemTodo++
+            : SoloTodo++)
         : null
     );
     return (
@@ -259,8 +266,7 @@ class SpecJob extends Component {
             />
           </>
         )}
-      </ul>
-    );
+      </ul>)
   };
   handelAnyChange = name => event => {
     this.setState({ error: "" });
@@ -366,12 +372,24 @@ class SpecJob extends Component {
   };
   EditComment = () => {};
   render() {
-    const { comments, submitting, value, agent } = this.state;
-
+    const { comments, submitting, value, agent,redirectToNews } = this.state;
+    let noData = {
+      emptyText:(<div>Ничего не найдено <FrownOutlined  style={{fontSize:"32px",marginRight:"5px"}}/></div>)
+    }
+    if (redirectToNews) {
+      return <Redirect to="/news" refresh="true" />;
+    }
     return (
       <div className="email_main_pos">
         <div>
-        <Skeleton paragraph={{ rows: 20 }} active loading={this.state.open}>
+          {this.state.err ?  (<Result
+    status="404"
+    title="404"
+    subTitle="Sorry, the page you visited does not exist."
+    extra={<Button type="primary">Back Home</Button>}
+  /> ):(
+    <>
+           <Skeleton paragraph={{ rows: 20 }} active loading={this.state.open}>
         <Icon type="question" />
           <Tabs onChange={this.changePanel} defaultActiveKey="1">
             <TabPane tab="Коментарий" key="1">
@@ -448,9 +466,8 @@ class SpecJob extends Component {
             </TabPane>
             <TabPane tab="Прошлая активность" key="2">
               <List
-              
+              locale={noData}
                 dataSource={comments}
-                header={`Всего:${comments.length}`}
                 itemLayout="horizontal"
                 renderItem={item => (
                   <div className="comment-and-todo-list">
@@ -673,6 +690,9 @@ class SpecJob extends Component {
             </TabPane>
           </Tabs>
         </Skeleton>
+    </>
+  )}
+
         </div>
         {this.state.editorSwitcher ? (
           <>

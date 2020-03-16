@@ -189,6 +189,7 @@ export default class MyAgent extends Component {
       icon: <Icon type="smile" style={{ color: "#108ee9" }} />
     });
   }
+
   // TODO: почтовый адрес
   render() {
     let {

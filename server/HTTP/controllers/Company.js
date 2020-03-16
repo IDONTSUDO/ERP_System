@@ -45,7 +45,9 @@ exports.workerById = async (req, res, next, id) => {
         })
 }
 exports.ManageList = async (req, res) =>{
-    Worker.find({role:"Менеджер"}).then(data => {
+    Worker.find({role:"Менеджер"})
+    .select("_id name")
+    .then(data => {
         return res.status(200).json(data)
     })
 }

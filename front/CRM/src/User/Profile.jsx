@@ -54,7 +54,7 @@ class Profile extends Component {
         this.setState({ browserCalendar: false, open: false });
       } else {
         this.setState({ static: data, open: false });
-        userActive(userId).then(data => {
+        userActive(userId).then(data => {   
           this.setState({ activUser: data, loading: false });
         });
       }

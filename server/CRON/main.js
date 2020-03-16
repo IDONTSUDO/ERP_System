@@ -116,7 +116,7 @@ function CRON_USER_TODO() {
 }
 
 function CRON_MANAGE_TASK_AT_AGENT() {
-  cron.schedule("0 1 * * *", () => {
+  cron.schedule("* * * * *", () => {
     let PlaningDateMoment = new Date();
     // +1 day
     PlaningDateMoment.setDate(PlaningDateMoment.getDate() + 1);
@@ -124,7 +124,6 @@ function CRON_MANAGE_TASK_AT_AGENT() {
     let dateMoment = moment(PlaningDateMoment).format("YYYY-MM-DD");
     ManageTaskAtAgentCron.find({ PlanningDate: dateMoment }).then(data => {
       let DateToday = Date.now();
-      console.log(data)
       let MomentTime = moment(DateToday)
         .locale("ru")
         .format("LL");
@@ -147,21 +146,24 @@ function CRON_MANAGE_TASK_AT_AGENT() {
         tod.tags = agentCron.UserId[0]._id;
         tod.status = status;
         tod.agent = agentCron.agent;
+        tod.agentByTodo = agentCron.agent;
         tod.mounth = mounth;
         tod.year = year;
         tod.importance = "Очень важное";
         tod.Date = new Date();
+        console.log(tod)
         tod.save();
       }
-      for (let i of data)
-        ManageTaskAtAgentCron.remove({ _id: i._id }).then(data =>
-          console.log(data)
-        );
+      // name
+      // for (let i of data)
+        // ManageTaskAtAgentCron.remove({ _id: i._id }).then(data =>
+        //   console.log(data)
+        // );
     });
   });
 }
 function everyWeekUserActive() {
-    cron.schedule("* * * * *", () => {
+    cron.schedule("0 1 * * sunday", () => {
         // Ищет всех кто состоит в компании и возвращает их ObjectId
         let WEEK = moment().isoWeek()
 

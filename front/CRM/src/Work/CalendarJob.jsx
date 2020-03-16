@@ -25,8 +25,11 @@ import {
   UserTodoYear,
   NewTodo,
   list,
-  MyTodoGetComandWorked
+  MyTodoGetComandWorked,
+  NewAssignTodoToday,
+  readMyTodo
 } from "../Api/Http";
+import { everyday, IsEveryDaySub } from "../helper/everyday.js";
 import DefaultProfile from "../Assets/default.png";
 import ReactQuill from "react-quill";
 import { Link } from "react-router-dom";
@@ -44,6 +47,7 @@ import moment from "moment";
 import Localisation from "../helper/LocalisationCalendar.json";
 
 let today = moment(Date.now());
+
 const { TabPane } = Tabs;
 export default class CalendarJob extends Component {
   constructor() {
@@ -74,22 +78,22 @@ export default class CalendarJob extends Component {
     const user = isAuthenticated().direct._id;
     let startDate = Date.now();
 
-    let mounthTodo = moment(startDate)
-      .locale("ru")
-      .format("MM");
-    let year = moment(startDate)
-      .locale("ru")
-      .format("YY");
-    let dataFetch = {
-      mounthTodo,
-      year,
-      user
-    };
-    UserTodoYear(dataFetch).then(data => {
+    // let mounthTodo = moment(startDate)
+    //   .locale("ru")
+    //   .format("MM");
+    // let year = moment(startDate)
+    //   .locale("ru")
+    //   .format("YY");
+    // let dataFetch = {
+    //   mounthTodo,
+    //   year,
+    //   user
+    // };
+    readMyTodo(user).then(data => {
       let TodoArray = [];
       let DifferDate;
 
-      TodoArray = data;
+      TodoArray = data.todos;
 
       // this.setState({ todosCalendar: data });
       let userfindString;
@@ -265,7 +269,6 @@ export default class CalendarJob extends Component {
       this.setState({ visibelTwoCalendar: "none", visibelCalendar: "block" });
     }
   };
-  getMonthData(value) {}
   onSelectDate = dateSelect => {
     let todoDate = moment(dateSelect)
       .locale("ru")
@@ -305,11 +308,38 @@ export default class CalendarJob extends Component {
     }
   };
   monthCellRender = value => {
-    const num = this.getMonthData(this.state.todosCalendar);
-    return num ? (
+    let UserWorked = isAuthenticated().direct._id + "IAMWORKED";
+    // TODO Change
+    const todos = this.state.todosCalendar;
+    let mounth = moment(value)
+      .locale("ru")
+      .format("MM");
+    let mounthTodo = 0;
+
+    todos.map((todo, i) =>
+      todo.JobArray.length === 0
+        ? mounth ===
+          moment(todo.diff[0])
+            .locale("ru")
+            .format("MM")
+          ? mounthTodo++
+          : null
+        : todo.JobArray.map((tod, i) =>
+            tod.user === UserWorked
+              ? mounth ===
+                moment(todo.diff[i])
+                  .locale("ru")
+                  .format("MM")
+                ? mounthTodo++
+                : null
+              : null
+          )
+    );
+
+    return mounthTodo != 0 ? (
       <div className="notes-month">
-        <section>{num}</section>
-        <span>Backlog number</span>
+        <section>Всего: {mounthTodo}</section>
+        <span></span>
       </div>
     ) : null;
   };
@@ -323,7 +353,6 @@ export default class CalendarJob extends Component {
       importance,
       description
     } = this.state;
-    // todo
     let msg;
     if (title === undefined) {
       msg = "Заголовок обязателен";
@@ -374,6 +403,8 @@ export default class CalendarJob extends Component {
       });
       this.hideModal();
       message.success("Новое дело создано!");
+      let sub = IsEveryDaySub()._id;
+      NewAssignTodoToday(sub);
     });
   };
   renderPopoverSystem = todo => {
@@ -393,7 +424,9 @@ export default class CalendarJob extends Component {
         <div>Телефон:{todo.agentByTodo[0].phone}</div>
         <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
         <div>Email:{todo.agentByTodo[0].email}</div>
-        <div>Индивидуальные условия:{todo.agentByTodo[0].individual_conditions_job}</div>
+        <div>
+          Индивидуальные условия:{todo.agentByTodo[0].individual_conditions_job}
+        </div>
         <div>Откуда пришел:{todo.agentByTodo[0].work_begin_with_him}</div>
       </>
     );
@@ -403,13 +436,14 @@ export default class CalendarJob extends Component {
     let results = todosCalendar.filter(el => el.name_posted === name);
     this.setState({ SelectDatedTodo: results });
   };
-  helperAgentAgregateClick = todo =>{
+  helperAgentAgregateClick = todo => {
     let { SystemTodo } = this.state;
-    
-    let results = SystemTodo.filter(el =>     el.agentByTodo[0]._id ===  todo.agentByTodo[0]._id);
-    this.setState({SelectDatedTodo:results})
 
-  }
+    let results = SystemTodo.filter(
+      el => el.agentByTodo[0]._id === todo.agentByTodo[0]._id
+    );
+    this.setState({ SelectDatedTodo: results });
+  };
   helperTodoByAgregateAgents = () => {};
   renderPopoverTeam = todo => {
     return (
@@ -587,7 +621,7 @@ export default class CalendarJob extends Component {
                     title="Агент"
                   >
                     <h5
-                      style={{cursor:"pointer"}}
+                      style={{ cursor: "pointer" }}
                       onClick={todo =>
                         this.helperAgentAgregateClick(item, todo)
                       }
@@ -608,7 +642,7 @@ export default class CalendarJob extends Component {
               renderItem={item => (
                 <List.Item>
                   <h5
-                   style={{cursor:"pointer"}}
+                    style={{ cursor: "pointer" }}
                     onClick={name =>
                       this.helperSearchTodoByAgeregate(item.name, name)
                     }

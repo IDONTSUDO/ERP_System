@@ -10,6 +10,7 @@
     "@babel/plugin-proposal-decorators": "^7.8.3",
     "@babel/plugin-transform-typescript": "^7.8.3",
     "@nivo/calendar": "^0.59.1",
+    "@nivo/pie": "^0.61.1",
     "@opuscapita/react-markdown": "2.3.11",
     "@svgr/webpack": "4.3.2",
     "@typescript-eslint/eslint-plugin": "1.13.0",

@@ -10,9 +10,11 @@ const Todo = require("../database/UserTodo");
 const News = require("../database/News");
 let moment = require("moment");
 const _ = require("lodash");
-const {
-  Worker, isMainThread, parentPort, workerData
-} = require('worker_threads');
+const { StaticPool } = require("node-worker-threads-pool");
+
+
+const agentHelper =  "./threads/newAgent.js"
+
 
 exports.taskId = async (req, res, next, id) => {
   TodoAgent.findById(id).exec((err, result) => {
@@ -125,8 +127,6 @@ exports.SearchAgent = async (req, res) => {
 exports.searchSpec = async (req, res) => {
   let specList = req.body;
 
-  // let re = /"/gi;
-  // const description = w.target.value.replace(re, "");
 
   ContrAgent.find({ specialications: { $all: [`${specList}`] } })
     .select("_id full_name email name agentGeo specialications")
@@ -134,7 +134,7 @@ exports.searchSpec = async (req, res) => {
       if (err) {
         return res.status(400).json({ err });
       } else {
-        // console.log(result)
+ 
         return res.status(200).json(result);
       }
     });
@@ -240,14 +240,15 @@ exports.ManageAddAgent = async (req, res, next) => {
     res.json(result);
 
     let PlaningDateMoment = new Date();
-    PlaningDateMoment.setDate(PlaningDateMoment.getDate() + 1);
+    // + 1
+    PlaningDateMoment.setDate(PlaningDateMoment.getDate() );
 
     let dateMoment = moment(PlaningDateMoment).format("YYYY-MM-DD");
 
     let agent_cron = new AgentCron();
     agent_cron.PlanningDate = dateMoment;
     agent_cron.UserId = [agentResult.tags[0]];
-    agent_cron.agent = agentResult;
+    agent_cron.agent = agent;
     agent_cron.agentId = agentResult._id;
     agent_cron.save();
     req.agent = agentResult;
@@ -648,6 +649,7 @@ exports.AgentAtPeopel = async (req, res, next) => {
     } else {
       return next();
     }
+    return next();
   }
 };
 exports.AgentAtBrachOfice = async (req, res, next) => {
@@ -670,19 +672,21 @@ exports.AgentAtBrachOfice = async (req, res, next) => {
 };
 exports.AgentAtTodo = async (req, res, next) => {
   let { todo } = req.body;
-
+  console.log(todo)
+  console.log()
   let agent = req.agent;
   let tod = new Todo(todo);
   tod.title = agent.name;
   tod.tags = agent.tags[0]._id;
   tod.agentByTodo = agent;
+  console.log(tod)
   tod.save().then(data => {
+    console.log(data)
     return next();
   });
 };
 exports.AgentAtNewManagerTodo = async (req, res, next) => {
   let agent = req.agent;
-  console.log(agent.tags);
   if (agent.tags.length > 0) {
     let PlaningDateMoment = new Date();
     PlaningDateMoment.setDate(PlaningDateMoment.getDate() + 1);
@@ -692,8 +696,10 @@ exports.AgentAtNewManagerTodo = async (req, res, next) => {
       let agnCron = new AgentCron();
       agnCron.PlanningDate = dateMoment;
       agnCron.UserId = { _id: i._id, name: i.name };
-      agnCron.agent = agent;
+      agnCron.agentByTodo = agent;
       agnCron.agentId = agent._id;
+      agnCron.agent = agent
+
       agnCron.save();
     }
     return next();
@@ -737,6 +743,7 @@ exports.StatisticNewAgent = async (req, res, next) => {
 };
 exports.GoodNewsByRegulatorPositiom = (req, res, next) => {
   let FinalyNewsPeopel = [];
+  // TODO WORKERTHREADS
   let { newAgent, whoAdd } = req.body;
   Company.find({ role: "Директор" })
     .select(" _id ")

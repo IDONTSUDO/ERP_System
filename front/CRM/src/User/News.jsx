@@ -25,7 +25,7 @@ export default class News extends Component {
       userId: "",
       newsList: [],
       error: false,
-      loadingNews:true
+      loadingNews: true
     };
   }
   componentDidMount() {
@@ -38,7 +38,7 @@ export default class News extends Component {
         console.log(data.error);
       } else {
         var reversedData = data.reverse();
-        this.setState({ newsList: reversedData,loadingNews:false});
+        this.setState({ newsList: reversedData, loadingNews: false });
         var NewsArray = [];
         for (var i = 0; data.length > i; i++) {
           NewsArray.push(data[i]._id);
@@ -53,18 +53,26 @@ export default class News extends Component {
     OneNewsDelete();
   };
   render() {
-
     const { newsList, error } = this.state;
     let err = false;
     let userID = isAuthenticated().direct._id;
     let noNews = {
-      emptyText:(<div>Нет новых новостей<FrownOutlined  style={{fontSize:"32px",marginRight:"5px"}}/></div>)
-    }
+      emptyText: (
+        <div>
+          Нет новых новостей
+          <FrownOutlined style={{ fontSize: "32px", marginRight: "5px" }} />
+        </div>
+      )
+    };
     return (
       <div className="news_pos">
         {error ? <Error></Error> : null}
         <div style={{ padding: "20px" }}>
-          <Skeleton paragraph={{ rows: 20 }} active loading={this.state.loadingNews}>
+          <Skeleton
+            paragraph={{ rows: 20 }}
+            active
+            loading={this.state.loadingNews}
+          >
             <List
               // locale="Новых новостей нет"
               itemLayout="horizontal"
@@ -77,135 +85,37 @@ export default class News extends Component {
                       className="px100"
                       style={{ margin: "5px" }}
                       avatar={
-                        <div className="pos-icon">
-                          {item.eventNews === "Новый коментарий" ? (
-                            <MessageOutlined style={{ fontSize: "32px" }} />
-                          ) : item.eventNews === "Новый Агент" ? (
-                            <UsergroupAddOutlined
-                              style={{ fontSize: "32px" }}
-                            />
-                          ) : item.eventNews === "вам пришло новое дело" ? (
-                            <NotificationOutlined
-                              style={{ fontSize: "32px" }}
-                            />
-                          ) : item.jobNews.length === 0 ? (
-                            <UserOutlined style={{ fontSize: "32px" }} />
-                          ) : (
-                            <TeamOutlined style={{ fontSize: "32px" }} />
-                          )}
-                        </div>
+                        <Avatar
+                          src={`${process.env.REACT_APP_API_URL}/user/photo/${item.posted_by}?`}
+                          onError={e =>
+                            e === undefined
+                              ? null
+                              : e.targer === undefined
+                              ? null
+                              : (e.target.src = DefaultProfile)
+                          }
+                        />
                       }
                       title={
                         <Link to={item.eventNews === "Новый коментарий"} />
                       }
                       description={
                         <>
-                          {item.eventNews === "Назначено новое дело" ? (
-                            item.jobNews.length === 0 ? (
+                          <h4>{item.eventNews}</h4>
+                          <>
+                            {item.eventNews === "Вам назначили агента" ? (
                               <>
-                                {" "}
-                                <div
-                                  dangerouslySetInnerHTML={{
-                                    __html: item.description
-                                  }}
-                                ></div>
-                                <div>На дату: {item.time}</div>
-                              </>
-                            ) : (
-                              <div>
-                                {item.jobNews.map((job, i) => (
-                                  <>
-                                    {job.user === userID ? (
-                                      <>
-                                        <div
-                                          dangerouslySetInnerHTML={{
-                                            __html: job.action
-                                          }}
-                                        ></div>
-                                      </>
-                                    ) : null}
-                                    <div></div>
-                                  </>
-                                ))}
-                                <Popover
-                                  content={
-                                    <>
-                                      {item.jobNews.map((job, i) => (
-                                        <>
-                                          <>
-                                            <div
-                                              dangerouslySetInnerHTML={{
-                                                __html: job.action
-                                              }}
-                                            ></div>
-                                          </>
-                                          <div></div>
-                                        </>
-                                      ))}
-                                    </>
-                                  }
-                                >
-                                  Подробности
-                                </Popover>
-                              </div>
-                            )
-                          ) : null}
-
-                          {item.eventNews === "Новый Агент" ? (
-                            <div>
-                              <div>{item.description}</div>
-                              <div>
-                                <Popover
-                                  content={
-                                    <>
-                                      <div>
-                                        Имя:<b>{item.agent.name}</b>
-                                      </div>
-                                      <div>Специализация:</div>
-                                      {item.agent.specialications.map(
-                                        (spec, i) => (
-                                          <div>
-                                            <b>{spec} </b>
-                                          </div>
-                                        )
-                                      )}
-                                      <div>
-                                        Закрпелен:
-                                        {item.agent.tags.map((tag, i) => (
-                                          <>
-                                            <b> {tag.name}</b>
-                                          </>
-                                        ))}
-                                      </div>
-                                    </>
-                                  }
-                                  title="Агент"
-                                >
+                                <Popover type="hover" content={<></>}>
                                   <Button>Подробности</Button>
                                 </Popover>
-                              </div>
-                            </div>
-                          ) : (
-                            ""
-                          )}
+                              </>
+                            ) : null}{" "}
+                          </>
                           <Moment fromNow>{item.dateCreated}</Moment>
                         </>
                       }
                     />
                   </div>
-                  <Avatar
-                    src={`${process.env.REACT_APP_API_URL}/user/photo/${
-                      item.posted_by
-                      // e.hasOwnProperty(target)
-                    }?`}
-                    onError={e =>
-                      e === undefined
-                        ? null
-                        : e.targer === undefined
-                        ? null
-                        : (e.target.src = DefaultProfile)
-                    }
-                  />
                 </List.Item>
               )}
             />
@@ -223,22 +133,24 @@ export default class News extends Component {
 //       <>
 //         <div className="news-width  alert-complete-status">
 //           <div style={{color:"#fff"}}>{news.description}</div>
-// <Popover
-//   content={
-//     <>
-//       <div>Имя:<b>{news.agent.name}</b></div>
-//       <div>Специализация:</div>
-//       {news.agent.specialications.map((spec, i) => (
-//         <div><b>{spec}  </b></div>
-//       ))}
-//       <div>Закрпелен:{news.agent.tags.map((tag,i) =>(
-//         <>
-//         <b> {tag.name}</b>
-//         </>
-//       )
-//       )}</div>
-//     </>
-//   }
+{
+  /* <Popover
+  content={
+    <>
+      <div>Имя:<b>{news.agent.name}</b></div>
+      <div>Специализация:</div>
+      {news.agent.specialications.map((spec, i) => (
+        <div><b>{spec}  </b></div>
+      ))}
+      <div>Закрпелен:{news.agent.tags.map((tag,i) =>(
+        <>
+        <b> {tag.name}</b>
+        </>
+      )
+      )}</div>
+    </>
+  } */
+}
 //   title="Агент"
 // >
 //   <Button ghost>Подробности</Button>

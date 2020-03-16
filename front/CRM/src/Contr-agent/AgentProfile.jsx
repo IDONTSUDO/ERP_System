@@ -16,6 +16,7 @@ import {
   Select,
   Switch
 } from "antd";
+import ChartAgent from "../Components/ChartAgent";
 import { isAuthenticated } from "../Api/Auth";
 import { Link } from "react-router-dom";
 const { TabPane } = Tabs;
@@ -43,7 +44,7 @@ export default class AgentProfile extends Component {
       actual_address: "",
       payment_account: "",
       redirectTo: false,
-      TagsStart:[]
+      TagsStart: []
     };
   }
 
@@ -73,12 +74,12 @@ export default class AgentProfile extends Component {
         if (data.tags === "none") {
           this.setState({ tags: undefined });
         } else {
-          console.log(data.tags)
+          console.log(data.tags);
           data.tags.map(tag => {
             TagsArray.push(tag.name);
           });
 
-          this.setState({ tags: TagsArray,TagsStart:TagsArray });
+          this.setState({ tags: TagsArray, TagsStart: TagsArray });
         }
       }
     });
@@ -123,20 +124,20 @@ export default class AgentProfile extends Component {
   clickSubmit = event => {
     event.preventDefault();
     this.setState({ loading: true });
-    let msg 
-    const { tags, id, worker,TagsStart } = this.state;
-    if(tags.length > 1){
-      msg = "Нельзя назначить больше одного менеджера агенту"
-      return this.openNotificationValid(msg)
-    }else{
-      let UserExit = []
-      let FinalySortUser = []
+    let msg;
+    const { tags, id, worker, TagsStart } = this.state;
+    if (tags.length > 1) {
+      msg = "Нельзя назначить больше одного менеджера агенту";
+      return this.openNotificationValid(msg);
+    } else {
+      let UserExit = [];
+      let FinalySortUser = [];
       const token = isAuthenticated().token;
       let userArray = [];
-      if(tags[0] === TagsStart[0]){
-        msg = "Этот менеджер уже был назначен"
-        return this.openNotificationValid(msg)
-      }else{
+      if (tags[0] === TagsStart[0]) {
+        msg = "Этот менеджер уже был назначен";
+        return this.openNotificationValid(msg);
+      } else {
         for (let i = 0; tags.length > i; i++) {
           for (let user of worker) {
             if (user.name === tags[i]) {
@@ -144,19 +145,19 @@ export default class AgentProfile extends Component {
             }
           }
         }
-        for(let i = 0; TagsStart.length > i; i++){
+        for (let i = 0; TagsStart.length > i; i++) {
           for (let user of worker) {
             if (user.name === TagsStart[i]) {
               UserExit.push({ name: user.name, _id: user._id });
             }
           }
         }
-
       }
-      let body ={
-        UserExit,userArray
-      }
-      AddManageForAgent(body,id).then(data => {
+      let body = {
+        UserExit,
+        userArray
+      };
+      AddManageForAgent(body, id).then(data => {
         if (data.error) {
           this.openNotificationError();
         } else {
@@ -222,7 +223,6 @@ export default class AgentProfile extends Component {
     });
   }
   ChangeSelect = inputData => {
-
     this.setState({ tags: inputData });
   };
   render() {
@@ -247,69 +247,86 @@ export default class AgentProfile extends Component {
       <div>
         <div className="postisitonRelativeSmeni">
           <div className="">
-            <Descriptions title="Корпаративная  информация" layout="vertical">
-              <Descriptions.Item label="Имя компании">
-                {name === "none" ? (
-                  <Tag color="geekblue">{name.toUpperCase()}</Tag>
-                ) : (
-                  <div>{name}</div>
-                )}
-              </Descriptions.Item>
-              <Descriptions.Item label="Телефон">
-                {phone === "none" ? (
-                  <Tag color="geekblue">{phone.toUpperCase()}</Tag>
-                ) : (
-                  <div>{phone}</div>
-                )}
-              </Descriptions.Item>
-              <Descriptions.Item label="Компания">
-                {company === "none" ? (
-                  <Tag color="geekblue">{company.toUpperCase()}</Tag>
-                ) : (
-                  <div>{company}</div>
-                )}
-              </Descriptions.Item>
-              <Descriptions.Item label="Адрес" span={2}>
-                {legal_address === "none" ? (
-                  <Tag color="geekblue">{legal_address.toUpperCase()}</Tag>
-                ) : (
-                  <div>{legal_address}</div>
-                )}
-              </Descriptions.Item>
-              <Descriptions.Item label="Генеральный директор">
-                {general_director === "none" ? (
-                  <Tag color="geekblue">{general_director.toUpperCase()}</Tag>
-                ) : (
-                  <div>{general_director}</div>
-                )}
-              </Descriptions.Item>
-            </Descriptions>
-            <div style={{ display: "flex" }}>
-              <Select
-                mode="multiple"
-                // maxTagTextLength={1}
+            <Tabs type="card">
+              <TabPane tab="Общая информация" key="1">
+                <Descriptions
+                  title="Корпаративная  информация"
+                  layout="vertical"
+                >
+                  <Descriptions.Item label="Имя компании">
+                    {name === "none" ? (
+                      <Tag color="geekblue">{name.toUpperCase()}</Tag>
+                    ) : (
+                      <div>{name}</div>
+                    )}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Телефон">
+                    {phone === "none" ? (
+                      <Tag color="geekblue">{phone.toUpperCase()}</Tag>
+                    ) : (
+                      <div>{phone}</div>
+                    )}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Компания">
+                    {company === "none" ? (
+                      <Tag color="geekblue">{company.toUpperCase()}</Tag>
+                    ) : (
+                      <div>{company}</div>
+                    )}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Адрес" span={2}>
+                    {legal_address === "none" ? (
+                      <Tag color="geekblue">{legal_address.toUpperCase()}</Tag>
+                    ) : (
+                      <div>{legal_address}</div>
+                    )}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Генеральный директор">
+                    {general_director === "none" ? (
+                      <Tag color="geekblue">
+                        {general_director.toUpperCase()}
+                      </Tag>
+                    ) : (
+                      <div>{general_director}</div>
+                    )}
+                  </Descriptions.Item>
+                </Descriptions>
+                <div style={{ display: "flex" }}>
+                  <Select
+                    mode="multiple"
+                    // maxTagTextLength={1}
 
-                style={{ width: "max-content" }}
-                placeholder="Выберете исполнителей"
-                onChange={this.ChangeSelect}
-                optionLabelProp="label"
-                value={tags}
-                defaultActiveFirstOption={false}
-                allowClear={true}
-              >
-                {worker.map((workerOne, i = 1) => (
-                  <Option value={workerOne.name} label={workerOne.name}>
-                    <span>{workerOne.name}</span>
-                  </Option>
-                ))}
-              </Select>
-              <div style={{ padding: "5px" }}>
-                <Button onClick={this.clickSubmit}>Назначить</Button>
-                <Button>
-                  <Link to={`/agent/tasks/${id}`}>Дела по контр агенту</Link>
-                </Button>
-              </div>
-            </div>
+                    style={{ width: "max-content" }}
+                    placeholder="Выберете исполнителей"
+                    onChange={this.ChangeSelect}
+                    optionLabelProp="label"
+                    value={tags}
+                    defaultActiveFirstOption={false}
+                    allowClear={true}
+                  >
+                    {worker.map((workerOne, i = 1) => (
+                      <Option value={workerOne.name} label={workerOne.name}>
+                        <span>{workerOne.name}</span>
+                      </Option>
+                    ))}
+                  </Select>
+
+                  <Button onClick={this.clickSubmit}>Назначить</Button>
+                  <Button>
+                    <Link to={`/agent/tasks/${id}`}>Дела по контр агенту</Link>
+                  </Button>
+                </div>
+              </TabPane>
+              <TabPane tab="Статистика" key="2">
+                <ChartAgent agentId={id} />
+              </TabPane>
+              <TabPane tab="Офисы" key="3">
+                Content of Tab Pane 3
+              </TabPane>
+              <TabPane tab="Люди" key="4">
+                Content of Tab Pane 3
+              </TabPane>
+            </Tabs>
           </div>
         </div>
       </div>
