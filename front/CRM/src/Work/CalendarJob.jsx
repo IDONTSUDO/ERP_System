@@ -309,7 +309,6 @@ export default class CalendarJob extends Component {
   };
   monthCellRender = value => {
     let UserWorked = isAuthenticated().direct._id + "IAMWORKED";
-    // TODO Change
     const todos = this.state.todosCalendar;
     let mounth = moment(value)
       .locale("ru")
