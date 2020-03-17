@@ -76,7 +76,7 @@ br {
   margin: 0;
   padding: 0;
   /* background: #373737; */
-  overflow: hidden;
+  /* overflow-y: auto; */
   font-family: "Monospaced Number", "Chinese Quote", -apple-system,
     BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB",
     "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -1401,7 +1401,7 @@ nav {
 }
 #root {
   overflow: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 ::-webkit-scrollbar {
@@ -1459,7 +1459,7 @@ nav {
   color: black;
 }
 .activiti-list {
-  overflow-y: scroll;
+  overflow-y: auto;
   width: 50vh;
   height: 387px;
 }

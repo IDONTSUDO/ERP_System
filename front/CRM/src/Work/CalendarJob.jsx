@@ -77,18 +77,6 @@ export default class CalendarJob extends Component {
   componentDidMount() {
     const user = isAuthenticated().direct._id;
     let startDate = Date.now();
-
-    // let mounthTodo = moment(startDate)
-    //   .locale("ru")
-    //   .format("MM");
-    // let year = moment(startDate)
-    //   .locale("ru")
-    //   .format("YY");
-    // let dataFetch = {
-    //   mounthTodo,
-    //   year,
-    //   user
-    // };
     readMyTodo(user).then(data => {
       let TodoArray = [];
       let DifferDate;
@@ -119,7 +107,6 @@ export default class CalendarJob extends Component {
           let postedTodoList = [];
           let userAr = [];
           TodoArray.map((todo, i) =>
-            // postedTodoList.push({name:todo.name_posted}),
             todo.name_posted != undefined ? userAr.push(todo.name_posted) : null
           );
           var result = {};
@@ -181,19 +168,37 @@ export default class CalendarJob extends Component {
   renderPopoverSolo = todo => {
     return (
       <>
-        <div>{todo.title}</div>
-        <div dangerouslySetInnerHTML={{ __html: todo.description }} />
-        <hr />
+        <Link
+          to={
+            todo.status === "system"
+              ? `/spec/job/${todo._id}`
+              : `/job/${todo._id}`
+          }
+          className="news"
+        >
+          <div>{todo.title}</div>
+          <div dangerouslySetInnerHTML={{ __html: todo.description }} />
+          <hr />
+          <div>
+            <span style={{ marginRight: "15px" }}></span>
+            <Link to={`/user/${todo.posted_by}`}>
+              <Avatar
+                src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
+              />
+            </Link>
+          </div>
+        </Link>
+
         <div>
-          <span style={{ marginRight: "15px" }}></span>
-          <Link to={`/user/${todo.posted_by}`}>
-            <Avatar
-              src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
-            />
-          </Link>
+          <Button onClick={todoOne => this.clickComplateTodo(todo, todoOne)}>
+            Выполненно
+          </Button>
         </div>
       </>
     );
+  };
+  clickComplateTodo = todo => {
+    console.log(todo);
   };
   dateCellRender = value => {
     const listData = this.state.todosCalendar;
@@ -270,6 +275,7 @@ export default class CalendarJob extends Component {
     }
   };
   onSelectDate = dateSelect => {
+    let UserWorked = isAuthenticated().direct._id + "IAMWORKED";
     let todoDate = moment(dateSelect)
       .locale("ru")
       .format("LL");
@@ -299,15 +305,24 @@ export default class CalendarJob extends Component {
       let time = moment(dateSelect).format("L");
 
       let SelectDatedTodo = [];
-      listData.map((todo, i) =>
-        time === moment(todo.diff[0]).format("L")
-          ? SelectDatedTodo.push(todo)
-          : null
+      // listData.map((todo,i) =>(
+      //   todo.JobArray.length === 0 ? (null):(todo.JobArray.map((job,i) =>(console.log(job.user == UserWorked))))
+      // ))
+      
+     let data = listData.map((todo) =>
+        todo.JobArray.length === 0
+          ? time === moment(todo.diff[0]).format("L")
+            ? SelectDatedTodo.push(todo)
+            : null
+          : todo.JobArray.map((job, i) =>
+              job.user === UserWorked
+                ? (time , moment(todo.diff[i]).format("L"))
+                  ? SelectDatedTodo.push(todo)
+                  : null
+                : null
+            )
       );
 
-
-
-      console.log(200)
       this.setState({ SelectDatedTodo: SelectDatedTodo });
     }
   };
@@ -413,24 +428,43 @@ export default class CalendarJob extends Component {
   renderPopoverSystem = todo => {
     return (
       <>
-        <div>Имя:{todo.agentByTodo[0].name}</div>
-        <div>Телефон:{todo.agentByTodo[0].phone}</div>
-        <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
-        <div>Email:{todo.agentByTodo[0].email}</div>
+        <Link
+          to={
+            todo.status === "system"
+              ? `/spec/job/${todo._id}`
+              : `/job/${todo._id}`
+          }
+          className="news"
+        >
+          <div>Имя:{todo.agentByTodo[0].name}</div>
+          <div>Телефон:{todo.agentByTodo[0].phone}</div>
+          <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
+          <div>Email:{todo.agentByTodo[0].email}</div>
+        </Link>
       </>
     );
   };
   renderPopoverAgent = todo => {
     return (
       <>
-        <div>Имя:{todo.agentByTodo[0].name}</div>
-        <div>Телефон:{todo.agentByTodo[0].phone}</div>
-        <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
-        <div>Email:{todo.agentByTodo[0].email}</div>
-        <div>
-          Индивидуальные условия:{todo.agentByTodo[0].individual_conditions_job}
-        </div>
-        <div>Откуда пришел:{todo.agentByTodo[0].work_begin_with_him}</div>
+        <Link
+          to={
+            todo.status === "system"
+              ? `/spec/job/${todo._id}`
+              : `/job/${todo._id}`
+          }
+          className="news"
+        >
+          <div>Имя:{todo.agentByTodo[0].name}</div>
+          <div>Телефон:{todo.agentByTodo[0].phone}</div>
+          <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
+          <div>Email:{todo.agentByTodo[0].email}</div>
+          <div>
+            Индивидуальные условия:
+            {todo.agentByTodo[0].individual_conditions_job}
+          </div>
+          <div>Откуда пришел:{todo.agentByTodo[0].work_begin_with_him}</div>
+        </Link>
       </>
     );
   };
@@ -451,40 +485,49 @@ export default class CalendarJob extends Component {
   renderPopoverTeam = todo => {
     return (
       <>
-        {todo.JobArray.map((job, i) => (
-          <>
-            {job.user.length === 33 ? (
-              <Link to={`/user/${job.user.slice(0, -9)}`}>
-                <Avatar
-                  src={`${
-                    process.env.REACT_APP_API_URL
-                  }/user/photo/${job.user.slice(0, -9)}?`}
-                  shape="square"
-                />
-              </Link>
-            ) : (
-              <Link to={`/user/${job.user}`}>
-                <Avatar
-                  src={`${process.env.REACT_APP_API_URL}/user/photo/${job.user}?`}
-                  shape="square"
-                />
-              </Link>
-            )}
-            <div
-              dangerouslySetInnerHTML={{
-                __html: job.action
-              }}
-            ></div>
-            <div>{job.date}</div>
-            <hr />
-          </>
-        ))}
-        <div>
-          <span style={{ marginRight: "15px" }}></span>
-          <Avatar
-            src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
-          />
-        </div>
+        <Link
+          to={
+            todo.status === "system"
+              ? `/spec/job/${todo._id}`
+              : `/job/${todo._id}`
+          }
+          className="news"
+        >
+          {todo.JobArray.map((job, i) => (
+            <>
+              {job.user.length === 33 ? (
+                <Link to={`/user/${job.user.slice(0, -9)}`}>
+                  <Avatar
+                    src={`${
+                      process.env.REACT_APP_API_URL
+                    }/user/photo/${job.user.slice(0, -9)}?`}
+                    shape="square"
+                  />
+                </Link>
+              ) : (
+                <Link to={`/user/${job.user}`}>
+                  <Avatar
+                    src={`${process.env.REACT_APP_API_URL}/user/photo/${job.user}?`}
+                    shape="square"
+                  />
+                </Link>
+              )}
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: job.action
+                }}
+              ></div>
+              <div>{job.date}</div>
+              <hr />
+            </>
+          ))}
+          <div>
+            <span style={{ marginRight: "15px" }}></span>
+            <Avatar
+              src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
+            />
+          </div>
+        </Link>
       </>
     );
   };
@@ -524,67 +567,59 @@ export default class CalendarJob extends Component {
         <div className>
           {this.state.SelectDatedTodo.map((todo, i) => (
             <>
-              <Link
-                to={
-                  todo.status === "system"
-                    ? `/spec/job/${todo._id}`
-                    : `/job/${todo._id}`
-                }
-              >
-                {todo.status === "system" ? (
-                  <>
-                    <Popover
-                      Popover
-                      content={<>{this.renderPopoverSystem(todo)}</>}
-                      title="Задача"
-                    >
-                      <WhatsAppOutlined
-                        style={{
-                          fontSize: "30px",
-                          color: "rgb(103, 58, 183)",
-                          marfin: "5px"
-                        }}
-                      />
-                    </Popover>
-                  </>
-                ) : (
-                  <>
-                    {todo.JobArray.length === 0 ? (
-                      <>
-                        <Popover
-                          Popover
-                          content={<>{this.renderPopoverSolo(todo)}</>}
-                          title="Задача"
-                        >
-                          <UserOutlined
-                            style={{
-                              fontSize: "30px",
-                              color: "rgb(3, 169, 244)",
-                              marfin: "5px"
-                            }}
-                          />
-                        </Popover>
-                      </>
-                    ) : (
-                      <>
-                        <Popover
-                          Popover
-                          content={<>{this.renderPopoverTeam(todo)}</>}
-                          title="Задача"
-                        >
-                          <TeamOutlined
-                            style={{
-                              fontSize: "30px",
-                              color: "rgb(3, 169, 244)",
-                              marfin: "5px"
-                            }}
-                          />
-                        </Popover>
-                      </>
-                    )}
-                  </>
-                )}
-              </Link>
+              {todo.status === "system" ? (
+                <>
+                  <Popover
+                    Popover
+                    content={<>{this.renderPopoverSystem(todo)}</>}
+                    title="Задача"
+                  >
+                    <WhatsAppOutlined
+                      style={{
+                        fontSize: "30px",
+                        color: "rgb(103, 58, 183)",
+                        marfin: "5px"
+                      }}
+                    />
+                  </Popover>
+                </>
+              ) : (
+                <>
+                  {todo.JobArray.length === 0 ? (
+                    <>
+                      <Popover
+                        Popover
+                        content={<>{this.renderPopoverSolo(todo)}</>}
+                        title="Задача"
+                      >
+                        <UserOutlined
+                          style={{
+                            fontSize: "30px",
+                            color: "rgb(3, 169, 244)",
+                            marfin: "5px"
+                          }}
+                        />
+                      </Popover>
+                    </>
+                  ) : (
+                    <>
+                      <Popover
+                        Popover
+                        content={<>{this.renderPopoverTeam(todo)}</>}
+                        title="Задача"
+                      >
+                        <TeamOutlined
+                          style={{
+                            fontSize: "30px",
+                            color: "rgb(3, 169, 244)",
+                            marfin: "5px"
+                          }}
+                        />
+                      </Popover>
+                    </>
+                  )}
+                </>
+              )}
             </>
           ))}
         </div>

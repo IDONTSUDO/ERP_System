@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
 import { Redirect, Link } from "react-router-dom";
-import { Spin, Typography, Popover, Skeleton } from "antd";
+import { Spin, Typography, Popover, Skeleton, Avatar } from "antd";
 import {
   read,
   AllStatistic,
@@ -54,7 +54,7 @@ class Profile extends Component {
         this.setState({ browserCalendar: false, open: false });
       } else {
         this.setState({ static: data, open: false });
-        userActive(userId).then(data => {   
+        userActive(userId).then(data => {
           this.setState({ activUser: data, loading: false });
         });
       }
@@ -110,6 +110,108 @@ class Profile extends Component {
       this.setState({ loading: false, activUser: data });
     });
   };
+  renderPopoverTeam = todo => {
+    return (
+      <>
+        <Link
+          to={
+            todo.status === "system"
+              ? `/spec/job/${todo._id}`
+              : `/job/${todo._id}`
+          }
+          className="news"
+        >
+          {todo.JobArray.map((job, i) => (
+            <>
+              {job.user.length === 33 ? (
+                <Link to={`/user/${job.user.slice(0, -9)}`}>
+                  <Avatar
+                    src={`${
+                      process.env.REACT_APP_API_URL
+                    }/user/photo/${job.user.slice(0, -9)}?`}
+                    shape="square"
+                  />
+                </Link>
+              ) : (
+                <Link to={`/user/${job.user}`}>
+                  <Avatar
+                    src={`${process.env.REACT_APP_API_URL}/user/photo/${job.user}?`}
+                    shape="square"
+                  />
+                </Link>
+              )}
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: job.action
+                }}
+              ></div>
+              <div>{job.date}</div>
+              <hr />
+            </>
+          ))}
+          <div>
+            <span style={{ marginRight: "15px" }}></span>
+            <Avatar
+              src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
+            />
+          </div>
+        </Link>
+      </>
+    );
+  };
+  renderPopoverSystem = todo => {
+    return <>1</>;
+  };
+  renderPopoverAgent = todo => {
+    return (
+      <>
+        <Link
+          to={
+            todo.status === "system"
+              ? `/spec/job/${todo._id}`
+              : `/job/${todo._id}`
+          }
+          className="news"
+        >
+          <div>Имя:{todo.agentByTodo[0].name}</div>
+          <div>Телефон:{todo.agentByTodo[0].phone}</div>
+          <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
+          <div>Email:{todo.agentByTodo[0].email}</div>
+          <div>
+            Индивидуальные условия:
+            {todo.agentByTodo[0].individual_conditions_job}
+          </div>
+          <div>Откуда пришел:{todo.agentByTodo[0].work_begin_with_him}</div>
+        </Link>
+      </>
+    );
+  };
+  renderPopoverSolo = todo => {
+    return (
+      <>
+        <Link
+          to={
+            todo.status === "system"
+              ? `/spec/job/${todo._id}`
+              : `/job/${todo._id}`
+          }
+          className="news"
+        >
+          <div>{todo.title}</div>
+          <div dangerouslySetInnerHTML={{ __html: todo.description }} />
+          <hr />
+          <div>
+            <span style={{ marginRight: "15px" }}></span>
+            <Link to={`/user/${todo.posted_by}`}>
+              <Avatar
+                src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
+              />
+            </Link>
+          </div>
+        </Link>
+      </>
+    );
+  };
   render() {
     const { redirectToSignin, user, open, error, browserCalendar } = this.state;
     const photoUrl = user._id
@@ -118,6 +220,7 @@ class Profile extends Component {
         }?${new Date().getTime()}`
       : DefaultProfile;
     const avatarBolean = user.avatar;
+    const userId = user._id;
     var d = new Date();
     let curr_year = d.getFullYear();
     let minimalDateYear = `${curr_year}-01-01`;
@@ -157,7 +260,6 @@ class Profile extends Component {
                           onError={i => (i.target.src = `${DefaultProfile}`)}
                           src={photoUrl}
                         />
-                        {/* <Online  user={user._id}/> */}
                         <div style={{ padding: "5px" }}>
                           <h1 className="name_user">Имя: {user.name}</h1>
                           <h2 style={{ backgroundColor: "#fcff38" }}>
@@ -178,28 +280,90 @@ class Profile extends Component {
                     <div className="activiti-list">
                       <Timeline>
                         <Skeleton
-                          paragraph={{ rows: 15 }}
+                          paragraph={{ rows: 5 }}
                           active
                           loading={this.state.loading}
                         >
                           <div>
+                          <Timeline >
                             {this.state.activUser.map((active, i) => (
                               <>
-                                <Popover content={<></>} title="Title">
-                                  <Timeline.Item
-                                    style={{ margin: "5px" }}
-                                    dot={
-                                      <UserOutlined
-                                        style={{ fontSize: "16px" }}
-                                      />
+                             
+                                {active.status === "system" ? (
+                                  <Popover
+                                    content={
+                                      <>{this.renderPopoverSystem(active)}</>
                                     }
-                                    color="blue"
                                   >
-                                    {active.title}
-                                  </Timeline.Item>
-                                </Popover>
+                                    <Timeline.Item
+                                      style={{ margin: "5px" }}
+                                      dot={
+                                        <WhatsAppOutlined
+                                          
+                                          style={{ fontSize: "16px",color:"purple" }}
+                                        />
+                                      }
+                                      color="purple"
+                                      label={active.time}
+                                    >
+                                      {active.title}
+                                      <span> {active.time}</span>
+                                    </Timeline.Item>
+                                  </Popover>
+                                ) : active.JobArray.length === 0 ? (
+                                  <>
+                                    <Popover
+                                      content={
+                                        <>{this.renderPopoverSolo(active)}</>
+                                      }
+                                    >
+                                      <Timeline.Item
+                                        style={{ margin: "5px" }}
+                                        dot={
+                                          <UserOutlined
+                                            style={{ fontSize: "16px",color:"#621aff" }}
+                                          />
+                                        }
+                                        label={active.time}
+                                      >
+                                        {active.title}
+                                      </Timeline.Item>
+                                    </Popover>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Popover
+                                      content={
+                                        <>{this.renderPopoverTeam(active)}</>
+                                      }
+                                    >
+                                      <Timeline.Item
+                                        style={{ margin: "5px" }}
+                                        dot={
+                                          <TeamOutlined
+                                            style={{ fontSize: "16px" }}
+                                          />
+                                        }
+                                        color="blue"
+                                      >
+                                        {active.title}
+                                        <span>
+                                          {active.JobArray.map((job, i) => (
+                                            <>
+                                              {job.user === userId
+                                                ? console.log(user)
+                                                : null}{" "}
+                                            </>
+                                          ))}
+                                        </span>
+                                      </Timeline.Item>
+                                    </Popover>
+                                  </>
+                                )}
                               </>
+                             
                             ))}
+                             </Timeline>
                           </div>
                         </Skeleton>
                       </Timeline>
