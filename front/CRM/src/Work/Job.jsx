@@ -170,10 +170,12 @@ export default class Job extends Component {
 
         let link = `/job/` + ID;
         let eventNews = "Новый статус";
+        let posted_by = isAuthenticated().direct._id
         let payloads = {
           link,
           worker_by,
-          eventNews
+          eventNews,
+          posted_by
         };
         this.openNotificationNewStatus();
         NewNewToSetStatusJob(payloads);
@@ -698,7 +700,7 @@ export default class Job extends Component {
     }
 
     return (
-      <div className="todo-list-main-selector">
+      <div className="todo-main">
         {comand ? (
           <>
             <div className="">
@@ -852,7 +854,6 @@ export default class Job extends Component {
                       <small class="text-muted"></small>
                     </a>
                     <div class="btn-group dropup">
-                      {/* когда работа по делу производится одним человеком  */}
                       <Select
                         defaultValue="Статус"
                         style={{ width: 120 }}

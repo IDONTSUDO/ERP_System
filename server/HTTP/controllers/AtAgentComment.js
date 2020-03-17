@@ -2,22 +2,30 @@ let Todo = require("../database/UserTodo.js");
 let AgentComent = require("../database/Comments.js");
 let TodoAgents = require("../database/AgentTasks.js");
 let AgentStatistic = require("../database/Statistics/AgentStatistic");
-let ActiveUserWeek = require("../database/Statistics/ActiveUserWeekDay")
-let Agent = require("../database/ContrAgent")
+let ActiveUserWeek = require("../database/Statistics/ActiveUserWeekDay");
+let Agent = require("../database/ContrAgent");
 exports.newCommentAtAgent = async (req, res, next) => {
-  let { taskId, value, rate, agentID, workerId, newTodo, task,user } = req.body;
- 
+  let {
+    taskId,
+    value,
+    rate,
+    agentID,
+    workerId,
+    newTodo,
+    task,
+    user
+  } = req.body;
 
   Todo.findById(taskId).then(data => {
     let agentTodos = [];
-    req.agent = task.agentByTodo[0]._id
-    console.log(task.agentByTodo[0]._id)
+    req.agent = task.agentByTodo[0]._id;
+    console.log(task.agentByTodo[0]._id);
     agentTodos.push(task.agentByTodo[0].name, task.agentByTodo[0]._id);
     let agentTodo = new TodoAgents(task);
     agentTodo.agentByTodo = agentTodos;
-    agentTodo.rate = rate
-    agentTodo.description = newTodo.description
-    agentTodo.user = user
+    agentTodo.rate = rate;
+    agentTodo.description = newTodo.description;
+    agentTodo.user = user;
     agentTodo.save().then((err, result) => {
       data.remove();
       res.status(200).json("OK");
@@ -26,19 +34,16 @@ exports.newCommentAtAgent = async (req, res, next) => {
   });
 };
 
-exports.newTodoByAgent = async (req) => {
-
-  let {newTodo} = req.body
-  let agent =  req.agent 
-  Agent.findById(agent).then(data =>{
-   
-    let todos = new Todo(newTodo)
-    todos.agentByTodo = [data]
-    todos.status = "system"
-    todos.title = data.name
-    todos.save()
-  })
-
+exports.newTodoByAgent = async req => {
+  let { newTodo } = req.body;
+  let agent = req.agent;
+  Agent.findById(agent).then(data => {
+    let todos = new Todo(newTodo);
+    todos.agentByTodo = [data];
+    todos.status = "system";
+    todos.title = data.name;
+    todos.save();
+  });
 };
 exports.agentUpdateStatistic = async req => {
   let { agentID, task } = req.body;
@@ -109,29 +114,31 @@ exports.agentUpdateStatistic = async req => {
 };
 exports.userActive = async (req, res) => {
   let { userId } = req.body;
-  TodoAgents.find({ tags: userId })
+  TodoAgents.find({
+    $or: [{ tags: userId }, { JobArray: { $elemMatch: { user: userId } } }]
+  })
     .sort({ _id: -1 })
     .limit(20)
     .then(data => {
       return res.status(200).json(data);
     });
 };
-exports.userActiveMouthAndYear = async (req,res) =>{
-  let {userId,Year,Mounth} = req.body
-  TodoAgents.find({tags:userId,year:Year,mounth:Mounth}).then(data =>{
-    return res.status(200).json(data)
-  })
-}
-exports.activeHelper = async (req,res) =>{
-  let {  WeekNum,year,userId} = req.body
+exports.userActiveMouthAndYear = async (req, res) => {
+  let { userId, Year, Mounth } = req.body;
+  TodoAgents.find({ tags: userId, year: Year, mounth: Mounth }).then(data => {
+    return res.status(200).json(data);
+  });
+};
+exports.activeHelper = async (req, res) => {
+  let { WeekNum, year, userId } = req.body;
 
-  ActiveUserWeek.find({year:year,week:WeekNum,userId:userId})
-  .select(" _id week year ")
-  .then(data =>{
-    if(data[0] != undefined){
-      return res.status(200).json(data[0])
-    }else{
-      // TODO
-    }
-  })
-}
+  ActiveUserWeek.find({ year: year, week: WeekNum, userId: userId })
+    .select(" _id week year ")
+    .then(data => {
+      if (data[0] != undefined) {
+        return res.status(200).json(data[0]);
+      } else {
+        // TODO
+      }
+    });
+};

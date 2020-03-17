@@ -5,7 +5,7 @@ import {
   NewComentSpecTodo,
   GetAgentMountAndYear
 } from "../Api/Http.js";
-import { Link,Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { isAuthenticated } from "../Api/Auth";
 // import { ResponsivePieCanvas } from "@nivo/pie";
 import Localisation from "../helper/LocalisationCalendar.json";
@@ -16,7 +16,7 @@ import {
   PhoneOutlined,
   WhatsAppOutlined,
   CoffeeOutlined,
-  FrownOutlined,
+  FrownOutlined
 } from "@ant-design/icons";
 import None from "../Components/None.jsx";
 import {
@@ -85,8 +85,8 @@ class SpecJob extends Component {
       comentEditId: "",
       description: "",
       EditCommentLoad: false,
-      open:true,
-      redirectToNews:false
+      open: true,
+      redirectToNews: false
     };
   }
   componentDidMount() {
@@ -204,7 +204,7 @@ class SpecJob extends Component {
 
       NewComentSpecTodo(body).then(data => {
         console.log(data);
-        this.setState({redirectToNews:true})
+        this.setState({ redirectToNews: true });
       });
     }
   };
@@ -266,7 +266,8 @@ class SpecJob extends Component {
             />
           </>
         )}
-      </ul>)
+      </ul>
+    );
   };
   handelAnyChange = name => event => {
     this.setState({ error: "" });
@@ -372,209 +373,224 @@ class SpecJob extends Component {
   };
   EditComment = () => {};
   render() {
-    const { comments, submitting, value, agent,redirectToNews } = this.state;
+    const { comments, submitting, value, agent, redirectToNews } = this.state;
+    let user = isAuthenticated().direct._id;
+
     let noData = {
-      emptyText:(<div>Ничего не найдено <FrownOutlined  style={{fontSize:"32px",marginRight:"5px"}}/></div>)
-    }
+      emptyText: (
+        <div>
+          Ничего не найдено{" "}
+          <FrownOutlined style={{ fontSize: "32px", marginRight: "5px" }} />
+        </div>
+      )
+    };
     if (redirectToNews) {
-      return <Redirect to="/news" refresh="true" />;
+      return <Redirect to={`/user/work/${user}`} refresh="true" />;
     }
     return (
       <div className="email_main_pos">
         <div>
-          {this.state.err ?  (<Result
-    status="404"
-    title="404"
-    subTitle="Sorry, the page you visited does not exist."
-    extra={<Button type="primary">Back Home</Button>}
-  /> ):(
-    <>
-           <Skeleton paragraph={{ rows: 20 }} active loading={this.state.open}>
-        <Icon type="question" />
-          <Tabs onChange={this.changePanel} defaultActiveKey="1">
-            <TabPane tab="Коментарий" key="1">
-              <Comment
-                content={
-                  <>
-                    {this.state.SelectDatedTodo.map((todo, i) => (
-                      <>
-                        {todo.status === "system" ? (
-                          <>
-                            <Popover
-                              Popover
-                              content={<>{this.renderPopoverSystem(todo)}</>}
-                              title="Задача"
-                            >
-                              <WhatsAppOutlined
-                                style={{
-                                  fontSize: "30px",
-                                  color: "#673AB7",
-                                  marfin: "5px"
-                                }}
-                              />
-                            </Popover>
-                          </>
-                        ) : (
-                          <>
-                            <Popover
-                              Popover
-                              content={<>{this.renderPopoverSolo(todo)}</>}
-                              title="Задача"
-                            >
-                              <UserOutlined
-                                style={{
-                                  fontSize: "30px",
-                                  color: "#03A9F4",
-                                  marfin: "5px"
-                                }}
-                              />
-                            </Popover>
-                          </>
-                        )}
-                      </>
-                    ))}
-                    <Calendar
-                      // headerRender={(<><h1>Ваш график дел</h1></>)}
-                      locale={Localisation}
-                      mode="month"
-                      dateCellRender={this.dateCellRender}
-                      monthCellRender={this.monthCellRender}
-                      validRange={[
-                        moment(new Date()),
-                        moment(new Date()).add(13, "days")
-                      ]}
-                      fullscreen={true}
-                      className="calendar_body"
-                      onChange={this.calendarChange}
-                      onSelect={this.handelSelect}
-                    />
-
-                    <Rate
-                      onChange={this.handelRateChaange}
-                      allowClear={false}
-                      defaultValue={3}
-                    />
-                    <Editor
-                      onChange={this.handleChange}
-                      onSubmit={this.handleSubmit}
-                      submitting={submitting}
-                      value={value}
-                    />
-                  </>
-                }
-              />
-            </TabPane>
-            <TabPane tab="Прошлая активность" key="2">
-              <List
-              locale={noData}
-                dataSource={comments}
-                itemLayout="horizontal"
-                renderItem={item => (
-                  <div className="comment-and-todo-list">
-                    {item.status === "system" ? (
-                      <div>
-                        <Comment
-                        style={{margin: "4%"}}
-                          actions={[
-                            <span
-                              onClick={id =>
-                                this.editorComments(
-                                  item._id,
-                                  item.description,
-                                  id
-                                )
-                              }
-                              key="comment-nested-reply-to"
-                            >
-                              редактировать
-                            </span>
-                          ]}
-                          author={<a>{item.user.name}</a>}
-                          avatar={
-                            <Link to={`/user/${item.user._id}`}>
-                              <Avatar
-                                src={`${process.env.REACT_APP_API_URL}/user/photo/${item.user._id}?`}
-                                alt={item.user.name}
-                              />
-                            </Link>
-                          }
-                          content={<p>{item.description}</p>}
-                        ></Comment>
-                        <Rate
-                          disabled={true}
-                          allowClear={false}
-                          defaultValue={item.rate}
-                        />
-                      </div>
-                    ) : (
-                      <>
-                        <div className="bg-item-spec-job">
-                          <div>Статус: {item.status}</div>
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: item.description
-                            }}
+          {this.state.err ? (
+            <Result
+              status="404"
+              title="404"
+              subTitle="Sorry, the page you visited does not exist."
+              extra={<Button type="primary">Back Home</Button>}
+            />
+          ) : (
+            <>
+              <Skeleton
+                paragraph={{ rows: 20 }}
+                active
+                loading={this.state.open}
+              >
+                <Icon type="question" />
+                <Tabs onChange={this.changePanel} defaultActiveKey="1">
+                  <TabPane tab="Коментарий" key="1">
+                    <Comment
+                      content={
+                        <>
+                          {this.state.SelectDatedTodo.map((todo, i) => (
+                            <>
+                              {todo.status === "system" ? (
+                                <>
+                                  <Popover
+                                    Popover
+                                    content={
+                                      <>{this.renderPopoverSystem(todo)}</>
+                                    }
+                                    title="Задача"
+                                  >
+                                    <WhatsAppOutlined
+                                      style={{
+                                        fontSize: "30px",
+                                        color: "#673AB7",
+                                        marfin: "5px"
+                                      }}
+                                    />
+                                  </Popover>
+                                </>
+                              ) : (
+                                <>
+                                  <Popover
+                                    Popover
+                                    content={
+                                      <>{this.renderPopoverSolo(todo)}</>
+                                    }
+                                    title="Задача"
+                                  >
+                                    <UserOutlined
+                                      style={{
+                                        fontSize: "30px",
+                                        color: "#03A9F4",
+                                        marfin: "5px"
+                                      }}
+                                    />
+                                  </Popover>
+                                </>
+                              )}
+                            </>
+                          ))}
+                          <Calendar
+                            // headerRender={(<><h1>Ваш график дел</h1></>)}
+                            locale={Localisation}
+                            mode="month"
+                            dateCellRender={this.dateCellRender}
+                            monthCellRender={this.monthCellRender}
+                            validRange={[
+                              moment(new Date()),
+                              moment(new Date()).add(13, "days")
+                            ]}
+                            fullscreen={true}
+                            className="calendar_body"
+                            onChange={this.calendarChange}
+                            onSelect={this.handelSelect}
                           />
-                          <div>{item.name_posted}</div>
-                          <div>Описание:{item.title}</div>
+
+                          <Rate
+                            onChange={this.handelRateChaange}
+                            allowClear={false}
+                            defaultValue={3}
+                          />
+                          <Editor
+                            onChange={this.handleChange}
+                            onSubmit={this.handleSubmit}
+                            submitting={submitting}
+                            value={value}
+                          />
+                        </>
+                      }
+                    />
+                  </TabPane>
+                  <TabPane tab="Прошлая активность" key="2">
+                    <List
+                      locale={noData}
+                      dataSource={comments}
+                      itemLayout="horizontal"
+                      renderItem={item => (
+                        <div className="comment-and-todo-list">
+                          {item.status === "system" ? (
+                            <div>
+                              <Comment
+                                style={{ margin: "4%" }}
+                                actions={[
+                                  <span
+                                    onClick={id =>
+                                      this.editorComments(
+                                        item._id,
+                                        item.description,
+                                        id
+                                      )
+                                    }
+                                    key="comment-nested-reply-to"
+                                  >
+                                    редактировать
+                                  </span>
+                                ]}
+                                author={<a>{item.user.name}</a>}
+                                avatar={
+                                  <Link to={`/user/${item.user._id}`}>
+                                    <Avatar
+                                      src={`${process.env.REACT_APP_API_URL}/user/photo/${item.user._id}?`}
+                                      alt={item.user.name}
+                                    />
+                                  </Link>
+                                }
+                                content={<p>{item.description}</p>}
+                              ></Comment>
+                              <Rate
+                                disabled={true}
+                                allowClear={false}
+                                defaultValue={item.rate}
+                              />
+                            </div>
+                          ) : (
+                            <>
+                              <div className="bg-item-spec-job">
+                                <div>Статус: {item.status}</div>
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: item.description
+                                  }}
+                                />
+                                <div>{item.name_posted}</div>
+                                <div>Описание:{item.title}</div>
+                              </div>
+                            </>
+                          )}
                         </div>
-                      </>
-                    )}
-                  </div>
-                )}
-              />
-            </TabPane>
-            <TabPane tab="Агент" key="3">
-              <Tabs onChange={this.changePodPanel} type="card">
-                <TabPane tab="Профиль" key="1">
-                  <div className="agent-profile-info">
-                    {/* font-size: 20px;
-    color: black */}
-                    <div>
-                      Короткое имя:
-                      <None tag={agent.name} />
-                    </div>
-                    <div>
-                      Полное имя:
-                      <None tag={agent.full_name} />
-                    </div>
-                    <div>
-                      Email:
-                      <None tag={agent.email} />
-                    </div>
-                    <div>
-                      Телефон :<None tag={agent.phone} />
-                    </div>
-                    <div>
-                      ИНН:
-                      <None tag={agent.INN} />
-                    </div>
-                    <div>
-                      ОГРН: <None tag={agent.OGRN} />
-                    </div>
-                    <div>
-                      Специализация: <None tag={agent.agentGeo} />
-                    </div>
-                    <div>
-                      Техника: <None tag={agent.TechAgent} />
-                    </div>
-                    <Link to={`/agent/edit/${agent._id}`}>
-                      <Button style={{ marginTop: "20px" }}>
-                        Редактировать
-                      </Button>
-                    </Link>
-                  </div>
-                </TabPane>
-                <TabPane tab="Люди" key="2">
-                  {this.state.peopelLoader ? (
-                    <Spin style={{ margin: " 8px" }} size="large" />
-                  ) : (
-                    <></>
-                  )}
-                </TabPane>
-                <TabPane tab="Статистика" key="3">
-                  <div className="agentChart">
-                    {/* <ResponsivePieCanvas
+                      )}
+                    />
+                  </TabPane>
+                  <TabPane tab="Агент" key="3">
+                    <Tabs onChange={this.changePodPanel} type="card">
+                      <TabPane tab="Профиль" key="1">
+                        <div className="agent-profile-info">
+                          <div>
+                            Короткое имя:
+                            <None tag={agent.name} />
+                          </div>
+                          <div>
+                            Полное имя:
+                            <None tag={agent.full_name} />
+                          </div>
+                          <div>
+                            Email:
+                            <None tag={agent.email} />
+                          </div>
+                          <div>
+                            Телефон :<None tag={agent.phone} />
+                          </div>
+                          <div>
+                            ИНН:
+                            <None tag={agent.INN} />
+                          </div>
+                          <div>
+                            ОГРН: <None tag={agent.OGRN} />
+                          </div>
+                          <div>
+                            Специализация: <None tag={agent.agentGeo} />
+                          </div>
+                          <div>
+                            Техника: <None tag={agent.TechAgent} />
+                          </div>
+                          <Link to={`/agent/edit/${agent._id}`}>
+                            <Button style={{ marginTop: "20px" }}>
+                              Редактировать
+                            </Button>
+                          </Link>
+                        </div>
+                      </TabPane>
+                      <TabPane tab="Люди" key="2">
+                        {this.state.peopelLoader ? (
+                          <Spin style={{ margin: " 8px" }} size="large" />
+                        ) : (
+                          <></>
+                        )}
+                      </TabPane>
+                      <TabPane tab="Статистика" key="3">
+                        <div className="agentChart">
+                          {/* <ResponsivePieCanvas
                       data={data}
                       margin={{ top: 40, right: 200, bottom: 40, left: 80 }}
                       pixelRatio={1}
@@ -684,15 +700,14 @@ class SpecJob extends Component {
                         }
                       ]}
                     /> */}
-                  </div>
-                </TabPane>
-              </Tabs>
-            </TabPane>
-          </Tabs>
-        </Skeleton>
-    </>
-  )}
-
+                        </div>
+                      </TabPane>
+                    </Tabs>
+                  </TabPane>
+                </Tabs>
+              </Skeleton>
+            </>
+          )}
         </div>
         {this.state.editorSwitcher ? (
           <>

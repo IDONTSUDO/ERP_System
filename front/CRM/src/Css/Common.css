@@ -1618,3 +1618,19 @@ nav {
 .news div{
   color: #000000;
 }
+.user-complete{
+  color: #1088e9;
+  font-size: 16px;
+}
+.todo-news-titel{
+  color: #1088e9;
+  font-size: 16px;
+}
+.todo-main{
+  margin-left: 100px;
+}
+/* 665 */
+@media (max-width:665px){
+  .todo-main{
+    margin-left: 0px;    }
+}

@@ -12,9 +12,7 @@ let moment = require("moment");
 const _ = require("lodash");
 const { StaticPool } = require("node-worker-threads-pool");
 
-
-const agentHelper =  "./threads/newAgent.js"
-
+const agentHelper = "./threads/newAgent.js";
 
 exports.taskId = async (req, res, next, id) => {
   TodoAgent.findById(id).exec((err, result) => {
@@ -78,7 +76,6 @@ exports.NewSpec = async (req, res) => {
   const spec = new Specialisation(req.body);
 
   await spec.save((err, result) => {
-   
     if (err) {
       return res.status(400).json({
         error: err
@@ -127,14 +124,12 @@ exports.SearchAgent = async (req, res) => {
 exports.searchSpec = async (req, res) => {
   let specList = req.body;
 
-
   ContrAgent.find({ specialications: { $all: [`${specList}`] } })
     .select("_id full_name email name agentGeo specialications")
     .exec((err, result) => {
       if (err) {
         return res.status(400).json({ err });
       } else {
- 
         return res.status(200).json(result);
       }
     });
@@ -186,13 +181,13 @@ exports.ChangeAgent = async (req, res) => {
   });
 };
 exports.UserAddAgentNews = async (req, res) => {
-  let { userArray,posted_by } = req.body;
+  let { userArray, posted_by } = req.body;
   if (userArray.length != 0) {
     let newNewsAtToJoinAgent = new News();
     newNewsAtToJoinAgent.NewsTO = userArray[0]._id;
     newNewsAtToJoinAgent.description = "Вам добавили Агента";
     newNewsAtToJoinAgent.eventNews = "Агент";
-    newNewsAtToJoinAgent.posted_by = posted_by
+    newNewsAtToJoinAgent.posted_by = posted_by;
     await newNewsAtToJoinAgent.save((err, result) => {
       console.log(err, result);
     });
@@ -201,7 +196,7 @@ exports.UserAddAgentNews = async (req, res) => {
   }
 };
 
-exports.UserDeleteAtAgentNews = async (req, res,next) => {
+exports.UserDeleteAtAgentNews = async (req, res, next) => {
   let { UserExit, userArray } = req.body;
 
   if (UserExit.length != 0) {
@@ -218,7 +213,7 @@ exports.UserDeleteAtAgentNews = async (req, res,next) => {
         .select("_id ")
         .then(data => {
           console.log(data);
-          return next()
+          return next();
         });
     });
   } else {
@@ -242,7 +237,7 @@ exports.ManageAddAgent = async (req, res, next) => {
 
     let PlaningDateMoment = new Date();
     // + 1
-    PlaningDateMoment.setDate(PlaningDateMoment.getDate() );
+    PlaningDateMoment.setDate(PlaningDateMoment.getDate());
 
     let dateMoment = moment(PlaningDateMoment).format("YYYY-MM-DD");
 
@@ -610,7 +605,7 @@ exports.addAgentAtManager = async (req, res, next) => {
 
 exports.NewAgentAtRegularoryPosition = async (req, res, next) => {
   let { newAgent } = req.body;
-  console.log(req.body)
+  console.log(req.body);
   if (newAgent.tags.length === 0) {
     delete newAgent.tags;
   }
@@ -638,7 +633,7 @@ exports.AgentAtPeopel = async (req, res, next) => {
   } else {
     if (AgentPeopel.bio.length > 0) {
       let agnHum = new AgentHuman(AgentPeopel);
-      agnHum.AgentBy = req.agent._id
+      agnHum.AgentBy = req.agent._id;
       await agnHum.save((err, result) => {
         if (err) {
           return null;
@@ -654,12 +649,11 @@ exports.AgentAtPeopel = async (req, res, next) => {
   }
 };
 exports.AgentAtBrachOfice = async (req, res, next) => {
-  let { AgentFeatus, } = req.body;
-  
+  let { AgentFeatus } = req.body;
 
   if (AgentFeatus !== undefined) {
     let AgentBranch = new AgentOffice(AgentFeatus);
-    AgentBranch.AgentBy = req.agent._id
+    AgentBranch.AgentBy = req.agent._id;
     await AgentBranch.save((err, result) => {
       if (err) {
         return null;
@@ -673,16 +667,16 @@ exports.AgentAtBrachOfice = async (req, res, next) => {
 };
 exports.AgentAtTodo = async (req, res, next) => {
   let { todo } = req.body;
-  console.log(todo)
-  console.log()
+  console.log(todo);
+  console.log();
   let agent = req.agent;
   let tod = new Todo(todo);
   tod.title = agent.name;
   tod.tags = agent.tags[0]._id;
   tod.agentByTodo = agent;
-  console.log(tod)
+  console.log(tod);
   tod.save().then(data => {
-    console.log(data)
+    console.log(data);
     return next();
   });
 };
@@ -699,7 +693,7 @@ exports.AgentAtNewManagerTodo = async (req, res, next) => {
       agnCron.UserId = { _id: i._id, name: i.name };
       agnCron.agentByTodo = agent;
       agnCron.agentId = agent._id;
-      agnCron.agent = agent
+      agnCron.agent = agent;
 
       agnCron.save();
     }
@@ -717,7 +711,7 @@ exports.finalyAgentSave = async (req, res, next) => {
       agent._id,
       { $push: { Office: Office } },
       { new: true }
-    )
+    );
   }
   if (Office !== undefined) {
     ContrAgent.findByIdAndUpdate(
@@ -769,8 +763,8 @@ exports.GoodNewsByRegulatorPositiom = (req, res, next) => {
                 news.description = description;
                 news.eventNews = eventNews;
                 news.newsFrom = whoAdd;
-                news.posted_by = whoAdd._id
-                console.log(whoAdd)
+                news.posted_by = whoAdd._id;
+                console.log(whoAdd);
                 news.save();
               }
               for (let newsHuman of FinalyNewsPeopel[1]) {
@@ -795,7 +789,7 @@ exports.NewRegulatoryPositionAtRegulatoriNews = (req, res, next) => {
   let FinalyNewsPeopel = [];
   let { newAgent, whoAdd } = req.body;
   let agent = req.agent;
-  let dateCreated = Date.now()
+  let dateCreated = Date.now();
   Company.find({ role: "Директор" })
     .select(" _id")
     .then(data => {
@@ -828,6 +822,7 @@ exports.NewRegulatoryPositionAtRegulatoriNews = (req, res, next) => {
                 news.worker_by = newsPeopel;
                 news.agent = agent;
                 news.description = description;
+                news.posted_by = newAgent.postedBy;
                 news.eventNews = eventNews;
                 news.save();
               }
@@ -840,12 +835,12 @@ exports.agentDontManager = async (req, res) => {
   const perPage = 50;
   var totalItems;
 
-  const agents = await ContrAgent.find({tags:"none"})
+  const agents = await ContrAgent.find({ tags: "none" })
 
     .countDocuments()
     .then(count => {
       totalItems = count;
-      return ContrAgent.find({tags:"none"})
+      return ContrAgent.find({ tags: "none" })
         .skip((currentPage - 1) * perPage)
         .limit(perPage);
     })
@@ -854,20 +849,18 @@ exports.agentDontManager = async (req, res) => {
     })
     .catch(err => console.log(err));
 };
-exports.NewNewsToManager = async (req,res,next) =>{
-  let agent = req.agent
- 
-  if(agent.tags === "none"){
+exports.NewNewsToManager = async (req, res, next) => {
+  let agent = req.agent;
 
-    return next()
-  }else{
-
-      let news =  new News()
-      news.NewsTO = agent.tags[0]._id
-      news.eventNews = "Вам назначили агента"
-      news.agent = agent
-      console.log(news)
-      news.save()
-    return next()
+  if (agent.tags === "none") {
+    return next();
+  } else {
+    let news = new News();
+    news.NewsTO = agent.tags[0]._id;
+    news.eventNews = "Вам назначили агента";
+    news.agent = agent;
+    console.log(news);
+    news.save();
+    return next();
   }
-}
+};
