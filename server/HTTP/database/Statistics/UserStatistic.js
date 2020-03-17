@@ -28,7 +28,8 @@ const UserOneStatistic = new mongoose.Schema({
         type: String
     },
     day:{
-        type:Object
+        type:Object,
+        default:[]
     }
 })
 module.exports = mongoose.model("UserOneStatistic", UserOneStatistic)

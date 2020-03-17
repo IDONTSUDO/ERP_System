@@ -153,9 +153,12 @@ export default class AgentProfile extends Component {
           }
         }
       }
+      let posted_by = isAuthenticated().direct._id
+      
       let body = {
         UserExit,
-        userArray
+        userArray,
+        posted_by
       };
       AddManageForAgent(body, id).then(data => {
         if (data.error) {

@@ -51,7 +51,7 @@ exports.UpdateStatisticCommentResult = async (req, res) => {
 
 
 exports.GetAllStatistic = async (req, res) => {
-// data[0].day
+
     let userId = req.body.userId
-    Statistic.find({ Userby: userId }).then(data => { return data[0].day === undefined ? (res.status(404).json("Not found")):(res.status(200).json(data[0].day))})
+    Statistic.find({ Userby: userId }).then(data => {  res.status(200).json(data[0].day)})
 }

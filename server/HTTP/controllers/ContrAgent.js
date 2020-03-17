@@ -186,12 +186,13 @@ exports.ChangeAgent = async (req, res) => {
   });
 };
 exports.UserAddAgentNews = async (req, res) => {
-  let { userArray } = req.body;
+  let { userArray,posted_by } = req.body;
   if (userArray.length != 0) {
     let newNewsAtToJoinAgent = new News();
-    newNewsAtToJoinAgent.worker_by = [userArray[0]._id];
+    newNewsAtToJoinAgent.NewsTO = userArray[0]._id;
     newNewsAtToJoinAgent.description = "Вам добавили Агента";
     newNewsAtToJoinAgent.eventNews = "Агент";
+    newNewsAtToJoinAgent.posted_by = posted_by
     await newNewsAtToJoinAgent.save((err, result) => {
       console.log(err, result);
     });
@@ -768,6 +769,8 @@ exports.GoodNewsByRegulatorPositiom = (req, res, next) => {
                 news.description = description;
                 news.eventNews = eventNews;
                 news.newsFrom = whoAdd;
+                news.posted_by = whoAdd._id
+                console.log(whoAdd)
                 news.save();
               }
               for (let newsHuman of FinalyNewsPeopel[1]) {

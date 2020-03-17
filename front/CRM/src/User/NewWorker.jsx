@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { NewPeopel } from "../Api/Http";
 import { Icon, notification, Select,Button,DatePicker } from "antd";
 import { isAuthenticated } from "../Api/Auth";
+import moment from "moment"
 
 const { Option } = Select;
 
@@ -55,17 +56,7 @@ class NewWorker extends Component {
   clickSubmit = event => {
     event.preventDefault();
     if (this.isValid()) {
-      const { name, email, password, phone, role, startDate } = this.state;
-      let yyyy = startDate.getFullYear();
-      let mm = startDate.getMonth();
-      let dd = startDate.getDate();
-      //
-      let FuckingDataPicker = +mm + 1;
-      //
-      let ItsRealyFucking = "0" + FuckingDataPicker;
-      //
-      let Date_of_Birth = dd + "/" + ItsRealyFucking + "/" + yyyy;
-
+      const { name, email, password, phone, role, Date_of_Birth } = this.state;
       const user = {
         name,
         email,
@@ -112,7 +103,7 @@ class NewWorker extends Component {
     return true;
   };
   onChangeworkerDate = (date, dateString) => {
-    this.setState({ Date_of_Birth: date });
+    this.setState({ Date_of_Birth: dateString });
   };
   openNotificationError() {
     notification.open({

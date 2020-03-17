@@ -15,7 +15,8 @@ import {
   MessageOutlined,
   NotificationOutlined,
   UsergroupAddOutlined,
-  FrownOutlined
+  FrownOutlined,
+  CloseOutlined
 } from "@ant-design/icons";
 
 export default class News extends Component {
@@ -48,10 +49,48 @@ export default class News extends Component {
       }
     });
   }
-
+  deleteNews = id => {
+    let newsList = this.state.newsList.filter(news => news._id != id);
+    this.setState({ newsList });
+    OneNewsDelete(id).then(data => console.log(data));
+  };
   NewsOneDelete = () => {
     OneNewsDelete();
   };
+  renderAgent(agent) {
+    return (
+      <>
+        {agent.map((agent, i) => (
+          <>
+            <div>
+              <b>Имя:</b>
+              {agent.name}
+            </div>
+            <div>
+              <b>Телефон:</b>
+              {agent.phone}
+            </div>
+            <div>
+              <b>Полное имя:</b>
+              {agent.full_name}
+            </div>
+            <div>
+              <b>Email:</b>
+              {agent.email}
+            </div>
+            <div>
+              <b>Индивидуальные условия:</b>
+              {agent.individual_conditions_job}
+            </div>
+            <div>
+              <b>Откуда пришел:</b>
+              {agent.work_begin_with_him}
+            </div>
+          </>
+        ))}
+      </>
+    );
+  }
   render() {
     const { newsList, error } = this.state;
     let err = false;
@@ -74,7 +113,6 @@ export default class News extends Component {
             loading={this.state.loadingNews}
           >
             <List
-              // locale="Новых новостей нет"
               itemLayout="horizontal"
               locale={noNews}
               dataSource={newsList}
@@ -85,37 +123,108 @@ export default class News extends Component {
                       className="px100"
                       style={{ margin: "5px" }}
                       avatar={
-                        <Avatar
-                          src={`${process.env.REACT_APP_API_URL}/user/photo/${item.posted_by}?`}
-                          onError={e =>
-                            e === undefined
-                              ? null
-                              : e.targer === undefined
-                              ? null
-                              : (e.target.src = DefaultProfile)
-                          }
-                        />
+                        <Link
+                          to={`${process.env.REACT_APP_API_URL}/user/${item.posted_by}?`}
+                        >
+                          <Avatar
+                            src={`${process.env.REACT_APP_API_URL}/user/photo/${item.posted_by}?`}
+                            onError={e =>
+                              e === undefined
+                                ? null
+                                : e.targer === undefined
+                                ? null
+                                : (e.target.src = DefaultProfile)
+                            }
+                          />
+                        </Link>
                       }
                       title={
                         <Link to={item.eventNews === "Новый коментарий"} />
                       }
                       description={
                         <>
-                          <h4>{item.eventNews}</h4>
+                          <h2>{item.eventNews}</h2>
+                          {item.eventNews === "Агент" ? <>
+                          
+                          <div>{item.description}</div>
+                          
+                          </> : null}
+
+
+                          {item.eventNews === "Новый коментарий" ? (
+                            <>
+                              <Link className="news" to={`${item.link}`}>
+                                <div style={{ color: "#000" }}>
+                                  {item.description}
+                                </div>
+                              </Link>
+                            </>
+                          ) : null}
+                          {item.eventNews === "Назначено новое дело" ? (
+                            <>
+                              <Link to={item.link}>
+                                <div style={{ color: "#2a2d30" }}>
+                                  {item.jobNews.length === 0 ? (
+                                    <>
+                                      <div>Описание:</div>
+                                      <div
+                                        dangerouslySetInnerHTML={{
+                                          __html: item.description
+                                        }}
+                                      />
+                                    </>
+                                  ) : (
+                                    <>
+                                      <div>Описание:</div>
+                                      {item.jobNews.map((job, i) => (
+                                        <>
+                                          <div
+                                            dangerouslySetInnerHTML={{
+                                              __html: job.action
+                                            }}
+                                          />
+                                          <div>{job.date}</div>
+                                        </>
+                                      ))}
+                                    </>
+                                  )}
+                                </div>
+                              </Link>
+                            </>
+                          ) : null}
+                          <div>{item.time}</div>
                           <>
-                            {item.eventNews === "Вам назначили агента" ? (
-                              <>
-                                <Popover type="hover" content={<></>}>
-                                  <Button>Подробности</Button>
+                            {item.eventNews === "Новый Агент" ? (
+                              <div>
+                                <div>{item.description}</div>
+                                <Popover
+                                  type="hover"
+                                  content={
+                                    <>{this.renderAgent([item.agent])}</>
+                                  }
+                                >
+                                  <Link to={`/agent/${item.agent._id}`}>
+                                    <Button style={{ margin: "5px" }}>
+                                      Подробности
+                                    </Button>
+                                  </Link>
                                 </Popover>
-                              </>
-                            ) : null}{" "}
+                              </div>
+                            ) : null}
+                            {item.eventNews === "Вам назначили агента" ? (
+                              <></>
+                            ) : null}
                           </>
+
                           <Moment fromNow>{item.dateCreated}</Moment>
                         </>
                       }
                     />
                   </div>
+                  <CloseOutlined
+                    onClick={newsId => this.deleteNews(item._id, newsId)}
+                    className="close"
+                  />
                 </List.Item>
               )}
             />
@@ -231,11 +340,11 @@ export default class News extends Component {
 //               <strong>{news.eventNews}</strong>
 //             </h6>
 //             <div className="">
-//               <div
-//                 dangerouslySetInnerHTML={{
-//                   __html: news.description
-//                 }}
-//               />
+// <div
+//   dangerouslySetInnerHTML={{
+//     __html: news.description
+//   }}
+// />
 //             </div>
 //             <Moment fromNow>{news.dateCreated}</Moment>
 //           </div>

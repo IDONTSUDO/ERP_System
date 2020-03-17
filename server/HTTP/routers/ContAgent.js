@@ -38,7 +38,7 @@ const {
   agentDontManager,
   NewNewsToManager
 } = require("../controllers/ContrAgent");
-// /agent/new/at/manager/
+
 const { workerById } = require("../controllers/Company");
 const { requireSignin } = require("../middleware/middleware.js");
 
@@ -56,7 +56,6 @@ router.post("/new/spec/agent", NewSpec);
 router.post("/agent/search", requireSignin, SearchAgent);
 router.post("/new/agent/:workerById", requireSignin, NewAgent);
 router.post("/agent/manage/", requireSignin, getMyListAgent);
-// /agent/dont/manage/?page=
 router.post(
   "/agent/new/at/manager/",
   addAgentAtManager,

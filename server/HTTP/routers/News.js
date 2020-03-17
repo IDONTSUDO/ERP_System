@@ -28,7 +28,7 @@ router.post('/new/news', requireSignin, newNews,NewPushingNotifycation)
 router.post('/new/news/coments', requireSignin, newNews,NewPushToObjectWorker)
 router.post('/new/news/set/status', requireSignin, newNews,NewPushToSetStatus)
 router.post('/new/news/job', requireSignin, NewTodoUserAwesomeNews, SetNews,NewPushingNotifycation)
-router.post('/new/delete/:newsId', requireSignin, NewsDelete)
+router.delete('/news/delete/:newsId', requireSignin, NewsDelete)
 router.param('newsId', NewsId)
 
 

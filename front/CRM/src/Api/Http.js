@@ -195,10 +195,18 @@ export const DeleteComment = comment => {
     });
 };
 export const OneNewsDelete = newsId => {
-  // /new/delete/:newsId
+ 
+  return fetch(`${process.env.REACT_APP_API_URL}/news/delete/${newsId}`,{
+    method: "DELETE",
+    headers: myHeaders,
+  }).then(response => {
+    return response.json();
+  })
+  .catch(error => {
+    console.log(error);
+  });
 };
 export const NewNews = payload => {
-  console.log(payload);
   return fetch(`${process.env.REACT_APP_API_URL}/new/news`, {
     method: "POST",
     headers: myHeaders,

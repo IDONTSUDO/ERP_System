@@ -38,7 +38,7 @@ function CRON_STATISTIC() {
   dateTime = moment(dateTime).format("YYYY-MM-DD");
   cron.schedule(
     // 0 1 * * *
-    "0 1 * * *",
+    "* * * * *",
     () => {
       console.log(200);
       StatisticsEveryDay.find({ day: dateTime }).exec((err, result) => {
