@@ -27,7 +27,10 @@ import {
   list,
   MyTodoGetComandWorked,
   NewAssignTodoToday,
-  readMyTodo
+  readMyTodo,
+  TodoChangeComandList,
+  NewNewsToComment,
+  UpdateDaysTodoComplete
 } from "../Api/Http";
 import { everyday, IsEveryDaySub } from "../helper/everyday.js";
 import DefaultProfile from "../Assets/default.png";
@@ -198,7 +201,42 @@ export default class CalendarJob extends Component {
     );
   };
   clickComplateTodo = todo => {
-    console.log(todo);
+    let ID = todo._id;
+    let posted_by = todo.posted_by;
+    let description = todo.title;
+    let postedBy = todo.posted_by;
+    let status = "Выполнено";
+    let expireAt = new Date();
+    let payload = {
+      status,
+      expireAt
+    };
+    TodoChangeComandList(ID, payload).then(data => {
+      if (data.error) {
+      } else {
+        this.forceUpdate();
+        let link = todo._id;
+        let posted_by = isAuthenticated().direct._id;
+        let name_posted = isAuthenticated().direct.name;
+        let worker_by = { user: todo.posted_by };
+        if (postedBy === posted_by) {
+          return null;
+        } else {
+          let eventNews = status;
+          let payload = {
+            worker_by,
+            eventNews,
+            link,
+            name_posted,
+            posted_by,
+            description
+          };
+          NewNewsToComment(payload);
+        }
+        let sub = IsEveryDaySub()._id;
+        UpdateDaysTodoComplete(sub);
+      }
+    });
   };
   dateCellRender = value => {
     const listData = this.state.todosCalendar;
@@ -305,18 +343,15 @@ export default class CalendarJob extends Component {
       let time = moment(dateSelect).format("L");
 
       let SelectDatedTodo = [];
-      // listData.map((todo,i) =>(
-      //   todo.JobArray.length === 0 ? (null):(todo.JobArray.map((job,i) =>(console.log(job.user == UserWorked))))
-      // ))
-      
-     let data = listData.map((todo) =>
+
+      let data = listData.map(todo =>
         todo.JobArray.length === 0
           ? time === moment(todo.diff[0]).format("L")
             ? SelectDatedTodo.push(todo)
             : null
           : todo.JobArray.map((job, i) =>
               job.user === UserWorked
-                ? (time , moment(todo.diff[i]).format("L"))
+                ? time === moment(todo.diff[i]).format("L")
                   ? SelectDatedTodo.push(todo)
                   : null
                 : null

@@ -48,7 +48,7 @@ const todoSchema = new mongoose.Schema({
     },
     expireAt: {
         type: Date,
-        index: { expires: '5m' },
+        index: { expires: '1m' },
     },
     name_posted:{
         type:String

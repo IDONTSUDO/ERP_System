@@ -44,13 +44,12 @@ export default class MyWork extends Component {
 
   init = async userId => {
     let TodoArray = [];
-
     readMyTodo(userId).then(Datas => {
       if (Datas.error) {
         this.setState({ redirectToSignin: true });
       } else {
         Object.keys(Datas);
-        console.log("readMyTodo" ,Datas)
+       
         for (let i = 0; Datas.todos.length > i; i++) {
           TodoArray.push(Datas.todos[i]);
         }
@@ -64,11 +63,11 @@ export default class MyWork extends Component {
           if (data.error) {
             console.log(data.error);
           } else {
-            console.log("MyTodoGetComandWorked" ,data)
+            
             for (let i = 0; data.result.length > i; i++) {
               TodoArray.push(data.result[i]);
-            } 
-            console.log(TodoArray)
+            }
+          
 
             this.setState({ todos: TodoArray });
             this.setState({ open: false });
