@@ -123,13 +123,13 @@ export default class NewAgent extends Component {
       branch_officeGeo: [],
       time: undefined,
       mounth: undefined,
-      branch_office:undefined,
+      branch_office: undefined,
       year: undefined,
       status: undefined,
       importance: undefined,
       description: undefined,
-      diff:[],
-      agentGeo:[]
+      diff: [],
+      agentGeo: []
     };
   }
 
@@ -187,8 +187,8 @@ export default class NewAgent extends Component {
     this.setState({ manageAdd: managListTo, tags: tags });
   };
   newAgentClick = () => {
-    let whoAdd
-    let role = isAuthenticated().direct.role
+    let whoAdd;
+    let role = isAuthenticated().direct.role;
     let resultValid = ["Директор", "Управляющий"].includes(role);
     if (resultValid) {
       let {
@@ -231,33 +231,31 @@ export default class NewAgent extends Component {
       if (name === undefined) {
         msg = "Имя является обязатльным параметром";
         this.openNotificationValidationError(msg);
-        this.setState({currentStep: 0})
+        this.setState({ currentStep: 0 });
       }
       if (full_name === undefined) {
         msg = "Полное имя является обязатльным параметром";
         this.openNotificationValidationError(msg);
-        this.setState({currentStep: 0})
+        this.setState({ currentStep: 0 });
       }
       if (INN === undefined) {
         msg = "Введите ИНН ";
         this.openNotificationValidationError(msg);
-        this.setState({currentStep: 0})
+        this.setState({ currentStep: 0 });
       }
       if (company_desription === undefined) {
         msg = "Описание компании не найдено, похоже вы забыли его добавить";
         this.openNotificationValidationError(msg);
       }
       if (WhereFromClient === undefined) {
-        this.setState({currentStep: 4})
+        this.setState({ currentStep: 4 });
         msg = "Откуда пришел клиент, не заполненно";
-        return  this.openNotificationValidationError(msg);
-       
+        return this.openNotificationValidationError(msg);
       }
       if (work_begin_with_him === undefined) {
-       (this.setState({currentStep: 4}))
+        this.setState({ currentStep: 4 });
         msg = "Как началась работа с клиентом, не заполненно";
-      return  this.openNotificationValidationError(msg);
-   
+        return this.openNotificationValidationError(msg);
       }
       let postedBy = isAuthenticated().direct._id;
 
@@ -310,7 +308,7 @@ export default class NewAgent extends Component {
       };
       NewAgentAddRegulatoryPosition(body).then(data => {
         message.success("Агент зарегестрирован!");
-        (this.setState({        
+        this.setState({
           currentStep: 0,
           company: "",
           name: undefined,
@@ -324,7 +322,7 @@ export default class NewAgent extends Component {
           legal_address: undefined,
           actual_address: undefined,
           payment_account: undefined,
-          specialications:[],
+          specialications: [],
           manageAdd: [],
           company_desription: "",
           phone: undefined,
@@ -343,16 +341,16 @@ export default class NewAgent extends Component {
           work_begin_with_him: undefined,
           tags: [],
           branch_officeGeo: [],
-          branch_office:undefined,
-          WhereFromClient:undefined,
-          agentGeo:[],
-          TechAgent:[],
-          checkedList:defaultCheckedList
-        }))
+          branch_office: undefined,
+          WhereFromClient: undefined,
+          agentGeo: [],
+          TechAgent: [],
+          checkedList: defaultCheckedList
+        });
       });
     } else {
       let managerId = isAuthenticated().direct._id;
-      
+
       let {
         OGRN,
         agentGeo,
@@ -402,15 +400,15 @@ export default class NewAgent extends Component {
       let msg;
       if (name === undefined) {
         msg = "Имя является обязатльным параметром";
-        return  this.openNotificationValidationError(msg);
+        return this.openNotificationValidationError(msg);
       }
       if (full_name === undefined) {
         msg = "Полное имя является обязатльным параметром";
-        return  this.openNotificationValidationError(msg);
+        return this.openNotificationValidationError(msg);
       }
       if (INN === undefined) {
         msg = "Введите ИНН ";
-        return  this.openNotificationValidationError(msg);
+        return this.openNotificationValidationError(msg);
       }
       if (company_desription === undefined) {
         msg = "Описание компании не найдено, похоже вы забыли его добавить";
@@ -487,7 +485,7 @@ export default class NewAgent extends Component {
       };
       NewAgentAddManager(body).then(data => {
         message.success("Агент добавлен!");
-        (this.setState({        
+        this.setState({
           currentStep: 0,
           company: "",
           name: undefined,
@@ -502,7 +500,7 @@ export default class NewAgent extends Component {
           actual_address: undefined,
           payment_account: undefined,
           inputQality: [],
-          specialications:[],
+          specialications: [],
           manageList: [],
           manageAdd: [],
           company_desription: "",
@@ -522,13 +520,13 @@ export default class NewAgent extends Component {
           work_begin_with_him: undefined,
           tags: [],
           branch_officeGeo: [],
-          branch_office:undefined,
+          branch_office: undefined,
           status: undefined,
-          WhereFromClient:undefined,
-          agentGeo:[],
-          TechAgent:[],
-          checkedList:defaultCheckedList
-        }))
+          WhereFromClient: undefined,
+          agentGeo: [],
+          TechAgent: [],
+          checkedList: defaultCheckedList
+        });
       });
     }
   };
@@ -571,16 +569,16 @@ export default class NewAgent extends Component {
     let year = moment(momentObj)
       .locale("ru")
       .format("YY");
-    let diff = [] 
-    diff.push(moment(momentObj).toDate())
+    let diff = [];
+    diff.push(moment(momentObj).toDate());
     let tags = [];
     let status = "system";
     let importance = "Очень важное";
     let description = "TESTING";
     let user = {
-      _id:isAuthenticated().direct._id,
-      name:isAuthenticated().direct.name
-    }
+      _id: isAuthenticated().direct._id,
+      name: isAuthenticated().direct.name
+    };
     tags.push(user);
     this.setState({
       time: time,
@@ -590,7 +588,7 @@ export default class NewAgent extends Component {
       status: status,
       importance: importance,
       description: description,
-      diff:diff
+      diff: diff
     });
   };
   openNotificationAgentNew() {
@@ -1108,9 +1106,9 @@ export default class NewAgent extends Component {
         title: "Контактные лица",
         content: (
           <>
-            <div className="row justify-content-between">              
+            <div className="row justify-content-between">
               <div className="col-8">
-              <p className="input_new_agent agentnew_front">Должность</p>
+                <p className="input_new_agent agentnew_front">Должность</p>
                 <Input
                   size="large"
                   onChange={this.handleChange("position")}
@@ -1172,7 +1170,9 @@ export default class NewAgent extends Component {
           <>
             <div className="row justify-content-between">
               <div className="col-8">
-              <p className="input_new_agent agentnew_front">Откуда пришел клиен</p>
+                <p className="input_new_agent agentnew_front">
+                  Откуда пришел клиен
+                </p>
                 <Input
                   size="large"
                   onChange={this.handleChange("WhereFromClient")}
@@ -1181,7 +1181,9 @@ export default class NewAgent extends Component {
                   addonBefore={<div className="required-start">*</div>}
                   placeholder="Откуда пришел клиент :"
                 />
-                 <p className="input_new_agent agentnew_front">Как начиналась с ним работа</p>
+                <p className="input_new_agent agentnew_front">
+                  Как начиналась с ним работа
+                </p>
                 <Input
                   size="large"
                   className="input_new_agent"
@@ -1193,11 +1195,13 @@ export default class NewAgent extends Component {
 
                 {["Менеджер"].includes(userRole) ? (
                   <>
-                    <div className="input_new_agent site-calendar-demo-card"> 
-                      <p className="input_new_agent agentnew_front">Начать работу с ним с числа</p>
+                    <div className="input_new_agent site-calendar-demo-card">
+                      <p className="input_new_agent agentnew_front">
+                        Начать работу с ним с числа
+                      </p>
                       <Calendar
-                      mode="mounth"
-                      locale={Localisation}
+                        mode="mounth"
+                        locale={Localisation}
                         validRange={[
                           moment(Date.now()),
                           moment(Date.now()).add("days", 10)

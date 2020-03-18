@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const { ObjectId } = mongoose.Schema
+const moment = require("moment")
 const agentTasksSchema = new mongoose.Schema({
     title: {
         type: String
@@ -60,6 +61,10 @@ const agentTasksSchema = new mongoose.Schema({
     },
     rate:{
         type:Number
+    },
+    day:{
+        type:String,
+        default: moment(new Date(Date.now())).format('DD') 
     }
 })
 

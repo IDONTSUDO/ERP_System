@@ -101,6 +101,9 @@ class Profile extends Component {
     let Year = moment(e.date)
       .locale("ru")
       .format("YY");
+    let Day = moment(e.date)
+    .locale("ru")
+    .format("YY");
     let Body = {
       userId,
       Year,

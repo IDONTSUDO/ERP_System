@@ -1646,3 +1646,8 @@ nav {
 .border-right{
   border-right: 2px #0f0f0fab solid;
 }
+.peopel-at-agent{
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+}

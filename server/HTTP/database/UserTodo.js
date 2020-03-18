@@ -1,8 +1,13 @@
 const mongoose = require('mongoose')
 const { ObjectId } = mongoose.Schema
+const moment = require("moment")
 const todoSchema = new mongoose.Schema({
     title: {
         type: String
+    },
+    day:{
+        type:String,
+        default: moment(new Date(Date.now())).format('DD') 
     },
     description: {
         type: String
