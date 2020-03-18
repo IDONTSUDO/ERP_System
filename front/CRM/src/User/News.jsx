@@ -48,7 +48,7 @@ export default class News extends Component {
           NewsArray.push(data[i]._id);
         }
 
-        // UpdateNews(NewsArray);
+        UpdateNews(NewsArray);
       }
     });
   }

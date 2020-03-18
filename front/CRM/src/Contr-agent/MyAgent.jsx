@@ -410,6 +410,9 @@ export default class MyAgent extends Component {
                         Редактированние контр агента
                       </Link>
                     </Button>
+                    <Button>
+                      <Link to={`/agent/human/${id}`}>Работники</Link>
+                    </Button>
                   </div>
                 </Col>
               </Row>

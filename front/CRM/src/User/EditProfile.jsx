@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
 import { read, update, updateUser } from "../Api/Http";
-import { notification, Icon, Spin,DatePicker } from "antd";
+import { notification, Icon, Spin, DatePicker } from "antd";
 import DefaultProfile from "../Assets/default.png";
 import { Link, Redirect } from "react-router-dom";
 import { Button } from "antd";
-
-
 
 class EditProfile extends Component {
   constructor() {
@@ -21,8 +19,8 @@ class EditProfile extends Component {
       fileSize: 0,
       loading: false,
       about: "",
-      phone:"",
-      Date_of_Birth:"",
+      phone: "",
+      Date_of_Birth: "",
       open: true
     };
   }
@@ -71,9 +69,9 @@ class EditProfile extends Component {
     }
     return true;
   };
-  onChange = (date, dateString)=> {
-    this.setState({Date_of_Birth:dateString})
-  }
+  onChange = (date, dateString) => {
+    this.setState({ Date_of_Birth: dateString });
+  };
   handleChange = name => event => {
     const value = name === "photo" ? event.target.files[0] : event.target.value;
     const fileSize = name === "photo" ? event.target.files[0].size : 0;
@@ -85,8 +83,8 @@ class EditProfile extends Component {
     this.setState({ open: true });
     if (this.isValid()) {
       const userId = this.props.match.params.userId;
-      let {Date_of_Birth } =this.state
-      this.userData.set("Date_of_Birth",Date_of_Birth)
+      let { Date_of_Birth } = this.state;
+      this.userData.set("Date_of_Birth", Date_of_Birth);
       update(userId, this.userData).then(data => {
         if (data.error) {
           this.openNotificationError();
@@ -130,20 +128,19 @@ class EditProfile extends Component {
       icon: <Icon type="smile" style={{ color: "#108ee9" }} />
     });
   }
-  SignUpForm = (name, email, password,phone,Date_of_Birth, about, id) => (
+  SignUpForm = (name, email, password, phone, Date_of_Birth, about, id) => (
     <form>
       <div>
         <div style={{ padding: "5px" }}>
-        <div class="upload-btn-wrapper">
-          <button class="btn-uploaded">Выберете файл</button>
-          <input
-            onChange={this.handleChange("photo")}
-            type="file"
-            accept="image/*"
-          />
+          <div class="upload-btn-wrapper">
+            <button class="btn-uploaded">Выберете файл</button>
+            <input
+              onChange={this.handleChange("photo")}
+              type="file"
+              accept="image/*"
+            />
+          </div>
         </div>
-        </div>
-       
       </div>
       <div>
         <label>Email</label>
@@ -173,9 +170,13 @@ class EditProfile extends Component {
         />
       </div>
       <div>
-        <label>Дата рождения    </label>
+        <label>Дата рождения </label>
         <div>
-        <DatePicker  placeholder="Дата рождения" size="large"  onChange={this.onChange} />
+          <DatePicker
+            placeholder="Дата рождения"
+            size="large"
+            onChange={this.onChange}
+          />
         </div>
       </div>
       <div>
@@ -225,40 +226,32 @@ class EditProfile extends Component {
           <>
             <div className="container">
               <div class="row">
-             
                 <div class="col-8">
-                <h2 className="dSnone"> Редактирование профиля</h2>
-                  {this.SignUpForm(name, email, password,phone,Date_of_Birth, about, id)}
+                  <h2 className="dSnone"> Редактирование профиля</h2>
+                  {this.SignUpForm(
+                    name,
+                    email,
+                    password,
+                    phone,
+                    Date_of_Birth,
+                    about,
+                    id
+                  )}
                 </div>
                 <div class="col-4">
-                  {" "}
-                  {/* <div className="container">
-                    <div className="row"> */}
-                      <>
-                        <div style={{ padding: "10px" }}>
-                          <img
-                            className="dSnone"
-                            style={{ height: "200px", width: "auto" }}
-                            onError={i => (i.target.src = `${DefaultProfile}`)}
-                            src={`http://localhost:8080/user/photo/${id}?`}
-                            onerror={DefaultProfile}
-                            alt={name}
-                          />
-                        </div>
-                        <div className="dSnone" style={{ padding: "5px" }}>
-                          <Button className="dSnone">
-                            <Link to={`/security/${id}`}>
-                              История безопаности
-                            </Link>
-                          </Button >
-                          <div className="dSnone" style={{ padding: "5px" }}></div>
-                          <Button>
-                            <Link  to={`/device`}>Подключенные девайсы</Link>
-                          </Button>
-                        </div>
-                      </>
-                    {/* </div>
-                  </div> */}
+                  <>
+                    <div style={{ padding: "10px" }}>
+                      <img
+                        className="dSnone"
+                        style={{ height: "200px", width: "auto" }}
+                        onError={i => (i.target.src = `${DefaultProfile}`)}
+                        src={`http://localhost:8080/user/photo/${id}?`}
+                        onerror={DefaultProfile}
+                        alt={name}
+                      />
+                    </div>
+                    <div className="dSnone" style={{ padding: "5px" }}></div>
+                  </>
                 </div>
               </div>
             </div>

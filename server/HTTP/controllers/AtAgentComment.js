@@ -142,3 +142,13 @@ exports.activeHelper = async (req, res) => {
       }
     });
 };
+exports.userActiveAtAgentGet = async (req,res) =>{
+  let {manageId,agentId} = req.body
+  TodoAgents.find({
+    $and: [{ agentByTodo: agentId }, { tags: manageId }]
+  }).sort({_id:-1})
+  .then(data => {
+    console.log(data)
+    return res.status(200).json(data);
+  });
+}

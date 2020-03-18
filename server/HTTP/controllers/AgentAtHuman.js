@@ -1,15 +1,11 @@
-const AgentPeopel = require('../database/AgentPeopel')
+const AgentPeopel = require("../database/AgentPeopel");
 
-
-exports.getHuman = ()=>{
-
-}
-exports.editHuman = () =>{
-
-}
-exports.humanId = () =>{
-
-}
-exports.newHuman = () =>{
-
-}
+exports.getHuman = async (req, res) => {
+  let { agentId } = req.body;
+  AgentPeopel.find({ AgentBy: agentId }).then(data => {
+    return res.status(200).json(data);
+  });
+};
+exports.editHuman = () => {};
+exports.humanId = () => {};
+exports.newHuman = () => {};

@@ -73,7 +73,7 @@ exports.getManagetAtAgent = async (req, res) => {
   }).then(data => {
     let promises = data.map((el, i) =>
       ContrAgentJob.find({
-        $and: [{ tags: _id }, { agentByTodo: el._id }]
+        $and: [{ tags: _id }, { agentByTodo: `${el._id}` }]
       })
         .count()
         .then(data => {
@@ -85,4 +85,3 @@ exports.getManagetAtAgent = async (req, res) => {
     });
   });
 };
-

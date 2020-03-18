@@ -195,16 +195,16 @@ export const DeleteComment = comment => {
     });
 };
 export const OneNewsDelete = newsId => {
- 
-  return fetch(`${process.env.REACT_APP_API_URL}/news/delete/${newsId}`,{
+  return fetch(`${process.env.REACT_APP_API_URL}/news/delete/${newsId}`, {
     method: "DELETE",
-    headers: myHeaders,
-  }).then(response => {
-    return response.json();
+    headers: myHeaders
   })
-  .catch(error => {
-    console.log(error);
-  });
+    .then(response => {
+      return response.json();
+    })
+    .catch(error => {
+      console.log(error);
+    });
 };
 export const NewNews = payload => {
   return fetch(`${process.env.REACT_APP_API_URL}/new/news`, {
@@ -1381,7 +1381,7 @@ export const NewAgentAddManager = data => {
     });
 };
 export const NewAgentAddRegulatoryPosition = data => {
-  console.log(JSON.stringify(data))
+  console.log(JSON.stringify(data));
   return fetch(
     `${process.env.REACT_APP_API_URL}/regulatory/position/add/agent`,
     {
@@ -1477,50 +1477,67 @@ export const ContrAgentDontManage = page => {
       console.log(err);
     });
 };
-export const GetWeekObjectId = (body) =>{
-  return fetch(
-    `${process.env.REACT_APP_API_URL}/active/helper/get/week`,
-    {
-      method: "POST",
-      headers: myHeaders,
-      body:JSON.stringify(body)
-    }
-  )
+export const GetWeekObjectId = body => {
+  return fetch(`${process.env.REACT_APP_API_URL}/active/helper/get/week`, {
+    method: "POST",
+    headers: myHeaders,
+    body: JSON.stringify(body)
+  })
     .then(response => {
       return response.json();
     })
     .catch(err => {
       console.log(err);
     });
-}
-export const GetEnterpriseManageAtAgentStatistic = () =>{
-  return fetch(
-    `${process.env.REACT_APP_API_URL}/agent/at/manager/statistic`,
-    {
-      method: "GET",
-      headers: myHeaders
-    }
-  )
+};
+export const GetEnterpriseManageAtAgentStatistic = () => {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/at/manager/statistic`, {
+    method: "GET",
+    headers: myHeaders
+  })
     .then(response => {
       return response.json();
     })
     .catch(err => {
       console.log(err);
     });
-}
-export const GetManagerAtAgent = (_id) =>{
-    return fetch(
-      `${process.env.REACT_APP_API_URL}/get/manager/at/agent/`,
-      {
-        method: "POST",
-        headers: myHeaders,
-        body:JSON.stringify({_id})
-      }
-    )
-      .then(response => {
-        return response.json();
-      })
-      .catch(err => {
-        console.log(err);
-      });
+};
+export const GetManagerAtAgent = _id => {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/manager/at/agent/`, {
+    method: "POST",
+    headers: myHeaders,
+    body: JSON.stringify({ _id })
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+export const GetUserActiveByAgent = body => {
+  return fetch(`${process.env.REACT_APP_API_URL}/active/user/helper`, {
+    method: "POST",
+    headers: myHeaders,
+    body: JSON.stringify(body)
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+export const GetAgentAtHuman = body =>{
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/at/human`, {
+    method: "POST",
+    headers: myHeaders,
+    body: JSON.stringify(body)
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
 }

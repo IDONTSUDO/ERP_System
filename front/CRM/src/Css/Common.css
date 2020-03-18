@@ -1641,5 +1641,8 @@ nav {
   justify-content: flex-start;
 }
 .active{
-  display: contents;
+  margin-left: 16px;
+}
+.border-right{
+  border-right: 2px #0f0f0fab solid;
 }
