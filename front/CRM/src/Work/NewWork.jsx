@@ -203,7 +203,7 @@ class Work extends React.Component {
       let tagsArray = [];
 
       let names_workers_list = tags;
-      
+
       for (let index = 0; tags.length > index; index++) {
         for (let index1 = 0; worker.length > index1; index1++) {
           if (worker[index1].name === tags[index]) {
@@ -239,7 +239,7 @@ class Work extends React.Component {
       var worker_job_news = tags.filter(function(el) {
         return el != posted_by;
       });
-      
+
       let worker_by = worker_job_news.map((user, index) => {
         return {
           user: user
@@ -441,8 +441,7 @@ class Work extends React.Component {
       workerJob8,
       workerJob9
     );
-   
-    
+
     for (let t = 0; timeArray.length > t; t++) {
       newTimeArray.push(timeArray[t]._d);
     }
@@ -484,7 +483,7 @@ class Work extends React.Component {
       }
       i++;
     }
-  
+
     for (let ar1 = 0; tags.length > ar1; ar1++) {
       for (let ar2 = 0; SortOfArray.length > ar2; ar2++) {
         if (tags[ar1] === SortOfArray[ar2]) {
@@ -492,7 +491,7 @@ class Work extends React.Component {
         }
       }
     }
-    
+
     for (let i = 0; tired.length > i; i++) {
       if (i == 0) {
         NoHope.push(tired[0] + "IAMWORKED");
@@ -528,8 +527,8 @@ class Work extends React.Component {
         action: filtered[index]
       };
     });
-    tags = tired
-  
+    tags = tired;
+
     if (this.validateDinamicJobs(JobArray)) {
       let comand = true;
 
@@ -537,7 +536,7 @@ class Work extends React.Component {
       let worker_by = jobNews;
       let eventNews = "Назначено новое дело";
       let link = `${process.env.REACT_APP_API_NEWS_JOB}`;
-     
+
       let payload;
       let agentByTodo = [];
       agentByTodo.push(agent, agentId);
@@ -555,8 +554,7 @@ class Work extends React.Component {
           importance,
           title,
           jobNews,
-          diff,
-          tags
+          diff
         };
       } else {
         payload = {
@@ -573,8 +571,7 @@ class Work extends React.Component {
           title,
           jobNews,
           agentByTodo,
-          diff,
-          tags
+          diff
         };
       }
 
@@ -980,13 +977,6 @@ class Work extends React.Component {
                                 Описание дела №{i}
                                 <h5>{tod}</h5>
                               </label>
-                              {/* <textarea
-                                onChange={this.handleAction(`workerJob${i}`)}
-                                class="form-control"
-                                id="exampleFormControlTextarea1"
-                                rows="3"
-                                value={this.state[`workerJob${i}`]}
-                              ></textarea> */}
                               <ReactQuill
                                 onChange={this.handleActionEditor(
                                   `workerJob${i}`

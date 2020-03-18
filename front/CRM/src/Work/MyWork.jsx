@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
-import { readMyTodo, MyTodoGetComandWorked, } from "../Api/Http";
+import { readMyTodo, MyTodoGetComandWorked } from "../Api/Http";
 import { Link } from "react-router-dom";
 import { Button, Card, Badge, Icon, Popover, Tabs, Spin, Skeleton } from "antd";
 import {
@@ -45,14 +45,14 @@ export default class MyWork extends Component {
   init = async userId => {
     let TodoArray = [];
 
-    readMyTodo(userId).then(data => {
-      if (data.error) {
+    readMyTodo(userId).then(Datas => {
+      if (Datas.error) {
         this.setState({ redirectToSignin: true });
       } else {
-        Object.keys(data);
-
-        for (let i = 0; data.todos.length > i; i++) {
-          TodoArray.push(data.todos[i]);
+        Object.keys(Datas);
+        console.log("readMyTodo" ,Datas)
+        for (let i = 0; Datas.todos.length > i; i++) {
+          TodoArray.push(Datas.todos[i]);
         }
 
         let userfindString;
@@ -64,10 +64,12 @@ export default class MyWork extends Component {
           if (data.error) {
             console.log(data.error);
           } else {
+            console.log("MyTodoGetComandWorked" ,data)
             for (let i = 0; data.result.length > i; i++) {
               TodoArray.push(data.result[i]);
-            }
-            
+            } 
+            console.log(TodoArray)
+
             this.setState({ todos: TodoArray });
             this.setState({ open: false });
           }
@@ -218,6 +220,7 @@ export default class MyWork extends Component {
                   className="container"
                 >
                   <div className="row">
+                    {/* {console.log(todos)} */}
                     {todos.map((comTodo, i) => (
                       <>
                         {comTodo.JobArray.length === 0 ? (
@@ -508,7 +511,6 @@ export default class MyWork extends Component {
                                       "days"
                                     ) <= 0 ? (
                                       <>
-                                        {/* <PhoneOutlined /> UserOutlined,PhoneOutlined <UserOutlined /> <WhatsAppOutlined /> */}
                                         {moment().diff(
                                           moment(comTodo.diff[i]),
                                           "days"
@@ -742,7 +744,10 @@ export default class MyWork extends Component {
             )}
           </TabPane>
           <TabPane tab="Календарь" key="2">
-            <div style={{ width: "90%",    display: "block" }} className="container">
+            <div
+              style={{ width: "90%", display: "block" }}
+              className="container"
+            >
               <CalendarJob />
             </div>
           </TabPane>
