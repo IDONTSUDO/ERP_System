@@ -305,7 +305,7 @@ exports.DeleteComent = async (req, res) => {
 exports.GetcomandTodo = async (req, res) => {
     let userId = req.body.userId
     TODO.find({ JobArray: { $elemMatch: { user: userId } } })
-        .select("comand _id title importance JobArray status postedBy diff")
+        .select("comand _id title importance JobArray status posted_by diff name_posted")
         .exec((err, result) => {
             if (err) {
                 return res.status(400).json({

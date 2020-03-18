@@ -1508,3 +1508,19 @@ export const GetEnterpriseManageAtAgentStatistic = () =>{
       console.log(err);
     });
 }
+export const GetManagerAtAgent = (_id) =>{
+    return fetch(
+      `${process.env.REACT_APP_API_URL}/get/manager/at/agent/`,
+      {
+        method: "POST",
+        headers: myHeaders,
+        body:JSON.stringify({_id})
+      }
+    )
+      .then(response => {
+        return response.json();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+}

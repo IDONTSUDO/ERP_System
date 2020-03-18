@@ -66,3 +66,23 @@ exports.statisticManagerAtAgents = async (req, res) => {
       });
     });
 };
+exports.getManagetAtAgent = async (req, res) => {
+  let { _id } = req.body;
+  ContrAgent.find({
+    tags: { $elemMatch: { _id: `${_id}` } }
+  }).then(data => {
+    let promises = data.map((el, i) =>
+      ContrAgentJob.find({
+        $and: [{ tags: _id }, { agentByTodo: el._id }]
+      })
+        .count()
+        .then(data => {
+          return { el, Counter: data };
+        })
+    );
+    Promise.all(promises).then(results => {
+      return res.status(200).json(results);
+    });
+  });
+};
+

@@ -50,10 +50,13 @@ const StaticEnterprise = require('./routers/StatisticEnterprise.js')
 const Tech = require("./routers/TechAgent.js")
 const ActiveUser = require("./routers/ActiveUsers.js")
 const AgentHuman = require('./routers/HumanAgent')
+app.use(cors())
+
+
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(expressValidator())
-app.use(cors())
+
 // 
 // app.use("/",logger)
 app.use("/", PushNotifications)
