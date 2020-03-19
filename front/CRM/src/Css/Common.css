@@ -1665,3 +1665,7 @@ nav {
   margin: 3px;
   border-radius: 50%;
 }
+.message-list{
+  position: fixed;
+  margin-left: 20vh;
+}
