@@ -41,7 +41,7 @@
     "eslint-plugin-react": "7.14.3",
     "eslint-plugin-react-hooks": "^1.6.1",
     "file-loader": "3.0.1",
-    "firebase": "^7.9.1",
+    "firebase": "^7.11.0",
     "fs-extra": "7.0.1",
     "geoip-lite": "^1.4.0",
     "google-maps-react": "^2.0.2",

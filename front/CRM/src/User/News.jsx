@@ -1,5 +1,5 @@
 //TODO[!] Не выполененое дело
-//TODO[!] 
+//TODO[!]
 
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
@@ -8,7 +8,8 @@ import { Badge, Popover, Button, Skeleton, List, Avatar } from "antd";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import Error from "../Error/Error.jsx";
-import DefaultProfile from "../Assets/default.png";
+import AvatarCus from "../Components/Avatar";
+
 import {
   TeamOutlined,
   UserOutlined,
@@ -129,15 +130,8 @@ export default class News extends Component {
                         <Link
                           to={`${process.env.REACT_APP_API_URL}/user/${item.posted_by}?`}
                         >
-                          <Avatar
-                            src={`${process.env.REACT_APP_API_URL}/user/photo/${item.posted_by}?`}
-                            onError={e =>
-                              e === undefined
-                                ? null
-                                : e.targer === undefined
-                                ? null
-                                : (e.target.src = DefaultProfile)
-                            }
+                          <AvatarCus
+                            avatarLink={`${process.env.REACT_APP_API_URL}/user/photo/${item.posted_by}?`}
                           />
                         </Link>
                       }
@@ -147,21 +141,28 @@ export default class News extends Component {
                       description={
                         <>
                           <h2>{item.eventNews}</h2>
-                          {item.eventNews === "Новый статус" ? (<>
-                          <Link to={item.link}>Посмотреть</Link>
-                          
-                          
-                          </>):(null)}
-                          {item.eventNews === "Выполнено" ?(
-                           
-                           <div>Пользователь <span className="user-complete">{item.name_posted}</span> выполнил  дело <span className="todo-news-titel">{item.description}</span></div> 
-                          ):(null)}
-                          {item.eventNews === "Агент" ? <>
-                          
-                          <div>{item.description}</div>
-                          
-                          </> : null}
-
+                          {item.eventNews === "Новый статус" ? (
+                            <>
+                              <Link to={item.link}>Посмотреть</Link>
+                            </>
+                          ) : null}
+                          {item.eventNews === "Выполнено" ? (
+                            <div>
+                              Пользователь{" "}
+                              <span className="user-complete">
+                                {item.name_posted}
+                              </span>{" "}
+                              выполнил дело{" "}
+                              <span className="todo-news-titel">
+                                {item.description}
+                              </span>
+                            </div>
+                          ) : null}
+                          {item.eventNews === "Агент" ? (
+                            <>
+                              <div>{item.description}</div>
+                            </>
+                          ) : null}
 
                           {item.eventNews === "Новый коментарий" ? (
                             <>
@@ -180,7 +181,9 @@ export default class News extends Component {
                                     <>
                                       <div>Описание:</div>
                                       <div
-                                        dangerouslySetInnerHTML={{__html: item.description}}
+                                        dangerouslySetInnerHTML={{
+                                          __html: item.description
+                                        }}
                                       />
                                     </>
                                   ) : (
@@ -207,7 +210,12 @@ export default class News extends Component {
                             {item.eventNews === "Новый Агент" ? (
                               <div>
                                 <div>{item.description}</div>
-                                <div>Добавил <span className="user-complete">{item.newsFrom.name}</span></div>
+                                <div>
+                                  Добавил{" "}
+                                  <span className="user-complete">
+                                    {item.newsFrom.name}
+                                  </span>
+                                </div>
                                 <Popover
                                   type="hover"
                                   content={

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import None from "../Components/None.jsx";
-
+import PopoverSoloTodo from "../Components/PopoverSoloTodo.jsx";
+import AvatarCus from "../Components/Avatar";
 import {
   Calendar,
   Badge,
@@ -182,14 +183,14 @@ export default class CalendarJob extends Component {
           <div>{todo.title}</div>
           <div dangerouslySetInnerHTML={{ __html: todo.description }} />
           <hr />
-          <div>
-            <span style={{ marginRight: "15px" }}></span>
-            <Link to={`/user/${todo.posted_by}`}>
-              <Avatar
-                src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
-              />
-            </Link>
-          </div>
+
+          {/*  style={{ marginRight: "15px" }} */}
+          <span></span>
+          <Link to={`/user/${todo.posted_by}`}>
+            <AvatarCus
+              avatarLink={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
+            />
+          </Link>
         </Link>
 
         <div>
@@ -532,18 +533,14 @@ export default class CalendarJob extends Component {
             <>
               {job.user.length === 33 ? (
                 <Link to={`/user/${job.user.slice(0, -9)}`}>
-                  <Avatar
-                    src={`${
-                      process.env.REACT_APP_API_URL
-                    }/user/photo/${job.user.slice(0, -9)}?`}
-                    shape="square"
+                  <AvatarCus
+                    avatarLink={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
                   />
                 </Link>
               ) : (
                 <Link to={`/user/${job.user}`}>
-                  <Avatar
-                    src={`${process.env.REACT_APP_API_URL}/user/photo/${job.user}?`}
-                    shape="square"
+                  <AvatarCus
+                    avatarLink={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
                   />
                 </Link>
               )}
@@ -556,12 +553,9 @@ export default class CalendarJob extends Component {
               <hr />
             </>
           ))}
-          <div>
-            <span style={{ marginRight: "15px" }}></span>
-            <Avatar
-              src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
-            />
-          </div>
+          <AvatarCus
+            avatarLink={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
+          />
         </Link>
       </>
     );

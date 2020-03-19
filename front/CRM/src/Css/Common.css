@@ -1640,14 +1640,28 @@ nav {
   display: flex;
   justify-content: flex-start;
 }
-.active{
+.active {
   margin-left: 16px;
 }
-.border-right{
+.border-right {
   border-right: 2px #0f0f0fab solid;
 }
-.peopel-at-agent{
+.peopel-at-agent {
   display: flex;
   justify-content: start;
   flex-direction: column;
+}
+.avatar-img {
+  list-style: none;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+  vertical-align: middle;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  margin: 3px;
+  border-radius: 50%;
 }

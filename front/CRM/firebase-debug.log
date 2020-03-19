@@ -1,0 +1,53 @@
+[debug] [2020-03-19T06:33:52.469Z] ----------------------------------------------------------------------
+[debug] [2020-03-19T06:33:52.471Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\idontsudo\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting:svarog-srm
+[debug] [2020-03-19T06:33:52.472Z] CLI Version:   7.15.1
+[debug] [2020-03-19T06:33:52.472Z] Platform:      win32
+[debug] [2020-03-19T06:33:52.472Z] Node Version:  v13.11.0
+[debug] [2020-03-19T06:33:52.473Z] Time:          Thu Mar 19 2020 09:33:52 GMT+0300 (Москва, стандартное время)
+[debug] [2020-03-19T06:33:52.473Z] ----------------------------------------------------------------------
+[debug] [2020-03-19T06:33:52.473Z] 
+[debug] [2020-03-19T06:33:52.480Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-03-19T06:33:52.480Z] > authorizing via signed-in user
+[debug] [2020-03-19T06:33:52.480Z] [iam] checking project crm-svarom for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-03-19T06:33:52.482Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/crm-svarom:testIamPermissions  
+
+[debug] [2020-03-19T06:33:53.593Z] <<< HTTP RESPONSE 200
+[debug] [2020-03-19T06:33:53.595Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/crm-svarom  
+ 
+[debug] [2020-03-19T06:33:53.851Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'crm-svarom'...
+[info] 
+[info] i  deploying hosting
+[info] 
+[info] +  Deploy complete!
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/crm-svarom/overview
+[debug] [2020-03-19T06:33:54.491Z] TypeError: Cannot read property 'deploys' of undefined
+    at C:\Users\idontsudo\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:84:36
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2020-03-19T06:34:36.758Z] ----------------------------------------------------------------------
+[debug] [2020-03-19T06:34:36.760Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\idontsudo\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting:svarog-srm
+[debug] [2020-03-19T06:34:36.761Z] CLI Version:   7.15.1
+[debug] [2020-03-19T06:34:36.761Z] Platform:      win32
+[debug] [2020-03-19T06:34:36.761Z] Node Version:  v13.11.0
+[debug] [2020-03-19T06:34:36.762Z] Time:          Thu Mar 19 2020 09:34:36 GMT+0300 (Москва, стандартное время)
+[debug] [2020-03-19T06:34:36.762Z] ----------------------------------------------------------------------
+[debug] [2020-03-19T06:34:36.762Z] 
+[debug] [2020-03-19T06:34:36.769Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-03-19T06:34:36.769Z] > authorizing via signed-in user
+[debug] [2020-03-19T06:34:36.769Z] [iam] checking project crm-svarom for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-03-19T06:34:36.770Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/crm-svarom:testIamPermissions  
+
+[debug] [2020-03-19T06:34:37.864Z] <<< HTTP RESPONSE 200
+[debug] [2020-03-19T06:34:37.865Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/crm-svarom  
+ 
+[debug] [2020-03-19T06:34:38.758Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'crm-svarom'...
+[info] 
+[info] i  deploying hosting
+[debug] [2020-03-19T06:34:38.766Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/svarog-srm/versions  
+

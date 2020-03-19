@@ -47,7 +47,7 @@ import EditorJob from "../Work/EditorJob.jsx";
 import ControlAgents from "../ControlAgents/ControlAgents.jsx";
 import AgentHuman from "../AgentHelper/Agent-Human.jsx";
 import AgentBranch from "../AgentHelper/AgentBranch";
-
+import CompanyTabel from "../User/CompanyTabel"
 
 const MainRouter = () => (
   <div>
@@ -62,12 +62,15 @@ const MainRouter = () => (
       <PrivateRoute exact path="/security/:userId" component={Security} />
       <PrivateRoute exact path="/device" component={DeviececEdit} />
 
+
+
+      <PrivateRoute exact path="/agent/human/:agentId" component={AgentHuman} />
       <PrivateRoute exact path="/new/worker" component={NewWorker} />
       <PrivateRoute exact path="/user/edit/:userId" component={EditProfile} />
       <PrivateRoute exact path="/user/work/:userId" component={MyWork} />
       <PrivateRoute exact path="/job/:todoId" component={Job} />
+      <PrivateRoute exact path="/company/tabel" component={CompanyTabel} />
       <PrivateRoute exact path="/today/:userId" component={TodayWork} />
-
       <PrivateRoute exact path="/all/agent" component={AllAgent} />
       <PrivateRoute exact path="/my/agent/:userId" component={MyAgent} />
       <PrivateRoute exact path="/new/agent" component={NewAgent} />
