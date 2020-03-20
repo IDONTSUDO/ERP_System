@@ -24,12 +24,13 @@ mongoose.connect(`mongodb://localhost/${process.env.DATABASE}`,{ useUnifiedTopol
 mongoose.connection.on('error', err => {
     console.log(`DB connection error: ${err.message}`)
 })
+
+
 if(`${process.env.DEBUG_Mode}` === "true"){
     mongoose.set("debug", true);
     app.use(morgan('tiny'))
 
 }
-mongoose.Promise = Promise;
 
 
 Fawn.init(mongoose);

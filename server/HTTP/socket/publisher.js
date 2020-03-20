@@ -54,7 +54,7 @@ exports.NewMessageSendWebSocketServer = async (req) => {
   let message = "NM"
     // New Message
 
-  let data =  req.messageData 
+  let data =  req.body 
   let payload = {
     data,
     message

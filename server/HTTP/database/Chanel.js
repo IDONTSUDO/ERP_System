@@ -1,12 +1,10 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema;
 const ChanelSchema = new mongoose.Schema({
-    User:{
-        type:Array
-    },
-    Name:{
-        type:String
-    }
-})
-ChanelSchema.plugin(require('mongoose-autopopulate'));
+  users: [{ type: ObjectId, ref: "User" }],
+  name: {
+    type: String
+  }
+});
 
-module.exports = mongoose.model("Chanel", ChanelSchema)
+module.exports = mongoose.model("Chanel", ChanelSchema);
