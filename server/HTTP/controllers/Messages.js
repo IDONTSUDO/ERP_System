@@ -1,7 +1,7 @@
 const Chanel = require("../database/Chanel");
 const Message = require("../database/Message");
 const _ = require("lodash");
-
+const Unread = require("../database/uReader.js");
 exports.MessageId = async (req, res, next, id) => {
   Message.findById(id).exec((err, result) => {
     if (err || !result) {
@@ -31,8 +31,6 @@ exports.ChanelList = async (req, res) => {
         .limit(perPage);
     })
     .then(data => {
-     
-
       let requests = data.map(one =>
         Message.find({ DialogId: one._id })
           .sort({ _id: -1 })
@@ -55,23 +53,26 @@ exports.ChanelNew = async (req, res, next) => {
       result
     });
     req.dilogData = result;
+
+    result.users.forEach(user => {
+      let unread = new Unread();
+      unread.chanel = result._id;
+      unread.user = user;
+      unread.save();
+    });
     return next();
   });
 };
 exports.ChanelDelete = async (req, res) => {};
 exports.newMessage = async (req, res, next) => {
   let { userBy } = req.body;
+  const message = new Message(req.body);
 
-  userBy.forEach(user => {
-    const message = new Message(req.body);
-    message.userBy = user._id;
-    message.save().then(result => {});
+  message.save((err, result) => {
+    req.message = result;
+    res.status(200).json("OK");
+    return next();
   });
-  res.status(200).json("OK");
-  // TODO
-  //
-
-  return next();
 };
 exports.EditMessage = async (req, res, next) => {
   let msg = req.message;
@@ -119,4 +120,12 @@ exports.ChanelGetDialog = async (req, res) => {
       res.status(200).json(data);
     })
     .catch(err => console.log(err));
+};
+exports.CounterUnread = req => {
+  let { userBy, DialogId } = req.message;
+  userBy.forEach(user => {
+    Unread.findOneAndUpdate({ user: `${user._id}`, chanel: DialogId },{ $inc: { num: +1} }).then(data =>
+      console.log(data)
+    );
+  });
 };

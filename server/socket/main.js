@@ -81,12 +81,13 @@ process.once("SIGTERM", function(code) {
   server.close();
 });
 async function SocketBroadCastNewDialog(message) {
-  let { users, name, _id } = message.data;
+  let { users } = message.data;
 
   for await (let user of users) {
     Online.find({ user: user }).then(data => {
       for (let us of data) {
-        io.to(`${us.io_id}`).emit("message", message.data);
+
+        io.to(`${us.io_id}`).emit("message", message);
       }
     });
   }
@@ -96,10 +97,16 @@ async function SocketBroadCasrNewMessage(message) {
   for await (let user of userBy) {
     Online.find({ user: user }).then(data => {
       for (let us of data) {
-        io.to(`${us.io_id}`).emit("message", message.data);
+        io.to(`${us.io_id}`).emit("message", message);
       }
     });
   }
+}
+async function SocketBroadCastDeleteDialog (message){
+
+}
+async function SocketBroadCastDeleteMessage(message){
+  
 }
 async function Subscribers() {
   sock.connect(`tcp://${process.env.SUBSCRIBER}`);
@@ -118,12 +125,14 @@ async function Subscribers() {
         break;
       case "DM": //удаление сообщения
         console.log("Перебор");
+        SocketBroadCastDeleteMessage(message)
         break;
       case "NM": //новое сообщение
         SocketBroadCasrNewMessage(message);
         console.log("NM");
         break;
       case "DD":
+        SocketBroadCastDeleteDialog(message)
         console.log("DD");
       default:
         console.log("System glitch ");

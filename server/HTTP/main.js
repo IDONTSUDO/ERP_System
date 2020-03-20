@@ -20,7 +20,7 @@ const moment = require('moment')
 
 Promise.promisifyAll(require("mongoose"));
 
-mongoose.connect(`mongodb://localhost/${process.env.DATABASE}`,{ useUnifiedTopology: true,  useNewUrlParser: true,  useCreateIndex :  true ,  poolSize: 25  }).then(() =>  console.log(`Server connect to Database ${process.env.DATABASE}`))
+mongoose.connect(`mongodb://localhost/${process.env.DATABASE}`,{ useUnifiedTopology: true,  useNewUrlParser: true,  useCreateIndex :  true ,  poolSize: 10  }).then(() =>  console.log(`Server connect to Database ${process.env.DATABASE}`))
 mongoose.connection.on('error', err => {
     console.log(`DB connection error: ${err.message}`)
 })

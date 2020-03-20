@@ -6,14 +6,6 @@ config:
   defaults:
     headers:
       Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGM1MTMyNTY1YWE2MTExZTVhZmU3MzEiLCJpYXQiOjE1NzQ0MDUzMjV9.XSccek02GAgsmK2RGh4EebY96EO-U5eGug9W7Jws70o'
-# scenarios:                                      
-#   - flow:
-#     - get:
-#         url: "/all/worker"
-# scenarios:
-#   - flow:
-#     - get:
-#         url: "/agent/list"
 scenarios:
   - name: "Search and buy"
     flow:

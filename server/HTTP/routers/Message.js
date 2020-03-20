@@ -7,7 +7,8 @@ const {
   EditMessage,
   DeleteMessage,
   ChanelGetDialog,
-  MessageId
+  MessageId,
+  CounterUnread
 } = require("../controllers/Messages");
 
 const { jwtTokenUserId } = require("../middleware/middleware.js");
@@ -25,7 +26,12 @@ router.post("/chanel/dialog", ChanelGetDialog);
 router.post("/chanel/new", ChanelNew, NewDialogSendWebSocketServer);
 router.delete("/chanel/delete", ChanelDelete);
 
-router.post("/new/message", newMessage, NewMessageSendWebSocketServer);
+router.post(
+  "/new/message",
+  newMessage,
+  NewMessageSendWebSocketServer,
+  CounterUnread
+);
 router.put(
   "/message/put/:messageId",
   EditMessage,
@@ -39,4 +45,3 @@ router.delete(
 
 router.param("messageId", MessageId);
 module.exports = router;
-3

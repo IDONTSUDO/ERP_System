@@ -4,7 +4,7 @@ const MessageSchema = new mongoose.Schema({
     type: String
    },
    userBy:{
-    type: String
+    type: Array
    },
    read:{
       type:Boolean,
