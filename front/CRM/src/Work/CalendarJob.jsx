@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import None from "../Components/None.jsx";
-import PopoverSoloTodo from "../Components/PopoverSoloTodo.jsx";
-import AvatarCus from "../Components/Avatar";
+import PopoverSoloTodo from "../Components/Popover/PopoverSoloTodo.jsx";
+import PopoverSystem from "../Components/Popover/PopoverSystem.jsx";
+import PopoverJobArray from "../Components/Popover/PopoverJobArray.jsx";
+
 import {
   Calendar,
   Badge,
@@ -169,38 +171,7 @@ export default class CalendarJob extends Component {
     this.setState({ [name]: event.target.value });
   };
   getListData = value => {};
-  renderPopoverSolo = todo => {
-    return (
-      <>
-        <Link
-          to={
-            todo.status === "system"
-              ? `/spec/job/${todo._id}`
-              : `/job/${todo._id}`
-          }
-          className="news"
-        >
-          <div>{todo.title}</div>
-          <div dangerouslySetInnerHTML={{ __html: todo.description }} />
-          <hr />
 
-          {/*  style={{ marginRight: "15px" }} */}
-          <span></span>
-          <Link to={`/user/${todo.posted_by}`}>
-            <AvatarCus
-              avatarLink={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
-            />
-          </Link>
-        </Link>
-
-        <div>
-          <Button onClick={todoOne => this.clickComplateTodo(todo, todoOne)}>
-            Выполненно
-          </Button>
-        </div>
-      </>
-    );
-  };
   clickComplateTodo = todo => {
     let ID = todo._id;
     let posted_by = todo.posted_by;
@@ -461,49 +432,7 @@ export default class CalendarJob extends Component {
       NewAssignTodoToday(sub);
     });
   };
-  renderPopoverSystem = todo => {
-    return (
-      <>
-        <Link
-          to={
-            todo.status === "system"
-              ? `/spec/job/${todo._id}`
-              : `/job/${todo._id}`
-          }
-          className="news"
-        >
-          <div>Имя:{todo.agentByTodo[0].name}</div>
-          <div>Телефон:{todo.agentByTodo[0].phone}</div>
-          <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
-          <div>Email:{todo.agentByTodo[0].email}</div>
-        </Link>
-      </>
-    );
-  };
-  renderPopoverAgent = todo => {
-    return (
-      <>
-        <Link
-          to={
-            todo.status === "system"
-              ? `/spec/job/${todo._id}`
-              : `/job/${todo._id}`
-          }
-          className="news"
-        >
-          <div>Имя:{todo.agentByTodo[0].name}</div>
-          <div>Телефон:{todo.agentByTodo[0].phone}</div>
-          <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
-          <div>Email:{todo.agentByTodo[0].email}</div>
-          <div>
-            Индивидуальные условия:
-            {todo.agentByTodo[0].individual_conditions_job}
-          </div>
-          <div>Откуда пришел:{todo.agentByTodo[0].work_begin_with_him}</div>
-        </Link>
-      </>
-    );
-  };
+
   helperSearchTodoByAgeregate = name => {
     let { todosCalendar } = this.state;
     let results = todosCalendar.filter(el => el.name_posted === name);
@@ -518,48 +447,7 @@ export default class CalendarJob extends Component {
     this.setState({ SelectDatedTodo: results });
   };
   helperTodoByAgregateAgents = () => {};
-  renderPopoverTeam = todo => {
-    return (
-      <>
-        <Link
-          to={
-            todo.status === "system"
-              ? `/spec/job/${todo._id}`
-              : `/job/${todo._id}`
-          }
-          className="news"
-        >
-          {todo.JobArray.map((job, i) => (
-            <>
-              {job.user.length === 33 ? (
-                <Link to={`/user/${job.user.slice(0, -9)}`}>
-                  <AvatarCus
-                    avatarLink={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
-                  />
-                </Link>
-              ) : (
-                <Link to={`/user/${job.user}`}>
-                  <AvatarCus
-                    avatarLink={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
-                  />
-                </Link>
-              )}
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: job.action
-                }}
-              ></div>
-              <div>{job.date}</div>
-              <hr />
-            </>
-          ))}
-          <AvatarCus
-            avatarLink={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
-          />
-        </Link>
-      </>
-    );
-  };
+
   switchCalendarEditor = switchCalendarEditor => {
     this.setState({ switchCalendarEditor: switchCalendarEditor });
     if (switchCalendarEditor === true) {
@@ -598,11 +486,7 @@ export default class CalendarJob extends Component {
             <>
               {todo.status === "system" ? (
                 <>
-                  <Popover
-                    Popover
-                    content={<>{this.renderPopoverSystem(todo)}</>}
-                    title="Задача"
-                  >
+                  <PopoverSystem todo={todo}>
                     <WhatsAppOutlined
                       style={{
                         fontSize: "30px",
@@ -610,41 +494,23 @@ export default class CalendarJob extends Component {
                         marfin: "5px"
                       }}
                     />
-                  </Popover>
+                  </PopoverSystem>
                 </>
               ) : (
                 <>
                   {todo.JobArray.length === 0 ? (
                     <>
-                      <Popover
-                        Popover
-                        content={<>{this.renderPopoverSolo(todo)}</>}
-                        title="Задача"
-                      >
-                        <UserOutlined
-                          style={{
-                            fontSize: "30px",
-                            color: "rgb(3, 169, 244)",
-                            marfin: "5px"
-                          }}
-                        />
-                      </Popover>
+                      <PopoverSoloTodo
+                        icon={true}
+                        todo={todo}
+                      ></PopoverSoloTodo>
                     </>
                   ) : (
                     <>
-                      <Popover
-                        Popover
-                        content={<>{this.renderPopoverTeam(todo)}</>}
-                        title="Задача"
-                      >
-                        <TeamOutlined
-                          style={{
-                            fontSize: "30px",
-                            color: "rgb(3, 169, 244)",
-                            marfin: "5px"
-                          }}
-                        />
-                      </Popover>
+                      <PopoverJobArray
+                        icon={true}
+                        todo={todo}
+                      ></PopoverJobArray>
                     </>
                   )}
                 </>

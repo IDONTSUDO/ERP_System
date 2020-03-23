@@ -7,7 +7,10 @@ import {
 } from "../Api/Http.js";
 import { Link, Redirect } from "react-router-dom";
 import { isAuthenticated } from "../Api/Auth";
-// import { ResponsivePieCanvas } from "@nivo/pie";
+
+import PopoverSoloTodo from "../Components/Popover/PopoverSoloTodo.jsx";
+import PopoverSystem from "../Components/Popover/PopoverSystem.jsx";
+import PopoverJobArray from "../Components/Popover/PopoverJobArray.jsx";
 import Localisation from "../helper/LocalisationCalendar.json";
 import DefaultProfile from "../Assets/default.png";
 import {
@@ -343,29 +346,6 @@ class SpecJob extends Component {
       this.setState({ peopelLoader: true });
     }
   };
-  renderPopoverSystem = todo => {
-    return (
-      <>
-        <div>Имя:{todo.agentByTodo[0].name}</div>
-        <div>Телефон:{todo.agentByTodo[0].phone}</div>
-        <div>Полное имя:{todo.agentByTodo[0].full_name}</div>
-      </>
-    );
-  };
-  renderPopoverSolo = todo => {
-    return (
-      <>
-        {" "}
-        <img
-          className="img-icon"
-          src={`${process.env.REACT_APP_API_URL}/user/photo/${todo.posted_by}?`}
-          onError={i => (i.target.src = `${DefaultProfile}`)}
-        />
-        <div>{todo.title}</div>
-        <div dangerouslySetInnerHTML={{ __html: todo.description }} />
-      </>
-    );
-  };
   changePanel = key => {
     if (key === "2") {
       console.log(key);
@@ -379,7 +359,6 @@ class SpecJob extends Component {
     let noData = {
       emptyText: (
         <div>
-          Ничего не найдено{" "}
           <FrownOutlined style={{ fontSize: "32px", marginRight: "5px" }} />
         </div>
       )
@@ -414,45 +393,19 @@ class SpecJob extends Component {
                             <>
                               {todo.status === "system" ? (
                                 <>
-                                  <Popover
-                                    Popover
-                                    content={
-                                      <>{this.renderPopoverSystem(todo)}</>
-                                    }
-                                    title="Задача"
-                                  >
-                                    <WhatsAppOutlined
-                                      style={{
-                                        fontSize: "30px",
-                                        color: "#673AB7",
-                                        marfin: "5px"
-                                      }}
-                                    />
-                                  </Popover>
+                                  <PopoverSystem todo={todo} icon={true} />
                                 </>
                               ) : (
                                 <>
-                                  <Popover
-                                    Popover
-                                    content={
-                                      <>{this.renderPopoverSolo(todo)}</>
-                                    }
-                                    title="Задача"
-                                  >
-                                    <UserOutlined
-                                      style={{
-                                        fontSize: "30px",
-                                        color: "#03A9F4",
-                                        marfin: "5px"
-                                      }}
-                                    />
-                                  </Popover>
+                                  <PopoverSoloTodo
+                                    todo={todo}
+                                    icon={true}
+                                  ></PopoverSoloTodo>
                                 </>
                               )}
                             </>
                           ))}
                           <Calendar
-                            // headerRender={(<><h1>Ваш график дел</h1></>)}
                             locale={Localisation}
                             mode="month"
                             dateCellRender={this.dateCellRender}

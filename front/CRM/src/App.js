@@ -1,7 +1,7 @@
 import React from "../node_modules/react";
 import { BrowserRouter } from "../node_modules/react-router-dom";
 import MainRouter from "./Router/MainRouter.js";
-import NotificationChat from "./WsSocket/NotificationChat.jsx";
+// import NotificationChat from "./WsSocket/NotificationChat.jsx";
 import "antd/dist/antd.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Css/NewWork.css";
@@ -9,7 +9,7 @@ import "./Css/Common.css";
 import "./Css/mail.css";
 const App = () => (
   <BrowserRouter>
-    <NotificationChat />
+    {/* <NotificationChat /> */}
     <MainRouter />
   </BrowserRouter>
 );

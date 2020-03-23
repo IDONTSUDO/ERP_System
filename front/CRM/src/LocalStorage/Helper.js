@@ -48,3 +48,8 @@ function WeekAnalyzed(){
         weekStatic()
     }
 }
+
+
+export function calendarRegim(){
+    
+}

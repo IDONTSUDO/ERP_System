@@ -8,7 +8,7 @@ import { Badge, Popover, Button, Skeleton, List, Avatar } from "antd";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import Error from "../Error/Error.jsx";
-import AvatarCus from "../Components/Avatar";
+import AvatarCus from "../Components/Imager/Avatar";
 
 import {
   TeamOutlined,

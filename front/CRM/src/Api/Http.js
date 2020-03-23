@@ -1528,7 +1528,7 @@ export const GetUserActiveByAgent = body => {
       console.log(err);
     });
 };
-export const GetAgentAtHuman = body =>{
+export const GetAgentAtHuman = body => {
   return fetch(`${process.env.REACT_APP_API_URL}/agent/at/human`, {
     method: "POST",
     headers: myHeaders,
@@ -1540,4 +1540,18 @@ export const GetAgentAtHuman = body =>{
     .catch(err => {
       console.log(err);
     });
-}
+};
+export const GetDialogList = () => {
+  let userId = isAuthenticated().direct._id;
+  return fetch(`${process.env.REACT_APP_API_URL}/chanel/list`, {
+    method: "POST",
+    headers: myHeaders,
+    body: JSON.stringify({ userId })
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};

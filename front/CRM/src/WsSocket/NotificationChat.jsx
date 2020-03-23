@@ -13,8 +13,6 @@ const socket = io.connect("http://localhost:4000", {
   }
 });
 socket.on("message", data => {
-  console.log(data);
-
   if (window.location.pathname != "/message") {
     if (data.message == "NM") {
       openNotificationNewDialog();

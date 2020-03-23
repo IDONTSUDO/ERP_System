@@ -5,7 +5,7 @@ import App from "./App";
 import "moment/locale/ru";
 import { weekStatic, weekEvery } from "./LocalStorage/Helper";
 import * as serviceWorker from "./Push/serviceWorker";
-
+import SessionDialogList from './SessionStorage/Session'
 import { isAuthenticated, Subscribe, IsSubscriber } from "./Api/Auth";
 require("setimmediate");
 
@@ -17,6 +17,7 @@ if (IsSubscriber()) {
   console.log("Subcribe");
 } else {
   if (isAuthenticated()) {
+    
     subscribeUser();
     let subscribe = true;
     Subscribe(subscribe);

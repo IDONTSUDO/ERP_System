@@ -99,8 +99,8 @@ export default class Email extends Component {
     let mapArray = [];
     Rusmap.map((geo, i) => mapArray.push(geo.value));
 
-    mapArray.sort((a, b) => a.localeCompare(b))
-  
+    mapArray.sort((a, b) => a.localeCompare(b));
+
     this.setState({ mapList: mapArray });
   }
   forceUpdate() {
@@ -128,21 +128,20 @@ export default class Email extends Component {
       }
     });
   };
-  SimpelSetingsToEmail = () =>{
-    let { resultSimpelAgentGeo,resultSimpelAgentSpec} = this.state;
+  SimpelSetingsToEmail = () => {
+    let { resultSimpelAgentGeo, resultSimpelAgentSpec } = this.state;
     this.editor.exportHtml(data => {
       const { html } = data;
       let settings = {
         resultSimpelAgentGeo,
         resultSimpelAgentSpec,
         html
-      }
-      SimpelEmailing(settings).then(data =>{
-        console.log(data)
-      }) 
+      };
+      SimpelEmailing(settings).then(data => {
+        console.log(data);
+      });
     });
-   
-  }
+  };
   handleClickImgCopy = id => {
     let copyInfo = `${process.env.REACT_APP_API_URL}/${id}`;
     navigator.clipboard.writeText(copyInfo);
@@ -396,7 +395,11 @@ export default class Email extends Component {
   renderFilterGeo = data => ({
     filterDropdown: ({}) => (
       <div style={{ padding: 8 }}>
-        <Button style={{padding: 5 }} type="primary"  onClick={this.handelSearchGeo}>
+        <Button
+          style={{ padding: 5 }}
+          type="primary"
+          onClick={this.handelSearchGeo}
+        >
           Поиск
         </Button>
         <div className="rusInputMap"></div>
@@ -409,7 +412,6 @@ export default class Email extends Component {
           value={this.state.geoSearch}
           onChange={this.handleSelectgeoSearch}
           maxTagCount={1}
-          
         >
           {Rusmap.map(map => (
             <Select.Option key={map.value} value={map.value}>
@@ -659,10 +661,10 @@ export default class Email extends Component {
 
         content: (
           <div className="rusInputMap">
-          <Checkbox.Group
-            options={this.specListToStr(this.state.specList)}
-            onChange={this.changeCheckBoxSpec}
-          />
+            <Checkbox.Group
+              options={this.specListToStr(this.state.specList)}
+              onChange={this.changeCheckBoxSpec}
+            />
           </div>
         )
       },
@@ -670,11 +672,11 @@ export default class Email extends Component {
         title: "Географиеское расположение",
         content: (
           <>
-          <div className="rusInputMap">
-            <Checkbox.Group
-              options={this.state.mapList}
-              onChange={this.changeCheckBoxGeo}
-            />
+            <div className="rusInputMap">
+              <Checkbox.Group
+                options={this.state.mapList}
+                onChange={this.changeCheckBoxGeo}
+              />
             </div>
           </>
         )
@@ -764,8 +766,9 @@ export default class Email extends Component {
                           <div>Полное имя:{agnt.full_name}</div>
                           <div>Короткое имя:{agnt.name}</div>
                           <div>Расчетный счет:{agnt.payment_account}</div>
-                          <div>Гео:
-                          {agnt.agentGeo.map((geo, i) => {
+                          <div>
+                            Гео:
+                            {agnt.agentGeo.map((geo, i) => {
                               let color = geo.length > 5 ? "geekblue" : "green";
                               if (geo === "loser") {
                                 color = "volcano";
@@ -775,20 +778,22 @@ export default class Email extends Component {
                                   {geo.toUpperCase()}
                                 </Tag>
                               );
-                          })}
+                            })}
                           </div>
-                          <div>Техника:
-                          {agnt.tech.map((tech, i) => {
-                            let color = tech.length > 5 ? "geekblue" : "green";
-                            if (tech === "loser") {
-                              color = "volcano";
-                            }
-                            return (
-                              <Tag color={color} key={tech}>
-                                {tech.toUpperCase()}
-                              </Tag>
-                            );
-                          })}
+                          <div>
+                            Техника:
+                            {agnt.tech.map((tech, i) => {
+                              let color =
+                                tech.length > 5 ? "geekblue" : "green";
+                              if (tech === "loser") {
+                                color = "volcano";
+                              }
+                              return (
+                                <Tag color={color} key={tech}>
+                                  {tech.toUpperCase()}
+                                </Tag>
+                              );
+                            })}
                           </div>
                         </>
                       }
