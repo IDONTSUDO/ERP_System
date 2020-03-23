@@ -45,5 +45,6 @@ async function MapIntegtation(Map){
     let rus = new RUSSIA(i);
     rus.save();
   }
+  let 
   console.log("Map integration complete !!11");
 } 
