@@ -1,6 +1,6 @@
-let ContrAgent = require("../database/ContrAgent");
-let ContrAgentJob = require("../database/AgentTasks");
-let Company = require("../database/Company");
+let ContrAgent = require("../database/Agent/ContrAgent");
+let ContrAgentJob = require("../database/Agent/AgentTasks");
+let Company = require("../database/Company/Company");
 
 exports.StatisticManageAtAgent = async (req, res) => {
   ContrAgent.find({ tags: "none" })

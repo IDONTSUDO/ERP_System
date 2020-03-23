@@ -1,4 +1,4 @@
-const AgentPeopel = require("../database/AgentPeopel");
+const AgentPeopel = require("../database/Agent/AgentPeopel");
 
 exports.getHuman = async (req, res) => {
   let { agentId } = req.body;

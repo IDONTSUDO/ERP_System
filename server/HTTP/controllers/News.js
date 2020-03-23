@@ -1,5 +1,5 @@
-const NEWS = require('../database/News')
-const TODO = require('../database/UserTodo.js')
+const NEWS = require('../database/User/News.js')
+const TODO = require('../database/User/UserTodo.js')
 const _ = require('lodash')
 require("dotenv").config()
 exports.NewsId = async (req, res, next, id) => {

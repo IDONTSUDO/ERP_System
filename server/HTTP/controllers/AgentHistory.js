@@ -1,5 +1,5 @@
-const History = require('../database/AgentHistory.js')
-const CommentHistory = require('../database/AgentComment.js')
+const History = require('../database/Agent/AgentHistory.js')
+const CommentHistory = require('../database/Agent/AgentComment.js')
 const _ = require('lodash')
 
 exports.HistoryById = async (req, res, next, id) => {

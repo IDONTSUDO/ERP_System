@@ -1,12 +1,12 @@
 const _ = require('lodash')
 const fs = require('fs')
 const formidable = require("formidable")
-const Worker = require('../database/Company')
-const UserSecurity = require('../database/Security')
+const Worker = require('../database/Company/Company')
+const UserSecurity = require('../database/User/Security')
 const UserStatistic = require('../database/Statistics/UserStatistic')
-const ManagePriced = require('../database/ManagePrice')
-const Subscriber = require('../database/Subscriber')
-const UserActiveMount = require('../database/ActivitiUserMounth')
+const ManagePriced = require('../database/Agent/ManagePrice')
+const Subscriber = require('../database/User/Subscriber')
+const UserActiveMount = require('../database/Statistics/ActivitiUserMounth')
 const geoip = require('geoip-lite');
 const moment = require('moment')
 

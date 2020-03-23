@@ -1,4 +1,4 @@
-const AgentBranch = require("../database/AgentOffice");
+const AgentBranch = require("../database/Agent/AgentOffice");
 
 exports.getBranchAgent = async (req, res) => {};
 exports.edditBranchAgent = async (req, res) => {};

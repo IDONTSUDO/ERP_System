@@ -14,7 +14,7 @@ const {
   unscribe
 } = require("../controllers/mail")
 const {agentId} = require("../controllers/ContrAgent.js")
-let ImagesMail = require("../database/Images")
+let ImagesMail = require("../database/Email/Images")
 
 let multer  = require('multer')
 let upload = multer({ dest: 'uploads/' })

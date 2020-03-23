@@ -1,9 +1,9 @@
-let Todo = require("../database/UserTodo.js");
-let AgentComent = require("../database/Comments.js");
-let TodoAgents = require("../database/AgentTasks.js");
+let Todo = require("../database/User/UserTodo.js");
+let AgentComent = require("../database/Agent/Comments.js");
+let TodoAgents = require("../database/Agent/AgentTasks.js");
 let AgentStatistic = require("../database/Statistics/AgentStatistic");
 let ActiveUserWeek = require("../database/Statistics/ActiveUserWeekDay");
-let Agent = require("../database/ContrAgent");
+let Agent = require("../database/Agent/ContrAgent");
 exports.newCommentAtAgent = async (req, res, next) => {
   let {
     taskId,

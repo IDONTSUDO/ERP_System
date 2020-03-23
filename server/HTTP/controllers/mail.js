@@ -1,6 +1,6 @@
-const EmailImg = require("../database/Images");
-const EmailSnipet = require("../database/EmailSnipet");
-const ContrAgent = require("../database/ContrAgent");
+const EmailImg = require("../database/Email/Images");
+const EmailSnipet = require("../database/Email/EmailSnipet");
+const ContrAgent = require("../database/Agent/ContrAgent");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 

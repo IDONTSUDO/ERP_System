@@ -1,7 +1,7 @@
-const Chanel = require("../database/Chanel");
-const Message = require("../database/Message");
+const Chanel = require("../database/Messages/Chanel");
+const Message = require("../database/Messages/Message");
 const _ = require("lodash");
-const Unread = require("../database/uReader.js");
+const Unread = require("../database/Messages/uReader.js");
 exports.MessageId = async (req, res, next, id) => {
   Message.findById(id).exec((err, result) => {
     if (err || !result) {
@@ -18,7 +18,7 @@ exports.MessageId = async (req, res, next, id) => {
 exports.ChanelList = async (req, res) => {
   let userId = req.body.userId;
   const currentPage = req.query.page || 1;
-  const perPage = 10;
+  const perPage = 20;
   var totalItems;
 
   const chanels = await Chanel.find({ User: userId })
