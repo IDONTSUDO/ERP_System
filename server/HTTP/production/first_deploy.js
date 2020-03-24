@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const process = require("process");
 const fs = require("fs");
 const path = require("path");
-const RUSSIA = require("../database/Helper/Russia");
+const RUSSIA = require("../database/Helper/RussiaSiti");
 
 if (process.env.PROD === "true") {
   mongoose
@@ -32,19 +32,15 @@ if (process.env.PROD === "true") {
 
   let Map = JSON.parse(BUFFER.toString());
 
-  MapIntegtation(Map)
+  MapIntegtation(Map);
 } else {
   console.log("please settings .env");
   process.exit(-1);
 }
 
-
-
-async function MapIntegtation(Map){
+async function MapIntegtation(Map) {
   for await (let i of Map) {
     let rus = new RUSSIA(i);
     rus.save();
   }
-  let 
-  console.log("Map integration complete !!11");
-} 
+}
