@@ -17,11 +17,16 @@
     "npm": "6.x"
   },
   "dependencies": {
+    "@vx/gradient": "0.0.195",
+    "@vx/group": "0.0.195",
+    "@vx/hierarchy": "0.0.195",
+    "@vx/shape": "0.0.195",
     "agenda": "^2.2.0",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "create-elms": "^1.0.9",
+    "d3-hierarchy": "^1.1.9",
     "dateformat": "^3.0.3",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",

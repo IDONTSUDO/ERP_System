@@ -8,6 +8,7 @@ const AgentOffice = require("../database/Agent/AgentOffice");
 const Company = require("../database/Company/Company");
 const Todo = require("../database/User/UserTodo");
 const News = require("../database/User/News");
+const RussiaSiti = require("../database/Helper/RussiaSiti");
 let moment = require("moment");
 const _ = require("lodash");
 const { StaticPool } = require("node-worker-threads-pool");
@@ -863,4 +864,15 @@ exports.NewNewsToManager = async (req, res, next) => {
     news.save();
     return next();
   }
+};
+exports.RussiaSitiSeach = (req, res) => {
+  RussiaSiti.find({ siti: new RegExp(req.body.item, "i") }).exec(
+    (err, result) => {
+      if (err) {
+        return res.status(400).json({ err });
+      } else {
+        return res.status(200).json(result);
+      }
+    }
+  );
 };

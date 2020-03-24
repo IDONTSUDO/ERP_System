@@ -47,7 +47,9 @@ import EditorJob from "../Work/EditorJob.jsx";
 import ControlAgents from "../ControlAgents/ControlAgents.jsx";
 import AgentHuman from "../AgentHelper/Agent-Human.jsx";
 import AgentBranch from "../AgentHelper/AgentBranch";
-import CompanyTabel from "../User/CompanyTabel";
+
+import EnterprisePermision from "../CompanySettings/EnterprisePermision.jsx";
+import ComapanyStruct from "../CompanySettings/CompanyStructur.jsx";
 
 const MainRouter = () => (
   <div>
@@ -55,6 +57,17 @@ const MainRouter = () => (
     <Switch>
       <Route exact path="/" component={Signin} />
       <PrivateRoute exact path="/news" component={News} />
+
+      <PrivateRoute
+        exact
+        path="/comapany/structur"
+        component={ComapanyStruct}
+      />
+      <PrivateRoute
+        exact
+        path="/company/permission"
+        component={EnterprisePermision}
+      />
       <PrivateRoute exact path="/user/:userId" component={Profile} />
       <PrivateRoute exact path="/statistic/:userId" component={MyStatistic} />
       <PrivateRoute exact path="/company" component={Company} />
@@ -66,7 +79,6 @@ const MainRouter = () => (
       <PrivateRoute exact path="/user/edit/:userId" component={EditProfile} />
       <PrivateRoute exact path="/user/work/:userId" component={MyWork} />
       <PrivateRoute exact path="/job/:todoId" component={Job} />
-      <PrivateRoute exact path="/company/tabel" component={CompanyTabel} />
       <PrivateRoute exact path="/today/:userId" component={TodayWork} />
       <PrivateRoute exact path="/all/agent" component={AllAgent} />
       <PrivateRoute exact path="/my/agent/:userId" component={MyAgent} />

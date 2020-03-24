@@ -95,6 +95,9 @@ const contrAgentSchema = new mongoose.Schema({
     type: Array,
     default: "none"
   },
+  hill:{
+    type:String,
+  },
   tags: {
     type: Object,
     default: "none"

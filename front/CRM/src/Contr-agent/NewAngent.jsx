@@ -17,7 +17,7 @@ import {
   NewAgentAddRegulatoryPosition,
   NewAgentAddManager
 } from "../Api/Http";
-import Rusmap from "../helper/RUSSIAN_MAP.js";
+import HillAndObl from "../helper/russia";
 import Tree from "react-animated-tree";
 import { EditOutlined } from "@ant-design/icons";
 import Localisation from "../helper/LocalisationCalendar.json";
@@ -943,9 +943,9 @@ export default class NewAgent extends Component {
                   value={this.state.agentGeo}
                   onChange={this.handleSelectOblastChange}
                 >
-                  {Rusmap.map(map => (
-                    <Select.Option key={map.value} value={map.value}>
-                      {map.value}
+                  {HillAndObl.map(map => (
+                    <Select.Option key={map.city} value={map.city}>
+                      {map.city}
                     </Select.Option>
                   ))}
                 </Select>
@@ -986,9 +986,9 @@ export default class NewAgent extends Component {
                       value={this.state.branch_officeGeo}
                       onChange={this.handleSelectOblastbranch_officeGeo}
                     >
-                      {Rusmap.map(map => (
-                        <Select.Option key={map.value} value={map.value}>
-                          {map.value}
+                      {HillAndObl.map(map => (
+                        <Select.Option key={map.city} value={map.city}>
+                          {map.city}
                         </Select.Option>
                       ))}
                     </Select>
