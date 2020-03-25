@@ -7,7 +7,7 @@ const todoSchema = new mongoose.Schema({
     },
     day:{
         type:String,
-        default: moment(new Date(Date.now())).format('DD') 
+        default: moment(new Date(Date.now())).day() 
     },
     description: {
         type: String

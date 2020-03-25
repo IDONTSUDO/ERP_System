@@ -49,19 +49,19 @@ import AgentHuman from "../AgentHelper/Agent-Human.jsx";
 import AgentBranch from "../AgentHelper/AgentBranch";
 
 import EnterprisePermision from "../CompanySettings/EnterprisePermision.jsx";
-import ComapanyStruct from "../CompanySettings/CompanyStructur.jsx";
-
+import StructurTabel from "../CompanySettings/CompanyStructur.jsx";
+import CompanySetting from "../CompanySettings/CompanySetting.jsx";
 const MainRouter = () => (
   <div>
     <MenuMain />
     <Switch>
       <Route exact path="/" component={Signin} />
       <PrivateRoute exact path="/news" component={News} />
-
+      <PrivateRoute exact path="/settings" component={CompanySetting}/>
       <PrivateRoute
         exact
         path="/comapany/structur"
-        component={ComapanyStruct}
+        component={StructurTabel}
       />
       <PrivateRoute
         exact
@@ -136,7 +136,6 @@ const MainRouter = () => (
       <PrivateRoute exact path="/spec/job/:specId" component={SpecJob} />
       <PrivateRoute exact path="/job/at/year/:userId" component={CalendarJob} />
       <PrivateRoute exact path="/control/agent" component={ControlAgents} />
-
       <PrivateRoute exact path="/agent/human/:agentId" component={AgentHuman} />
       <PrivateRoute
         exact

@@ -14,7 +14,7 @@ import {
   UpdateDaysTodoComplete,
   UpdateCommentStatistic
 } from "../Api/Http";
-import { IsEveryDaySub, everyday } from "../helper/everyday.js";
+import { IsEveryDaySub, everyday } from "../LocalStorage/everyday.js";
 import { isAuthenticated } from "../Api/Auth";
 import {
   Comment,

@@ -11,9 +11,11 @@ import {
   Card,
   Icon,
   Select,
-  notification
+  notification,
+  Input,
+  Skeleton
 } from "antd";
-
+import { PhoneOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import Error from "../Error/Error.jsx";
 import Rusmap from "../helper/RUSSIAN_MAP.js";
@@ -71,7 +73,8 @@ export default class MyAgent extends Component {
       legal_address: "",
       actual_address: "",
       payment_account: "",
-      status: ""
+      status: "",
+      preloader: true
     };
   }
   componentDidMount() {
@@ -83,7 +86,8 @@ export default class MyAgent extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
-        this.setState({ agentList: data });
+        // preloader: false
+        this.setState({ agentList: data, preloader: false });
       }
     });
   }
@@ -209,72 +213,85 @@ export default class MyAgent extends Component {
       payment_account
     } = this.state;
     return (
-      <div className="email_main_pos">
-        <div className="container">
-          <div className="row">
-            {agentList.map((agent, i) => (
-              <>
-                <div>
-                  <Card
-                    className="card-agent"
-                    styles={{ width: "auto", height: "autocomplete" }}
-                  >
-                    <Icon
-                      className=""
-                      style={{ fontSize: "35px", color: "#08c" }}
-                      type="idcard"
-                    />
-                    <h5>{agent.name}</h5>
-                    <div>{agent.email}</div>
-                    {agent.status === "Друг" ? (
-                      <>
-                        <div>
-                          <div style={{ padding: "5px" }}>
-                            <div className="square-green card_agent_st"></div>
+      // <Input />
+      <div className="news_pos">
+        {/* <PhoneOutlined /> */}
+        <div style={{ justifyContent: "flex-start" }} className="container">
+          <Skeleton
+            style={{ width: "70vw" }}
+            paragraph={{ rows: 20 }}
+            active
+            //  loading={this.state.preloader}
+            // active={true}
+            //  active
+            loading={this.state.preloader}
+            active
+          >
+            <div className="row">
+              {agentList.map((agent, i) => (
+                <>
+                  <div>
+                    <Card
+                      className="card-agent"
+                      styles={{ width: "auto", height: "autocomplete" }}
+                    >
+                      <Icon
+                        className=""
+                        style={{ fontSize: "35px", color: "#08c" }}
+                        type="idcard"
+                      />
+                      <h5>{agent.name}</h5>
+                      <div>{agent.email}</div>
+                      {agent.status === "Друг" ? (
+                        <>
+                          <div>
+                            <div style={{ padding: "5px" }}>
+                              <div className="square-green card_agent_st"></div>
+                            </div>
                           </div>
-                        </div>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                    {agent.status === "Капризный" ? (
-                      <>
-                        <div>
-                          <div style={{ padding: "5px" }}>
-                            <div className="square-red card_agent_st"></div>
+                        </>
+                      ) : (
+                        ""
+                      )}
+                      {agent.status === "Капризный" ? (
+                        <>
+                          <div>
+                            <div style={{ padding: "5px" }}>
+                              <div className="square-red card_agent_st"></div>
+                            </div>
                           </div>
-                        </div>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                    {agent.status === "Упертый" ? (
-                      <>
-                        <div>
-                          <div style={{ padding: "5px" }}>
-                            <div className="square-yellow card_agent_st"></div>
+                        </>
+                      ) : (
+                        ""
+                      )}
+                      {agent.status === "Упертый" ? (
+                        <>
+                          <div>
+                            <div style={{ padding: "5px" }}>
+                              <div className="square-yellow card_agent_st"></div>
+                            </div>
                           </div>
-                        </div>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                    <div className="btn_pad">
-                      <Button
-                        className="agent_profile_btn"
-                        onClick={agentId =>
-                          this.handleClick(agent._id, agentId)
-                        }
-                      >
-                        Посмотреть профиль
-                      </Button>
-                    </div>
-                    <br />
-                  </Card>
-                </div>
-              </>
-            ))}
-          </div>
+                        </>
+                      ) : (
+                        ""
+                      )}
+                      <div className="btn_pad">
+                        <Button
+                          className="agent_profile_btn"
+                          onClick={agentId =>
+                            this.handleClick(agent._id, agentId)
+                          }
+                        >
+                          Посмотреть профиль
+                        </Button>
+                      </div>
+                      <br />
+                    </Card>
+                  </div>
+                </>
+              ))}
+            </div>
+          </Skeleton>
         </div>
         <Drawer
           width={640}

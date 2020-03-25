@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { isAuthenticated } from "../Api/Auth";
+import { debounce } from "debounce";
 import {
   NewContrAgent,
   NewSpecialication,
@@ -15,7 +16,9 @@ import {
   DeleteAtTech,
   manage_list,
   NewAgentAddRegulatoryPosition,
-  NewAgentAddManager
+  NewAgentAddManager,
+  GetRussiaCitiFind,
+  GetRussiaOblastHelper
 } from "../Api/Http";
 import HillAndObl from "../helper/russia";
 import Tree from "react-animated-tree";
@@ -129,7 +132,14 @@ export default class NewAgent extends Component {
       importance: undefined,
       description: undefined,
       diff: [],
-      agentGeo: []
+      agentGeo: [],
+      russiaCity: [],
+      agentHill: [],
+      oblast: [],
+      oblastAgent: [],
+      branch_office_sity: undefined,
+      sity: undefined,
+      number_phone: undefined
     };
   }
 
@@ -186,24 +196,37 @@ export default class NewAgent extends Component {
     }
     this.setState({ manageAdd: managListTo, tags: tags });
   };
+  RussiaSityHelper = sity => {
+    GetRussiaCitiFind(sity).then(data => {
+      this.setState({ russiaCity: data });
+    });
+  };
+
+  RussiaOblastHelper = oblast => {
+    GetRussiaOblastHelper(oblast).then(data => {
+      this.setState({ oblast: data });
+    });
+  };
   newAgentClick = () => {
     let whoAdd;
     let role = isAuthenticated().direct.role;
     let resultValid = ["Директор", "Управляющий"].includes(role);
+    {
+      /* branch_office_sity(город) branch_officeGeo(Область) agentHill(город агента) oblastAgent(область агента) */
+    }
     if (resultValid) {
       let {
+        number_phone,
         position,
         features_job,
         bio,
         phoneAt_peopel,
         mail_at_peopel,
         checkedList,
-        tags
-      } = this.state;
-      let { branch_office, agentGeo, branch_officeGeo } = this.state;
-      let FilteredOfice;
-      let FilteredGeo = [];
-      let {
+        tags,
+        branch_office,
+        agentGeo,
+        branch_officeGeo,
         OGRN,
         manageAdd,
         specialications,
@@ -221,8 +244,14 @@ export default class NewAgent extends Component {
         WhereFromClient,
         work_begin_with_him,
         individual_conditions_job,
-        pay_character
+        pay_character,
+        branch_office_sity,
+        agentHill,
+        oblastAgent
       } = this.state;
+      let FilteredOfice;
+      let FilteredGeo = [];
+
       let msg;
       whoAdd = {
         name: isAuthenticated().direct.name,
@@ -258,7 +287,9 @@ export default class NewAgent extends Component {
         return this.openNotificationValidationError(msg);
       }
       let postedBy = isAuthenticated().direct._id;
-
+      // branch_office_sity,
+      // agentHill,
+      // oblastAgent
       let newAgent = {
         OGRN,
         agentGeo,
@@ -280,7 +311,8 @@ export default class NewAgent extends Component {
         WhereFromClient,
         work_begin_with_him,
         individual_conditions_job,
-        pay_character
+        pay_character,
+        hill:agentHill,
       };
       let AgentFeatus;
       FilteredGeo.push(branch_officeGeo);
@@ -288,8 +320,10 @@ export default class NewAgent extends Component {
         AgentFeatus = undefined;
       } else {
         AgentFeatus = {
-          branch_office: branch_office,
-          officeGeo: branch_officeGeo
+          region: branch_officeGeo,
+          sity: branch_office_sity,
+          name: branch_office,
+          number_phone: number_phone
         };
       }
       let AgentPeopel = {
@@ -345,7 +379,12 @@ export default class NewAgent extends Component {
           WhereFromClient: undefined,
           agentGeo: [],
           TechAgent: [],
-          checkedList: defaultCheckedList
+          checkedList: defaultCheckedList,
+          branch_office_sity: undefined,
+          agentHill: undefined,
+          oblastAgent: undefined,
+          branch_officeGeo: undefined,
+          number_phone: undefined
         });
       });
     } else {
@@ -371,12 +410,13 @@ export default class NewAgent extends Component {
         WhereFromClient,
         work_begin_with_him,
         individual_conditions_job,
-        pay_character
-      } = this.state;
-      // agent
-      let { branch_office, branch_officeGeo } = this.state;
-      // agentfeaturs
-      let {
+        pay_character,
+        branch_office_sity,
+        agentHill,
+        oblastAgent,
+        branch_office,
+        branch_officeGeo,
+        number_phone,
         time,
         mounth,
         year,
@@ -384,10 +424,7 @@ export default class NewAgent extends Component {
         importance,
         description,
         tags,
-        diff
-      } = this.state;
-      // todo
-      let {
+        diff,
         position,
         features_job,
         bio,
@@ -396,7 +433,6 @@ export default class NewAgent extends Component {
         checkedList,
         userRole
       } = this.state;
-      //agent human
       let msg;
       if (name === undefined) {
         msg = "Имя является обязатльным параметром";
@@ -442,16 +478,20 @@ export default class NewAgent extends Component {
         WhereFromClient,
         work_begin_with_him,
         individual_conditions_job,
-        pay_character
+        pay_character,
+        agentHill,
+        oblastAgent
+
       };
       let AgentFeatus;
       if (branch_office === undefined) {
         AgentFeatus = {};
       } else {
         AgentFeatus = {
-          branch_office,
-          agentGeo,
-          branch_officeGeo
+          region: branch_officeGeo,
+          sity: branch_office_sity,
+          name: branch_office,
+          number_phone: number_phone
         };
       }
       let AgentPeopel = {
@@ -521,11 +561,15 @@ export default class NewAgent extends Component {
           tags: [],
           branch_officeGeo: [],
           branch_office: undefined,
-          status: undefined,
           WhereFromClient: undefined,
           agentGeo: [],
           TechAgent: [],
-          checkedList: defaultCheckedList
+          checkedList: defaultCheckedList,
+          branch_office_sity: undefined,
+          agentHill: undefined,
+          oblastAgent: undefined,
+          branch_officeGeo: undefined,
+          number_phone: undefined
         });
       });
     }
@@ -552,13 +596,18 @@ export default class NewAgent extends Component {
     const currentStep = this.state.currentStep - 1;
     this.setState({ currentStep });
   }
-
+  handelChangeAgentHill = value => {
+    this.setState({ agentHill: value });
+  };
   openNotificationError() {
     notification.open({
       message: "Ой что то пошло не так, мне жаль",
       icon: <Icon type="frown" style={{ color: "#108ee9" }} />
     });
   }
+  sitiBranchAgentHelper = value => {
+    this.setState({ branch_office_sity: value });
+  };
   onPanelChange = momentObj => {
     let time = moment(momentObj)
       .locale("ru")
@@ -933,17 +982,38 @@ export default class NewAgent extends Component {
                   value={this.state.full_name}
                   onChange={this.handleChange("full_name")}
                 />
-                <p className="input_new_agent agentnew_front">Расположение</p>
+                <p className="input_new_agent agentnew_front">Область</p>
                 <Select
                   style={{ width: "auto" }}
                   className="input_new_agent"
                   mode="multiple"
                   size="large"
-                  placeholder="Выберите гео расположение котрагента"
+                  notFoundContent="Введите название области"
+                  placeholder="Выберите область котрагента"
                   value={this.state.agentGeo}
                   onChange={this.handleSelectOblastChange}
+                  onSearch={debounce(this.RussiaOblastHelper, 450)}
                 >
-                  {HillAndObl.map(map => (
+
+                  {this.state.oblast.map(map => (
+                    <Select.Option key={map.oblast} value={map.oblast}>
+                      {map.oblast}
+                    </Select.Option>
+                  ))}
+                </Select>
+                <p className="input_new_agent agentnew_front">Город</p>
+                <Select
+                  style={{ width: "auto" }}
+                  className="input_new_agent"
+                  mode="multiple"
+                  size="large"
+                  placeholder="Выберите город  котрагента"
+                  notFoundContent="Введите название города"
+                  value={this.state.agentHill}
+                  onChange={this.handelChangeAgentHill}
+                  onSearch={debounce(this.RussiaSityHelper, 700)}
+                >
+                  {this.state.russiaCity.map(map => (
                     <Select.Option key={map.city} value={map.city}>
                       {map.city}
                     </Select.Option>
@@ -982,19 +1052,44 @@ export default class NewAgent extends Component {
                       style={{ width: "auto" }}
                       className="input_new_agent"
                       mode="multiple"
-                      placeholder="Выберите гео расположение подразделения "
+                      placeholder="Выберите область"
+                      notFoundContent="Введите название области"
                       value={this.state.branch_officeGeo}
                       onChange={this.handleSelectOblastbranch_officeGeo}
+                      onSearch={debounce(this.RussiaOblastHelper, 450)}
                     >
-                      {HillAndObl.map(map => (
+                      {this.state.oblast.map(map => (
+                        <Select.Option key={map.oblast} value={map.oblast}>
+                          {map.oblast}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                    {/* branch_office */}
+                    <Select
+                      style={{ width: "auto" }}
+                      className="input_new_agent"
+                      mode="multiple"
+                      placeholder="Выберите город"
+                      notFoundContent="Введите название города"
+                      value={this.state.branch_office_sity}
+                      onChange={this.sitiBranchAgentHelper}
+                      onSearch={debounce(this.RussiaSityHelper, 450)}
+                    >
+                      {this.state.russiaCity.map(map => (
                         <Select.Option key={map.city} value={map.city}>
                           {map.city}
                         </Select.Option>
                       ))}
                     </Select>
+                    <Input
+                      className="input_new_agent "
+                      placeholder="Номер телефона"
+                      value={this.state.number_phone}
+                      onChange={this.handleChange("number_phone")}
+                    />
                   </div>
                 </div>
-              </div>{" "}
+              </div>
             </div>
           </div>
         )
@@ -1456,6 +1551,7 @@ export default class NewAgent extends Component {
               mode="multiple"
               style={{ width: "100%" }}
               placeholder="Выберите специализацию"
+              notFoundContent="Не найдено специализаций"
               value={this.state.specialications}
               onChange={this.handelChangeSpec}
             >

@@ -131,24 +131,31 @@ exports.userActiveMouthAndYear = async (req, res) => {
 };
 exports.activeHelper = async (req, res) => {
   let { WeekNum, year, userId } = req.body;
-
+  console.log(WeekNum);
   ActiveUserWeek.find({ year: year, week: WeekNum, userId: userId })
     .select(" _id week year ")
     .then(data => {
       if (data[0] != undefined) {
         return res.status(200).json(data[0]);
       } else {
-        // TODO
+        let week = new ActiveUserWeek();
+        week.week = WeekNum;
+        week.year = year;
+        week.userId = userId;
+        week.save().then(result => {
+          return res.status(200).json(result);
+        });
       }
     });
 };
-exports.userActiveAtAgentGet = async (req,res) =>{
-  let {manageId,agentId} = req.body
+exports.userActiveAtAgentGet = async (req, res) => {
+  let { manageId, agentId } = req.body;
   TodoAgents.find({
     $and: [{ agentByTodo: agentId }, { tags: manageId }]
-  }).sort({_id:-1})
-  .then(data => {
-    console.log(data)
-    return res.status(200).json(data);
-  });
-}
+  })
+    .sort({ _id: -1 })
+    .then(data => {
+      console.log(data);
+      return res.status(200).json(data);
+    });
+};

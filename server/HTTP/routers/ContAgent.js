@@ -38,7 +38,8 @@ const {
   UserAddAgentNews,
   agentDontManager,
   NewNewsToManager,
-  RussiaSitiSeach
+  RussiaSitiSeach,
+  OblastSearch
 } = require("../controllers/ContrAgent");
 
 const { workerById } = require("../controllers/Company");
@@ -70,6 +71,7 @@ router.post(
 );
 
 router.post("/russia/siti/helper", RussiaSitiSeach);
+router.post("/russia/oblast/helper", OblastSearch);
 router.post(
   "/new/manage/agent/:agentId",
   ManageAddAgent,

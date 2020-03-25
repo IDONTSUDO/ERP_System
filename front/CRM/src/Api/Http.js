@@ -773,6 +773,7 @@ export const AllStatistic = userId => {
     });
 };
 export const NewTodoCompleteStatistic = statisticId => {
+ 
   return fetch(
     `${process.env.REACT_APP_API_URL}/update/days/statistics/todo/complete`,
     {
@@ -1547,6 +1548,33 @@ export const GetDialogList = () => {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ userId })
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+export const GetRussiaCitiFind = body => {
+  console.log(2000);
+  return fetch(`${process.env.REACT_APP_API_URL}/russia/siti/helper`, {
+    method: "POST",
+    headers: myHeaders,
+    body: JSON.stringify({ body })
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+export const GetRussiaOblastHelper = body => {
+  return fetch(`${process.env.REACT_APP_API_URL}/russia/oblast/helper`, {
+    method: "POST",
+    headers: myHeaders,
+    body: JSON.stringify({ body })
   })
     .then(response => {
       return response.json();

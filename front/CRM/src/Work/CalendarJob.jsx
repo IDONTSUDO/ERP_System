@@ -35,7 +35,7 @@ import {
   NewNewsToComment,
   UpdateDaysTodoComplete
 } from "../Api/Http";
-import { everyday, IsEveryDaySub } from "../helper/everyday.js";
+import { everyday, IsEveryDaySub } from "../LocalStorage/everyday.js";
 import DefaultProfile from "../Assets/default.png";
 import ReactQuill from "react-quill";
 import { Link } from "react-router-dom";

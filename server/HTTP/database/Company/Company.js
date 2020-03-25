@@ -3,51 +3,54 @@ const uuidv1 = require("uuid/v1")
 const crypto = require("crypto")
 
 const workerSchema = new mongoose.Schema({
-    name: { //@params Имя 
+    name: { 
         type: String,
         required: true
     },
-    Date_of_Birth: { //@params дата рождения
+    Date_of_Birth: {
         type: String,
     },
-    email: { //@params емэил
-        type: String,
-        required: true
-    },
-    hashed_password: { //@params хэш пароля
+    email: {
         type: String,
         required: true
     },
-    salt: String, //@params соль пороля
-    created: { //@params когда создан
+    hashed_password: { 
+        type: String,
+        required: true
+    },
+    permission: { 
+        type:Object
+    },
+    salt: String, 
+    created: { 
         type: Date, 
         default: Date.now
     },
-    updated: Date,//@params дата когда он последний раз производил, изменения в профиле
-    photo: { //@params
+    updated: Date,
+    photo: {
         data: Buffer,
         contentType: String
     },
-    role: { //@params роль юзера в системе
+    role: { 
         type: String,
         required: true
     },
-    phone: {//@params номер телефона
+    phone: {
         type: String,
     },
-    avatar:{//@params вообще нужно реакт слишком быстр, и типо по этому значения смотрю нужно ли делать запрос. Костыль больших масштабов. Но делать нечего.
+    avatar:{
         type:Boolean, 
         default:false
     },
-    todo_avesome:{//@params
+    todo_avesome:{
         type:String,
         default:"#f72d2dc9"
     },
-    todo_middle:{//@params
+    todo_middle:{
         type:String,
         default:"#fff30fc0"
     },
-    todo_not_very_important:{ //@params отвечает за цвета на фронте.
+    todo_not_very_important:{ 
         type:String,
         default:"#15b11ac4"
     },
@@ -78,7 +81,7 @@ const workerSchema = new mongoose.Schema({
     logged_in:{
         type:Boolean,
         default:false
-    },//отвечает за первую авторизацию сначала создается как false, при авторизации оно меняется на true. Нужно для безопасности.
+    },
     device:{
         type:Array
     },

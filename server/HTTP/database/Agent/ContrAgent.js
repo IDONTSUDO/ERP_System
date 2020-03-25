@@ -26,14 +26,14 @@ const contrAgentSchema = new mongoose.Schema({
     type: String
   },
   // Должность, ФИО, контакты (телефон, почта). Комментарий с описанием особенности работы с данным человеком
-  Contact_faces:{
-    type:ObjectId
+  Contact_faces: {
+    type: ObjectId
   },
 
-  Getting_started_with:{
-      type:String
+  Getting_started_with: {
+    type: String
   },
-  
+
   full_name: {
     type: String,
     default: "none"
@@ -72,17 +72,17 @@ const contrAgentSchema = new mongoose.Schema({
     default: "none"
   },
   // Подразделения (филиалы) и их местонахождения:
-  agentGeo: {
-    type: Array,
-    default: "none"
-  },
+  // agentGeo: {
+  //   type: Array,
+  //   default: "none"
+  // },
   Date: {
     type: Date,
     default: Date.now
   },
+  sity: { type: Array, default: "none" },
   region: {
-    //регион РФ
-    type: String,
+    type: Array,
     default: "none"
   },
   specialications: {
@@ -95,12 +95,16 @@ const contrAgentSchema = new mongoose.Schema({
     type: Array,
     default: "none"
   },
-  hill:{
-    type:String,
+  hill: {
+    type: Array,
+    default: "none"
   },
   tags: {
     type: Object,
     default: "none"
+  },
+  city: {
+    type: String
   },
   postedBy: {
     type: ObjectId,
@@ -130,24 +134,19 @@ const contrAgentSchema = new mongoose.Schema({
   tagging_features: {
     type: String
   },
-  company_desription:{
-    type:String
+  company_desription: {
+    type: String
   },
   active: { type: Boolean, default: true },
-  WhereFromClient: {type:String},
-  work_begin_with_him:{type:String},
-  individual_conditions_job:{type:String},
-  pay_character:{type:String},
-  Human:{
-    type:ObjectId
+  WhereFromClient: { type: String },
+  work_begin_with_him: { type: String },
+  individual_conditions_job: { type: String },
+  pay_character: { type: String },
+  Human: {
+    type: ObjectId
   },
-  Office:{
-    type:ObjectId
+  Office: {
+    type: ObjectId
   }
 });
 module.exports = mongoose.model("Agent", contrAgentSchema);
-
-
-
-
-

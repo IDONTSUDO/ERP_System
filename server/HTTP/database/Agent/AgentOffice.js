@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Schema
+const { ObjectId } = mongoose.Schema;
 const AgentOfficeSchema = new mongoose.Schema({
-  branch_office: { type: String },
-  officeGeo: { type: Array },
-  AgentBy:{type:ObjectId}
+  name: { type: String },
+  AgentBy: { type: ObjectId },
+  sity: { type: Array },
+  region: { type: Array },
+  number_phone:{ type: String },
 });
+
 module.exports = mongoose.model("AgentOffice", AgentOfficeSchema);

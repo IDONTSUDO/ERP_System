@@ -33,7 +33,6 @@ class TodoAssignUserBy extends Component {
   }
   init = async payload => {
     AssignedTodoUserBy(payload).then(data => {
-      console.log(data);
       if (data.error) {
         this.setState({ error: true });
       } else {

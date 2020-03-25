@@ -9,7 +9,7 @@ import {
   SearchContrAgent
 } from "../Api/Http";
 import { isAuthenticated } from "../Api/Auth";
-import { everyday, IsEveryDaySub } from "../helper/everyday.js";
+import { everyday, IsEveryDaySub } from "../LocalStorage/everyday.js";
 import {
   Button,
   Tabs,

@@ -4,6 +4,7 @@ const process = require("process");
 const fs = require("fs");
 const path = require("path");
 const RUSSIA = require("../database/Helper/RussiaSiti");
+const RUSSIA_OBL = require("../database/Helper/RussiaOblast");
 
 if (process.env.PROD === "true") {
   mongoose
@@ -24,15 +25,16 @@ if (process.env.PROD === "true") {
   if (`${process.env.DEBUG_Mode}` === "true") {
     mongoose.set("debug", true);
   }
-  var BUFFER = bufferFile("./russia.json");
-
+  let rusSity = bufferFile("./russia.json");
+  let rusObl = bufferFile("./russia_oblast.json");
   function bufferFile(relPath) {
     return fs.readFileSync(path.join(__dirname, relPath)); // zzzz....
   }
-
-  let Map = JSON.parse(BUFFER.toString());
-
-  MapIntegtation(Map);
+  let MapSity = JSON.parse(rusSity.toString());
+  let MapObl = JSON.parse(rusObl.toString());
+  OblMat(MapObl)
+  MapIntegtation(MapSity)
+  // MapIntegtation(MapSity);
 } else {
   console.log("please settings .env");
   process.exit(-1);
@@ -41,6 +43,13 @@ if (process.env.PROD === "true") {
 async function MapIntegtation(Map) {
   for await (let i of Map) {
     let rus = new RUSSIA(i);
+    rus.save();
+  }
+}
+async function OblMat(Map) {
+  for await (let i of Map) {
+    let rus = new RUSSIA_OBL();
+    rus.oblast = i.value;
     rus.save();
   }
 }

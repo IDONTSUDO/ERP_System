@@ -29,11 +29,8 @@ export const everyday = () => {
         })
     }
     if (Localtime == sub.day) {
-        console.log(202)
-
         return true
     } else {
-        console.log(20)
         NewSubscribeEveryDay().then(data => {            
             const {_id,day } = data
             let everydaySubscribe = {_id,day}

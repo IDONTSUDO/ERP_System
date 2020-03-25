@@ -200,6 +200,7 @@ br {
   padding: 1em 6em 0.1em;
   left: 50px;
 }
+
 .img_h3 {
   color: #fdeeee;
 }
@@ -1668,4 +1669,9 @@ nav {
 .message-list{
   position: fixed;
   margin-left: 20vh;
+}
+.search_helper{
+  display: inline-flex;
+  margin-left: 1vw;
+  margin-top: 1vh;
 }

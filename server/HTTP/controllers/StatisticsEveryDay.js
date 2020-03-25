@@ -1,5 +1,6 @@
 let StatisticsEveryDayAll = require("../database/Statistics/StatisticsEveryDay");
 let Statistic = require("../database/Statistics/UserStatistic.js");
+let Week = require("../database/Statistics/ActiveUserWeekDay")
 let dateFormat = require("dateformat");
 let moment = require("moment");
 
@@ -34,7 +35,7 @@ exports.UpdateStatisticTodoComplete = async (req, res) => {
 //
 exports.UpdateStatisticTodoAssign = async (req, res) => {
   let findId = req.body.statisticId;
-
+  let weekDay = req.body.statisticIdWeek
   StatisticsEveryDayAll.findOneAndUpdate(
     { _id: findId },
     { $inc: { assigned_todo: +1, value: +1 } }
