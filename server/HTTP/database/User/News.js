@@ -57,6 +57,7 @@ const NewsSchema = new mongoose.Schema({
   expireAt: {
     type: Date,
     index: { expires: '5m' },
-  }
+  },
+  deletItem:Object
 })
 module.exports = mongoose.model("News", NewsSchema)

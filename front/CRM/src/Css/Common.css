@@ -1675,3 +1675,17 @@ nav {
   margin-left: 1vw;
   margin-top: 1vh;
 }
+.human_pos{
+  margin-left:100px;
+}
+@media (max-width: 665px) {
+  .human_pos{
+    margin-left: 0px;
+  }
+}
+.editHuman{
+  color: #cf5f79;
+}
+.editHumDefault{
+  color: #1933a76c;
+}

@@ -7,7 +7,8 @@ const {
     NewsSetDateDelete,
     readNewsQuality,
     NewsDelete,
-    SetNews
+    SetNews,
+    NewNewsFeatursJob
     } = require("../controllers/News")
 const {
     NewPushingNotifycation,
@@ -21,6 +22,9 @@ const { requireSignin } = require("../middleware/middleware.js")
 
 const router = express.Router({ mergeParams: true });
 
+
+
+router.post('/new/news/features/position',NewNewsFeatursJob)
 router.post('/news/quality',readNewsQuality)
 router.post('/worker/news', requireSignin, readNews)
 router.post('/worker/read/:newsId', requireSignin, NewsSetDateDelete)

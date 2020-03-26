@@ -24,6 +24,6 @@ if (IsSubscriber()) {
   }
 }
 if(isAuthenticated()){
-  weekEvery()
+  // weekEvery()
 }
 // weekEvery()

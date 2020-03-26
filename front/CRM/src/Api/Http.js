@@ -773,7 +773,6 @@ export const AllStatistic = userId => {
     });
 };
 export const NewTodoCompleteStatistic = statisticId => {
- 
   return fetch(
     `${process.env.REACT_APP_API_URL}/update/days/statistics/todo/complete`,
     {
@@ -1529,8 +1528,8 @@ export const GetUserActiveByAgent = body => {
       console.log(err);
     });
 };
-export const GetAgentAtHuman = body => {
-  return fetch(`${process.env.REACT_APP_API_URL}/agent/at/human`, {
+export const GetAgentAtHuman = (body,page) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/at/human/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(body)
@@ -1583,3 +1582,56 @@ export const GetRussiaOblastHelper = body => {
       console.log(err);
     });
 };
+export const ChangeHuman = (body, humanId) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/edit/human/${humanId}`, {
+    method: "PUT",
+    headers: myHeaders,
+    body: JSON.stringify(body)
+  })
+    .then(response => {
+      console.log(response);
+      return response.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+export const NewHuman = (body, agentId) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/new/human/${agentId}`, {
+    method: "POST",
+    headers: myHeaders,
+    body: JSON.stringify({ body })
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+export const DeleteHuman = id => {
+  //delet/human/
+  return fetch(`${process.env.REACT_APP_API_URL}/delet/human/${id}`, {
+    method: "DELETE",
+    headers: myHeaders
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+export const NewNewsFeatursPosition = (news) =>{
+  return fetch(`${process.env.REACT_APP_API_URL}/new/news/features/position`, {
+    method: "POST",
+    headers: myHeaders,
+    body: JSON.stringify(news)
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
