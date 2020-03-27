@@ -7,7 +7,7 @@ var myHeaders = new Headers({
 });
 
 export const manage_list = () => {
-  return fetch(`https://svarog-server.ru/manage/list`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/manage/list`, {
     method: "GET",
     headers: myHeaders
   })
@@ -20,7 +20,7 @@ export const manage_list = () => {
 };
 export const list = page => {
   return fetch(
-    `https://svarog-server.ru/all/worker/list/?page=${page}`,
+    `${process.env.REACT_APP_API_URL}/all/worker/list/?page=${page}`,
     {
       method: "GET",
       headers: myHeaders
@@ -34,7 +34,7 @@ export const list = page => {
     });
 };
 export const DeleteUser = userId => {
-  return fetch(`https://svarog-server.ru/delete/worker/${userId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/delete/worker/${userId}`, {
     method: "DELETE",
     headers: myHeaders
   })
@@ -46,7 +46,7 @@ export const DeleteUser = userId => {
     });
 };
 export const NewPeopel = user => {
-  return fetch(`https://svarog-server.ru/new/worker/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/new/worker/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(user)
@@ -59,7 +59,7 @@ export const NewPeopel = user => {
 
 export const NewTodo = (todo, user) => {
   return fetch(
-    `https://svarog-server.ru/new/todo/awesome/${user._id}`,
+    `${process.env.REACT_APP_API_URL}/new/todo/awesome/${user._id}`,
     {
       method: "POST",
       headers: myHeaders,
@@ -72,7 +72,7 @@ export const NewTodo = (todo, user) => {
     .catch(err => console.log(err));
 };
 export const read = userId => {
-  return fetch(`https://svarog-server.ru/worker/get/${userId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/worker/get/${userId}`, {
     method: "GET",
     headers: myHeaders
   })
@@ -85,7 +85,7 @@ export const read = userId => {
 };
 export const update = (userId, user) => {
   console.log(user);
-  return fetch(`https://svarog-server.ru/edit/worker/${userId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/edit/worker/${userId}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -129,7 +129,7 @@ export const updateUser = (user, next) => {
   }
 };
 export const readMyTodo = userId => {
-  return fetch(`https://svarog-server.ru/my/todo/soso/${userId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/my/todo/soso/${userId}`, {
     method: "GET",
     headers: myHeaders
   })
@@ -141,7 +141,7 @@ export const readMyTodo = userId => {
     });
 };
 export const soloJob = todoId => {
-  return fetch(`https://svarog-server.ru/todo/${todoId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/todo/${todoId}`, {
     method: "GET",
     headers: myHeaders
   })
@@ -153,7 +153,7 @@ export const soloJob = todoId => {
     });
 };
 export const readComentList = todoId => {
-  return fetch(`https://svarog-server.ru/get/todo/coments/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/todo/coments/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ todoId })
@@ -166,7 +166,7 @@ export const readComentList = todoId => {
     });
 };
 export const NewComent = comment => {
-  return fetch(`https://svarog-server.ru/comment/todo/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/comment/todo/`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -183,7 +183,7 @@ export const NewComent = comment => {
     });
 };
 export const DeleteComment = comment => {
-  return fetch(`https://svarog-server.ru/delete/comment/${comment}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/delete/comment/${comment}`, {
     method: "POST",
     headers: myHeaders
   })
@@ -195,7 +195,7 @@ export const DeleteComment = comment => {
     });
 };
 export const OneNewsDelete = newsId => {
-  return fetch(`https://svarog-server.ru/news/delete/${newsId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/news/delete/${newsId}`, {
     method: "DELETE",
     headers: myHeaders
   })
@@ -207,7 +207,7 @@ export const OneNewsDelete = newsId => {
     });
 };
 export const NewNews = payload => {
-  return fetch(`https://svarog-server.ru/new/news`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/new/news`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(payload)
@@ -220,7 +220,7 @@ export const NewNews = payload => {
     });
 };
 export const listNews = id => {
-  return fetch(`https://svarog-server.ru/worker/news`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/worker/news`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ id })
@@ -234,7 +234,7 @@ export const listNews = id => {
 };
 export const SetStatusJob = (payload, todoId) => {
   console.log(payload);
-  return fetch(`https://svarog-server.ru/todo/change/${todoId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/todo/change/${todoId}`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ payload })
@@ -247,7 +247,7 @@ export const SetStatusJob = (payload, todoId) => {
     });
 };
 export const TodayWorkHTTP = userId => {
-  return fetch(`https://svarog-server.ru/today/todo/${userId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/today/todo/${userId}`, {
     method: "GET",
     headers: myHeaders
   })
@@ -260,7 +260,7 @@ export const TodayWorkHTTP = userId => {
 };
 
 export const TodoChangeExperienseAtHTTP = (expireAt, todoId) => {
-  return fetch(`https://svarog-server.ru/todo/change/${todoId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/todo/change/${todoId}`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ expireAt: expireAt })
@@ -273,7 +273,7 @@ export const TodoChangeExperienseAtHTTP = (expireAt, todoId) => {
     });
 };
 export const NewContrAgent = (NewAgent, user) => {
-  return fetch(`https://svarog-server.ru/new/agent/${user}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/new/agent/${user}`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(NewAgent)
@@ -286,7 +286,7 @@ export const NewContrAgent = (NewAgent, user) => {
     });
 };
 export const ContrAgentList = page => {
-  return fetch(`https://svarog-server.ru/agent/list/?page=${page}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/list/?page=${page}`, {
     method: "GET",
     headers: myHeaders
   })
@@ -298,7 +298,7 @@ export const ContrAgentList = page => {
     });
 };
 export const GetAgentProfile = agentId => {
-  return fetch(`https://svarog-server.ru/agent/${agentId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/${agentId}`, {
     method: "GET",
     headers: myHeaders
   })
@@ -310,7 +310,7 @@ export const GetAgentProfile = agentId => {
     });
 };
 export const AddManageForAgent = (tags, agentId) => {
-  return fetch(`https://svarog-server.ru/new/manage/agent/${agentId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/new/manage/agent/${agentId}`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(tags)
@@ -321,7 +321,7 @@ export const AddManageForAgent = (tags, agentId) => {
     .catch(err => console.log(err));
 };
 export const MyAgentList = workerId => {
-  return fetch(`https://svarog-server.ru/agent/manage/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/manage/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ workerId })
@@ -332,7 +332,7 @@ export const MyAgentList = workerId => {
     .catch(err => console.log(err));
 };
 export const MyHistoryActive = userId => {
-  return fetch(`https://svarog-server.ru/my/history/active/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/my/history/active/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ userId })
@@ -343,7 +343,7 @@ export const MyHistoryActive = userId => {
     .catch(err => console.log(err));
 };
 export const MyHistoryBeginer = userId => {
-  return fetch(`https://svarog-server.ru/my/history/beginer/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/my/history/beginer/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ userId })
@@ -355,7 +355,7 @@ export const MyHistoryBeginer = userId => {
 };
 export const MyHistoryComplete = (userId, page) => {
   return fetch(
-    `https://svarog-server.ru/my/history/complete/?page=${page}`,
+    `${process.env.REACT_APP_API_URL}/my/history/complete/?page=${page}`,
     {
       method: "POST",
       headers: myHeaders,
@@ -368,7 +368,7 @@ export const MyHistoryComplete = (userId, page) => {
     .catch(err => console.log(err));
 };
 export const OneHistoryGet = HistoryById => {
-  return fetch(`https://svarog-server.ru/history/${HistoryById}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/history/${HistoryById}`, {
     method: "GET",
     headers: myHeaders
   })
@@ -378,7 +378,7 @@ export const OneHistoryGet = HistoryById => {
     .catch(err => console.log(err));
 };
 export const ChangeHistory = (DealId, status) => {
-  return fetch(`https://svarog-server.ru/change/history/${DealId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/change/history/${DealId}`, {
     method: "PUT",
     headers: myHeaders,
     body: JSON.stringify({ status })
@@ -389,7 +389,7 @@ export const ChangeHistory = (DealId, status) => {
     .catch(err => console.log(err));
 };
 export const ChangeHistoryItem = (DealId, payload) => {
-  return fetch(`https://svarog-server.ru/change/history/${DealId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/change/history/${DealId}`, {
     method: "PUT",
     headers: myHeaders,
     body: JSON.stringify(payload)
@@ -400,7 +400,7 @@ export const ChangeHistoryItem = (DealId, payload) => {
     .catch(err => console.log(err));
 };
 export const SearchContrAgent = item => {
-  return fetch(`https://svarog-server.ru/agent/search`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/search`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ item })
@@ -411,7 +411,7 @@ export const SearchContrAgent = item => {
     .catch(err => console.log(err));
 };
 export const listStatisticCompany = () => {
-  return fetch(`https://svarog-server.ru/get/qauality/user/statistic`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/qauality/user/statistic`, {
     method: "GET",
     headers: myHeaders
   })
@@ -421,7 +421,7 @@ export const listStatisticCompany = () => {
     .catch(err => console.log(err));
 };
 export const NewDealHistory = payload => {
-  return fetch(`https://svarog-server.ru/new/history/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/new/history/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(payload)
@@ -432,7 +432,7 @@ export const NewDealHistory = payload => {
     .catch(err => console.log(err));
 };
 export const AllAgentHistory = agentId => {
-  return fetch(`https://svarog-server.ru/all/agent/history/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/all/agent/history/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ agentId: agentId })
@@ -444,14 +444,14 @@ export const AllAgentHistory = agentId => {
 };
 export const UpdateNews = NewsArray => {
   for (let news of NewsArray) {
-    fetch(`https://svarog-server.ru/worker/read/${news}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/worker/read/${news}`, {
       method: "POST",
       headers: myHeaders
     }).catch(err => console.log(err));
   }
 };
 export const TodoUpTime = (ID, UpTime) => {
-  return fetch(`https://svarog-server.ru/todo/change/${ID}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/todo/change/${ID}`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ time: UpTime })
@@ -462,7 +462,7 @@ export const TodoUpTime = (ID, UpTime) => {
     .catch(err => console.log(err));
 };
 export const TodoChangeComandList = (todoId, payload) => {
-  return fetch(`https://svarog-server.ru/todo/change/${todoId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/todo/change/${todoId}`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ payload })
@@ -474,7 +474,7 @@ export const TodoChangeComandList = (todoId, payload) => {
 };
 export const ChangeAgentProfile = (AgentId, payload) => {
   return fetch(
-    `https://svarog-server.ru/change/agent/profile/${AgentId}`,
+    `${process.env.REACT_APP_API_URL}/change/agent/profile/${AgentId}`,
     {
       method: "PUT",
       headers: myHeaders,
@@ -487,7 +487,7 @@ export const ChangeAgentProfile = (AgentId, payload) => {
     .catch(err => console.log(err));
 };
 export const ChangeAgent = (AgentId, status) => {
-  return fetch(`https://svarog-server.ru/change/agent/${AgentId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/change/agent/${AgentId}`, {
     method: "PUT",
     headers: myHeaders,
     body: JSON.stringify({ status: status })
@@ -498,7 +498,7 @@ export const ChangeAgent = (AgentId, status) => {
     .catch(err => console.log(err));
 };
 export const MyTodoGetComandWorked = userId => {
-  return fetch(`https://svarog-server.ru/get/comand/todo/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/comand/todo/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ userId })
@@ -509,7 +509,7 @@ export const MyTodoGetComandWorked = userId => {
     .catch(err => console.log(err));
 };
 export const MytodoComandItsDay = userId => {
-  return fetch(`https://svarog-server.ru/get/comand/todo/time/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/comand/todo/time/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ userId })
@@ -521,7 +521,7 @@ export const MytodoComandItsDay = userId => {
 };
 export const MyTodoComandQuality = userId => {
   return fetch(
-    `https://svarog-server.ru/get/comand/todo/time/quality/`,
+    `${process.env.REACT_APP_API_URL}/get/comand/todo/time/quality/`,
     {
       method: "POST",
       headers: myHeaders,
@@ -534,7 +534,7 @@ export const MyTodoComandQuality = userId => {
     .catch(err => console.log(err));
 };
 export const MyTodoTodyQuality = userId => {
-  return fetch(`https://svarog-server.ru/today/todo/qulity/${userId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/today/todo/qulity/${userId}`, {
     method: "GET",
     headers: myHeaders
   })
@@ -544,7 +544,7 @@ export const MyTodoTodyQuality = userId => {
     .catch(err => console.log(err));
 };
 export const MyNewsQuality = userId => {
-  return fetch(`https://svarog-server.ru/news/quality/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/news/quality/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ userId })
@@ -556,7 +556,7 @@ export const MyNewsQuality = userId => {
 };
 export const NewNewsJob = payload => {
   console.log(payload);
-  return fetch(`https://svarog-server.ru/new/news/job`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/new/news/job`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(payload)
@@ -569,7 +569,7 @@ export const NewNewsJob = payload => {
     });
 };
 export const UserSecurityList = userId => {
-  return fetch(`https://svarog-server.ru/user/security`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/user/security`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ userId })
@@ -580,7 +580,7 @@ export const UserSecurityList = userId => {
     .catch(err => console.log(err));
 };
 export const PricedAtManage = AgentId => {
-  return fetch(`https://svarog-server.ru/agent/user/price`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/user/price`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ AgentId })
@@ -591,7 +591,7 @@ export const PricedAtManage = AgentId => {
     .catch(err => console.log(err));
 };
 export const NewPricedAtAgent = (userBy, agentId, percent) => {
-  return fetch(`https://svarog-server.ru/new/agent/price/at/manage`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/new/agent/price/at/manage`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ userBy, agentId, percent })
@@ -603,7 +603,7 @@ export const NewPricedAtAgent = (userBy, agentId, percent) => {
 };
 export const DeleteManageAtAgent = payload => {
   return fetch(
-    `https://svarog-server.ru/manage/delete/price/at/manage`,
+    `${process.env.REACT_APP_API_URL}/manage/delete/price/at/manage`,
     {
       method: "DELETE",
       headers: myHeaders,
@@ -616,7 +616,7 @@ export const DeleteManageAtAgent = payload => {
     .catch(err => console.log(err));
 };
 export const MyDevice = userBy => {
-  return fetch(`https://svarog-server.ru/my/device/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/my/device/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ userBy })
@@ -627,7 +627,7 @@ export const MyDevice = userBy => {
     .catch(err => console.log(err));
 };
 export const GetIpData = ip => {
-  return fetch(`https://svarog-server.ru/get/ip/data`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/ip/data`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ ip })
@@ -638,7 +638,7 @@ export const GetIpData = ip => {
     .catch(err => console.log(err));
 };
 export const DeleteDevice = device => {
-  return fetch(`https://svarog-server.ru/delete/device/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/delete/device/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ _id: device })
@@ -650,7 +650,7 @@ export const DeleteDevice = device => {
 };
 export const NewNewsToComment = payload => {
   console.log(JSON.stringify({ payload }));
-  return fetch(`https://svarog-server.ru/new/news/coments`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/new/news/coments`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ payload })
@@ -661,7 +661,7 @@ export const NewNewsToComment = payload => {
     .catch(err => console.log(err));
 };
 export const NewNewToSetStatusJob = payload => {
-  return fetch(`https://svarog-server.ru/new/news/set/status `, {
+  return fetch(`${process.env.REACT_APP_API_URL}/new/news/set/status `, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ payload })
@@ -672,7 +672,7 @@ export const NewNewToSetStatusJob = payload => {
     .catch(err => console.log(err));
 };
 export const SaveSnipet = payload => {
-  return fetch(`https://svarog-server.ru/save/email/snipets`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/save/email/snipets`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ payload })
@@ -685,7 +685,7 @@ export const SaveSnipet = payload => {
     });
 };
 export const MailImger = () => {
-  return fetch(`https://svarog-server.ru/images/email/all`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/images/email/all`, {
     method: "GET",
     headers: myHeaders
   })
@@ -698,7 +698,7 @@ export const UploadEmailImg = file => {
   const formData = new FormData();
   formData.append("email", file);
   console.log(formData);
-  return fetch(`https://svarog-server.ru/photos/upload`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/photos/upload`, {
     method: "POST",
     headers: {
       ContentType: "multipart/form-data",
@@ -716,7 +716,7 @@ export const UploadEmailImg = file => {
     });
 };
 export const DeleteImg = id => {
-  return fetch(`https://svarog-server.ru/images/del/${id}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/images/del/${id}`, {
     method: "DELETE",
     headers: myHeaders
   })
@@ -729,7 +729,7 @@ export const DeleteImg = id => {
     });
 };
 export const NewSubscribeEveryDay = () => {
-  return fetch(`https://svarog-server.ru/new/statistic/everyday`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/new/statistic/everyday`, {
     method: "POST",
     headers: myHeaders
   })
@@ -743,7 +743,7 @@ export const NewSubscribeEveryDay = () => {
 };
 export const NewAssignTodoToday = statisticId => {
   return fetch(
-    `https://svarog-server.ru/update/days/statistics/todo/assign`,
+    `${process.env.REACT_APP_API_URL}/update/days/statistics/todo/assign`,
     {
       method: "POST",
       headers: myHeaders,
@@ -759,7 +759,7 @@ export const NewAssignTodoToday = statisticId => {
     });
 };
 export const AllStatistic = userId => {
-  return fetch(`https://svarog-server.ru/all/statistics`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/all/statistics`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ userId })
@@ -774,7 +774,7 @@ export const AllStatistic = userId => {
 };
 export const NewTodoCompleteStatistic = statisticId => {
   return fetch(
-    `https://svarog-server.ru/update/days/statistics/todo/complete`,
+    `${process.env.REACT_APP_API_URL}/update/days/statistics/todo/complete`,
     {
       method: "POST",
       headers: myHeaders,
@@ -791,7 +791,7 @@ export const NewTodoCompleteStatistic = statisticId => {
 };
 export const NewComentStatistic = statisticId => {
   return fetch(
-    `https://svarog-server.ru/update/days/statistics/comment/result`,
+    `${process.env.REACT_APP_API_URL}/update/days/statistics/comment/result`,
     {
       method: "POST",
       headers: myHeaders,
@@ -807,7 +807,7 @@ export const NewComentStatistic = statisticId => {
     });
 };
 export const MyAssignedTodo = userId => {
-  return fetch(`https://svarog-server.ru/get/assigned/todo`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/assigned/todo`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ userId })
@@ -821,7 +821,7 @@ export const MyAssignedTodo = userId => {
     });
 };
 export const AssignedTodoUserBy = payload => {
-  return fetch(`https://svarog-server.ru/assigned/task/userby`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/assigned/task/userby`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ payload })
@@ -836,7 +836,7 @@ export const AssignedTodoUserBy = payload => {
 };
 export const UpdateDaysTodoComplete = payload => {
   return fetch(
-    `https://svarog-server.ru/update/days/statistics/todo/complete`,
+    `${process.env.REACT_APP_API_URL}/update/days/statistics/todo/complete`,
     {
       method: "POST",
       headers: myHeaders,
@@ -852,7 +852,7 @@ export const UpdateDaysTodoComplete = payload => {
     });
 };
 export const DeleteTodo = TodoId => {
-  return fetch(`https://svarog-server.ru/delete/todo/${TodoId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/delete/todo/${TodoId}`, {
     method: "DELETE",
     headers: myHeaders
   })
@@ -866,7 +866,7 @@ export const DeleteTodo = TodoId => {
 };
 export const SearchAgentEmail = item => {
   return fetch(
-    `https://svarog-server.ru/search/managing/director/to/email`,
+    `${process.env.REACT_APP_API_URL}/search/managing/director/to/email`,
     {
       method: "POST",
       headers: myHeaders,
@@ -883,7 +883,7 @@ export const SearchAgentEmail = item => {
 };
 
 export const GetTodoByAgent = agentId => {
-  return fetch(`https://svarog-server.ru/agent/todo/${agentId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/todo/${agentId}`, {
     method: "GET",
     headers: myHeaders
   })
@@ -897,7 +897,7 @@ export const GetTodoByAgent = agentId => {
 };
 export const GetAgentTodoStatistic = agentId => {
   return fetch(
-    `https://svarog-server.ru/agent/todo/quality${agentId}`,
+    `${process.env.REACT_APP_API_URL}/agent/todo/quality${agentId}`,
     {
       method: "GET",
       headers: myHeaders
@@ -912,7 +912,7 @@ export const GetAgentTodoStatistic = agentId => {
     });
 };
 export const GetAgentYearStatistic = (agentId, Year) => {
-  return fetch(`https://svarog-server.ru/year/agent/todo/statistics`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/year/agent/todo/statistics`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ agentId, Year })
@@ -927,7 +927,7 @@ export const GetAgentYearStatistic = (agentId, Year) => {
 };
 export const GetAgentMountAndYear = (agentId, Year, Mounth) => {
   return fetch(
-    `https://svarog-server.ru/year/on/mounth/todo/agent/todo`,
+    `${process.env.REACT_APP_API_URL}/year/on/mounth/todo/agent/todo`,
     {
       method: "POST",
       headers: myHeaders,
@@ -943,7 +943,7 @@ export const GetAgentMountAndYear = (agentId, Year, Mounth) => {
     });
 };
 export const GetTask = taskId => {
-  return fetch(`https://svarog-server.ru/agent/task/${taskId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/task/${taskId}`, {
     method: "GET",
     headers: myHeaders
   })
@@ -956,7 +956,7 @@ export const GetTask = taskId => {
     });
 };
 export const NewSpecialication = data => {
-  return fetch(`https://svarog-server.ru/new/spec/agent`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/new/spec/agent`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ data })
@@ -970,7 +970,7 @@ export const NewSpecialication = data => {
     });
 };
 export const AllSpecList = () => {
-  return fetch(`https://svarog-server.ru/all/spec/agent`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/all/spec/agent`, {
     method: "GET",
     headers: myHeaders
   })
@@ -983,7 +983,7 @@ export const AllSpecList = () => {
     });
 };
 export const deleteSpecialisations = id => {
-  return fetch(`https://svarog-server.ru/delete/spec/${id}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/delete/spec/${id}`, {
     method: "DELETE",
     headers: myHeaders
   })
@@ -996,7 +996,7 @@ export const deleteSpecialisations = id => {
     });
 };
 export const SnipetDelete = id => {
-  return fetch(`https://svarog-server.ru/snipets/delete/${id}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/snipets/delete/${id}`, {
     method: "DELETE",
     headers: myHeaders
   })
@@ -1009,7 +1009,7 @@ export const SnipetDelete = id => {
     });
 };
 export const GetSnipets = id => {
-  return fetch(`https://svarog-server.ru/get/email/snipet`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/email/snipet`, {
     method: "GET",
     headers: myHeaders
   })
@@ -1022,7 +1022,7 @@ export const GetSnipets = id => {
     });
 };
 export const GetDisign = id => {
-  return fetch(`https://svarog-server.ru/get/disign/${id}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/disign/${id}`, {
     method: "GET",
     headers: myHeaders
   })
@@ -1035,7 +1035,7 @@ export const GetDisign = id => {
     });
 };
 export const SeacrhSpecAgnets = spec => {
-  return fetch(`https://svarog-server.ru/get/spec/agents`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/spec/agents`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(spec)
@@ -1049,7 +1049,7 @@ export const SeacrhSpecAgnets = spec => {
     });
 };
 export const SearchGeoAgents = geoList => {
-  return fetch(`https://svarog-server.ru/get/geo/search`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/geo/search`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(geoList)
@@ -1063,7 +1063,7 @@ export const SearchGeoAgents = geoList => {
     });
 };
 export const ItegrationContrAgent = userBy => {
-  return fetch(`https://svarog-server.ru/integration/on`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/integration/on`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(userBy)
@@ -1077,7 +1077,7 @@ export const ItegrationContrAgent = userBy => {
     });
 };
 export const integrationList = () => {
-  return fetch(`https://svarog-server.ru/integration/list`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/integration/list`, {
     method: "GET",
     headers: myHeaders
   })
@@ -1090,7 +1090,7 @@ export const integrationList = () => {
     });
 };
 export const agentStaticAtMail = () => {
-  return fetch(`https://svarog-server.ru/agnet/static/at/mail`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agnet/static/at/mail`, {
     method: "GET",
     headers: myHeaders
   })
@@ -1102,7 +1102,7 @@ export const agentStaticAtMail = () => {
     });
 };
 export const agentStaticAtJob = () => {
-  return fetch(`https://svarog-server.ru/agnet/static/at/job`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agnet/static/at/job`, {
     method: "GET",
     headers: myHeaders
   })
@@ -1114,7 +1114,7 @@ export const agentStaticAtJob = () => {
     });
 };
 export const agentStaticAtAll = () => {
-  return fetch(`https://svarog-server.ru/agnet/static/at/all`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agnet/static/at/all`, {
     method: "GET",
     headers: myHeaders
   })
@@ -1126,7 +1126,7 @@ export const agentStaticAtAll = () => {
     });
 };
 export const agentStaticAtTech = () => {
-  return fetch(`https://svarog-server.ru/agnet/static/at/tech/agent`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agnet/static/at/tech/agent`, {
     method: "GET",
     headers: myHeaders
   })
@@ -1138,7 +1138,7 @@ export const agentStaticAtTech = () => {
     });
 };
 export const agentStatiAtManager = () => {
-  return fetch(`https://svarog-server.ru/agent/static/at/manger`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/static/at/manger`, {
     method: "GET",
     headers: myHeaders
   })
@@ -1150,7 +1150,7 @@ export const agentStatiAtManager = () => {
     });
 };
 export const SimpelEmailing = (settings, html) => {
-  return fetch(`https://svarog-server.ru/simpel/email`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/simpel/email`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(settings)
@@ -1163,7 +1163,7 @@ export const SimpelEmailing = (settings, html) => {
     });
 };
 export const EmailingLists = settings => {
-  return fetch(`https://svarog-server.ru/emailing/lists`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/emailing/lists`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(settings)
@@ -1176,7 +1176,7 @@ export const EmailingLists = settings => {
     });
 };
 export const GetTechList = () => {
-  return fetch(`https://svarog-server.ru/get/tech/list`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/tech/list`, {
     method: "GET",
     headers: myHeaders
   })
@@ -1188,7 +1188,7 @@ export const GetTechList = () => {
     });
 };
 export const NewTechCollect = name => {
-  return fetch(`https://svarog-server.ru/new/tech/collection`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/new/tech/collection`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(name)
@@ -1202,7 +1202,7 @@ export const NewTechCollect = name => {
 };
 export const SaveTech = (name, techColId) => {
   return fetch(
-    `https://svarog-server.ru/save/tech/by/collection/${techColId}`,
+    `${process.env.REACT_APP_API_URL}/save/tech/by/collection/${techColId}`,
     {
       method: "POST",
       headers: myHeaders,
@@ -1217,7 +1217,7 @@ export const SaveTech = (name, techColId) => {
     });
 };
 export const GetNode = id => {
-  return fetch(`https://svarog-server.ru/get/node/${id}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/node/${id}`, {
     method: "GET",
     headers: myHeaders
   })
@@ -1229,7 +1229,7 @@ export const GetNode = id => {
     });
 };
 export const NewNode = (name, id) => {
-  return fetch(`https://svarog-server.ru/save/tech/by/node/${id}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/save/tech/by/node/${id}`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(name)
@@ -1247,7 +1247,7 @@ export const MyTodoMount = (mounthTodo, user, yearTodo) => {
     user,
     yearTodo
   };
-  return fetch(`https://svarog-server.ru/my/todo/mounth`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/my/todo/mounth`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(obj)
@@ -1260,7 +1260,7 @@ export const MyTodoMount = (mounthTodo, user, yearTodo) => {
     });
 };
 export const NewComentSpecTodo = result => {
-  return fetch(`https://svarog-server.ru/new/comment/at/agent/spec`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/new/comment/at/agent/spec`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(result)
@@ -1273,7 +1273,7 @@ export const NewComentSpecTodo = result => {
     });
 };
 export const SaveCarAgent = name => {
-  return fetch(`https://svarog-server.ru/save/tech/at/agent`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/save/tech/at/agent`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ name })
@@ -1287,7 +1287,7 @@ export const SaveCarAgent = name => {
 };
 export const SaveNodeAtCar = (nodeid, name) => {
   return fetch(
-    `https://svarog-server.ru/save/node/at/agent/tech/${nodeid}`,
+    `${process.env.REACT_APP_API_URL}/save/node/at/agent/tech/${nodeid}`,
     {
       method: "POST",
       headers: myHeaders,
@@ -1303,7 +1303,7 @@ export const SaveNodeAtCar = (nodeid, name) => {
 };
 export const SaveDetalAtNode = (nodeid, name) => {
   return fetch(
-    `https://svarog-server.ru/save/node/at/tech/node/${nodeid}`,
+    `${process.env.REACT_APP_API_URL}/save/node/at/tech/node/${nodeid}`,
     {
       method: "POST",
       headers: myHeaders,
@@ -1318,7 +1318,7 @@ export const SaveDetalAtNode = (nodeid, name) => {
     });
 };
 export const DeleteAtTech = id => {
-  return fetch(`https://svarog-server.ru/del/tech/${id}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/del/tech/${id}`, {
     method: "DELETE",
     headers: myHeaders
   })
@@ -1330,7 +1330,7 @@ export const DeleteAtTech = id => {
     });
 };
 export const DeleteAtNode = id => {
-  return fetch(`https://svarog-server.ru/del/node/${id}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/del/node/${id}`, {
     method: "DELETE",
     headers: myHeaders
   })
@@ -1342,7 +1342,7 @@ export const DeleteAtNode = id => {
     });
 };
 export const DeleteDetalAtNode = id => {
-  return fetch(`https://svarog-server.ru/del/node/prop/${id}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/del/node/prop/${id}`, {
     method: "DELETE",
     headers: myHeaders
   })
@@ -1355,7 +1355,7 @@ export const DeleteDetalAtNode = id => {
 };
 
 export const UserTodoYear = data => {
-  return fetch(`https://svarog-server.ru/my/todo/year`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/my/todo/year`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(data)
@@ -1368,7 +1368,7 @@ export const UserTodoYear = data => {
     });
 };
 export const NewAgentAddManager = data => {
-  return fetch(`https://svarog-server.ru/agent/new/at/manager/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/new/at/manager/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(data)
@@ -1383,7 +1383,7 @@ export const NewAgentAddManager = data => {
 export const NewAgentAddRegulatoryPosition = data => {
   console.log(JSON.stringify(data));
   return fetch(
-    `https://svarog-server.ru/regulatory/position/add/agent`,
+    `${process.env.REACT_APP_API_URL}/regulatory/position/add/agent`,
     {
       method: "POST",
       headers: myHeaders,
@@ -1399,7 +1399,7 @@ export const NewAgentAddRegulatoryPosition = data => {
 };
 
 export const AgentAtHuman = agentId => {
-  return fetch(`https://svarog-server.ru/get/agent/human${agentId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/agent/human${agentId}`, {
     method: "GET",
     headers: myHeaders
   })
@@ -1411,7 +1411,7 @@ export const AgentAtHuman = agentId => {
     });
 };
 export const AgentNewHuman = (data, agentId) => {
-  return fetch(`https://svarog-server.ru/agent/new/human${agentId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/new/human${agentId}`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(data)
@@ -1424,7 +1424,7 @@ export const AgentNewHuman = (data, agentId) => {
     });
 };
 export const AgentEditHuman = (data, humanId) => {
-  return fetch(`https://svarog-server.ru/agent/edit/human${humanId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/edit/human${humanId}`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(data)
@@ -1437,7 +1437,7 @@ export const AgentEditHuman = (data, humanId) => {
     });
 };
 export const userActive = userId => {
-  return fetch(`https://svarog-server.ru/user/active/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/user/active/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ userId })
@@ -1450,7 +1450,7 @@ export const userActive = userId => {
     });
 };
 export const UserActiveMounthAndYear = data => {
-  return fetch(`https://svarog-server.ru/user/active/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/user/active/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(data)
@@ -1464,7 +1464,7 @@ export const UserActiveMounthAndYear = data => {
 };
 export const ContrAgentDontManage = page => {
   return fetch(
-    `https://svarog-server.ru/agent/dont/manage/?page=${page}`,
+    `${process.env.REACT_APP_API_URL}/agent/dont/manage/?page=${page}`,
     {
       method: "GET",
       headers: myHeaders
@@ -1478,7 +1478,7 @@ export const ContrAgentDontManage = page => {
     });
 };
 export const GetWeekObjectId = body => {
-  return fetch(`https://svarog-server.ru/active/helper/get/week`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/active/helper/get/week`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(body)
@@ -1491,7 +1491,7 @@ export const GetWeekObjectId = body => {
     });
 };
 export const GetEnterpriseManageAtAgentStatistic = () => {
-  return fetch(`https://svarog-server.ru/agent/at/manager/statistic`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/at/manager/statistic`, {
     method: "GET",
     headers: myHeaders
   })
@@ -1503,7 +1503,7 @@ export const GetEnterpriseManageAtAgentStatistic = () => {
     });
 };
 export const GetManagerAtAgent = _id => {
-  return fetch(`https://svarog-server.ru/get/manager/at/agent/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/manager/at/agent/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ _id })
@@ -1516,7 +1516,7 @@ export const GetManagerAtAgent = _id => {
     });
 };
 export const GetUserActiveByAgent = body => {
-  return fetch(`https://svarog-server.ru/active/user/helper`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/active/user/helper`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(body)
@@ -1529,7 +1529,7 @@ export const GetUserActiveByAgent = body => {
     });
 };
 export const GetAgentAtHuman = (body, page) => {
-  return fetch(`https://svarog-server.ru/agent/at/human/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/at/human/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(body)
@@ -1543,7 +1543,7 @@ export const GetAgentAtHuman = (body, page) => {
 };
 export const GetDialogList = () => {
   let userId = isAuthenticated().direct._id;
-  return fetch(`https://svarog-server.ru/chanel/list`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/chanel/list`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ userId })
@@ -1557,7 +1557,7 @@ export const GetDialogList = () => {
 };
 export const GetRussiaCitiFind = body => {
   console.log(2000);
-  return fetch(`https://svarog-server.ru/russia/siti/helper`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/russia/siti/helper`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ body })
@@ -1570,7 +1570,7 @@ export const GetRussiaCitiFind = body => {
     });
 };
 export const GetRussiaOblastHelper = body => {
-  return fetch(`https://svarog-server.ru/russia/oblast/helper`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/russia/oblast/helper`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ body })
@@ -1583,7 +1583,7 @@ export const GetRussiaOblastHelper = body => {
     });
 };
 export const ChangeHuman = (body, humanId) => {
-  return fetch(`https://svarog-server.ru/edit/human/${humanId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/edit/human/${humanId}`, {
     method: "PUT",
     headers: myHeaders,
     body: JSON.stringify(body)
@@ -1597,7 +1597,7 @@ export const ChangeHuman = (body, humanId) => {
     });
 };
 export const NewHuman = (body, agentId) => {
-  return fetch(`https://svarog-server.ru/agent/new/human/${agentId}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/new/human/${agentId}`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ body })
@@ -1611,7 +1611,7 @@ export const NewHuman = (body, agentId) => {
 };
 export const DeleteHuman = id => {
   //delet/human/
-  return fetch(`https://svarog-server.ru/delet/human/${id}`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/delet/human/${id}`, {
     method: "DELETE",
     headers: myHeaders
   })
@@ -1623,7 +1623,7 @@ export const DeleteHuman = id => {
     });
 };
 export const NewNewsFeatursPosition = news => {
-  return fetch(`https://svarog-server.ru/new/news/features/position`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/new/news/features/position`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(news)
@@ -1636,7 +1636,7 @@ export const NewNewsFeatursPosition = news => {
     });
 };
 export const getAgentBranch = agentId => {
-  return fetch(`https://svarog-server.ru/get/agent/branch`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/agent/branch`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({agentId})
@@ -1648,3 +1648,16 @@ export const getAgentBranch = agentId => {
       console.log(err);
     });
 };
+export const SendEmailSending = agent =>{
+  return fetch(`${process.env.REACT_APP_API_URL}/send/email`, {
+    method: "POST",
+    headers: myHeaders,
+    body: JSON.stringify(agent)
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}

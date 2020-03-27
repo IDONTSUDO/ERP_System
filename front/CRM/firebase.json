@@ -1,15 +1,11 @@
 {
   "hosting": {
-    "site": "crm-svarog",
     "public": "build",
-    "headers": [{
-      "source" : "bundle.js",
-      "headers" : [{
-        "key" : "Access-Control-Allow-Origin",
-        "value" : "*"
-      }]
-    }],
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "rewrites": [
       {
         "source": "**",

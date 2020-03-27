@@ -14,6 +14,7 @@ import {
   SeacrhSpecAgnets,
   SearchGeoAgents,
   EmailingLists,
+  SendEmailSending,
   SimpelEmailing
 } from "../Api/Http.js";
 import Error from "../Error/Error.jsx";
@@ -161,7 +162,26 @@ export default class Email extends Component {
   };
 
   // SNIPET
-
+  send = () => {
+    let { agentResultsList } = this.state;
+    let errr;
+    if (agentResultsList.length === 0) {
+      errr = "Ни одного агента не добавлено";
+      return this.err(errr);
+    } else {
+      this.editor.exportHtml(data => {
+        const { html } = data;
+        let settings = {
+          agentResultsList,
+          html
+        };
+        SendEmailSending(settings).then(data => {
+          console.log(data);
+        });
+      });
+    }
+    // SendEmailSending().then(() =>da)
+  };
   next() {
     const current = this.state.current + 1;
     this.setState({ current });
@@ -567,7 +587,12 @@ export default class Email extends Component {
       icon: <Icon type="frown" style={{ color: "#108ee9" }} />
     });
   };
-
+  err = err => {
+    notification.open({
+      message: `${err}`,
+      icon: <Icon type="frown" style={{ color: "#108ee9" }} />
+    });
+  };
   render() {
     let { errors } = this.state;
 
@@ -625,14 +650,14 @@ export default class Email extends Component {
       },
       {
         title: "Гео",
-        dataIndex: "agentGeo",
-        key: "agentGeo",
+        dataIndex: "region",
+        key: "region",
         // ...this.handelTag("agentGeo")
         ...this.renderFilterGeo("agnetGeo"),
 
-        render: agentGeo => (
+        render: region => (
           <span>
-            {agentGeo.map(tag => {
+            {region.map(tag => {
               let color = tag.length > 5 ? "geekblue" : "green";
               if (tag === "loser") {
                 color = "volcano";
@@ -745,6 +770,7 @@ export default class Email extends Component {
                       size="large"
                       type="primary"
                       shape=""
+                      onClick={this.send}
                       // onClick={this.showModalSnipets}
                       icon="mail"
                     ></Button>
@@ -757,7 +783,7 @@ export default class Email extends Component {
               <div className="row">
                 {this.state.agentResultsList.map((agnt, i) => (
                   <>
-                    <Popover
+                    {/* <Popover
                       title="Контр Агент"
                       trigger="click"
                       title={
@@ -768,7 +794,7 @@ export default class Email extends Component {
                           <div>Расчетный счет:{agnt.payment_account}</div>
                           <div>
                             Гео:
-                            {agnt.agentGeo.map((geo, i) => {
+                            {agnt.region.map((geo, i) => {
                               let color = geo.length > 5 ? "geekblue" : "green";
                               if (geo === "loser") {
                                 color = "volcano";
@@ -797,17 +823,17 @@ export default class Email extends Component {
                           </div>
                         </>
                       }
+                    > */}
+                    <Tag
+                      closable
+                      onClose={e => {
+                        // e.preventDefault();
+                        this.handleCloseTagsAngt(e);
+                      }}
                     >
-                      <Tag
-                        closable
-                        onClose={e => {
-                          // e.preventDefault();
-                          this.handleCloseTagsAngt(e);
-                        }}
-                      >
-                        {agnt.name}
-                      </Tag>
-                    </Popover>
+                      {agnt.name}
+                    </Tag>
+                    {/* </Popover> */}
                   </>
                 ))}
               </div>

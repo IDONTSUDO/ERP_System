@@ -1,0 +1,9 @@
+header{
+    display: flex;
+    justify-content: center;
+    color: #e02f2f;
+    background-color: aqua;
+    margin-left: 12vw;
+    margin-right: 12vw;
+    border-radius: 5px;
+}
