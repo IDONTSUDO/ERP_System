@@ -1528,7 +1528,7 @@ export const GetUserActiveByAgent = body => {
       console.log(err);
     });
 };
-export const GetAgentAtHuman = (body,page) => {
+export const GetAgentAtHuman = (body, page) => {
   return fetch(`${process.env.REACT_APP_API_URL}/agent/at/human/`, {
     method: "POST",
     headers: myHeaders,
@@ -1622,7 +1622,7 @@ export const DeleteHuman = id => {
       console.log(err);
     });
 };
-export const NewNewsFeatursPosition = (news) =>{
+export const NewNewsFeatursPosition = news => {
   return fetch(`${process.env.REACT_APP_API_URL}/new/news/features/position`, {
     method: "POST",
     headers: myHeaders,
@@ -1634,4 +1634,17 @@ export const NewNewsFeatursPosition = (news) =>{
     .catch(err => {
       console.log(err);
     });
-}
+};
+export const getAgentBranch = agentId => {
+  return fetch(`${process.env.REACT_APP_API_URL}/get/agent/branch`, {
+    method: "POST",
+    headers: myHeaders,
+    body: JSON.stringify({agentId})
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};

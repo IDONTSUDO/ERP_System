@@ -430,6 +430,10 @@ export default class MyAgent extends Component {
                     <Button>
                       <Link to={`/agent/human/${id}`}>Работники</Link>
                     </Button>
+                    <Button>
+                      <Link to={`/agent/work_branch/${id}`}>Офисы</Link>
+                    </Button>
+                    {/* /agent/work_branch/:agentId */}
                   </div>
                 </Col>
               </Row>

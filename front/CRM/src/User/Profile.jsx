@@ -102,8 +102,8 @@ class Profile extends Component {
       .locale("ru")
       .format("YY");
     let Day = moment(e.date)
-    .locale("ru")
-    .format("YY");
+      .locale("ru")
+      .format("YY");
     let Body = {
       userId,
       Year,
@@ -281,98 +281,110 @@ class Profile extends Component {
                       </div>
                     </div>
                     <div className="activiti-list">
-                      <Timeline>
-                        <Skeleton
-                          paragraph={{ rows: 5 }}
-                          active
-                          loading={this.state.loading}
-                        >
-                          <div>
-                            <Timeline>
-                              {this.state.activUser.map((active, i) => (
-                                <>
-                                  {active.status === "system" ? (
-                                    <Popover
-                                      content={
-                                        <>{this.renderPopoverSystem(active)}</>
-                                      }
-                                    >
-                                      <Timeline.Item
-                                        style={{ margin: "5px" }}
-                                        dot={
-                                          <WhatsAppOutlined
-                                            style={{
-                                              fontSize: "16px",
-                                              color: "purple"
-                                            }}
-                                          />
-                                        }
-                                        color="purple"
-                                        label={active.time}
-                                      >
-                                        {active.title}
-                                        <span> {active.time}</span>
-                                      </Timeline.Item>
-                                    </Popover>
-                                  ) : active.JobArray.length === 0 ? (
+                      {browserCalendar ? (
+                        <>
+                          <Timeline>
+                            <Skeleton
+                              paragraph={{ rows: 5 }}
+                              active
+                              loading={this.state.loading}
+                            >
+                              <div>
+                                <Timeline>
+                                  {this.state.activUser.map((active, i) => (
                                     <>
-                                      <Popover
-                                        content={
-                                          <>{this.renderPopoverSolo(active)}</>
-                                        }
-                                      >
-                                        <Timeline.Item
-                                          style={{ margin: "5px" }}
-                                          dot={
-                                            <UserOutlined
-                                              style={{
-                                                fontSize: "16px",
-                                                color: "#621aff"
-                                              }}
-                                            />
+                                      {active.status === "system" ? (
+                                        <Popover
+                                          content={
+                                            <>
+                                              {this.renderPopoverSystem(active)}
+                                            </>
                                           }
-                                          label={active.time}
                                         >
-                                          {active.title}
-                                        </Timeline.Item>
-                                      </Popover>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <Popover
-                                        content={
-                                          <>{this.renderPopoverTeam(active)}</>
-                                        }
-                                      >
-                                        <Timeline.Item
-                                          style={{ margin: "5px" }}
-                                          dot={
-                                            <TeamOutlined
-                                              style={{ fontSize: "16px" }}
-                                            />
-                                          }
-                                          color="blue"
-                                        >
-                                          {active.title}
-                                          <span>
-                                            {active.JobArray.map((job, i) => (
+                                          <Timeline.Item
+                                            style={{ margin: "5px" }}
+                                            dot={
+                                              <WhatsAppOutlined
+                                                style={{
+                                                  fontSize: "16px",
+                                                  color: "purple"
+                                                }}
+                                              />
+                                            }
+                                            color="purple"
+                                            label={active.time}
+                                          >
+                                            {active.title}
+                                            <span> {active.time}</span>
+                                          </Timeline.Item>
+                                        </Popover>
+                                      ) : active.JobArray.length === 0 ? (
+                                        <>
+                                          <Popover
+                                            content={
                                               <>
-                                                {job.user === userId
-                                                  ? console.log(user)
-                                                  : null}{" "}
+                                                {this.renderPopoverSolo(active)}
                                               </>
-                                            ))}
-                                          </span>
-                                        </Timeline.Item>
-                                      </Popover>
+                                            }
+                                          >
+                                            <Timeline.Item
+                                              style={{ margin: "5px" }}
+                                              dot={
+                                                <UserOutlined
+                                                  style={{
+                                                    fontSize: "16px",
+                                                    color: "#621aff"
+                                                  }}
+                                                />
+                                              }
+                                              label={active.time}
+                                            >
+                                              {active.title}
+                                            </Timeline.Item>
+                                          </Popover>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Popover
+                                            content={
+                                              <>
+                                                {this.renderPopoverTeam(active)}
+                                              </>
+                                            }
+                                          >
+                                            <Timeline.Item
+                                              style={{ margin: "5px" }}
+                                              dot={
+                                                <TeamOutlined
+                                                  style={{ fontSize: "16px" }}
+                                                />
+                                              }
+                                              color="blue"
+                                            >
+                                              {active.title}
+                                              <span>
+                                                {active.JobArray.map(
+                                                  (job, i) => (
+                                                    <>
+                                                      {job.user === userId
+                                                        ? console.log(user)
+                                                        : null}{" "}
+                                                    </>
+                                                  )
+                                                )}
+                                              </span>
+                                            </Timeline.Item>
+                                          </Popover>
+                                        </>
+                                      )}
                                     </>
-                                  )}
-                                </>
-                              ))}
-                            </Timeline>
-                          </div>
-                        </Skeleton>
-                      </Timeline>
+                                  ))}
+                                </Timeline>
+                              </div>
+                            </Skeleton>
+                          </Timeline>
+                        </>
+                      ) : null}
                     </div>
                     {browserCalendar ? (
                       <>

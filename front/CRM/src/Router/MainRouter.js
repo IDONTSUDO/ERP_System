@@ -12,6 +12,8 @@ import PersonalizationUser from "../User/PersonalizationUser.jsx";
 import Security from "../User/Security.jsx";
 import DeviececEdit from "../User/DeviececEdit.jsx";
 
+import NotFoundContent from "../Error/NotFound";
+
 import AgentProfile from "../Contr-agent/AgentProfile.jsx";
 import NewAgent from "../Contr-agent/NewAngent.jsx";
 import MyAgent from "../Contr-agent/MyAgent.jsx";
@@ -142,6 +144,7 @@ const MainRouter = () => (
         path="/agent/work_branch/:agentId"
         component={AgentBranch}
       />
+      <PrivateRoute exact path="*" component={NotFoundContent} />
     </Switch>
   </div>
 );

@@ -279,7 +279,6 @@ class MenuMain extends React.Component {
                                 <span>Email рассылки</span>
                               </Link>
                             </Menu.Item>
-                            
                           </SubMenu>
                         ) : (
                           ""
