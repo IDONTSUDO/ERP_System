@@ -8,7 +8,7 @@ const AgentHumanSchema = new mongoose.Schema({
   mail_at_peopel: { type: String },
   checkedList: { type: Array },
   AgentBy: { type: ObjectId },
-  number:{ type: String}
-  
+  number:{ type: String},
+  common:{type:String}
 });
 module.exports = mongoose.model("AgentHuman", AgentHumanSchema);

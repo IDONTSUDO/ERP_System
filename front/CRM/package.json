@@ -55,7 +55,6 @@
     "fs-extra": "7.0.1",
     "g6-for-react": "^0.1.4",
     "geoip-lite": "^1.4.0",
-    "gojs-react": "^1.0.5",
     "google-maps-react": "^2.0.2",
     "html-to-react": "^1.4.2",
     "html-webpack-plugin": "4.0.0-beta.5",

@@ -1689,3 +1689,7 @@ nav {
 .editHumDefault{
   color: #1933a76c;
 }
+.border-new-agent{
+  border: 1px solid #2196F3;
+  display: grid;
+}

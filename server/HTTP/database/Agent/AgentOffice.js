@@ -6,6 +6,7 @@ const AgentOfficeSchema = new mongoose.Schema({
   sity: { type: Array },
   region: { type: Array },
   number_phone:{ type: String },
+  adress:{type:String}
 });
 
 module.exports = mongoose.model("AgentOffice", AgentOfficeSchema);

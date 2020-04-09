@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import NewAgentBracnchOfice from "../Components/FABRICS/newAgentBracnchOfice"
+import NewAgentPeopel from "../Components/FABRICS/newAgentPeopel"
 import { isAuthenticated } from "../Api/Auth";
 import { debounce } from "debounce";
+import {ObjHelperShape,infiniteCurry } from "../helper/common/type"
 import {
   NewContrAgent,
   NewSpecialication,
@@ -22,7 +25,7 @@ import {
 } from "../Api/Http";
 import HillAndObl from "../helper/russia";
 import Tree from "react-animated-tree";
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined,PlusCircleOutlined,DeleteOutlined } from "@ant-design/icons";
 import Localisation from "../helper/LocalisationCalendar.json";
 import {
   notification,
@@ -50,6 +53,17 @@ const { Step } = Steps;
 
 const plainOptions = ["Viber", "WhatsAp", "Почта", "Telegram", "Звонки"];
 const defaultCheckedList = [];
+
+
+
+
+
+let visibleFUCKINGbtn = false
+
+
+
+
+
 export default class NewAgent extends Component {
   constructor() {
     super();
@@ -83,10 +97,6 @@ export default class NewAgent extends Component {
       peopelQality: [],
       editorRegim: false,
       agentGeo0: [],
-      agentGeo1: [],
-      agentGeo2: [],
-      agentGeo3: [],
-      agentGeo4: [],
       visibleTreeDrawer: false,
       EditorRegim: "none",
       loadNode: [],
@@ -139,7 +149,11 @@ export default class NewAgent extends Component {
       oblastAgent: [],
       branch_office_sity: undefined,
       sity: undefined,
-      number_phone: undefined
+      number_phone: undefined,
+      peopelResults:[],
+      GeoOficeHelper:[],
+      AgentOffice:[],
+      AgentPeopel:[]
     };
   }
 
@@ -207,372 +221,466 @@ export default class NewAgent extends Component {
       this.setState({ oblast: data });
     });
   };
+  nextStepOne =  () =>{
+    let {GeoOficeHelper,currentStep} = this.state
+
+    /*@FABRIC
+      ------------------ office -----------------
+      @branch_office {id}
+      @branch_officeGeo {id}
+      @branch_office_sity {id}
+      @number_phone {id}
+      @adress {id}
+      @dependence  {GeoOficeHelper} state
+    */
+   
+   let structuresDOMfabric = []
+   if(GeoOficeHelper.length != 0){
+    for(let i = 0;GeoOficeHelper.length > i; i++){
+      let name = document.getElementById(`branch_office${i}`).value
+      let branch_officeGeoHTML = document.querySelector(`#branch_officeGeo${i} > div > div > ul > li.ant-select-selection__choice > div`)
+      let sityHTML = document.querySelector(`#branch_office_sity0 > div > div > ul > li.ant-select-selection__choice > div`)
+      let number_phone = document.getElementById(`number_phone${i}`).value
+      let addres =  document.getElementById(`adress${i}`).value
+      let region = document.getElementById(`region${i}`)
+      if(branch_officeGeoHTML != null  && sityHTML != null ){
+        structuresDOMfabric.push([
+          
+          ObjHelperShape(name,"name"),
+          ObjHelperShape(branch_officeGeoHTML.innerText,"region"),
+          ObjHelperShape(sityHTML.innerText,"sity"),
+          ObjHelperShape(number_phone,"number_phone"),
+          ObjHelperShape(addres,"adress"),
+        ])
+      } 
+      }
+      structuresDOMfabric.lenght === 0 ? (this.setState({currentStep:currentStep+1})):(this.setState({AgentOffice:structuresDOMfabric,currentStep:currentStep+1}))
+   
+  }
+  this.nextStep()
+
+  }
+  nextStepfour = () =>{
+    let { peopelResults,currentStep  } = this.state
+    /*@FABRIC
+      ------------------ Human -------------------
+      @HumanPhone {id}
+      @Humanbio {id}
+      @HumanEmail {id}
+      @HumanPosition {id}
+      @HumanFeatures_job {id}
+      @HumanCommon {id}
+      @dependence {peopelResults} state
+    */
+    let structuresDOMfabric = []
+
+    if(peopelResults.length != 0){
+      for(let i = 0;peopelResults.length > i; i++){
+        let phoneAt_peopel = document.getElementById(`HumanPhone${i}`).value
+        let bio = document.getElementById(`Humanbio${i}`).value
+        let mail_at_peopel = document.getElementById(`HumanEmail${i}`).value
+        let common = document.getElementById(`HumanCommon${i}`).value
+        let position = document.getElementById(`HumanPosition${i}`).value
+        let features_job =  document.getElementById(`HumanFeatures_job${i}`).value
+        if(bio.length != 0){
+          structuresDOMfabric.push([
+            ObjHelperShape(phoneAt_peopel,"phoneAt_peopel"),
+            ObjHelperShape(bio,"bio"),
+            ObjHelperShape(mail_at_peopel,"mail_at_peopel"),
+            ObjHelperShape(common,"common"),
+            ObjHelperShape(position,"position"),
+            ObjHelperShape(features_job,"features_job")
+            ])
+        }
+      }
+      structuresDOMfabric.lenght === 0 ? (this.setState({currentStep:currentStep+1})):(this.setState({AgentPeopel:structuresDOMfabric,currentStep:currentStep+1}))
+
+    }
+    this.nextStep()
+  }
   newAgentClick = () => {
-    let whoAdd;
-    let role = isAuthenticated().direct.role;
-    let resultValid = ["Директор", "Управляющий"].includes(role);
-    {
-      /* branch_office_sity(город) branch_officeGeo(Область) agentHill(город агента) oblastAgent(область агента) */
-    }
-    if (resultValid) {
-      let {
-        number_phone,
-        position,
-        features_job,
-        bio,
-        phoneAt_peopel,
-        mail_at_peopel,
-        checkedList,
-        tags,
-        branch_office,
-        agentGeo,
-        branch_officeGeo,
-        OGRN,
-        manageAdd,
-        specialications,
-        TechMap,
-        name,
-        full_name,
-        INN,
-        company_desription,
-        legal_address,
-        actual_address,
-        email,
-        site,
-        instagram,
-        phone,
-        WhereFromClient,
-        work_begin_with_him,
-        individual_conditions_job,
-        pay_character,
-        branch_office_sity,
-        agentHill,
-        oblastAgent
-      } = this.state;
-      let FilteredOfice;
-      let FilteredGeo = [];
+    /*@FABRIC
+      ------------------ officec -----------------
+      @branch_office {id}
+      @branch_officeGeo {id}
+      @branch_office_sity {id}
+      @number_phone {id}
+      @dependence  {GeoOficeHelper} state
+      ------------------ Human -------------------
+      @HumanPhone {id}
+      @Humanbio {id}
+      @HumanEmail {id}
+      @HumanPosition {id}
+      @HumanFeatures_job {id}
+      @HumanCommon {id}
+      @dependence {peopelResults} state
+    */
+  
+    // let whoAdd;  
+    // let role = isAuthenticated().direct.role;
+    // let resultValid = ["Директор", "Управляющий"].includes(role);
+    // {
+    //   /* branch_office_sity(город) branch_officeGeo(Область) agentHill(город агента) oblastAgent(область агента) */
+    // }
+    // if (resultValid) {
+    //   let {
+    //     number_phone,
+    //     position,
+    //     features_job,
+    //     bio,
+    //     phoneAt_peopel,
+    //     mail_at_peopel,
+    //     checkedList,
+    //     tags,
+    //     branch_office,
+    //     agentGeo,
+    //     branch_officeGeo,
+    //     OGRN,
+    //     manageAdd,
+    //     specialications,
+    //     TechMap,
+    //     name,
+    //     full_name,
+    //     INN,
+    //     company_desription,
+    //     legal_address,
+    //     actual_address,
+    //     email,
+    //     site,
+    //     instagram,
+    //     phone,
+    //     WhereFromClient,
+    //     work_begin_with_him,
+    //     individual_conditions_job,
+    //     pay_character,
+    //     branch_office_sity,
+    //     agentHill,
+    //     oblastAgent
+    //   } = this.state;
+    //   let FilteredOfice;
+    //   let FilteredGeo = [];
 
-      let msg;
-      whoAdd = {
-        name: isAuthenticated().direct.name,
-        _id: isAuthenticated().direct._id
-      };
-      if (name === undefined) {
-        msg = "Имя является обязатльным параметром";
-        this.openNotificationValidationError(msg);
-        this.setState({ currentStep: 0 });
-      }
-      if (full_name === undefined) {
-        msg = "Полное имя является обязатльным параметром";
-        this.openNotificationValidationError(msg);
-        this.setState({ currentStep: 0 });
-      }
-      if (INN === undefined) {
-        msg = "Введите ИНН ";
-        this.openNotificationValidationError(msg);
-        this.setState({ currentStep: 0 });
-      }
-      if (company_desription === undefined) {
-        msg = "Описание компании не найдено, похоже вы забыли его добавить";
-        this.openNotificationValidationError(msg);
-      }
-      if (WhereFromClient === undefined) {
-        this.setState({ currentStep: 4 });
-        msg = "Откуда пришел клиент, не заполненно";
-        return this.openNotificationValidationError(msg);
-      }
-      if (work_begin_with_him === undefined) {
-        this.setState({ currentStep: 4 });
-        msg = "Как началась работа с клиентом, не заполненно";
-        return this.openNotificationValidationError(msg);
-      }
-      let postedBy = isAuthenticated().direct._id;
-      // branch_office_sity,
-      // agentHill,
-      // oblastAgent
-      let newAgent = {
-        OGRN,
-        agentGeo,
-        manageAdd,
-        specialications,
-        postedBy,
-        TechMap,
-        name,
-        tags,
-        full_name,
-        INN,
-        company_desription,
-        legal_address,
-        actual_address,
-        email,
-        site,
-        instagram,
-        phone,
-        WhereFromClient,
-        work_begin_with_him,
-        individual_conditions_job,
-        pay_character,
-        hill:agentHill,
-      };
-      let AgentFeatus;
-      FilteredGeo.push(branch_officeGeo);
-      if (branch_office === undefined) {
-        AgentFeatus = undefined;
-      } else {
-        AgentFeatus = {
-          region: branch_officeGeo,
-          sity: branch_office_sity,
-          name: branch_office,
-          number_phone: number_phone
-        };
-      }
-      let AgentPeopel = {
-        position,
-        features_job,
-        bio,
-        phoneAt_peopel,
-        mail_at_peopel,
-        checkedList
-      };
-      let body = {
-        AgentFeatus,
-        AgentPeopel,
-        newAgent,
-        whoAdd
-      };
-      NewAgentAddRegulatoryPosition(body).then(data => {
-        message.success("Агент зарегестрирован!");
-        this.setState({
-          currentStep: 0,
-          company: "",
-          name: undefined,
-          full_name: undefined,
-          phone: undefined,
-          INN: undefined,
-          general_director: undefined,
-          OGRN: undefined,
-          email: undefined,
-          any: undefined,
-          legal_address: undefined,
-          actual_address: undefined,
-          payment_account: undefined,
-          specialications: [],
-          manageAdd: [],
-          company_desription: "",
-          phone: undefined,
-          instagram: undefined,
-          site: undefined,
-          email: undefined,
-          legal_address: undefined,
-          company_desription: undefined,
-          mail_at_peopel: undefined,
-          phoneAt_peopel: undefined,
-          bio: undefined,
-          features_job: undefined,
-          position: undefined,
-          pay_character: undefined,
-          individual_conditions_job: undefined,
-          work_begin_with_him: undefined,
-          tags: [],
-          branch_officeGeo: [],
-          branch_office: undefined,
-          WhereFromClient: undefined,
-          agentGeo: [],
-          TechAgent: [],
-          checkedList: defaultCheckedList,
-          branch_office_sity: undefined,
-          agentHill: undefined,
-          oblastAgent: undefined,
-          branch_officeGeo: undefined,
-          number_phone: undefined
-        });
-      });
-    } else {
-      let managerId = isAuthenticated().direct._id;
+    //   let msg;
+    //   whoAdd = {
+    //     name: isAuthenticated().direct.name,
+    //     _id: isAuthenticated().direct._id
+    //   };
+    //   if (name === undefined) {
+    //     msg = "Имя является обязатльным параметром";
+    //     this.openNotificationValidationError(msg);
+    //     this.setState({ currentStep: 0 });
+    //   }
+    //   if (full_name === undefined) {
+    //     msg = "Полное имя является обязатльным параметром";
+    //     this.openNotificationValidationError(msg);
+    //     this.setState({ currentStep: 0 });
+    //   }
+    //   if (INN === undefined) {
+    //     msg = "Введите ИНН ";
+    //     this.openNotificationValidationError(msg);
+    //     this.setState({ currentStep: 0 });
+    //   }
+    //   if (company_desription === undefined) {
+    //     msg = "Описание компании не найдено, похоже вы забыли его добавить";
+    //     this.openNotificationValidationError(msg);
+    //   }
+    //   if (WhereFromClient === undefined) {
+    //     this.setState({ currentStep: 4 });
+    //     msg = "Откуда пришел клиент, не заполненно";
+    //     return this.openNotificationValidationError(msg);
+    //   }
+    //   if (work_begin_with_him === undefined) {
+    //     this.setState({ currentStep: 4 });
+    //     msg = "Как началась работа с клиентом, не заполненно";
+    //     return this.openNotificationValidationError(msg);
+    //   }
+    //   let postedBy = isAuthenticated().direct._id;
+    //   // branch_office_sity,
+    //   // agentHill,
+    //   // oblastAgent
+    //   let newAgent = {
+    //     OGRN,
+    //     agentGeo,
+    //     manageAdd,
+    //     specialications,
+    //     postedBy,
+    //     TechMap,
+    //     name,
+    //     tags,
+    //     full_name,
+    //     INN,
+    //     company_desription,
+    //     legal_address,
+    //     actual_address,
+    //     email,
+    //     site,
+    //     instagram,
+    //     phone,
+    //     WhereFromClient,
+    //     work_begin_with_him,
+    //     individual_conditions_job,
+    //     pay_character,
+    //     hill:agentHill,
+    //   };
+    //   let AgentFeatus;
+    //   FilteredGeo.push(branch_officeGeo);
+    //   if (branch_office === undefined) {
+    //     AgentFeatus = undefined;
+    //   } else {
+    //     AgentFeatus = {
+    //       region: branch_officeGeo,
+    //       sity: branch_office_sity,
+    //       name: branch_office,
+    //       number_phone: number_phone
+    //     };
+    //   }
+    //   let AgentPeopel = {
+    //     position,
+    //     features_job,
+    //     bio,
+    //     phoneAt_peopel,
+    //     mail_at_peopel,
+    //     checkedList
+    //   };
+    //   let body = {
+    //     AgentFeatus,
+    //     AgentPeopel,
+    //     newAgent,
+    //     whoAdd
+    //   };
+    //   NewAgentAddRegulatoryPosition(body).then(data => {
+    //     message.success("Агент зарегестрирован!");
+    //     this.setState({
+    //       currentStep: 0,
+    //       company: "",
+    //       name: undefined,
+    //       full_name: undefined,
+    //       phone: undefined,
+    //       INN: undefined,
+    //       general_director: undefined,
+    //       OGRN: undefined,
+    //       email: undefined,
+    //       any: undefined,
+    //       legal_address: undefined,
+    //       actual_address: undefined,
+    //       payment_account: undefined,
+    //       specialications: [],
+    //       manageAdd: [],
+    //       company_desription: "",
+    //       phone: undefined,
+    //       instagram: undefined,
+    //       site: undefined,
+    //       email: undefined,
+    //       legal_address: undefined,
+    //       company_desription: undefined,
+    //       mail_at_peopel: undefined,
+    //       phoneAt_peopel: undefined,
+    //       bio: undefined,
+    //       features_job: undefined,
+    //       position: undefined,
+    //       pay_character: undefined,
+    //       individual_conditions_job: undefined,
+    //       work_begin_with_him: undefined,
+    //       tags: [],
+    //       branch_officeGeo: [],
+    //       branch_office: undefined,
+    //       WhereFromClient: undefined,
+    //       agentGeo: [],
+    //       TechAgent: [],
+    //       checkedList: defaultCheckedList,
+    //       branch_office_sity: undefined,
+    //       agentHill: undefined,
+    //       oblastAgent: undefined,
+    //       branch_officeGeo: undefined,
+    //       number_phone: undefined
+    //     });
+    //   });
+    // } else {
+    //   let managerId = isAuthenticated().direct._id;
 
-      let {
-        OGRN,
-        agentGeo,
-        manageAdd,
-        specialications,
-        postedBy,
-        TechMap,
-        name,
-        full_name,
-        INN,
-        company_desription,
-        legal_address,
-        actual_address,
-        email,
-        site,
-        instagram,
-        phone,
-        WhereFromClient,
-        work_begin_with_him,
-        individual_conditions_job,
-        pay_character,
-        branch_office_sity,
-        agentHill,
-        oblastAgent,
-        branch_office,
-        branch_officeGeo,
-        number_phone,
-        time,
-        mounth,
-        year,
-        status,
-        importance,
-        description,
-        tags,
-        diff,
-        position,
-        features_job,
-        bio,
-        phoneAt_peopel,
-        mail_at_peopel,
-        checkedList,
-        userRole
-      } = this.state;
-      let msg;
-      if (name === undefined) {
-        msg = "Имя является обязатльным параметром";
-        return this.openNotificationValidationError(msg);
-      }
-      if (full_name === undefined) {
-        msg = "Полное имя является обязатльным параметром";
-        return this.openNotificationValidationError(msg);
-      }
-      if (INN === undefined) {
-        msg = "Введите ИНН ";
-        return this.openNotificationValidationError(msg);
-      }
-      if (company_desription === undefined) {
-        msg = "Описание компании не найдено, похоже вы забыли его добавить";
-        return this.openNotificationValidationError(msg);
-      }
-      if (WhereFromClient === undefined) {
-        msg = "Откуда пришел клиент, не заполненно";
-        return this.openNotificationValidationError(msg);
-      }
-      if (work_begin_with_him === undefined) {
-        msg = "Как началась работа с клиентом, не заполненно";
-        return this.openNotificationValidationError(msg);
-      }
-      let newAgent = {
-        agentGeo,
-        manageAdd,
-        specialications,
-        postedBy,
-        TechMap,
-        name,
-        tags,
-        full_name,
-        INN,
-        company_desription,
-        legal_address,
-        actual_address,
-        email,
-        site,
-        instagram,
-        phone,
-        WhereFromClient,
-        work_begin_with_him,
-        individual_conditions_job,
-        pay_character,
-        agentHill,
-        oblastAgent
+    //   let {
+    //     OGRN,
+    //     agentGeo,
+    //     manageAdd,
+    //     specialications,
+    //     postedBy,
+    //     TechMap,
+    //     name,
+    //     full_name,
+    //     INN,
+    //     company_desription,
+    //     legal_address,
+    //     actual_address,
+    //     email,
+    //     site,
+    //     instagram,
+    //     phone,
+    //     WhereFromClient,
+    //     work_begin_with_him,
+    //     individual_conditions_job,
+    //     pay_character,
+    //     branch_office_sity,
+    //     agentHill,
+    //     oblastAgent,
+    //     branch_office,
+    //     branch_officeGeo,
+    //     number_phone,
+    //     time,
+    //     mounth,
+    //     year,
+    //     status,
+    //     importance,
+    //     description,
+    //     tags,
+    //     diff,
+    //     position,
+    //     features_job,
+    //     bio,
+    //     phoneAt_peopel,
+    //     mail_at_peopel,
+    //     checkedList,
+    //     userRole
+    //   } = this.state;
+    //   let msg;
+    //   if (name === undefined) {
+    //     msg = "Имя является обязатльным параметром";
+    //     return this.openNotificationValidationError(msg);
+    //   }
+    //   if (full_name === undefined) {
+    //     msg = "Полное имя является обязатльным параметром";
+    //     return this.openNotificationValidationError(msg);
+    //   }
+    //   if (INN === undefined) {
+    //     msg = "Введите ИНН ";
+    //     return this.openNotificationValidationError(msg);
+    //   }
+    //   if (company_desription === undefined) {
+    //     msg = "Описание компании не найдено, похоже вы забыли его добавить";
+    //     return this.openNotificationValidationError(msg);
+    //   }
+    //   if (WhereFromClient === undefined) {
+    //     msg = "Откуда пришел клиент, не заполненно";
+    //     return this.openNotificationValidationError(msg);
+    //   }
+    //   if (work_begin_with_him === undefined) {
+    //     msg = "Как началась работа с клиентом, не заполненно";
+    //     return this.openNotificationValidationError(msg);
+    //   }
+    //   let newAgent = {
+    //     agentGeo,
+    //     manageAdd,
+    //     specialications,
+    //     postedBy,
+    //     TechMap,
+    //     name,
+    //     tags,
+    //     full_name,
+    //     INN,
+    //     company_desription,
+    //     legal_address,
+    //     actual_address,
+    //     email,
+    //     site,
+    //     instagram,
+    //     phone,
+    //     WhereFromClient,
+    //     work_begin_with_him,
+    //     individual_conditions_job,
+    //     pay_character,
+    //     agentHill,
+    //     oblastAgent
 
-      };
-      let AgentFeatus;
-      if (branch_office === undefined) {
-        AgentFeatus = {};
-      } else {
-        AgentFeatus = {
-          region: branch_officeGeo,
-          sity: branch_office_sity,
-          name: branch_office,
-          number_phone: number_phone
-        };
-      }
-      let AgentPeopel = {
-        position,
-        features_job,
-        bio,
-        phoneAt_peopel,
-        mail_at_peopel,
-        checkedList
-      };
-      let todo = {
-        time,
-        mounth,
-        year,
-        status,
-        importance,
-        description,
-        tags,
-        diff
-      };
-      whoAdd = {
-        name: isAuthenticated().direct.name,
-        _id: isAuthenticated().direct._id
-      };
-      let body = {
-        newAgent,
-        AgentPeopel,
-        AgentFeatus,
-        todo,
-        whoAdd
-      };
-      NewAgentAddManager(body).then(data => {
-        message.success("Агент добавлен!");
-        this.setState({
-          currentStep: 0,
-          company: "",
-          name: undefined,
-          full_name: undefined,
-          phone: undefined,
-          INN: undefined,
-          general_director: undefined,
-          OGRN: undefined,
-          email: undefined,
-          any: undefined,
-          legal_address: undefined,
-          actual_address: undefined,
-          payment_account: undefined,
-          inputQality: [],
-          specialications: [],
-          manageList: [],
-          manageAdd: [],
-          company_desription: "",
-          phone: undefined,
-          instagram: undefined,
-          site: undefined,
-          email: undefined,
-          legal_address: undefined,
-          company_desription: undefined,
-          mail_at_peopel: undefined,
-          phoneAt_peopel: undefined,
-          bio: undefined,
-          features_job: undefined,
-          position: undefined,
-          pay_character: undefined,
-          individual_conditions_job: undefined,
-          work_begin_with_him: undefined,
-          tags: [],
-          branch_officeGeo: [],
-          branch_office: undefined,
-          WhereFromClient: undefined,
-          agentGeo: [],
-          TechAgent: [],
-          checkedList: defaultCheckedList,
-          branch_office_sity: undefined,
-          agentHill: undefined,
-          oblastAgent: undefined,
-          branch_officeGeo: undefined,
-          number_phone: undefined
-        });
-      });
-    }
+    //   };
+    //   let AgentFeatus;
+    //   if (branch_office === undefined) {
+    //     AgentFeatus = {};
+    //   } else {
+    //     AgentFeatus = {
+    //       region: branch_officeGeo,
+    //       sity: branch_office_sity,
+    //       name: branch_office,
+    //       number_phone: number_phone
+    //     };
+    //   }
+    //   let AgentPeopel = {
+    //     position,
+    //     features_job,
+    //     bio,
+    //     phoneAt_peopel,
+    //     mail_at_peopel,
+    //     checkedList
+    //   };
+    //   let todo = {
+    //     time,
+    //     mounth,
+    //     year,
+    //     status,
+    //     importance,
+    //     description,
+    //     tags,
+    //     diff
+    //   };
+    //   whoAdd = {
+    //     name: isAuthenticated().direct.name,
+    //     _id: isAuthenticated().direct._id
+    //   };
+    //   let body = {
+    //     newAgent,
+    //     AgentPeopel,
+    //     AgentFeatus,
+    //     todo,
+    //     whoAdd
+    //   };
+    //   NewAgentAddManager(body).then(data => {
+    //     message.success("Агент добавлен!");
+    //     this.setState({
+    //       currentStep: 0,
+    //       company: "",
+    //       name: undefined,
+    //       full_name: undefined,
+    //       phone: undefined,
+    //       INN: undefined,
+    //       general_director: undefined,
+    //       OGRN: undefined,
+    //       email: undefined,
+    //       any: undefined,
+    //       legal_address: undefined,
+    //       actual_address: undefined,
+    //       payment_account: undefined,
+    //       inputQality: [],
+    //       specialications: [],
+    //       manageList: [],
+    //       manageAdd: [],
+    //       company_desription: "",
+    //       phone: undefined,
+    //       instagram: undefined,
+    //       site: undefined,
+    //       email: undefined,
+    //       legal_address: undefined,
+    //       company_desription: undefined,
+    //       mail_at_peopel: undefined,
+    //       phoneAt_peopel: undefined,
+    //       bio: undefined,
+    //       features_job: undefined,
+    //       position: undefined,
+    //       pay_character: undefined,
+    //       individual_conditions_job: undefined,
+    //       work_begin_with_him: undefined,
+    //       tags: [],
+    //       branch_officeGeo: [],
+    //       branch_office: undefined,
+    //       WhereFromClient: undefined,
+    //       agentGeo: [],
+    //       TechAgent: [],
+    //       checkedList: defaultCheckedList,
+    //       branch_office_sity: undefined,
+    //       agentHill: undefined,
+    //       oblastAgent: undefined,
+    //       branch_officeGeo: undefined,
+    //       number_phone: undefined
+    //     });
+    //   });
+    // }
   };
 
   handleChange = name => event => {
@@ -914,8 +1022,8 @@ export default class NewAgent extends Component {
     const TechAgent = this.state.TechAgent.filter(tech => tech !== techRemove);
     this.setState({ TechAgent });
   };
-  handleSelectOblastbranch_officeGeo = branch_officeGeo => {
-    this.setState({ branch_officeGeo });
+  handleSelectOblastbranch_officeGeo = (branch_officeGeo,activeState) => {
+    this.setState({ [activeState]: branch_officeGeo });
   };
   TechMap = tech => {
     const tagElem = (
@@ -936,6 +1044,29 @@ export default class NewAgent extends Component {
       </span>
     );
   };
+  addPeopel = () =>{
+    let { peopelResults } = this.state
+    peopelResults.push({})
+    this.setState({peopelResults})
+  }
+  deleteInputNewPeopel = (elInc) =>{
+    let newSect = [];
+    let { peopelResults } = this.state;
+    peopelResults.map((serct, i) => (i === elInc ? null : newSect.push(serct)));
+    this.setState({ peopelResults: newSect });
+
+  }
+  addbranch_office = () =>{
+    let {GeoOficeHelper} = this.state
+    GeoOficeHelper.push({})
+    this.setState({GeoOficeHelper})
+  }
+  deletebranch_office = (elInc) =>{
+    let newSect = [];
+    let { GeoOficeHelper } = this.state;
+    GeoOficeHelper.map((serct, i) => (i === elInc ? null : newSect.push(serct)));
+    this.setState({ GeoOficeHelper: newSect });
+  }
   render() {
     let techChild = this.state.TechAgent.map(this.TechMap);
 
@@ -963,7 +1094,9 @@ export default class NewAgent extends Component {
           <div className="">
             <div className="row justify-content-between">
               <div className="col-8">
-                {" "}
+              <h1 className="input_new_agent agentnew_front">
+              Компания
+                    </h1>
                 <p className="input_new_agent agentnew_front">Короткое имя</p>
                 <Input
                   addonBefore={<div className="required-start">*</div>}
@@ -1038,56 +1171,25 @@ export default class NewAgent extends Component {
                 />{" "}
                 <hr className="input_new_agent" />
                 <div className="input_helper">
-                  <div>
-                    <p className="input_new_agent agentnew_front">
+                <h1 className="input_new_agent agentnew_front">
                       Подразделения
-                    </p>
-                    <Input
-                      className="input_new_agent "
-                      placeholder="Подразделения (филиалы)"
-                      value={this.state.branch_office}
-                      onChange={this.handleChange("branch_office")}
-                    />
-                    <Select
-                      style={{ width: "auto" }}
-                      className="input_new_agent"
-                      mode="multiple"
-                      placeholder="Выберите область"
-                      notFoundContent="Введите название области"
-                      value={this.state.branch_officeGeo}
-                      onChange={this.handleSelectOblastbranch_officeGeo}
-                      onSearch={debounce(this.RussiaOblastHelper, 450)}
-                    >
-                      {this.state.oblast.map(map => (
-                        <Select.Option key={map.oblast} value={map.oblast}>
-                          {map.oblast}
-                        </Select.Option>
+                    </h1>
+                <PlusCircleOutlined className="input_new_agent" onClick={() =>this.addbranch_office()} style={{fontSize:"32px",color:"#2196F3"}} />
+
+                    {this.state.GeoOficeHelper.lenght === 0 ?(null):(
+                      <>
+                      {this.state.GeoOficeHelper.map((item,i) => (
+                        <>
+                        <div>
+                          {/* {console.log(this.state.AgentOffice[i])} */}
+                          {/* CommonProps={this.state.AgentOffice[i] === undefined ? (null):(this.state.AgentOffice[i])}  */}
+                  <NewAgentBracnchOfice CommonProps={this.state.AgentOffice[i]}   fabricState={`${i}`}/>
+                  
+                  </div> 
+                        </>
                       ))}
-                    </Select>
-                    {/* branch_office */}
-                    <Select
-                      style={{ width: "auto" }}
-                      className="input_new_agent"
-                      mode="multiple"
-                      placeholder="Выберите город"
-                      notFoundContent="Введите название города"
-                      value={this.state.branch_office_sity}
-                      onChange={this.sitiBranchAgentHelper}
-                      onSearch={debounce(this.RussiaSityHelper, 450)}
-                    >
-                      {this.state.russiaCity.map(map => (
-                        <Select.Option key={map.city} value={map.city}>
-                          {map.city}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                    <Input
-                      className="input_new_agent "
-                      placeholder="Номер телефона"
-                      value={this.state.number_phone}
-                      onChange={this.handleChange("number_phone")}
-                    />
-                  </div>
+                      </>
+                    )} 
                 </div>
               </div>
             </div>
@@ -1100,9 +1202,11 @@ export default class NewAgent extends Component {
           <div className="">
             <div className="row justify-content-between">
               <div className="col-8">
-                {" "}
+              <h1 className="input_new_agent agentnew_front">
+              Комментарии
+                    </h1>
                 <p className="input_new_agent agentnew_front">Описание</p>
-                <Input
+                <TextArea
                   size="large"
                   value={this.state.company_desription}
                   onChange={this.handleChange("company_desription")}
@@ -1140,6 +1244,9 @@ export default class NewAgent extends Component {
           <>
             <div className="row justify-content-between">
               <div className="col-8">
+              <h1 className="input_new_agent agentnew_front">
+              Адрес/контакты
+                    </h1>
                 <p className="input_new_agent agentnew_front">
                   Юридический адрес
                 </p>
@@ -1191,7 +1298,7 @@ export default class NewAgent extends Component {
                   onChange={this.handleChange("phone")}
                   className="input_new_agent"
                   placeholder="Общий тел:"
-                />
+                /> 
               </div>
             </div>
           </>
@@ -1203,56 +1310,30 @@ export default class NewAgent extends Component {
           <>
             <div className="row justify-content-between">
               <div className="col-8">
-                <p className="input_new_agent agentnew_front">Должность</p>
-                <Input
-                  size="large"
-                  onChange={this.handleChange("position")}
-                  value={this.state.position}
-                  className="input_new_agent "
-                  placeholder="Должность:"
-                />
-                <p className="input_new_agent agentnew_front">
-                  Особености работы
-                </p>
-                <Input
-                  size="large"
-                  onChange={this.handleChange("features_job")}
-                  value={this.state.features_job}
-                  className="input_new_agent "
-                  placeholder="Особености работы:"
-                />
-                <p className="input_new_agent agentnew_front">ФИО</p>
-                <Input
-                  onChange={this.handleChange("bio")}
-                  value={this.state.bio}
-                  size="large"
-                  className="input_new_agent "
-                  placeholder="ФИО:"
-                />
-                <p className="input_new_agent agentnew_front">Телефон</p>
-                <Input
-                  size="large"
-                  onChange={this.handleChange("phoneAt_peopel")}
-                  value={this.state.phoneAt_peopel}
-                  className="input_new_agent "
-                  placeholder="телефон:"
-                />
-                <p className="input_new_agent agentnew_front">Email</p>
-                <Input
-                  size="large"
-                  onChange={this.handleChange("mail_at_peopel")}
-                  value={this.state.mail_at_peopel}
-                  className="input_new_agent "
-                  placeholder="почта:"
-                />
-                <p className="input_new_agent agentnew_front">
+
+                <h1 className="input_new_agent agentnew_front" >Контактные Лица</h1>
+                {this.state.peopelResults.length === 0 ? (<>  <div><PlusCircleOutlined onClick={() =>this.addPeopel()} style={{fontSize:"32px",color:"#2196F3"}} /></div>    
+        </>):(<div>{this.state.peopelResults.map((el,i) =>( 
+          <div>
+              <div>
+             <NewAgentPeopel CommonProps={this.state.AgentPeopel[i]} fabricState={i}/>
+             <DeleteOutlined className="input_new_agent" onClick={() =>this.deleteInputNewPeopel(i)} style={{fontSize:"25px",color:"#e91e63c4"}}/>
+        </div>
+
+    </div>
+      ))}
+      <PlusCircleOutlined onClick={() =>this.addPeopel()} style={{fontSize:"32px",color:"#2196F3"}} />
+      </div>) }
+         
+              
+                {/* <p className="input_new_agent agentnew_front">
                   Предпочитаемый способ связи
                 </p>
                 <CheckboxGroup
                   options={plainOptions}
                   onChange={this.onChangeGroup}
                   value={this.state.checkedList}
-                />
+                /> */}
               </div>
             </div>
           </>
@@ -1265,10 +1346,13 @@ export default class NewAgent extends Component {
           <>
             <div className="row justify-content-between">
               <div className="col-8">
+              <h1 className="input_new_agent agentnew_front">
+              Начало работы
+                    </h1>
                 <p className="input_new_agent agentnew_front">
-                  Откуда пришел клиен
+                  Откуда пришел клиент
                 </p>
-                <Input
+                <TextArea
                   size="large"
                   onChange={this.handleChange("WhereFromClient")}
                   value={this.state.WhereFromClient}
@@ -1279,7 +1363,7 @@ export default class NewAgent extends Component {
                 <p className="input_new_agent agentnew_front">
                   Как начиналась с ним работа
                 </p>
-                <Input
+                <TextArea
                   size="large"
                   className="input_new_agent"
                   onChange={this.handleChange("work_begin_with_him")}
@@ -1340,6 +1424,9 @@ export default class NewAgent extends Component {
           <>
             <div className="row justify-content-between">
               <div className="col-8">
+              <h1 className="input_new_agent agentnew_front">
+              Особые пометки
+                    </h1>
                 <TextArea
                   style={{ width: "100%" }}
                   className="input_new_agent"
@@ -1348,7 +1435,7 @@ export default class NewAgent extends Component {
                   placeholder=" Индивидуальные условия работы с клиентом:"
                   allowClear
                 />
-                <Input
+                <TextArea
                   size="large"
                   className="input_new_agent"
                   value={this.state.pay_character}
@@ -1376,13 +1463,33 @@ export default class NewAgent extends Component {
           </div>
           <div className="steps-action">
             {this.state.currentStep < steps.length - 1 && (
-              <Button type="primary" onClick={() => this.nextStep()}>
+              <>
+              {this.state.currentStep === 0 ? (<Button type="primary" onClick={() => this.nextStepOne()}>
                 Следующий шаг
-              </Button>
+              </Button>):(null)}
+              {this.state.currentStep === 3 ? (<Button type="primary" onClick={() => this.nextStepfour()}>
+                Следующий шаг
+              </Button>):(null)}
+              {this.state.currentStep === 1 ? (<Button type="primary" onClick={() => this.nextStep()}>
+                Следующий шаг
+              </Button>):(null)}
+              {this.state.currentStep === 2 ? (<Button type="primary" onClick={() => this.nextStep()}>
+                Следующий шаг
+              </Button>):(null)}
+              {this.state.currentStep === 4 ? (<Button type="primary" onClick={() => this.nextStep()}>
+                Следующий шаг
+              </Button>):(null)}
+              {this.state.currentStep === 5 ? (<Button type="primary" onClick={() => this.nextStep()}>
+                Следующий шаг
+              </Button>):(null)}
+              {this.state.currentStep === 6 ? (<Button type="primary" onClick={() => this.nextStep()}>
+                Следующий шаг
+              </Button>):(null)}
+              </>
+          
             )}
             {this.state.currentStep === steps.length - 1 && (
               <Button type="primary" onClick={this.newAgentClick}>
-                {/* message.success("Агент зарегестрирован!") */}
                 Зарегестрировать
               </Button>
             )}
