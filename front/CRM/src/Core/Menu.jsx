@@ -311,6 +311,11 @@ class MenuMain extends React.Component {
                                 <span>Менеджеры</span>
                               </Link>
                             </Menu.Item>
+                            <Menu.Item key="96">
+                              <Link to="/company/permission">
+                                <span>Управление компанией</span>
+                              </Link>
+                            </Menu.Item>
                           </SubMenu>
                         ) : (
                           ""

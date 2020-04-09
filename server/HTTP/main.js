@@ -51,6 +51,7 @@ const StaticEnterprise = require('./routers/StatisticEnterprise.js')
 const Tech = require("./routers/TechAgent.js")
 const ActiveUser = require("./routers/ActiveUsers.js")
 const AgentHuman = require('./routers/HumanAgent')
+const EnterPrise = require("./routers/Enterprise")
 app.use(cors())
 
 
@@ -60,6 +61,8 @@ app.use(expressValidator())
 
 // 
 // app.use("/",logger)
+app.use("/", EnterPrise)
+
 app.use("/", PushNotifications)
 app.use("/", DirectAuthRoutes)
 app.use("/", DirectCompanyhRoutes)

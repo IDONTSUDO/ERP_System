@@ -50,7 +50,7 @@ import ControlAgents from "../ControlAgents/ControlAgents.jsx";
 import AgentHuman from "../AgentHelper/Agent-Human.jsx";
 import AgentBranch from "../AgentHelper/AgentBranch";
 
-import EnterprisePermision from "../CompanySettings/EnterprisePermision.jsx";
+import CompanyPermission from "../CompanySettings/EnterprisePermision.jsx";
 import StructurTabel from "../CompanySettings/CompanyStructur.jsx";
 import CompanySetting from "../CompanySettings/CompanySetting.jsx";
 const MainRouter = () => (
@@ -68,7 +68,7 @@ const MainRouter = () => (
       <PrivateRoute
         exact
         path="/company/permission"
-        component={EnterprisePermision}
+        component={CompanyPermission}
       />
       <PrivateRoute exact path="/user/:userId" component={Profile} />
       <PrivateRoute exact path="/statistic/:userId" component={MyStatistic} />
