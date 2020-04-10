@@ -116,6 +116,7 @@ exports.getMyListAgent = async (req, res) => {
   });
 };
 exports.getAgentProfile = async (req, res) => {
+  console.log(req.agent)
   res.status(200).json(req.agent);
 };
 exports.SearchAgent = async (req, res) => {
@@ -608,7 +609,6 @@ exports.addAgentAtManager = async (req, res, next) => {
 
 exports.NewAgentAtRegularoryPosition = async (req, res, next) => {
   let { newAgent } = req.body;
-  console.log(req.body);
   if (newAgent.tags.length === 0) {
     delete newAgent.tags;
   }
@@ -631,46 +631,30 @@ exports.AgentAtTodoCron = async (req, res, next) => {
 };
 exports.AgentAtPeopel = async (req, res, next) => {
   let { AgentPeopel } = req.body;
-  if (AgentPeopel.bio === undefined) {
+  if (AgentPeopel === undefined) {
     return next();
   } else {
-    if (AgentPeopel.bio.length > 0) {
-      let agnHum = new AgentHuman(AgentPeopel);
-      agnHum.AgentBy = req.agent._id;
-      await agnHum.save((err, result) => {
-        if (err) {
-          return null;
-        }
-
-        req.peopelId = result._id;
-        return next();
-      });
-    } else {
-      return next();
-    }
+      for(el of AgentPeopel){
+        let agnHum = new AgentHuman(el);
+        agnHum.save()
+      }
     return next();
   }
 };
 exports.AgentAtBrachOfice = async (req, res, next) => {
-  let { AgentFeatus } = req.body;
-
-  if (AgentFeatus !== undefined) {
-    let AgentBranch = new AgentOffice(AgentFeatus);
-    AgentBranch.AgentBy = req.agent._id;
-    await AgentBranch.save((err, result) => {
-      if (err) {
-        return null;
-      }
-
-      return next();
-    });
+  let { AgentBranch } = req.body;
+  if (AgentBranch !== undefined) {
+    for(el of AgentBranch){
+      let branch = new AgentOffice(el);
+      branch.save()
+    }
+    return next()
   } else {
     return next();
   }
 };
 exports.AgentAtTodo = async (req, res, next) => {
   let { todo } = req.body;
- 
   let agent = req.agent;
   let tod = new Todo(todo);
   tod.title = agent.name;

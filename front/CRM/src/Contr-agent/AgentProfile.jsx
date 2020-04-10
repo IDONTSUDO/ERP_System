@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import ReactTags from "react-tag-autocomplete";
+// import WorkBranch from "../Components/agent/WorkBranch.jsx"
+import AgentHuman from "../AgentHelper/Agent-Human.jsx"
 import {
   GetAgentProfile,
   list,
   AddManageForAgent,
-  PricedAtManage
+  PricedAtManage,
 } from "../Api/Http";
 import {
   Button,
@@ -14,15 +16,17 @@ import {
   Tabs,
   Tag,
   Select,
-  Switch
+  Switch,
+  Typography,
+  Collapse,
 } from "antd";
 import ChartAgent from "../Components/ChartAgent";
 import { isAuthenticated } from "../Api/Auth";
 import { Link } from "react-router-dom";
 const { TabPane } = Tabs;
-
+const { Title, Paragraph, Text } = Typography;
 const { Option, OptGroup } = Select;
-
+const { Panel } = Collapse;
 export default class AgentProfile extends Component {
   constructor() {
     super();
@@ -44,17 +48,20 @@ export default class AgentProfile extends Component {
       actual_address: "",
       payment_account: "",
       redirectTo: false,
-      TagsStart: []
+      TagsStart: [],
+      agentId:""
     };
   }
 
   componentDidMount() {
     const agentId = this.props.match.params.agentId;
     let TagsArray = [];
-    GetAgentProfile(agentId).then(data => {
+    this.setState({agentId})
+    GetAgentProfile(agentId).then((data) => {
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
+        console.log(data);
         this.setState({
           id: data._id,
           name: data.name,
@@ -68,14 +75,13 @@ export default class AgentProfile extends Component {
           any: data.any,
           legal_address: data.legal_address,
           actual_address: data.actual_address,
-          payment_account: data.payment_account
+          payment_account: data.payment_account,
         });
 
         if (data.tags === "none") {
           this.setState({ tags: undefined });
         } else {
-          console.log(data.tags);
-          data.tags.map(tag => {
+          data.tags.map((tag) => {
             TagsArray.push(tag.name);
           });
 
@@ -83,7 +89,7 @@ export default class AgentProfile extends Component {
         }
       }
     });
-    list().then(data => {
+    list().then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
@@ -92,7 +98,7 @@ export default class AgentProfile extends Component {
           let ItsWorkerAtValid = [
             "Директор",
             "Управляющий",
-            "Менеджер"
+            "Менеджер",
           ].includes(us.role);
           if (ItsWorkerAtValid) {
             workerList.push(us);
@@ -112,16 +118,16 @@ export default class AgentProfile extends Component {
     const tags = [].concat(this.state.tags, tag);
     this.setState({ tags });
   }
-  handleChange = date => {
+  handleChange = (date) => {
     this.setState({
-      startDate: date
+      startDate: date,
     });
   };
-  handleAction = name => event => {
+  handleAction = (name) => (event) => {
     this.setState({ error: "" });
     this.setState({ [name]: event.target.value });
   };
-  clickSubmit = event => {
+  clickSubmit = (event) => {
     event.preventDefault();
     this.setState({ loading: true });
     let msg;
@@ -153,14 +159,14 @@ export default class AgentProfile extends Component {
           }
         }
       }
-      let posted_by = isAuthenticated().direct._id
-      
+      let posted_by = isAuthenticated().direct._id;
+
       let body = {
         UserExit,
         userArray,
-        posted_by
+        posted_by,
       };
-      AddManageForAgent(body, id).then(data => {
+      AddManageForAgent(body, id).then((data) => {
         if (data.error) {
           this.openNotificationError();
         } else {
@@ -170,34 +176,92 @@ export default class AgentProfile extends Component {
       });
     }
   };
-
   forceUpdate() {
     const agentId = this.props.match.params.agentId;
-    GetAgentProfile(agentId).then(data => {
+    GetAgentProfile(agentId).then((data) => {
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
+        console.log(data)
         let TagsArray = [];
+        let {
+          INN,
+          OGRN,
+          TechAgent,
+          UUID,
+          WhereFromClient,
+          _id,
+          active,
+          actual_address,
+          any,
+          company,
+          company_desription,
+          email,
+          full_name,
+          general_director,
+          hill,
+          Date,
+          individual_conditions_job,
+          legal_address,
+          name,
+          partners,
+          pay_character,
+          payment_account,
+          phone,
+          production,
+          region,
+          site,
+          specialications,
+          status,
+          tags,
+          work_begin_with_him,
+        } = data;
+        // Date: "2020-03-25T08:45:26.067Z"
+
+        // actual_address: "уйццйу"
+        // any: "none"
+        // company: "none"
+        // company_desription: "йуцуйцуцййуц"
+        // email: "уцйцйу"
+        // full_name: "wqeewqwe"
+        // general_director: "none"
+        // hill: Array [ "Куйбышев" ]
+        // individual_conditions_job: "цйуц"
+        // legal_address: "йцуйц"
+        // name: "eqew"
+        // partners: Array []
+        // pay_character: "йцууцйцйу"
+        // payment_account: "none"
+        // phone: "йуцуцу"
+        // postedBy: "5e72142b51c3d152ecf8f16d"
+        // production: Array []
+        // region: Array [ "none" ]
+        // site: "йцууцй"
+        // sity: Array [ "none" ]
+        // specialications: Array [ "уйцуйцуц" ]
+        // status: "none"
+        // tags: Array [ {…} ]
+        // work_begin_with_him: "йцуцу"
         this.setState({
-          id: data._id,
-          name: data.name,
-          email: data.email,
-          company: data.company,
-          full_name: data.full_name,
-          phone: data.phone,
-          INN: data.INN,
-          general_director: data.general_director,
-          OGRN: data.OGRN,
-          any: data.any,
-          legal_address: data.legal_address,
-          actual_address: data.actual_address,
-          payment_account: data.payment_account,
-          result: []
+          // id: data._id,
+          // name: data.name,
+          // email: data.email,
+          // company: data.company,
+          // full_name: data.full_name,
+          // phone: data.phone,
+          // INN: data.INN,
+          // general_director: data.general_director,
+          // OGRN: data.OGRN,
+          // any: data.any,
+          // legal_address: data.legal_address,
+          // actual_address: data.actual_address,
+          // payment_account: data.payment_account,
+          // result: []
         });
         if (data.tags === "none") {
           this.setState({ tags: undefined });
         } else {
-          data.tags.map(tag => {
+          data.tags.map((tag) => {
             TagsArray.push(tag.name);
           });
 
@@ -210,22 +274,22 @@ export default class AgentProfile extends Component {
   openNotificationError() {
     notification.open({
       message: "Ой что то пошло не так, мне жаль",
-      icon: <Icon type="frown" style={{ color: "#108ee9" }} />
+      icon: <Icon type="frown" style={{ color: "#108ee9" }} />,
     });
   }
   openNotificationValid(msg) {
     notification.open({
       message: `${msg}`,
-      icon: <Icon type="frown" style={{ color: "#108ee9" }} />
+      icon: <Icon type="frown" style={{ color: "#108ee9" }} />,
     });
   }
   openNotificationNewUserList() {
     notification.open({
       message: "Назначено",
-      icon: <Icon type="smile" style={{ color: "#108ee9" }} />
+      icon: <Icon type="smile" style={{ color: "#108ee9" }} />,
     });
   }
-  ChangeSelect = inputData => {
+  ChangeSelect = (inputData) => {
     this.setState({ tags: inputData });
   };
   render() {
@@ -244,7 +308,7 @@ export default class AgentProfile extends Component {
       actual_address,
       payment_account,
       tags,
-      id
+      id,
     } = this.state;
     return (
       <div>
@@ -252,49 +316,90 @@ export default class AgentProfile extends Component {
           <div className="">
             <Tabs type="card">
               <TabPane tab="Общая информация" key="1">
-                <Descriptions
-                  title="Корпаративная  информация"
-                  layout="vertical"
+                <div
+                  className="container"
+                  style={{
+                    justifyContent: "space-between",
+                    marginTop: "50px",
+                    alignItems: "baseline",
+                    flexDirection: "column",
+                  }}
                 >
-                  <Descriptions.Item label="Имя компании">
-                    {name === "none" ? (
-                      <Tag color="geekblue">{name.toUpperCase()}</Tag>
-                    ) : (
-                      <div>{name}</div>
-                    )}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Телефон">
-                    {phone === "none" ? (
-                      <Tag color="geekblue">{phone.toUpperCase()}</Tag>
-                    ) : (
-                      <div>{phone}</div>
-                    )}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Компания">
-                    {company === "none" ? (
-                      <Tag color="geekblue">{company.toUpperCase()}</Tag>
-                    ) : (
-                      <div>{company}</div>
-                    )}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Адрес" span={2}>
-                    {legal_address === "none" ? (
-                      <Tag color="geekblue">{legal_address.toUpperCase()}</Tag>
-                    ) : (
-                      <div>{legal_address}</div>
-                    )}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Генеральный директор">
-                    {general_director === "none" ? (
-                      <Tag color="geekblue">
-                        {general_director.toUpperCase()}
-                      </Tag>
-                    ) : (
-                      <div>{general_director}</div>
-                    )}
-                  </Descriptions.Item>
-                </Descriptions>
-                <div style={{ display: "flex" }}>
+                  <Typography>
+                    <Title>ОАО Сварог</Title>
+                    <Collapse style={{width: "70vw"}} defaultActiveKey={["1"]}>
+                      <Panel
+                        header={
+                          <>
+                            <b>Огранизационные данные</b>
+                          </>
+                        }
+                      >
+                        <p></p>
+                      </Panel>
+                      <Panel
+                        header={
+                          <>
+                            <b>География</b>
+                          </>
+                        }
+                        key="2"
+                      >
+                        <p></p>
+                      </Panel>
+                      <Panel
+                        header={
+                          <>
+                            <b>Начало работы</b>
+                          </>
+                        }
+                        key="3"
+                      >
+                        <p></p>
+                      </Panel>
+                      <Panel
+                        header={
+                          <>
+                            <b>Контактные лица</b>
+                          </>
+                        }
+                        key="4"
+                      >
+                        <p></p>
+                      </Panel>
+                      <Panel
+                        header={
+                          <>
+                            <b>Особые пометки</b>
+                          </>
+                        }
+                        key="5"
+                      >
+                        <p></p>
+                      </Panel>
+                      <Panel
+                        header={
+                          <>
+                            <b>Офисы</b>
+                          </>
+                        }
+                        key="6"
+                      >
+                      </Panel>
+                      <Panel
+                        header={
+                          <>
+                            <b>Люди</b>
+                          </>
+                        }
+                        key="7"
+                      >
+                        
+                      </Panel>
+                      
+                    </Collapse>
+                  </Typography>
+                  <div style={{ display: "flex" }}>
                   <Select
                     mode="multiple"
                     // maxTagTextLength={1}
@@ -318,6 +423,7 @@ export default class AgentProfile extends Component {
                   <Button>
                     <Link to={`/agent/tasks/${id}`}>Дела по контр агенту</Link>
                   </Button>
+                </div>
                 </div>
               </TabPane>
               <TabPane tab="Статистика" key="2">

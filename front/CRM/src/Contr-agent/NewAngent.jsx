@@ -418,20 +418,47 @@ export default class NewAgent extends Component {
       }
       let AgentBranch
       let AgentPeopel
+      // РАБОТАЕТ НЕ ТРОЖЬ БЛЯТЬ!!!111
       if(AgentOfficeFabrics.length != 0){
-        AgentBranch = AgentOfficeFabrics
+        let normaliz = []
+        let newItem
+        
+        for(let el of AgentOfficeFabrics){
+          newItem = {}
+          for(let i of el)
+           if(i != null){
+             
+             for (let [key, value] of Object.entries(i)) {
+               newItem[key] = value
+             }
+          }
+           normaliz.push(newItem)
+        }
+        AgentBranch = normaliz
       }
       if(AgentPeopelFabrics.length != 0){
-        AgentPeopel = AgentPeopelFabrics
+        let normaliz = []
+        let newItem
+        
+        for(let el of AgentPeopelFabrics){
+          newItem = {}
+          for(let i of el)
+           if(i != null){
+             
+             for (let [key, value] of Object.entries(i)) {
+               newItem[key] = value
+             }
+          }
+           normaliz.push(newItem)
+        }
+        AgentPeopel = normaliz
       }
-
       let body = {
         AgentBranch,
         AgentPeopel,
         newAgent,
         whoAdd
       };
-      console.log(JSON.stringify(body))
       NewAgentAddRegulatoryPosition(body).then(data => {
         message.success("Агент зарегестрирован!");
         this.setState({
@@ -478,7 +505,9 @@ export default class NewAgent extends Component {
           branch_officeGeo: undefined,
           number_phone: undefined,
           AgentPeopelFabrics:[],
-          AgentOfficeFabrics:[]
+          AgentOfficeFabrics:[],
+          peopelResults:[],
+          GeoOficeHelper:[],
         });
       });
     } else {
@@ -525,7 +554,9 @@ export default class NewAgent extends Component {
         phoneAt_peopel,
         mail_at_peopel,
         checkedList,
-        userRole
+        userRole,
+        AgentOfficeFabrics,
+        AgentPeopelFabrics
       } = this.state;
       let msg;
       if (name === undefined) {
@@ -577,25 +608,42 @@ export default class NewAgent extends Component {
         oblastAgent
 
       };
-      let AgentFeatus;
-      if (branch_office === undefined) {
-        AgentFeatus = {};
-      } else {
-        AgentFeatus = {
-          region: branch_officeGeo,
-          sity: branch_office_sity,
-          name: branch_office,
-          number_phone: number_phone
-        };
+      let AgentBranch;
+      let AgentPeopel;
+      if(AgentOfficeFabrics.length != 0){
+        let normaliz = []
+        let newItem
+        
+        for(let el of AgentOfficeFabrics){
+          newItem = {}
+          for(let i of el)
+           if(i != null){
+             
+             for (let [key, value] of Object.entries(i)) {
+               newItem[key] = value
+             }
+          }
+           normaliz.push(newItem)
+        }
+        AgentBranch = normaliz
       }
-      let AgentPeopel = {
-        position,
-        features_job,
-        bio,
-        phoneAt_peopel,
-        mail_at_peopel,
-        checkedList
-      };
+      if(AgentPeopelFabrics.length != 0){
+        let normaliz = []
+        let newItem
+        
+        for(let el of AgentPeopelFabrics){
+          newItem = {}
+          for(let i of el)
+           if(i != null){
+             
+             for (let [key, value] of Object.entries(i)) {
+               newItem[key] = value
+             }
+          }
+           normaliz.push(newItem)
+        }
+        AgentPeopel = normaliz
+      }
       let todo = {
         time,
         mounth,
@@ -613,7 +661,7 @@ export default class NewAgent extends Component {
       let body = {
         newAgent,
         AgentPeopel,
-        AgentFeatus,
+        AgentBranch,
         todo,
         whoAdd
       };
@@ -663,7 +711,9 @@ export default class NewAgent extends Component {
           agentHill: undefined,
           oblastAgent: undefined,
           branch_officeGeo: undefined,
-          number_phone: undefined
+          number_phone: undefined,
+          peopelResults:[],
+          GeoOficeHelper:[],
         });
       });
     }
@@ -1078,8 +1128,8 @@ export default class NewAgent extends Component {
         title: "Компания",
         content: (
           <div className="">
-            <div className="row justify-content-between">
-              <div className="col-8">
+            <div  className="row boootstrap_helperColumn justify-content-between">
+           
               <h1 className="input_new_agent agentnew_front">
               Компания
                     </h1>
@@ -1120,12 +1170,15 @@ export default class NewAgent extends Component {
                     </Select.Option>
                   ))}
                 </Select>
-                <p className="input_new_agent agentnew_front">Город</p>
+                <p className="input_new_agent  agentnew_front">Город</p>
                 <Select
                   style={{ width: "auto" }}
-                  className="input_new_agent"
+                  className="input_new_agent select_helper_render"
+                  dropdownClassName="select_helper_render"
                   mode="multiple"
                   size="large"
+                  dropdownMatchSelectWidth="250px"
+                  dropdownStyle={true}
                   placeholder="Выберите город  котрагента"
                   notFoundContent="Введите название города"
                   value={this.state.agentHill}
@@ -1160,7 +1213,7 @@ export default class NewAgent extends Component {
                 <h1 className="input_new_agent agentnew_front">
                       Подразделения
                     </h1>
-                <PlusCircleOutlined className="input_new_agent" onClick={() =>this.addbranch_office()} style={{fontSize:"32px",color:"#2196F3"}} />
+                <PlusCircleOutlined className="input_new_agent" onClick={() =>this.addbranch_office()} style={{fontSize:"32px",color:"#2196F3",marginTop:"5px",marginBottom:"5px"}} />
 
                     {this.state.GeoOficeHelper.lenght === 0 ?(null):(
                       <>
@@ -1178,7 +1231,7 @@ export default class NewAgent extends Component {
                     )} 
                 </div>
               </div>
-            </div>
+            
           </div>
         )
       },
@@ -1186,8 +1239,8 @@ export default class NewAgent extends Component {
         title: "Комментарии",
         content: (
           <div className="">
-            <div className="row justify-content-between">
-              <div className="col-8">
+            <div className="row boootstrap_helperColumn justify-content-between">
+              
               <h1 className="input_new_agent agentnew_front">
               Комментарии
                     </h1>
@@ -1220,7 +1273,7 @@ export default class NewAgent extends Component {
                   </div>
                 </div>
               </div>
-            </div>
+     
           </div>
         )
       },
@@ -1228,8 +1281,8 @@ export default class NewAgent extends Component {
         title: "Адрес/контакты",
         content: (
           <>
-            <div className="row justify-content-between">
-              <div className="col-8">
+            <div className="row boootstrap_helperColumn justify-content-between">
+            
               <h1 className="input_new_agent agentnew_front">
               Адрес/контакты
                     </h1>
@@ -1286,7 +1339,7 @@ export default class NewAgent extends Component {
                   placeholder="Общий тел:"
                 /> 
               </div>
-            </div>
+            
           </>
         )
       },
@@ -1294,34 +1347,23 @@ export default class NewAgent extends Component {
         title: "Контактные лица",
         content: (
           <>
-            <div className="row justify-content-between">
-              <div className="col-8">
+            <div className="row boootstrap_helperColumn justify-content-between">
+           
 
                 <h1 className="input_new_agent agentnew_front">Контактные Лица</h1>
-                {this.state.peopelResults.length === 0 ? (<>  <div><PlusCircleOutlined onClick={() =>this.addPeopel()} style={{fontSize:"32px",color:"#2196F3"}} /></div>    
+                {this.state.peopelResults.length === 0 ? (<>  <div><PlusCircleOutlined onClick={() =>this.addPeopel()} style={{fontSize:"32px",color:"#2196F3",marginTop:"5px",marginBottom:"5px"}} /></div>    
         </>):(<div>{this.state.peopelResults.map((el,i) =>( 
           <div>
               <div>
              <NewAgentPeopel CommonProps={this.state.AgentPeopelFabrics[i]} fabricState={i}/>
-             <DeleteOutlined className="input_new_agent" onClick={() =>this.deleteInputNewPeopel(i)} style={{fontSize:"25px",color:"#e91e63c4"}}/>
+             <DeleteOutlined className="input_new_agent" onClick={() =>this.deleteInputNewPeopel(i)} style={{fontSize:"25px",color:"#e91e63c4",marginTop:"5px",marginBottom:"5px"}}/>
         </div>
 
     </div>
       ))}
       <PlusCircleOutlined onClick={() =>this.addPeopel()} style={{fontSize:"32px",color:"#2196F3"}} />
       </div>) }
-         
-              
-                {/* <p className="input_new_agent agentnew_front">
-                  Предпочитаемый способ связи
-                </p>
-                <CheckboxGroup
-                  options={plainOptions}
-                  onChange={this.onChangeGroup}
-                  value={this.state.checkedList}
-                /> */}
               </div>
-            </div>
           </>
         )
       },
@@ -1330,8 +1372,8 @@ export default class NewAgent extends Component {
         title: "Начало работы",
         content: (
           <>
-            <div className="row justify-content-between">
-              <div className="col-8">
+            <div className="row boootstrap_helperColumn justify-content-between">
+           
               <h1 className="input_new_agent agentnew_front">
               Начало работы
                     </h1>
@@ -1400,7 +1442,7 @@ export default class NewAgent extends Component {
                   </>
                 ) : null}
               </div>
-            </div>
+    
           </>
         )
       },
@@ -1408,14 +1450,14 @@ export default class NewAgent extends Component {
         title: "Особые пометки",
         content: (
           <>
-            <div className="row justify-content-between">
-              <div className="col-8">
+            <div className="row boootstrap_helperColumn justify-content-between">
+         
               <h1 className="input_new_agent agentnew_front">
               Особые пометки
                     </h1>
                 <TextArea
                   style={{ width: "100%" }}
-                  className="input_new_agent"
+                  className="input_new_agent_helper"
                   value={this.state.individual_conditions_job}
                   onChange={this.handleChange("individual_conditions_job")}
                   placeholder=" Индивидуальные условия работы с клиентом:"
@@ -1423,12 +1465,12 @@ export default class NewAgent extends Component {
                 />
                 <TextArea
                   size="large"
-                  className="input_new_agent"
+                  className="input_new_agent_helper"
                   value={this.state.pay_character}
                   onChange={this.handleChange("pay_character")}
                   placeholder="Характер предлагаемой цены для клиента:"
                 />
-              </div>
+              
             </div>
           </>
         )
@@ -1489,7 +1531,7 @@ export default class NewAgent extends Component {
 
         <Drawer
           title="Техника"
-          width="900"
+          width={window.innerWidth / 2}
           placement="right"
           closable={false}
           onClose={this.onCloseTechDriwer}
@@ -1633,14 +1675,15 @@ export default class NewAgent extends Component {
             </>
           }
           placement="right"
-          width="900"
+          width={window.innerWidth / 2}
           closable={false}
           onClose={this.onCloseSpecDriwer}
           visible={this.state.visibleSpecDriwer}
         >
           <div className="specListsEditor">
+            <div className="drawer_flex">
             <Select
-              className="col-xs-12"
+              // className="col-xs-12"
               mode="multiple"
               style={{ width: "100%" }}
               placeholder="Выберите специализацию"
@@ -1654,6 +1697,7 @@ export default class NewAgent extends Component {
                 </Select.Option>
               ))}
             </Select>
+            <div>
             <Button
               onClick={regim =>
                 this.editorRegimSwitcher(this.state.editorRegim, regim)
@@ -1665,11 +1709,13 @@ export default class NewAgent extends Component {
               Редактировать
               <EditOutlined />
             </Button>
+            </div>
+            </div>
             <div></div>
           </div>
           <div className="editor_regim">
-            <div className="row">
-              <div className="col">
+            <div className="row boootstrap_helperColumn">
+             
                 {editorRegim ? (
                   <>
                     {this.state.specialicationsToBaseEditors.map(
@@ -1690,7 +1736,7 @@ export default class NewAgent extends Component {
                   </>
                 ) : null}
               </div>
-            </div>
+            
           </div>
         </Drawer>
         <Modal

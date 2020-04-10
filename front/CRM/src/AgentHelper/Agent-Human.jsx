@@ -37,7 +37,8 @@ export default class AgentHuman extends Component {
   }
 
   componentDidMount() {
-    let agentId = this.props.match.params.agentId;
+
+    let agentId = this.props.match.params.agentId 
     let body = {
       agentId: agentId
     };

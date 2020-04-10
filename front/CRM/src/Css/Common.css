@@ -1694,3 +1694,30 @@ nav {
 	justify-items: center;
 	align-items: center;
 }
+@media(max-width: 665px){
+	.email_main_pos{
+		position: relative;
+		padding: 0px;
+		left: 20px;
+		margin-top: 10px;
+	}
+}
+.boootstrap_helperColumn{
+	flex-direction: column;
+}
+
+.drawer_flex{
+	display: flex;
+}
+.select_helper_render{
+	width: 250px;
+	/* max-width: 500px; */
+}
+.input_new_agent_helper{
+	width: 65%;
+float: left;
+clear: left;
+
+margin-top: 5px;
+margin-bottom: 5px;
+}

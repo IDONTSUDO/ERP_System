@@ -1,6 +1,8 @@
 export function ObjHelperShape(value,form){
     if(value.length >= 1){
+      if(value != null){
         return {[form]:value}
+      }
     }else{
         return undefined
     }
