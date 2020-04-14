@@ -6,7 +6,7 @@ import {
   read,
   AllStatistic,
   userActive,
-  UserActiveMounthAndYear
+  UserActiveMounthAndYear,
 } from "../Api/Http";
 import DefaultProfile from "../Assets/default.png";
 import moment from "moment";
@@ -21,7 +21,7 @@ import {
   UserOutlined,
   PhoneOutlined,
   WhatsAppOutlined,
-  CoffeeOutlined
+  CoffeeOutlined,
 } from "@ant-design/icons";
 const { Text } = Typography;
 
@@ -36,32 +36,32 @@ class Profile extends Component {
       browserCalendar: false,
       activUser: [],
       loading: true,
-      userId: ""
+      userId: "",
     };
   }
-  init = userId => {
+  init = (userId) => {
     this.setState({ userId: userId });
-    read(userId).then(data => {
+    read(userId).then((data) => {
       if (data.error) {
         this.setState({ error: true });
       } else {
         this.setState({ user: data });
       }
     });
-    AllStatistic(userId).then(data => {
+    AllStatistic(userId).then((data) => {
       let total_installment = 0;
       if (data === "Not found") {
         this.setState({ browserCalendar: false, open: false });
       } else {
         this.setState({ static: data, open: false });
-        userActive(userId).then(data => {
+        userActive(userId).then((data) => {
           this.setState({ activUser: data, loading: false });
         });
       }
     });
   };
-  initNotCalendar = userId => {
-    read(userId).then(data => {
+  initNotCalendar = (userId) => {
+    read(userId).then((data) => {
       if (data.error) {
         this.setState({ error: true });
       } else {
@@ -92,28 +92,22 @@ class Profile extends Component {
     const userId = props.match.params.userId;
     this.init(userId);
   }
-  calendarClick = e => {
+  calendarClick = (e) => {
     this.setState({ loading: true });
     let { userId } = this.state;
-    let Mounth = moment(e.date)
-      .locale("ru")
-      .format("MM");
-    let Year = moment(e.date)
-      .locale("ru")
-      .format("YY");
-    let Day = moment(e.date)
-      .locale("ru")
-      .format("YY");
+    let Mounth = moment(e.date).locale("ru").format("MM");
+    let Year = moment(e.date).locale("ru").format("YY");
+    let Day = moment(e.date).locale("ru").format("YY");
     let Body = {
       userId,
       Year,
-      Mounth
+      Mounth,
     };
-    UserActiveMounthAndYear(Body).then(data => {
+    UserActiveMounthAndYear(Body).then((data) => {
       this.setState({ loading: false, activUser: data });
     });
   };
-  renderPopoverTeam = todo => {
+  renderPopoverTeam = (todo) => {
     return (
       <>
         <Link
@@ -145,7 +139,7 @@ class Profile extends Component {
               )}
               <div
                 dangerouslySetInnerHTML={{
-                  __html: job.action
+                  __html: job.action,
                 }}
               ></div>
               <div>{job.date}</div>
@@ -162,10 +156,10 @@ class Profile extends Component {
       </>
     );
   };
-  renderPopoverSystem = todo => {
+  renderPopoverSystem = (todo) => {
     return <>1</>;
   };
-  renderPopoverAgent = todo => {
+  renderPopoverAgent = (todo) => {
     return (
       <>
         <Link
@@ -189,7 +183,7 @@ class Profile extends Component {
       </>
     );
   };
-  renderPopoverSolo = todo => {
+  renderPopoverSolo = (todo) => {
     return (
       <>
         <Link
@@ -240,7 +234,7 @@ class Profile extends Component {
       "Сентябрь",
       "Октябрь",
       "Ноябрь",
-      "Декабрь"
+      "Декабрь",
     ];
     let data = this.state.static;
     return (
@@ -260,7 +254,7 @@ class Profile extends Component {
                       <div className="avatar">
                         <img
                           style={{ height: "260px", width: "260px" }}
-                          onError={i => (i.target.src = `${DefaultProfile}`)}
+                          onError={(i) => (i.target.src = `${DefaultProfile}`)}
                           src={photoUrl}
                         />
                         <div style={{ padding: "5px" }}>
@@ -307,7 +301,7 @@ class Profile extends Component {
                                               <WhatsAppOutlined
                                                 style={{
                                                   fontSize: "16px",
-                                                  color: "purple"
+                                                  color: "purple",
                                                 }}
                                               />
                                             }
@@ -333,7 +327,7 @@ class Profile extends Component {
                                                 <UserOutlined
                                                   style={{
                                                     fontSize: "16px",
-                                                    color: "#621aff"
+                                                    color: "#621aff",
                                                   }}
                                                 />
                                               }
@@ -405,19 +399,19 @@ class Profile extends Component {
                                 "#61cdbb",
                                 "#97e3d5",
                                 "#e8c1a0",
-                                "#f47560"
+                                "#f47560",
                               ]}
                               margin={{
                                 top: 40,
                                 right: 40,
                                 bottom: 40,
-                                left: 40
+                                left: 40,
                               }}
                               yearSpacing={40}
                               monthBorderColor="#ffffff"
                               dayBorderWidth={2}
                               dayBorderColor="#ffffff"
-                              tooltip={function(e) {
+                              tooltip={function (e) {
                                 return (
                                   <>
                                     {data[0].day}
@@ -443,8 +437,8 @@ class Profile extends Component {
                                   itemWidth: 42,
                                   itemHeight: 36,
                                   itemsSpacing: 14,
-                                  itemDirection: "right-to-left"
-                                }
+                                  itemDirection: "right-to-left",
+                                },
                               ]}
                             />
                           </div>

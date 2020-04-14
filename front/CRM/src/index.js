@@ -10,9 +10,7 @@ import { isAuthenticated, Subscribe, IsSubscriber } from "./Api/Auth";
 require("setimmediate");
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <App />,
   document.getElementById("root")
 );
 serviceWorker.register();

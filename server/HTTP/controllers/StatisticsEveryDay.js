@@ -59,6 +59,14 @@ exports.UpdateStatisticCommentResult = async (req, res) => {
 exports.GetAllStatistic = async (req, res) => {
   let userId = req.body.userId;
   Statistic.find({ Userby: userId }).then(data => {
-    console.log(data), res.status(200).json(data[0].day);
+    if(data[0] === undefined){
+      return res.status(200).json([])
+    }else{
+      if(data[0].day === undefined){
+        return res.status(200).json([])
+      }else{
+        return res.status(200).json(data[0].day);
+      }
+    }
   });
 };

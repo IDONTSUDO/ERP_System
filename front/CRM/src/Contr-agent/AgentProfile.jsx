@@ -1,7 +1,7 @@
 import React, { Component } from "react";
+import None from "../Components/None.jsx";
 import ReactTags from "react-tag-autocomplete";
-// import WorkBranch from "../Components/agent/WorkBranch.jsx"
-import AgentHuman from "../AgentHelper/Agent-Human.jsx"
+import AgentHuman from "../AgentHelper/Agent-Human.jsx";
 import {
   GetAgentProfile,
   list,
@@ -31,51 +31,112 @@ export default class AgentProfile extends Component {
   constructor() {
     super();
     this.state = {
-      id: "",
-      tags: [],
-      user: "",
-      company: "",
-      name: "",
-      full_name: "",
-      phone: "",
-      INN: "",
-      general_director: "",
-      OGRN: "",
-      email: "",
       worker: [],
-      any: "",
-      legal_address: "",
+      tags: [],
+      INN: "",
+      OGRN: "",
+      Tech: [],
+      WhereFromClient: "",
+      id: "",
+      active: undefined,
       actual_address: "",
+      any: "",
+      company: "",
+      company_desription: "",
+      email: "",
+      full_name: "",
+      general_director: "",
+      hill: [],
+      Date: "",
+      individual_conditions_job: "",
+      legal_address: "",
+      name: "",
+      partners: "",
+      pay_character: "",
       payment_account: "",
-      redirectTo: false,
-      TagsStart: [],
-      agentId:""
+      phone: "",
+      production: "",
+      region: [],
+      site: "",
+      specialications: "",
+      agentGeo: [],
+      status: "",
+      work_begin_with_him: "",
     };
   }
 
   componentDidMount() {
     const agentId = this.props.match.params.agentId;
     let TagsArray = [];
-    this.setState({agentId})
+    this.setState({ agentId });
     GetAgentProfile(agentId).then((data) => {
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
-        console.log(data);
+        let TagsArray = [];
+        let {
+          INN,
+          OGRN,
+          TechAgent,
+          UUID,
+          WhereFromClient,
+          _id,
+          active,
+          actual_address,
+          any,
+          company,
+          company_desription,
+          email,
+          full_name,
+          general_director,
+          hill,
+          Date,
+          individual_conditions_job,
+          legal_address,
+          name,
+          partners,
+          pay_character,
+          payment_account,
+          phone,
+          production,
+          region,
+          site,
+          specialications,
+          status,
+          tags,
+          agentGeo,
+          work_begin_with_him,
+        } = data;
         this.setState({
-          id: data._id,
-          name: data.name,
-          email: data.email,
-          company: data.company,
-          full_name: data.full_name,
-          phone: data.phone,
-          INN: data.INN,
-          general_director: data.general_director,
-          OGRN: data.OGRN,
-          any: data.any,
-          legal_address: data.legal_address,
-          actual_address: data.actual_address,
-          payment_account: data.payment_account,
+          INN: INN,
+          OGRN: OGRN,
+          Tech: TechAgent,
+          WhereFromClient: WhereFromClient,
+          id: _id,
+          active: active,
+          actual_address: actual_address,
+          any: any,
+          company: company,
+          company_desription: company_desription,
+          email: email,
+          full_name: full_name,
+          general_director: general_director,
+          hill: hill,
+          Date: Date,
+          individual_conditions_job: individual_conditions_job,
+          legal_address: legal_address,
+          name: name,
+          partners: partners,
+          pay_character: pay_character,
+          payment_account: payment_account,
+          phone: phone,
+          production: production,
+          region: region,
+          site: site,
+          specialications: specialications,
+          status: status,
+          work_begin_with_him: work_begin_with_him,
+          agentGeo: agentGeo,
         });
 
         if (data.tags === "none") {
@@ -160,7 +221,6 @@ export default class AgentProfile extends Component {
         }
       }
       let posted_by = isAuthenticated().direct._id;
-
       let body = {
         UserExit,
         userArray,
@@ -182,7 +242,6 @@ export default class AgentProfile extends Component {
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
-        console.log(data)
         let TagsArray = [];
         let {
           INN,
@@ -215,48 +274,38 @@ export default class AgentProfile extends Component {
           status,
           tags,
           work_begin_with_him,
+          agentGeo,
         } = data;
-        // Date: "2020-03-25T08:45:26.067Z"
-
-        // actual_address: "уйццйу"
-        // any: "none"
-        // company: "none"
-        // company_desription: "йуцуйцуцййуц"
-        // email: "уцйцйу"
-        // full_name: "wqeewqwe"
-        // general_director: "none"
-        // hill: Array [ "Куйбышев" ]
-        // individual_conditions_job: "цйуц"
-        // legal_address: "йцуйц"
-        // name: "eqew"
-        // partners: Array []
-        // pay_character: "йцууцйцйу"
-        // payment_account: "none"
-        // phone: "йуцуцу"
-        // postedBy: "5e72142b51c3d152ecf8f16d"
-        // production: Array []
-        // region: Array [ "none" ]
-        // site: "йцууцй"
-        // sity: Array [ "none" ]
-        // specialications: Array [ "уйцуйцуц" ]
-        // status: "none"
-        // tags: Array [ {…} ]
-        // work_begin_with_him: "йцуцу"
         this.setState({
-          // id: data._id,
-          // name: data.name,
-          // email: data.email,
-          // company: data.company,
-          // full_name: data.full_name,
-          // phone: data.phone,
-          // INN: data.INN,
-          // general_director: data.general_director,
-          // OGRN: data.OGRN,
-          // any: data.any,
-          // legal_address: data.legal_address,
-          // actual_address: data.actual_address,
-          // payment_account: data.payment_account,
-          // result: []
+          INN: INN,
+          OGRN: OGRN,
+          Tech: TechAgent,
+          WhereFromClient: WhereFromClient,
+          id: _id,
+          active: active,
+          actual_address: actual_address,
+          any: any,
+          company: company,
+          company_desription: company_desription,
+          email: email,
+          full_name: full_name,
+          general_director: general_director,
+          hill: hill,
+          Date: Date,
+          individual_conditions_job: individual_conditions_job,
+          legal_address: legal_address,
+          name: name,
+          partners: partners,
+          pay_character: pay_character,
+          payment_account: payment_account,
+          phone: phone,
+          production: production,
+          region: region,
+          site: site,
+          specialications: specialications,
+          status: status,
+          work_begin_with_him: work_begin_with_him,
+          agentGeo: agentGeo,
         });
         if (data.tags === "none") {
           this.setState({ tags: undefined });
@@ -326,8 +375,11 @@ export default class AgentProfile extends Component {
                   }}
                 >
                   <Typography>
-                    <Title>ОАО Сварог</Title>
-                    <Collapse style={{width: "70vw"}} defaultActiveKey={["1"]}>
+                    <Title>{this.state.full_name}</Title>
+                    <Collapse
+                      style={{ width: "70vw" }}
+                      defaultActiveKey={["1"]}
+                    >
                       <Panel
                         header={
                           <>
@@ -335,7 +387,34 @@ export default class AgentProfile extends Component {
                           </>
                         }
                       >
-                        <p></p>
+                        <div style={{display:'contents'}}>
+                          <p className="flex pBmagin">
+                            <b>Полное имя:</b>
+                            <None tag={this.state.full_name} />
+                          </p>
+                          <p className="flex">
+                            <b>ОГРН:</b>
+                            <None tag={this.state.OGRN} />
+                          </p>
+                          <p className="flex">
+                            <b>ИНН:</b>
+
+                            <None tagMode={false} tag={this.state.INN} />
+                          </p>
+                          <p className="flex">
+                            <b>Генеральный директор:</b>
+
+                            <None tag={this.state.general_director} />
+                          </p>
+                          <p className="flex">
+                            <b>Официальный адрес:</b>
+                            <None tag={this.state.legal_address} />
+                          </p>
+                          <p className="flex">
+                            <b>Актуальный адресс:</b>
+                            <None tag={this.state.actual_address} />
+                          </p>
+                        </div>
                       </Panel>
                       <Panel
                         header={
@@ -345,7 +424,28 @@ export default class AgentProfile extends Component {
                         }
                         key="2"
                       >
-                        <p></p>
+                        <div>
+                          <p style={{display:'contents'}} className="flex">
+                            <div className="flex">
+                            <b>Город:</b>
+                            {this.state.hill.map((region, i) => (
+                              <>
+                                <None tag={region} />
+                              </>
+                            ))}
+                            </div>
+                            <div className="flex">
+                            <b>Область:</b>
+                            <div>
+                              {this.state.agentGeo.map((region, i) => (
+                                <>
+                                  <None tag={region} />
+                                </>
+                              ))}
+                            </div>
+                            </div>
+                          </p>
+                        </div>
                       </Panel>
                       <Panel
                         header={
@@ -355,7 +455,16 @@ export default class AgentProfile extends Component {
                         }
                         key="3"
                       >
-                        <p></p>
+                        <p className="flex">
+                          <div>
+                            <b>Начало работы:</b>
+                            {this.state.work_begin_with_him}
+                          </div>
+                          <div>
+                            <b>Откуда пришел клиент</b>
+                            {this.state.WhereFromClient}
+                          </div>
+                        </p>
                       </Panel>
                       <Panel
                         header={
@@ -384,8 +493,7 @@ export default class AgentProfile extends Component {
                           </>
                         }
                         key="6"
-                      >
-                      </Panel>
+                      ></Panel>
                       <Panel
                         header={
                           <>
@@ -393,37 +501,39 @@ export default class AgentProfile extends Component {
                           </>
                         }
                         key="7"
-                      >
-                        
-                      </Panel>
-                      
+                      ></Panel>
                     </Collapse>
                   </Typography>
                   <div style={{ display: "flex" }}>
-                  <Select
-                    mode="multiple"
-                    // maxTagTextLength={1}
+                    <Select
+                      mode="multiple"
+                      // maxTagTextLength={1}
 
-                    style={{ width: "max-content" }}
-                    placeholder="Выберете исполнителей"
-                    onChange={this.ChangeSelect}
-                    optionLabelProp="label"
-                    value={tags}
-                    defaultActiveFirstOption={false}
-                    allowClear={true}
-                  >
-                    {worker.map((workerOne, i = 1) => (
-                      <Option value={workerOne.name} label={workerOne.name}>
-                        <span>{workerOne.name}</span>
-                      </Option>
-                    ))}
-                  </Select>
+                      style={{ width: "max-content" }}
+                      placeholder="Выберете исполнителей"
+                      onChange={this.ChangeSelect}
+                      optionLabelProp="label"
+                      value={tags}
+                      defaultActiveFirstOption={false}
+                      allowClear={true}
+                    >
+                      {worker.map((workerOne, i = 1) => (
+                        <Option value={workerOne.name} label={workerOne.name}>
+                          <span>{workerOne.name}</span>
+                        </Option>
+                      ))}
+                    </Select>
 
-                  <Button onClick={this.clickSubmit}>Назначить</Button>
-                  <Button>
-                    <Link to={`/agent/tasks/${id}`}>Дела по контр агенту</Link>
-                  </Button>
-                </div>
+                    <Button onClick={this.clickSubmit}>Назначить</Button>
+                    <Button>
+                      <Link to={`/agent/tasks/${id}`}>
+                        Дела по контр агенту
+                      </Link>
+                    </Button>
+                    <Button>
+                      <Link to={`/agent/edit/${id}`}>Изменить агента</Link>
+                    </Button>
+                  </div>
                 </div>
               </TabPane>
               <TabPane tab="Статистика" key="2">

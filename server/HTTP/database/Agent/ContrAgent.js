@@ -19,9 +19,11 @@ const contrAgentSchema = new mongoose.Schema({
   production: {
     type: Array
   },
+  // сайт 
   site: {
     type: String
   },
+  // инстаграм
   Instagram: {
     type: String
   },
@@ -29,27 +31,32 @@ const contrAgentSchema = new mongoose.Schema({
   Contact_faces: {
     type: ObjectId
   },
-
+// как началась работа с ним
   Getting_started_with: {
     type: String
   },
-
+// полное имя
   full_name: {
     type: String,
     default: "none"
   },
+  // короткое имя
   name: {
     type: String,
     default: "none"
   },
+
+  // ююайди из 1-Ски
   UUID: {
     type: String,
     default: "none"
   },
+  // телефон
   phone: {
     type: String,
     default: "none"
   },
+  // статус
   status: {
     type: String,
     default: "none"
@@ -59,27 +66,32 @@ const contrAgentSchema = new mongoose.Schema({
     type: String,
     default: "none"
   },
+  // генеральный директор
   general_director: {
     type: String,
     default: "none"
   },
+  // огрн
   OGRN: {
     type: String,
     default: "none"
   },
+  // email
   email: {
     type: String,
     default: "none"
   },
-  // Подразделения (филиалы) и их местонахождения:
-  // agentGeo: {
-  //   type: Array,
-  //   default: "none"
-  // },
+  //гео
+  agentGeo: {
+    type: Array,
+    default: "none"
+  },
+  // дата создания
   Date: {
     type: Date,
     default: Date.now
   },
+  // города
   sity: { type: Array, default: "none" },
   region: {
     type: Array,

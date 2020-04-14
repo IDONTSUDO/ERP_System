@@ -116,7 +116,6 @@ exports.getMyListAgent = async (req, res) => {
   });
 };
 exports.getAgentProfile = async (req, res) => {
-  console.log(req.agent)
   res.status(200).json(req.agent);
 };
 exports.SearchAgent = async (req, res) => {
@@ -371,7 +370,6 @@ exports.TodoAgentFind = (req, res, id) => {
       if (err) {
         return res.status(400).json({ err });
       } else {
-        console.log(result);
         return res.status(200).json(result);
       }
     }

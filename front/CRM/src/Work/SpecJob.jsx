@@ -206,7 +206,6 @@ class SpecJob extends Component {
       };
 
       NewComentSpecTodo(body).then(data => {
-        console.log(data);
         this.setState({ redirectToNews: true });
       });
     }

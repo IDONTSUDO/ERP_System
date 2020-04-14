@@ -21,12 +21,12 @@ exports.ChanelList = async (req, res) => {
   const perPage = 20;
   var totalItems;
 
-  const chanels = await Chanel.find({ User: userId })
+  const chanels = await Chanel.find({ users: userId })
 
     .countDocuments()
     .then(count => {
       totalItems = count;
-      return Chanel.find({ User: userId })
+      return Chanel.find({ users: userId })
         .skip((currentPage - 1) * perPage)
         .limit(perPage);
     })

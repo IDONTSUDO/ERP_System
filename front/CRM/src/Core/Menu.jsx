@@ -15,19 +15,22 @@ const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
 class MenuMain extends React.Component {
-  state = {
-    collapsed: true,
-    window_width: "",
-    getComandTodo: Number,
-    SoloTodoToday: Number,
-    NotReadNews: Number,
-    role: String
-  };
-
+  constructor(props) {
+    super(props)
+    this.state = {
+      collapsed: true,
+      window_width: "",
+      getComandTodo: Number,
+      SoloTodoToday: Number,
+      NotReadNews: Number,
+      role: String
+    };
+  }
   onCollapse = collapsed => {
     this.setState({ collapsed });
   };
-  componentDidMount() {
+  componentDidMount(props) {
+    console.log("MENUPROPS",props)
     if (isAuthenticated() == false) {
       return false;
     } else {

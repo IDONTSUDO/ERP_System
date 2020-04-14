@@ -1721,3 +1721,10 @@ clear: left;
 margin-top: 5px;
 margin-bottom: 5px;
 }
+.flex{
+	display:flex;
+}
+
+.flex > div{
+	margin-left: 10px;
+}
