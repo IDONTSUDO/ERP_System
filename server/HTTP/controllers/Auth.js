@@ -18,7 +18,6 @@ exports.signup = async (req, res, next) => {
 
   const direct = await new Direct(req.body);
   await direct.save().exec(result => {
-    console.log(result._id);
     res.status(200).json({
       result: "complete-user-registr"
     });

@@ -1728,3 +1728,19 @@ margin-bottom: 5px;
 .flex > div{
 	margin-left: 10px;
 }
+.flex > span{
+	margin-left: 10px;
+}
+.SelectHelper{
+	color:red
+}
+.ant-select-selection__placeholder{
+
+}
+.flex-rev{
+	display: flex;
+	flex-direction: row-reverse;
+}
+.mr5px{
+	margin: 5px;
+}

@@ -150,7 +150,6 @@ export default class Human extends Component {
   deleteHuman = () => {
     let { _id } = this.state;
     DeleteHuman(_id).then(data => {
-      console.log(data);
       this.setState({ visibleData: "none" });
       message.success("Удален");
     });
@@ -233,14 +232,6 @@ export default class Human extends Component {
             ) : null}
           </div>
           <div>
-            <CheckboxGroup
-              options={plainOptions}
-              disabled={this.state.TwoEditBool}
-              value={this.state.checkedList}
-              onChange={this.onChangeChecked}
-            />
-          </div>
-          <div>
             {this.state.editBool ? (
               <Button onClick={this.saveAgent}>Изменить</Button>
             ) : null}
@@ -255,17 +246,22 @@ export default class Human extends Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          <>
-            {" "}
+          <span>
             <TextArea
               onChange={this.handelAnyChange("comment")}
               value={this.state.comment}
               placeholder="Глаголом жги сердца людей..."
             />
-          </>
+          </span>
         </Modal>
       </>
     );
   }
 }
+
+
+
+
+
+
 

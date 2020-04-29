@@ -6,9 +6,6 @@ import { Link } from "react-router-dom";
 import { Button } from "antd";
 import Error from "../Error/Error.jsx";
 import Online from "./Online.jsx";
-
-
-// import {isOnline} from "../Soket/soket.js"
 export default class Company extends Component {
   constructor() {
     super();

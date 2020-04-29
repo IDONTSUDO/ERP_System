@@ -152,7 +152,8 @@ export default class NewAgent extends Component {
       peopelResults:[],
       GeoOficeHelper:[],
       AgentOfficeFabrics:[],
-      AgentPeopelFabrics:[]
+      AgentPeopelFabrics:[],
+      partners:undefined
     };
   }
 
@@ -337,7 +338,8 @@ export default class NewAgent extends Component {
         agentHill,
         oblastAgent,
         AgentOfficeFabrics,
-        AgentPeopelFabrics
+        AgentPeopelFabrics,
+        partners
       } = this.state;
       let FilteredOfice;
       let FilteredGeo = [];
@@ -403,6 +405,7 @@ export default class NewAgent extends Component {
         individual_conditions_job,
         pay_character,
         hill:agentHill,
+        partners
       };
       let AgentFeatus;
       FilteredGeo.push(branch_officeGeo);
@@ -508,6 +511,7 @@ export default class NewAgent extends Component {
           AgentOfficeFabrics:[],
           peopelResults:[],
           GeoOficeHelper:[],
+          partners:undefined
         });
       });
     } else {
@@ -556,7 +560,8 @@ export default class NewAgent extends Component {
         checkedList,
         userRole,
         AgentOfficeFabrics,
-        AgentPeopelFabrics
+        AgentPeopelFabrics,
+        partners
       } = this.state;
       let msg;
       if (name === undefined) {
@@ -605,8 +610,8 @@ export default class NewAgent extends Component {
         individual_conditions_job,
         pay_character,
         agentHill,
-        oblastAgent
-
+        oblastAgent,
+        partners
       };
       let AgentBranch;
       let AgentPeopel;
@@ -714,6 +719,7 @@ export default class NewAgent extends Component {
           number_phone: undefined,
           peopelResults:[],
           GeoOficeHelper:[],
+          partners:undefined
         });
       });
     }
@@ -1153,12 +1159,14 @@ export default class NewAgent extends Component {
                 />
                 <p className="input_new_agent agentnew_front">Область</p>
                 <Select
-                  style={{ width: "auto" }}
+                  style={{ width: "250px" }}
                   className="input_new_agent"
                   mode="multiple"
-                  size="large"
+                  // size="large"
+                  // dropdownClassName=""
                   notFoundContent="Введите название области"
                   placeholder="Выберите область котрагента"
+                  dropdownClassName="SelectHelper"
                   value={this.state.agentGeo}
                   onChange={this.handleSelectOblastChange}
                   onSearch={debounce(this.RussiaOblastHelper, 450)}
@@ -1172,12 +1180,11 @@ export default class NewAgent extends Component {
                 </Select>
                 <p className="input_new_agent  agentnew_front">Город</p>
                 <Select
-                  style={{ width: "auto" }}
+                 style={{ width: "250px" }}
                   className="input_new_agent select_helper_render"
                   dropdownClassName="select_helper_render"
                   mode="multiple"
                   size="large"
-                  dropdownMatchSelectWidth="250px"
                   dropdownStyle={true}
                   placeholder="Выберите город  котрагента"
                   notFoundContent="Введите название города"
@@ -1207,7 +1214,15 @@ export default class NewAgent extends Component {
                   placeholder="ОГРН"
                   value={this.state.OGRN}
                   onChange={this.handleChange("OGRN")}
-                />{" "}
+                />
+                <p className="input_new_agent agentnew_front">Партнеры</p>
+                <Input 
+                    onChange={this.handleChange("partners")}
+                    value={this.state.partners}
+                    className="input_new_agent"
+                    size="large" 
+                    placeholder="Партнеры"
+                />
                 <hr className="input_new_agent" />
                 <div className="input_helper">
                 <h1 className="input_new_agent agentnew_front">
@@ -1216,18 +1231,18 @@ export default class NewAgent extends Component {
                 <PlusCircleOutlined className="input_new_agent" onClick={() =>this.addbranch_office()} style={{fontSize:"32px",color:"#2196F3",marginTop:"5px",marginBottom:"5px"}} />
 
                     {this.state.GeoOficeHelper.lenght === 0 ?(null):(
-                      <>
+                      <span>
                       {this.state.GeoOficeHelper.map((item,i) => (
-                        <>
+                        <span>
                         <div>
                          
                   <NewAgentBracnchOfice CommonProps={this.state.AgentOfficeFabrics[i]}   fabricState={`${i}`}/>
                   <DeleteOutlined className="input_new_agent" onClick={() =>this.deletebranch_office(i)} style={{fontSize:"25px",color:"#e91e63c4"}}/>
 
                   </div> 
-                        </>
+                        </span>
                       ))}
-                      </>
+                      </span>
                     )} 
                 </div>
               </div>

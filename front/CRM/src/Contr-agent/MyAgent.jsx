@@ -86,7 +86,6 @@ export default class MyAgent extends Component {
       if (data.error) {
         console.log(data.error);
       } else {
-        // preloader: false
         this.setState({ agentList: data, preloader: false });
       }
     });
@@ -111,8 +110,13 @@ export default class MyAgent extends Component {
       if (data.error) {
         this.setState({ redirectToProfile: true });
       } else {
+        let TagsArray = [];
+        data.tags.map((tag) => {
+          TagsArray.push(tag.name);
+        });
         this.setState({
           id: data._id,
+          tags: TagsArray,
           name: data.name,
           email: data.email,
           company: data.company,
@@ -418,9 +422,6 @@ export default class MyAgent extends Component {
                     className="square-yellow-sort"
                   ></button>
                   <div style={{ padding: "5px" }}>
-                    <Button>
-                      <Link to={`/agent/history/${id}`}>История сделок</Link>
-                    </Button>
                     <div style={{ padding: "5px" }}></div>
                     <Button>
                       <Link to={`/agent/edit/${id}`}>
@@ -433,7 +434,6 @@ export default class MyAgent extends Component {
                     <Button>
                       <Link to={`/agent/work_branch/${id}`}>Офисы</Link>
                     </Button>
-                    {/* /agent/work_branch/:agentId */}
                   </div>
                 </Col>
               </Row>

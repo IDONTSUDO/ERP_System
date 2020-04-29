@@ -26,14 +26,12 @@ exports.getHuman = async (req, res) => {
 
 exports.editHuman = async (req, res) => {
   let { human } = req.body;
-  console.log(human);
   human = _.extend(req.human, req.body);
   human.save((err, result) => {
     return res.status(200).json(result);
   });
 };
 exports.humanId = async (req, res, next, id) => {
-  console.log(id);
   await AgentPeopel.findById(id).exec((err, result) => {
     if (err || !result) {
       return res.status(400).json({
@@ -52,7 +50,6 @@ exports.newHuman = (req, res) => {
   agent.AgentBy = agn._id;
 
   agent.save().then(data => {
-    console.log(data);
     return res.status(200).json(data);
   });
 };

@@ -1636,7 +1636,7 @@ export const NewNewsFeatursPosition = (news) => {
     });
 };
 export const getAgentBranch = (agentId) => {
-  return fetch(`${process.env.REACT_APP_API_URL}/get/agent/branch`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/at/branch/`, {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({ agentId }),
@@ -1712,3 +1712,28 @@ export const GetMessageList = (payload) => {
       console.log(err);
     });
 };
+export const NewAgentBranch = (payload,agentId) =>{
+  return fetch(`${process.env.REACT_APP_API_URL}/agent/new/branch/${agentId}`,{
+      method:"POST",
+      headers:myHeaders,
+      body:JSON.stringify(payload)
+  })
+    .then((responce) =>{
+      return responce.json()
+    })
+    .catch((err) =>{
+      console.log(err)
+    })
+}
+export const DeleteBranchAgent = (branchId) =>{
+  return fetch(`${process.env.REACT_APP_API_URL}/delet/branch/${branchId}`,{
+    method:"DELETE",
+    headers:myHeaders
+})
+  .then((responce) =>{
+    return responce.json()
+  })
+  .catch((err) =>{
+    console.log(err)
+  })
+}
