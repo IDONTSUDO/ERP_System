@@ -359,7 +359,7 @@ export default class AgentProfile extends Component {
 											<Panel
 												header={
 													<span>
-														<b>Данные о компании</b>
+														<b>Компания</b>
 													</span>
 												}
 											>
@@ -381,61 +381,114 @@ export default class AgentProfile extends Component {
 														<None tag={this.state.general_director} />
 													</p>
 													<p className="flex">
-														<b>Официальный адрес:</b>
-														<None tag={this.state.legal_address} />
-													</p>
-													<p className="flex">
-														<b>Актуальный адресс:</b>
-														<None tag={this.state.actual_address} />
-													</p>
-													<p className="flex">
-														<b>Партнеры</b>
-														<None tag={this.state.partners} />
-													</p>
-													<p className="flex">
-														<b>Юридический адрес</b>
-														<None tag={this.state.legal_address} />
-													</p>
-													<p className="flex">
-														<b>Фактический адрес</b>
-														<None tag={this.state.actual_address} />
-													</p>
-													<p className="flex">
-														<b>Email</b>
-														<None tag={this.state.email} />
-													</p>
-													<p className="flex">
-														<b>Инстаграмм </b>
-														<None tag={this.state.instagram} />
-													</p>
-													<p className="flex">
 														<b>Общий телефон</b>
 														<None tag={this.state.phone} />
 													</p>
 													<p className="flex">
-														<b>Партнеры </b>
+														<b>Партнеры</b>
 														{this.state.partners.map((el, i) => (
 															<span>
 																<None tag={el} />
 															</span>
 														))}
 													</p>
-													<p className="flex">
-														<b>Специальзации</b>
-														{this.state.specialications}
+												</div>
+											</Panel>
+											<Panel
+												header={
+													<span>
+														<b>Комментарии:</b>
+													</span>
+												}
+												key="28"
+											>
+												<div>
+													<p style={{ display: 'contents' }} className="flex">
+														<div className="flex">
+															<b>Описание компани:</b>
+															{this.state.hill.map((region, i) => (
+																<span>
+																	<None tag={this.state.company_desription} />
+																</span>
+															))}
+														</div>
+														<div className="flex">
+															<b>Техника:</b>
+															{this.state.Tech.map((tech, i) => (
+																<span>
+																	<None tag={tech} />
+																</span>
+															))}
+														</div>
+														<div className="flex">
+															<b>Специальзации: </b>
+
+															<span>
+																{' '}
+																<None tag={this.state.specialications} />{' '}
+															</span>
+														</div>
 													</p>
 												</div>
 											</Panel>
 											<Panel
 												header={
 													<span>
-														<b>География</b>
+														<b>Адрес, контакты</b>
 													</span>
 												}
 												key="2"
 											>
 												<div>
 													<p style={{ display: 'contents' }} className="flex">
+														<div className="flex">
+															<b>Юридический адрес:</b>
+															{this.state.hill.map((region, i) => (
+																<span>
+																	<None tag={this.state.legal_address} />
+																</span>
+															))}
+														</div>
+														<div className="flex">
+															<b>Фактический адрес:</b>
+															{this.state.hill.map((region, i) => (
+																<span>
+																	<None tag={this.state.actual_address} />
+																</span>
+															))}
+														</div>
+														<div className="flex">
+															<b>Сайт:</b>
+															{this.state.hill.map((region, i) => (
+																<span>
+																	<None tag={this.state.site} />
+																</span>
+															))}
+														</div>
+														<div className="flex">
+															<b>Инстаграм:</b>
+															{this.state.hill.map((region, i) => (
+																<span>
+																	<None tag={this.state.instagram} />
+																</span>
+															))}
+														</div>
+														<div className="flex">
+															<b>Общая почта:</b>
+															{this.state.hill.map((region, i) => (
+																<span>
+																	<None tag={this.state.email} />
+																</span>
+															))}
+														</div>
+														<div className="flex">
+															<b>Общий тел:</b>
+															{this.state.hill.map((region, i) => (
+																<span>
+																	<None tag={this.state.phone} />
+																</span>
+															))}
+														</div>
 														<div className="flex">
 															<b>Город:</b>
 															{this.state.hill.map((region, i) => (
@@ -460,7 +513,7 @@ export default class AgentProfile extends Component {
 											<Panel
 												header={
 													<span>
-														<b>Начало работы</b>
+														<b>Начало работы с клиентом:</b>
 													</span>
 												}
 												key="3"
@@ -468,7 +521,7 @@ export default class AgentProfile extends Component {
 												<div style={{ display: 'flex', flexDirection: 'column' }}>
 													<div className="flex">
 														<p>
-															<b>Начало работы:</b>
+															<b> Как начиналась с ним работа:</b>
 															{this.state.work_begin_with_him}
 														</p>
 													</div>
@@ -478,33 +531,10 @@ export default class AgentProfile extends Component {
 															{this.state.WhereFromClient}
 														</p>
 													</div>
-												</div>
-											</Panel>
-											<Panel
-												header={
-													<span>
-														<b>Особые пометки</b>
-													</span>
-												}
-												key="5"
-											>
-												<div style={{ display: 'flex', flexDirection: 'column' }}>
 													<div className="flex">
 														<p>
-															<b>Описание: </b>
+															<b>Описанание компании: </b>
 															{this.state.company_desription}
-														</p>
-													</div>
-													<div className="flex">
-														<p>
-															<b>Откуда пришел клиент: </b>
-															{this.state.WhereFromClient}
-														</p>
-													</div>
-													<div className="flex">
-														<p>
-															<b>Как начиналась с ним работа: </b>
-															{this.state.work_begin_with_him}
 														</p>
 													</div>
 													<div className="flex">
@@ -555,7 +585,7 @@ export default class AgentProfile extends Component {
 								<ChartAgent agentId={id} />
 							</TabPane>
 							<TabPane tab="Офисы" key="3">
-								<AgentBranch classNameRoot={false}  agentId={this.state.id} />
+								<AgentBranch classNameRoot={false} agentId={this.state.id} />
 							</TabPane>
 							<TabPane tab="Люди" key="4">
 								<AgentHuman classNameRoot={false} agentId={this.state.id} />
