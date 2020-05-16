@@ -5,6 +5,7 @@ import { Button, Descriptions, Icon, notification, Tabs, Tag, Select, Switch, Ty
 import ChartAgent from '../Components/ChartAgent';
 import AgentBranch from '../AgentHelper/AgentBranch.jsx';
 import AgentHuman from '../AgentHelper/Agent-Human.jsx';
+import AgentsDatas from "./AgentsDatas"
 
 import { isAuthenticated } from '../Api/Auth';
 import { Link } from 'react-router-dom';
@@ -46,7 +47,8 @@ export default class AgentProfile extends Component {
 			specialications: '',
 			agentGeo: [],
 			status: '',
-			work_begin_with_him: ''
+			work_begin_with_him: '',
+			agentProfile:''
 		};
 	}
 
@@ -90,7 +92,8 @@ export default class AgentProfile extends Component {
 					status,
 					tags,
 					agentGeo,
-					work_begin_with_him
+					work_begin_with_him,
+					instagram
 				} = data;
 				this.setState({
 					INN: INN,
@@ -122,7 +125,8 @@ export default class AgentProfile extends Component {
 					status: status,
 					work_begin_with_him: work_begin_with_him,
 					agentGeo: agentGeo,
-					TagsStart: TagsArray
+					TagsStart: TagsArray,
+					agentProfile:data
 				});
 
 				if (data.tags === 'none') {
@@ -131,8 +135,8 @@ export default class AgentProfile extends Component {
 					data.tags.map((tag) => {
 						TagsArray.push(tag.name);
 					});
-
 					this.setState({ tags: TagsArray, TagsStart: TagsArray });
+
 				}
 			}
 		});
@@ -353,206 +357,8 @@ export default class AgentProfile extends Component {
 										flexDirection: 'column'
 									}}
 								>
-									<Typography>
-										<Title>{this.state.full_name}</Title>
-										<Collapse style={{ width: '70vw' }} defaultActiveKey={[ '1' ]}>
-											<Panel
-												header={
-													<span>
-														<b>Компания</b>
-													</span>
-												}
-											>
-												<div style={{ display: 'contents' }}>
-													<p className="flex pBmagin">
-														<b>Полное имя:</b>
-														<None tag={this.state.full_name} />
-													</p>
-													<p className="flex">
-														<b>ОГРН:</b>
-														<None tag={this.state.OGRN} />
-													</p>
-													<p className="flex">
-														<b>ИНН:</b>
-														<None tagMode={false} tag={this.state.INN} />
-													</p>
-													<p className="flex">
-														<b>Генеральный директор:</b>
-														<None tag={this.state.general_director} />
-													</p>
-													<p className="flex">
-														<b>Общий телефон</b>
-														<None tag={this.state.phone} />
-													</p>
-													<p className="flex">
-														<b>Партнеры</b>
-														{this.state.partners.map((el, i) => (
-															<span>
-																<None tag={el} />
-															</span>
-														))}
-													</p>
-												</div>
-											</Panel>
-											<Panel
-												header={
-													<span>
-														<b>Комментарии:</b>
-													</span>
-												}
-												key="28"
-											>
-												<div>
-													<p style={{ display: 'contents' }} className="flex">
-														<div className="flex">
-															<b>Описание компани:</b>
-															{this.state.hill.map((region, i) => (
-																<span>
-																	<None tag={this.state.company_desription} />
-																</span>
-															))}
-														</div>
-														<div className="flex">
-															<b>Техника:</b>
-															{this.state.Tech.map((tech, i) => (
-																<span>
-																	<None tag={tech} />
-																</span>
-															))}
-														</div>
-														<div className="flex">
-															<b>Специальзации: </b>
+									<AgentsDatas tech={this.state.Tech} profile={this.state.agentProfile}/>
 
-															<span>
-																{' '}
-																<None tag={this.state.specialications} />{' '}
-															</span>
-														</div>
-													</p>
-												</div>
-											</Panel>
-											<Panel
-												header={
-													<span>
-														<b>Адрес, контакты</b>
-													</span>
-												}
-												key="2"
-											>
-												<div>
-													<p style={{ display: 'contents' }} className="flex">
-														<div className="flex">
-															<b>Юридический адрес:</b>
-															{this.state.hill.map((region, i) => (
-																<span>
-																	<None tag={this.state.legal_address} />
-																</span>
-															))}
-														</div>
-														<div className="flex">
-															<b>Фактический адрес:</b>
-															{this.state.hill.map((region, i) => (
-																<span>
-																	<None tag={this.state.actual_address} />
-																</span>
-															))}
-														</div>
-														<div className="flex">
-															<b>Сайт:</b>
-															{this.state.hill.map((region, i) => (
-																<span>
-																	<None tag={this.state.site} />
-																</span>
-															))}
-														</div>
-														<div className="flex">
-															<b>Инстаграм:</b>
-															{this.state.hill.map((region, i) => (
-																<span>
-																	<None tag={this.state.instagram} />
-																</span>
-															))}
-														</div>
-														<div className="flex">
-															<b>Общая почта:</b>
-															{this.state.hill.map((region, i) => (
-																<span>
-																	<None tag={this.state.email} />
-																</span>
-															))}
-														</div>
-														<div className="flex">
-															<b>Общий тел:</b>
-															{this.state.hill.map((region, i) => (
-																<span>
-																	<None tag={this.state.phone} />
-																</span>
-															))}
-														</div>
-														<div className="flex">
-															<b>Город:</b>
-															{this.state.hill.map((region, i) => (
-																<span>
-																	<None tag={region} />
-																</span>
-															))}
-														</div>
-														<div className="flex">
-															<b>Область:</b>
-															<div>
-																{this.state.agentGeo.map((region, i) => (
-																	<span>
-																		<None tag={region} />
-																	</span>
-																))}
-															</div>
-														</div>
-													</p>
-												</div>
-											</Panel>
-											<Panel
-												header={
-													<span>
-														<b>Начало работы с клиентом:</b>
-													</span>
-												}
-												key="3"
-											>
-												<div style={{ display: 'flex', flexDirection: 'column' }}>
-													<div className="flex">
-														<p>
-															<b> Как начиналась с ним работа:</b>
-															{this.state.work_begin_with_him}
-														</p>
-													</div>
-													<div className="flex">
-														<p>
-															<b>Откуда пришел клиент</b>
-															{this.state.WhereFromClient}
-														</p>
-													</div>
-													<div className="flex">
-														<p>
-															<b>Описанание компании: </b>
-															{this.state.company_desription}
-														</p>
-													</div>
-													<div className="flex">
-														<p>
-															<b>Индивидуальные условия: </b>
-															{this.state.individual_conditions_job}
-														</p>
-													</div>
-													<div className="flex">
-														<p>
-															<b>Характер предлагаемой цены: </b>
-															{this.state.pay_character}
-														</p>
-													</div>
-												</div>
-											</Panel>
-										</Collapse>
-									</Typography>
 									<div style={{ display: 'flex' }}>
 										<Select
 											mode="multiple"

@@ -112,45 +112,6 @@ class MenuMain extends React.Component {
                             </Link>
                           </Menu.Item>
                         </SubMenu>
-                        {/* {["Директор", "Управляющий", "Менеджер"].includes(
-                          role
-                        ) ? (
-                          // <SubMenu
-                          //   key="sub6"
-                          //   title={
-                          //     <span>
-                          //       <Icon type="dollar" />
-                          //       <span>Сделка</span>
-                          //     </span>
-                          //   }
-                          // >
-                          //   <Menu.Item key="13">
-                          //     <Link
-                          //       to={`/new/deal/${isAuthenticated().direct._id}`}
-                          //     >
-                          //       <span>Новая сделка</span>{" "}
-                          //     </Link>
-                          //   </Menu.Item>
-                          //   <Menu.Item key="14">
-                          //     <Link
-                          //       to={`/my/deal/${isAuthenticated().direct._id}`}
-                          //     >
-                          //       <span>История сделок</span>{" "}
-                          //     </Link>
-                          //   </Menu.Item>
-                          //   <Menu.Item key="15">
-                          //     <Link
-                          //       to={`/my/deal/history/${
-                          //         isAuthenticated().direct._id
-                          //       }`}
-                          //     >
-                          //       <span>Завершенные сделки</span>
-                          //     </Link>
-                          //   </Menu.Item>
-                          // </SubMenu>
-                        ) : (
-                          ""
-                        )} */}
                         <SubMenu
                           key="sub2"
                           title={
@@ -165,6 +126,12 @@ class MenuMain extends React.Component {
                               <span>Предприятие</span>
                             </Link>
                           </Menu.Item>
+                          <Menu.Item key="2">
+                              <Link to={`/comapany/structur`}>
+                                <span>Структура компании</span>
+                              </Link>
+                          </Menu.Item>
+                    
                           {["Директор", "Управляющий", "Бухгалтер"].includes(
                             role
                           ) ? (

@@ -153,7 +153,8 @@ export default class NewAgent extends Component {
       GeoOficeHelper:[],
       AgentOfficeFabrics:[],
       AgentPeopelFabrics:[],
-      partners:undefined
+      partners:undefined,
+      Customer_Submitted:undefined
     };
   }
 
@@ -339,7 +340,9 @@ export default class NewAgent extends Component {
         oblastAgent,
         AgentOfficeFabrics,
         AgentPeopelFabrics,
-        partners
+        partners,
+        Customer_Submitted,
+        TechAgent
       } = this.state;
       let FilteredOfice;
       let FilteredGeo = [];
@@ -388,7 +391,7 @@ export default class NewAgent extends Component {
         manageAdd,
         specialications,
         postedBy,
-        TechMap,
+        TechAgent,
         name,
         tags,
         full_name,
@@ -405,7 +408,8 @@ export default class NewAgent extends Component {
         individual_conditions_job,
         pay_character,
         hill:agentHill,
-        partners
+        partners,
+        Customer_Submitted
       };
       let AgentFeatus;
       FilteredGeo.push(branch_officeGeo);
@@ -511,7 +515,8 @@ export default class NewAgent extends Component {
           AgentOfficeFabrics:[],
           peopelResults:[],
           GeoOficeHelper:[],
-          partners:undefined
+          partners:undefined,
+          Customer_Submitted:undefined
         });
       });
     } else {
@@ -561,7 +566,9 @@ export default class NewAgent extends Component {
         userRole,
         AgentOfficeFabrics,
         AgentPeopelFabrics,
-        partners
+        partners,
+        Customer_Submitted,
+        TechAgent
       } = this.state;
       let msg;
       if (name === undefined) {
@@ -611,7 +618,8 @@ export default class NewAgent extends Component {
         pay_character,
         agentHill,
         oblastAgent,
-        partners
+        partners,
+        Customer_Submitted
       };
       let AgentBranch;
       let AgentPeopel;
@@ -719,7 +727,8 @@ export default class NewAgent extends Component {
           number_phone: undefined,
           peopelResults:[],
           GeoOficeHelper:[],
-          partners:undefined
+          partners:undefined,
+          Customer_Submitted:undefined
         });
       });
     }
@@ -1406,6 +1415,7 @@ export default class NewAgent extends Component {
                 <p className="input_new_agent agentnew_front">
                   Как начиналась с ним работа <span className="requre_input">*</span>
                 </p>
+                
                 <TextArea
                   size="large"
                   className="input_new_agent"
@@ -1414,7 +1424,17 @@ export default class NewAgent extends Component {
                   addonBefore={<div className="required-start">*</div>}
                   placeholder=" Как начиналась с ним работа:"
                 />
-
+                <p className="input_new_agent agentnew_front">
+                Это переданный (от кого передан) <span className="requre_input">*</span>
+</p>
+                <TextArea
+                size="large"
+                className="input_new_agent"
+                onChange={this.handleChange("Customer_Submitted")}
+                value={this.state.Customer_Submitted}
+                addonBefore={<div className="required-start">*</div>}
+                placeholder="Это переданный (от кого передан)работа:"
+                />
                 {["Менеджер"].includes(userRole) ? (
                   <>
                     <div className="input_new_agent site-calendar-demo-card">

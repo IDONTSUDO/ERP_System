@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import None from "../Components/None.jsx";
+import AgentDatas from "./AgentsDatas.jsx"
 import { MyAgentList, GetAgentProfile, ChangeAgent } from "../Api/Http.js";
 import {
   Button,
@@ -74,7 +75,8 @@ export default class MyAgent extends Component {
       actual_address: "",
       payment_account: "",
       status: "",
-      preloader: true
+      preloader: true,
+      agentProfile:''
     };
   }
   componentDidMount() {
@@ -131,7 +133,9 @@ export default class MyAgent extends Component {
           actual_address: data.actual_address,
           payment_account: data.payment_account,
           status: data.status,
-          open: false
+          open: false,
+          agentProfile:data
+      
         });
       }
     });
@@ -308,105 +312,7 @@ export default class MyAgent extends Component {
             <Spin size="large" />
           ) : (
             <>
-              <p style={{ ...pStyle, marginBottom: 24 }}>Профиль Агента</p>
-              <p style={pStyle}>Персональные данные</p>
-              <Row>
-                <Col span={12}>
-                  {/* <DescriptionItem title="Full Name" content="Lily" />{' '} */}
-                </Col>
-                <Col span={12}>
-                  {/* <DescriptionItem title="Account" content="AntDesign@example.com" /> */}
-                </Col>
-              </Row>
-              <Row>
-                <Col span={12}>
-                  <DescriptionItem
-                    title="Телефон"
-                    content={<None tag={phone}></None>}
-                  />
-                </Col>
-                <Col span={12}>
-                  <DescriptionItem
-                    title="Email"
-                    content={<None tag={email}></None>}
-                  />
-                </Col>
-              </Row>
-              <Row></Row>
-              <Row>
-                <Col span={24}></Col>
-              </Row>
-              <Divider />
-              <p style={pStyle}>Данные о компании</p>
-              <Row>
-                <Col span={12}>
-                  <DescriptionItem title="ИНН" content={INN} />
-                </Col>
-                <Col span={12}>
-                  <DescriptionItem title="ОГРН" content={OGRN} />
-                </Col>
-              </Row>
-              <Row>
-                <Col span={12}>
-                  <DescriptionItem
-                    title="Расчетный счет"
-                    content={<None tag={payment_account}></None>}
-                  />
-                </Col>
-                <Col span={12}>
-                  <DescriptionItem
-                    title="Актуальный адрес"
-                    content={<None tag={actual_address}></None>}
-                  />
-                </Col>
-                <Col span={12}>
-                  <DescriptionItem
-                    title="Юридический адрес"
-                    content={<None tag={legal_address}></None>}
-                  />
-                </Col>
-
-                <Col span={12}>
-                  <DescriptionItem
-                    title="Полное имя компании"
-                    content={<None tag={full_name}></None>}
-                  />
-                </Col>
-                <Col span={12}>
-                  <DescriptionItem
-                    title="Сокращенное имя компании"
-                    content={<None tag={name}></None>}
-                  />
-                </Col>
-                <Col span={12}>
-                  <DescriptionItem
-                    title="Генеральный директор"
-                    content={<None tag={general_director}></None>}
-                  />
-                </Col>
-              </Row>
-
-              <Divider />
-              <p style={pStyle}>Контактные данные</p>
-              <Row>
-                <Col span={12}>
-                  <DescriptionItem
-                    title="Email"
-                    content={<None tag={email}></None>}
-                  />
-                </Col>
-                <Col span={12}>
-                  <DescriptionItem
-                    title="Номер телефона"
-                    content={<None tag={phone}></None>}
-                  />
-                </Col>
-                <Col span={12}>
-                  <DescriptionItem title="Полезная информация" content={any} />
-                </Col>
-              </Row>
-
-              <Row></Row>
+              <Row><AgentDatas profile={this.state.agentProfile} /></Row>
               <Row>
                 <Col span={24}>
                   <button

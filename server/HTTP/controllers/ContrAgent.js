@@ -756,7 +756,9 @@ exports.NewNewsToManager = async (req, res, next) => {
 	}
 };
 exports.RussiaSitiSeach = async (req, res) => {
-	RussiaSiti.find({ city: new RegExp(req.body.body, 'i') }).exec((err, result) => {
+	RussiaSiti.find({ city: new RegExp(req.body.body, 'i') })
+	.limit(50)
+	.exec((err, result) => {
 		if (err) {
 			return res.status(400).json({ err });
 		} else {
@@ -765,7 +767,9 @@ exports.RussiaSitiSeach = async (req, res) => {
 	});
 };
 exports.OblastSearch = async (req, res) => {
-	RussiaOblast.find({ oblast: new RegExp(req.body.body, 'i') }).exec((err, result) => {
+	RussiaOblast.find({ oblast: new RegExp(req.body.body, 'i') })
+	.limit(50)
+	.exec((err, result) => {
 		if (err) {
 			return res.statatus(400).json({ err });
 		} else {

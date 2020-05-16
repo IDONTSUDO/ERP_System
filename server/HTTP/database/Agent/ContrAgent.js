@@ -111,6 +111,11 @@ const contrAgentSchema = new mongoose.Schema({
     type: Array,
     default: "none"
   },
+  Customer_Submitted:{
+    // 5.3. Это переданный (от кого передан) клиент или нет: Клиента добыл сам
+    type:String,
+    defaul:"none"
+  },
   tags: {
     type: Object,
     default: "none"
