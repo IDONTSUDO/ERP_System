@@ -10,7 +10,7 @@ import Mail from "./icon/Mail.js";
 import Phone from "./icon/Phone.js";
 import Paper from "./icon/Paper.js";
 import Vk from "./icon/Vk.js";
-
+import Logo from "./icon/svarog_logo.js"
 /* 
 @Desctiption: Icon component
 @props: {width} ширина
@@ -40,6 +40,8 @@ const Icon = props => {
       return <Paper {...props} />;
     case "vk":
       return <Vk {...props}/>
+    case "logo":
+      return <Logo {...props}/>
   }
 };
 
