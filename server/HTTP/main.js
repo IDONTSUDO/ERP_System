@@ -37,7 +37,7 @@ if (`${process.env.DEBUG_Mode}` === 'true') {
 Fawn.init(mongoose);
 const DirectAuthRoutes = require('./routers/Auth');
 const DirectCompanyhRoutes = require('./routers/Company');
-const CommonTodoRoutes = require('./routers/todo');
+const CommonTodoRoutes = require('./routers/todo.js');
 const NewsRouter = require('./routers/News');
 const AgentRouter = require('./routers/ContAgent');
 const NewHistory = require('./routers/AgentHistory');
@@ -60,6 +60,7 @@ app.use(bodyParser.json());
 app.use(expressValidator());
 
 app.use('/', EnterPrise);
+app.use('/', CommonTodoRoutes);
 app.use('/', AgentBranch);
 app.use('/', PushNotifications);
 app.use('/', DirectAuthRoutes);
@@ -67,7 +68,7 @@ app.use('/', DirectCompanyhRoutes);
 app.use('/', NewsRouter);
 app.use('/', AgentRouter);
 app.use('/', NewHistory);
-app.use('/', CommonTodoRoutes);
+
 app.use('/', PriceUsers);
 app.use('/', Mail);
 app.use('/', StatisticsEveryDay);

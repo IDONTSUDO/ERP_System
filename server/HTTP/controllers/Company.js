@@ -31,7 +31,10 @@ exports.workerSelectId = async (req, res, next, id) => {
 				error: 'Worker not found'
 			});
 		}
+		console.log("ITS WORKS");
 		req.worker = worker;
+		console.log("its works")
+		return next()
 	});
 };
 
@@ -45,7 +48,7 @@ exports.workerById = async (req, res, next, id) => {
 
 		req.worker = worker;
 
-		next();
+		return next();
 	});
 };
 exports.ManageList = async (req, res) => {

@@ -34,7 +34,8 @@ exports.ComentById = async (req, res, next, id) => {
 };
 
 exports.SOSotodo = (req, res) => {};
-exports.myTodoItsDay = async (req, res, next) => {
+exports.myTodoItsDayS = async (req, res, next) => {
+  console.log("ITS WORK")
   let time = moment()
     .locale("ru")
     .format("LL");
@@ -97,7 +98,9 @@ exports.MyTodoYear = async (req, res) => {
     }
   );
 };
-exports.myTODO = async (req, res) => {
+exports.myTODOSSS = async (req, res) => {
+  console.log(2000);
+  console.log(req.worker._id);
   TODO.find({ tags: `${req.worker._id}` })
   .exec((err, todos) => {
     if (err) {
@@ -318,7 +321,6 @@ exports.GetcomandTodo = async (req, res) => {
 };
 exports.AssignedTask = async (req, res) => {
   let userId = req.body.userId;
-
   const currentPage = req.query.page || 1;
 
   const perPage = 100;

@@ -1,7 +1,7 @@
 const express = require("express")
 const {
     SOSotodo,
-    myTODO,
+    myTODOSSS,
     NewTodoUserAwesome,
     TodoById,
     TodoChange,
@@ -11,7 +11,7 @@ const {
     FindComments,
     DeleteComent,
     ComentById,
-    myTodoItsDay,
+    myTodoItsDayS,
     GetcomandTodo,
     MyComandTodo,
     MyComandTodoQuality,
@@ -31,8 +31,8 @@ const router = express.Router({ mergeParams: true });
 
 
 router.get('/todo/:todoid', requireSignin, GetTodo)
-router.get('/my/todo/soso/:workerSelectId', requireSignin, myTODO)
-router.get('/today/todo/:workerSelectId', requireSignin, myTodoItsDay)
+router.get('/my/todo/soso/:workerSelectId', myTODOSSS)
+router.get('/today/todo/:workerSelectId',  myTodoItsDayS)
 router.get('/today/todo/qulity/:workerSelectId',  myTodoItsDayQuality)
 
 // TODO [?] GET 
