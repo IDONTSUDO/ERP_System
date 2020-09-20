@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import { GetTodoByAgent, GetAgentYearStatistic, GetAgentMountAndYear } from '../Api/Http.js';
 import moment from 'moment';
 import { ResponsivePieCanvas } from '@nivo/pie';
-
+import {
+	FrownOutlined
+  } from "@ant-design/icons";
 export default class ChartAgent extends Component {
 	constructor(props) {
 		super();
 		this.state = {
 			yearStatistic: {},
-			open: true
+			open: true,
+			none:true
 		};
 	}
 	componentDidMount(props) {
@@ -19,7 +22,14 @@ export default class ChartAgent extends Component {
 			if (data.err) {
 				console.log(data.err);
 			} else {
-				console.log(data);
+				Object.entries(data).forEach(([key, value]) => {
+					console.log(typeof value)
+					if(value instanceof Number){
+						if(value != 0){
+							this.setState({none:false})
+						}
+					}
+				});
 				this.setState({ yearStatistic: data, YearAt: Year });
 			}
 		});
@@ -29,7 +39,7 @@ export default class ChartAgent extends Component {
 		console.log(value.value);
 	};
 	render() {
-		let { yearStatistic } = this.state;
+		let { yearStatistic,none } = this.state;
 		let data = [
 			{
 				id: 'Январь',
@@ -107,7 +117,14 @@ export default class ChartAgent extends Component {
 		return (
 			<div>
 				<div style={{ width: '500px', height: '500px' }}>
-					<ResponsivePieCanvas
+					{none ? (<>
+					Пока что нет выполненых дел	<br></br>
+					<FrownOutlined style={{ fontSize: "32px", marginRight: "5px" }} />
+					
+
+</>):(
+						<>
+			<ResponsivePieCanvas
 						data={data}
 						margin={{ top: 40, right: 200, bottom: 40, left: 80 }}
 						pixelRatio={1}
@@ -163,6 +180,8 @@ export default class ChartAgent extends Component {
 							}
 						]}
 					/>
+					</>
+					)}
 				</div>
 			</div>
 		);

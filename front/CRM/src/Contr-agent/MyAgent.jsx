@@ -330,11 +330,6 @@ export default class MyAgent extends Component {
                   <div style={{ padding: "5px" }}>
                     <div style={{ padding: "5px" }}></div>
                     <Button>
-                      <Link to={`/agent/edit/${id}`}>
-                        Редактированние контр агента
-                      </Link>
-                    </Button>
-                    <Button>
                       <Link to={`/agent/human/${id}`}>Работники</Link>
                     </Button>
                     <Button>

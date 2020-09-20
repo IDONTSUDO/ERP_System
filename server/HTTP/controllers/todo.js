@@ -35,7 +35,6 @@ exports.ComentById = async (req, res, next, id) => {
 
 exports.SOSotodo = (req, res) => {};
 exports.myTodoItsDayS = async (req, res, next) => {
-  console.log("ITS WORK")
   let time = moment()
     .locale("ru")
     .format("LL");

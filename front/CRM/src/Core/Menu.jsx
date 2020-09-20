@@ -126,7 +126,7 @@ class MenuMain extends React.Component {
                               <span>Предприятие</span>
                             </Link>
                           </Menu.Item>
-                          <Menu.Item key="2">
+                          <Menu.Item key="209">
                               <Link to={`/comapany/structur`}>
                                 <span>Структура компании</span>
                               </Link>

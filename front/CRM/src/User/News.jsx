@@ -6,6 +6,8 @@ import { isAuthenticated } from "../Api/Auth";
 import { listNews, UpdateNews, OneNewsDelete } from "../Api/Http";
 import { Badge, Popover, Button, Skeleton, List, Avatar } from "antd";
 import { Link } from "react-router-dom";
+import AgentsDatas from "../Contr-agent/AgentsDatas"
+
 import Moment from "react-moment";
 import Error from "../Error/Error.jsx";
 import AvatarCus from "../Components/Imager/Avatar";
@@ -22,6 +24,7 @@ import {
   FrownOutlined,
   CloseOutlined
 } from "@ant-design/icons";
+ 
 
 export default class News extends Component {
   constructor() {
@@ -37,18 +40,20 @@ export default class News extends Component {
     const Id = isAuthenticated().direct._id;
     const token = isAuthenticated().token;
     this.setState({ userId: Id });
+     
     listNews(Id, token).then(data => {
       if (data.error) {
         this.setState({ error: true });
         console.log(data.error);
       } else {
         var reversedData = data.reverse();
+        console.log(JSON.stringify(data))
         this.setState({ newsList: reversedData, loadingNews: false });
         var NewsArray = [];
         for (var i = 0; data.length > i; i++) {
           NewsArray.push(data[i]._id);
         }
-
+        console.log(JSON.stringify(reversedData))
         UpdateNews(NewsArray);
       }
     });
@@ -140,7 +145,37 @@ export default class News extends Component {
                       }
                       description={
                         <>
-                          <h2>{item.eventNews}</h2>
+                          {item.eventNews === "Изменение Агента" ? (
+                            <>
+                            <h2>{item.eventNews}</h2> 
+                            <div>
+                            <Popover
+                                  type="hover"
+                                  placement="bottom" 
+                                  content={
+                                    <><AgentsDatas REGIM="PREV" profile={item.agent.agentPrev}/></>
+                                  }
+                                >
+                                   
+                                    <Button style={{ margin: "5px" }}>
+                                      Было
+                                    </Button>
+                                </Popover>
+                                <Popover
+                                  type="hover"
+                                  placement="bottom" 
+                                  content={
+                                    <><AgentsDatas REGIM="PREV" profile={item.agent.agentNew}/></>
+                                  }
+                                >
+                                   
+                                    <Button style={{ margin: "5px" }}>
+                                      Стало
+                                    </Button>
+                                </Popover>
+                            </div>
+                            </>
+                          ): null}
                           {item.eventNews === "Новый статус" ? (
                             <>
                               <Link to={item.link}>Посмотреть</Link>

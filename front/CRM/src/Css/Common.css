@@ -1486,7 +1486,7 @@ nav {
 	background-color: #f0f2f5;
 }
 .news_pos {
-	margin-left: 78px;
+	margin-left: 102px;
 }
 .margin__menu {
 	margin-left: 90px;
@@ -1743,4 +1743,38 @@ margin-bottom: 5px;
 }
 .mr5px{
 	margin: 5px;
+}
+.edit_conter_agent_profile{
+	border-left-color: #f31a1e;
+    border-left-style: dashed;
+    border-left-width: 3px;
+    padding: 0 10px;
+}
+.INptAng{
+	width: 50%;
+	left:auto;
+    margin-left: auto;
+}
+
+.mr5px{
+	margin-right: 3px;
+}
+.width1{
+	width: 100%;
+}
+.btn_save{
+	position: fixed;
+    top: 50%;
+    right: 10px;
+}
+
+.fuck_btn{
+	margin-right: 4px;
+    margin-left: 4px;
+    width: 56px;
+}
+
+.centerd_fuck{
+	display: flex;
+    align-items: center;
 }

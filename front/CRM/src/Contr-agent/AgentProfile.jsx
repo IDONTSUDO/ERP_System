@@ -48,7 +48,12 @@ export default class AgentProfile extends Component {
 			agentGeo: [],
 			status: '',
 			work_begin_with_him: '',
-			agentProfile:''
+			agentProfile: '',
+			Notes: '',
+			booker_phone: '',
+			booker_email: '',
+			post_address: '',
+			notes: ''
 		};
 	}
 
@@ -93,7 +98,13 @@ export default class AgentProfile extends Component {
 					tags,
 					agentGeo,
 					work_begin_with_him,
-					instagram
+					instagram,
+					//todo
+					Notes,
+					booker_phone,
+					booker_email,
+					post_address,
+					notes
 				} = data;
 				this.setState({
 					INN: INN,
@@ -126,7 +137,7 @@ export default class AgentProfile extends Component {
 					work_begin_with_him: work_begin_with_him,
 					agentGeo: agentGeo,
 					TagsStart: TagsArray,
-					agentProfile:data
+					agentProfile: data
 				});
 
 				if (data.tags === 'none') {
@@ -146,7 +157,7 @@ export default class AgentProfile extends Component {
 			} else {
 				let workerList = [];
 				for (let us of data) {
-					let ItsWorkerAtValid = [ 'Директор', 'Управляющий', 'Менеджер' ].includes(us.role);
+					let ItsWorkerAtValid = ['Директор', 'Управляющий', 'Менеджер'].includes(us.role);
 					if (ItsWorkerAtValid) {
 						workerList.push(us);
 					}
@@ -357,7 +368,7 @@ export default class AgentProfile extends Component {
 										flexDirection: 'column'
 									}}
 								>
-									<AgentsDatas tech={this.state.Tech} profile={this.state.agentProfile}/>
+									<AgentsDatas tech={this.state.Tech} profile={this.state.agentProfile} />
 
 									<div style={{ display: 'flex' }}>
 										<Select
@@ -380,9 +391,6 @@ export default class AgentProfile extends Component {
 										<Button onClick={this.clickSubmit}>Назначить</Button>
 										<Button>
 											<Link to={`/agent/tasks/${id}`}>Дела по контр агенту</Link>
-										</Button>
-										<Button>
-											<Link to={`/agent/edit/${id}`}>Изменить агента</Link>
 										</Button>
 									</div>
 								</div>

@@ -39,7 +39,9 @@ const {
   agentDontManager,
   NewNewsToManager,
   RussiaSitiSeach,
-  OblastSearch
+  OblastSearch,
+  GetAgentPreSaved,
+  UserNewSetAgent
 } = require("../controllers/ContrAgent");
 
 const { workerById } = require("../controllers/Company");
@@ -102,7 +104,7 @@ router.delete(
 router.delete("/delete/spec/:specid", RemoveSpec);
 
 router.put("/change/agent/:agentId", requireSignin, ChangeAgent);
-router.put("/change/agent/profile/:agentId", changeAgentProfile);
+router.put("/change/agent/profile/:agentId", changeAgentProfile,UserNewSetAgent);
 
 router.param("specid", specid);
 router.param("workerById", workerById);

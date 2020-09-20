@@ -31,11 +31,11 @@ const contrAgentSchema = new mongoose.Schema({
   Contact_faces: {
     type: ObjectId
   },
-// как началась работа с ним
+  // как началась работа с ним
   Getting_started_with: {
     type: String
   },
-// полное имя
+  // полное имя
   full_name: {
     type: String,
     default: "none"
@@ -111,10 +111,10 @@ const contrAgentSchema = new mongoose.Schema({
     type: Array,
     default: "none"
   },
-  Customer_Submitted:{
+  Customer_Submitted: {
     // 5.3. Это переданный (от кого передан) клиент или нет: Клиента добыл сам
-    type:String,
-    defaul:"none"
+    type: String,
+    defaul: "none"
   },
   tags: {
     type: Object,
@@ -164,6 +164,11 @@ const contrAgentSchema = new mongoose.Schema({
   },
   Office: {
     type: ObjectId
-  }
+  },
+  Notes: { type: String },
+  booker_phone: { type: String },
+  booker_email: { type: String },
+  post_address: { type: String },
+  notes: { type: String }
 });
 module.exports = mongoose.model("Agent", contrAgentSchema);

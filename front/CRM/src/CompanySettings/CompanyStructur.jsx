@@ -30,8 +30,11 @@ export default class StructurTabel extends Component {
 	componentDidMount() {
 		this.setState({ role: isAuthenticated().direct.role });
 		GetCompanySturctures().then((data) => {
-			if (data[0].hasOwnProperty('structures')) {
-				this.setState({ structure: structureHelper(data[0].structures) });
+			console.log(data)
+			if (data[0] != undefined) {
+				if(data[0]['structures'] != undefined){
+					this.setState({ structure: structureHelper(data[0].structures) });
+				}
 			} else {
 				this.setState({ err: 'никто не добавил структуру компании' });
 			}
@@ -95,9 +98,6 @@ export default class StructurTabel extends Component {
 						<Button onClick={this.showModal}>
 							<h5>Изменить</h5>
 						</Button>
-						<Button onClick={this.showDrawer}>
-							<h5>Добавить роль</h5>
-						</Button>
 					</span>
 				) : null}
 				{this.state.err === undefined ? (
@@ -131,16 +131,6 @@ export default class StructurTabel extends Component {
 						onChange={(e) => this.handleChange(e.target.value, 'structureNew')}
 					/>
 				</Modal>
-				<Drawer
-					title="Basic Drawer"
-					placement="right"
-					width={windowWidth / 2}
-					closable={false}
-					onClose={this.onClose}
-					visible={this.state.visibleDrawer}
-				>
-					<CompanySetting />
-				</Drawer>
 			</div>
 		);
 	}

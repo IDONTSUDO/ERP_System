@@ -13,6 +13,7 @@ const RussiaOblast = require('../database/Helper/RussiaOblast.js');
 let moment = require('moment');
 const _ = require('lodash');
 const { StaticPool } = require('node-worker-threads-pool');
+const { async } = require('q');
 
 const agentHelper = './threads/newAgent.js';
 
@@ -60,10 +61,11 @@ exports.RemoveSpec = async (req, res) => {
 	});
 };
 
-exports.changeAgentProfile = async (req, res) => {
+exports.changeAgentProfile = async (req, res,next) => {
 	let agent = req.agent;
 	let { payload } = req.body;
-	agent = _.extend(agent, payload);
+	agent = _.extend(agent, payload.agent)
+	req.prevStateAgent = payload.agent;
 	await agent.save((err, result) => {
 		if (err) {
 			return res.status(400).json({
@@ -72,6 +74,7 @@ exports.changeAgentProfile = async (req, res) => {
 		}
 
 		res.json(result);
+		return next()
 	});
 };
 exports.NewSpec = async (req, res) => {
@@ -126,7 +129,7 @@ exports.SearchAgent = async (req, res) => {
 exports.searchSpec = async (req, res) => {
 	let specList = req.body;
 
-	ContrAgent.find({ specialications: { $all: [ `${specList}` ] } })
+	ContrAgent.find({ specialications: { $all: [`${specList}`] } })
 		.select('_id full_name email name agentGeo specialications')
 		.exec((err, result) => {
 			if (err) {
@@ -179,6 +182,47 @@ exports.ChangeAgent = async (req, res) => {
 		res.json(result);
 	});
 };
+ 
+exports.UserNewSetAgent = async (req, res, next) => {
+
+	let {agent,userBy} = req.body.payload;
+
+	let FinalyNewsPeopel = [];
+	let finalAgent = {
+		agentPrev: req.prevStateAgent,
+		agentNew: agent
+	}
+	let eventNews = 'Изменение Агента';
+	Company.find({ role: 'Директор' }).select(' _id ').then((data) => {
+		FinalyNewsPeopel.push(data);
+		Company.find({ role: 'Управляющий' }).select(' _id ').then((results) => {
+			FinalyNewsPeopel.push(results);
+			for (let newsHuman of FinalyNewsPeopel[0]) {
+				let news = new News();
+				news.NewsTO = newsHuman._id;		 
+				news.description = "";
+				news.eventNews = eventNews;
+				news.newsFrom = userBy;
+				news.posted_by = userBy._id;
+				news.agent = finalAgent;
+				news.save();
+			}
+			for (let newsHuman of FinalyNewsPeopel[1]) {
+				let news = new News();
+				news.NewsTO = newsHuman._id;
+				news.worker_by = newsHuman;
+				news.description = "";
+				news.eventNews = eventNews;
+				news.newsFrom = userBy;
+				news.posted_by = userBy._id;
+				news.agent = finalAgent;
+				news.save();
+			}
+		});
+	});
+
+}
+
 exports.UserAddAgentNews = async (req, res) => {
 	let { userArray, posted_by } = req.body;
 	if (userArray.length != 0) {
@@ -200,14 +244,14 @@ exports.UserDeleteAtAgentNews = async (req, res, next) => {
 
 	if (UserExit.length != 0) {
 		let news = new News();
-		news.worker_by = [ { user: UserExit[0]._id } ];
+		news.worker_by = [{ user: UserExit[0]._id }];
 		news.description = 'С вас сняли контр агента';
 		news.eventNews = 'Агент';
 		await news.save((err, result) => {
 			Todo.deleteMany({
 				agentByTodo: { $elemMatch: { _id: req.agent._id } },
 				status: 'system',
-				tags: [ UserExit[0]._id ]
+				tags: [UserExit[0]._id]
 			})
 				.select('_id ')
 				.then((data) => {
@@ -238,7 +282,7 @@ exports.ManageAddAgent = async (req, res, next) => {
 		let dateMoment = moment(PlaningDateMoment).format('YYYY-MM-DD');
 		let agent_cron = new AgentCron();
 		agent_cron.PlanningDate = dateMoment;
-		agent_cron.UserId = [ agentResult.tags[0] ];
+		agent_cron.UserId = [agentResult.tags[0]];
 		agent_cron.agent = agent;
 		agent_cron.agentId = agentResult._id;
 		agent_cron.save();
@@ -291,7 +335,7 @@ exports.NewAgent = async (req, res) => {
 exports.AgentStates = async (req, res) => {
 	let AgentStat = {};
 	function ContrAgentAll() {
-		return new Promise(function(resolve, reject) {
+		return new Promise(function (resolve, reject) {
 			ContrAgent.countDocuments().exec((err, agent) => {
 				if (err) {
 					throw new Error(reject);
@@ -303,7 +347,7 @@ exports.AgentStates = async (req, res) => {
 		});
 	}
 	function ContrAgentGeo() {
-		return new Promise(function(resolve, reject) {
+		return new Promise(function (resolve, reject) {
 			ContrAgent.countDocuments({ region: 'none' }).exec((err, agent) => {
 				if (err) {
 					throw new Error(reject);
@@ -315,7 +359,7 @@ exports.AgentStates = async (req, res) => {
 		});
 	}
 	function ContrAgentEmail() {
-		return new Promise(function(resolve, reject) {
+		return new Promise(function (resolve, reject) {
 			ContrAgent.countDocuments({ email: 'none' }).exec((err, agent) => {
 				if (err) {
 					throw new Error(reject);
@@ -326,12 +370,12 @@ exports.AgentStates = async (req, res) => {
 		});
 	}
 	function ContrAgentRegion() {
-		return new Promise(function(resolve, reject) {
+		return new Promise(function (resolve, reject) {
 			return resolve();
 		});
 	}
 	function ContrAgentSpecialications() {
-		return new Promise(function(resolve, reject) {
+		return new Promise(function (resolve, reject) {
 			ContrAgent.countDocuments({ specialications: 'none' }).exec((err, agent) => {
 				if (err) {
 					throw new Error(reject);
@@ -355,7 +399,7 @@ exports.AgentStates = async (req, res) => {
 exports.TodoAgentFind = (req, res, id) => {
 	let agentId = req.agent._id;
 
-	TodoAgent.find({ agentByTodo: { $all: [ `${agentId}` ] } }).exec((err, result) => {
+	TodoAgent.find({ agentByTodo: { $all: [`${agentId}`] } }).exec((err, result) => {
 		if (err) {
 			return res.status(400).json({ err });
 		} else {
@@ -366,7 +410,7 @@ exports.TodoAgentFind = (req, res, id) => {
 exports.TodoAgentQuality = async (req, res, id) => {
 	let agentId = req.agent._id;
 
-	TodoAgent.count({ agentByTodo: { $all: [ `${agentId}` ] } }).exec((err, result) => {
+	TodoAgent.count({ agentByTodo: { $all: [`${agentId}`] } }).exec((err, result) => {
 		if (err) {
 			return res.status(400).json({ err });
 		} else {
@@ -382,7 +426,7 @@ exports.agentUpdateStatistic = async (req, res) => {
 	let agentIdByFind = todoDestr.agentByTodo[1];
 
 	if (mounth === '01') {
-		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 1: +1 } }, function(error, success) {
+		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 1: +1 } }, function (error, success) {
 			if (error) {
 				return console.log(error);
 			} else {
@@ -390,7 +434,7 @@ exports.agentUpdateStatistic = async (req, res) => {
 			}
 		});
 	} else if (mounth === '02') {
-		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 2: +1 } }, function(error, success) {
+		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 2: +1 } }, function (error, success) {
 			if (error) {
 				return console.log(error);
 			} else {
@@ -398,7 +442,7 @@ exports.agentUpdateStatistic = async (req, res) => {
 			}
 		});
 	} else if (mounth === '03') {
-		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 3: +1 } }, function(error, success) {
+		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 3: +1 } }, function (error, success) {
 			if (error) {
 				return console.log(error);
 			} else {
@@ -406,7 +450,7 @@ exports.agentUpdateStatistic = async (req, res) => {
 			}
 		});
 	} else if (mounth === '04') {
-		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 4: +1 } }, function(error, success) {
+		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 4: +1 } }, function (error, success) {
 			if (error) {
 				return console.log(error);
 			} else {
@@ -414,7 +458,7 @@ exports.agentUpdateStatistic = async (req, res) => {
 			}
 		});
 	} else if (mounth === '05') {
-		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 5: +1 } }, function(error, success) {
+		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 5: +1 } }, function (error, success) {
 			if (error) {
 				return console.log(error);
 			} else {
@@ -422,7 +466,7 @@ exports.agentUpdateStatistic = async (req, res) => {
 			}
 		});
 	} else if (mounth === '06') {
-		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 6: +1 } }, function(error, success) {
+		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 6: +1 } }, function (error, success) {
 			if (error) {
 				return console.log(error);
 			} else {
@@ -430,7 +474,7 @@ exports.agentUpdateStatistic = async (req, res) => {
 			}
 		});
 	} else if (mounth === '07') {
-		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 7: +1 } }, function(error, success) {
+		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 7: +1 } }, function (error, success) {
 			if (error) {
 				return console.log(error);
 			} else {
@@ -438,7 +482,7 @@ exports.agentUpdateStatistic = async (req, res) => {
 			}
 		});
 	} else if (mounth === '08') {
-		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 8: +1 } }, function(error, success) {
+		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 8: +1 } }, function (error, success) {
 			if (error) {
 				return console.log(error);
 			} else {
@@ -446,7 +490,7 @@ exports.agentUpdateStatistic = async (req, res) => {
 			}
 		});
 	} else if (mounth === '09') {
-		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 9: +1 } }, function(error, success) {
+		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 9: +1 } }, function (error, success) {
 			if (error) {
 				return console.log(error);
 			} else {
@@ -454,7 +498,7 @@ exports.agentUpdateStatistic = async (req, res) => {
 			}
 		});
 	} else if (mounth === '10') {
-		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 10: +1 } }, function(error, success) {
+		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 10: +1 } }, function (error, success) {
 			if (error) {
 				return console.log(error);
 			} else {
@@ -462,7 +506,7 @@ exports.agentUpdateStatistic = async (req, res) => {
 			}
 		});
 	} else if (mounth === '11') {
-		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 11: +1 } }, function(error, success) {
+		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 11: +1 } }, function (error, success) {
 			if (error) {
 				return console.log(error);
 			} else {
@@ -470,7 +514,7 @@ exports.agentUpdateStatistic = async (req, res) => {
 			}
 		});
 	} else if (mounth === '12') {
-		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 12: +1 } }, function(error, success) {
+		AgentStatistic.findOneAndUpdate({ agentBy: agentIdByFind }, { $inc: { 12: +1 } }, function (error, success) {
 			if (error) {
 				return console.log(error);
 			} else {
@@ -496,7 +540,7 @@ exports.GetYearAndMountStatistichAgent = async (req, res) => {
 	TodoAgent.find({
 		year: Year,
 		mounth: Mounth,
-		agentByTodo: { $all: [ `${agentId}` ] }
+		agentByTodo: { $all: [`${agentId}`] }
 	}).then((result, err) => {
 		if (err) {
 			return res.status(400).json({ err });
@@ -508,7 +552,7 @@ exports.GetYearAndMountStatistichAgent = async (req, res) => {
 exports.searchGeo = async (req, res) => {
 	let geoData = req.body;
 
-	ContrAgent.find({ agentGeo: { $all: [ `${geoData}` ] } })
+	ContrAgent.find({ agentGeo: { $all: [`${geoData}`] } })
 		.select('_id full_name email name agentGeo specialications')
 		.exec((err, result) => {
 			if (err) {
@@ -658,7 +702,7 @@ exports.GoodNewsByRegulatorPositiom = (req, res, next) => {
 				for (let newsHuman of FinalyNewsPeopel[0]) {
 					let news = new News();
 					let description = `Добавление нового контр агента.  Агентов всего: ${result}`;
-					let eventNews = 'Новый Агент';ы
+					let eventNews = 'Новый Агент'; ы
 					news.NewsTO = newsHuman;
 					news.NewsTO = newsHuman._id;
 					news.agent = req.agent;
@@ -757,23 +801,23 @@ exports.NewNewsToManager = async (req, res, next) => {
 };
 exports.RussiaSitiSeach = async (req, res) => {
 	RussiaSiti.find({ city: new RegExp(req.body.body, 'i') })
-	.limit(50)
-	.exec((err, result) => {
-		if (err) {
-			return res.status(400).json({ err });
-		} else {
-			return res.status(200).json(result);
-		}
-	});
+		.limit(50)
+		.exec((err, result) => {
+			if (err) {
+				return res.status(400).json({ err });
+			} else {
+				return res.status(200).json(result);
+			}
+		});
 };
 exports.OblastSearch = async (req, res) => {
 	RussiaOblast.find({ oblast: new RegExp(req.body.body, 'i') })
-	.limit(50)
-	.exec((err, result) => {
-		if (err) {
-			return res.statatus(400).json({ err });
-		} else {
-			return res.status(200).json(result);
-		}
-	});
+		.limit(50)
+		.exec((err, result) => {
+			if (err) {
+				return res.statatus(400).json({ err });
+			} else {
+				return res.status(200).json(result);
+			}
+		});
 };

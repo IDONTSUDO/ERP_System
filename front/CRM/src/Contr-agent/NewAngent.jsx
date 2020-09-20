@@ -3,7 +3,7 @@ import NewAgentBracnchOfice from "../Components/FABRICS/newAgentBracnchOfice"
 import NewAgentPeopel from "../Components/FABRICS/newAgentPeopel"
 import { isAuthenticated } from "../Api/Auth";
 import { debounce } from "debounce";
-import {ObjHelperShape,infiniteCurry } from "../helper/common/type"
+import { ObjHelperShape, infiniteCurry } from "../helper/common/type"
 import {
   NewContrAgent,
   NewSpecialication,
@@ -25,7 +25,7 @@ import {
 } from "../Api/Http";
 import HillAndObl from "../helper/russia";
 import Tree from "react-animated-tree";
-import { EditOutlined,PlusCircleOutlined,DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import Localisation from "../helper/LocalisationCalendar.json";
 import {
   notification,
@@ -149,12 +149,18 @@ export default class NewAgent extends Component {
       branch_office_sity: undefined,
       sity: undefined,
       number_phone: undefined,
-      peopelResults:[],
-      GeoOficeHelper:[],
-      AgentOfficeFabrics:[],
-      AgentPeopelFabrics:[],
-      partners:undefined,
-      Customer_Submitted:undefined
+      peopelResults: [],
+      GeoOficeHelper: [],
+      AgentOfficeFabrics: [],
+      AgentPeopelFabrics: [],
+      partners: undefined,
+      Customer_Submitted: undefined,
+      // ? todo
+      Notes: undefined,
+      booker_phone: undefined,
+      booker_email: undefined,
+      post_address: undefined,
+      notes:undefined
     };
   }
 
@@ -222,8 +228,8 @@ export default class NewAgent extends Component {
       this.setState({ oblast: data });
     });
   };
-  nextStepOne =  () =>{
-    let {GeoOficeHelper,currentStep} = this.state
+  nextStepOne = () => {
+    let { GeoOficeHelper, currentStep } = this.state
 
     /*@FABRIC
       ------------------ office -----------------
@@ -234,35 +240,35 @@ export default class NewAgent extends Component {
       @adress {id}
       @dependence  {GeoOficeHelper} state
     */
-   
-   let structuresDOMfabric = []
-   if(GeoOficeHelper.length != 0){
-    for(let i = 0;GeoOficeHelper.length > i; i++){
-      let name = document.getElementById(`branch_office${i}`).value
-      let branch_officeGeoHTML = document.querySelector(`#branch_officeGeo${i} > div > div > ul > li.ant-select-selection__choice > div`)
-      let sityHTML = document.querySelector(`#branch_office_sity0 > div > div > ul > li.ant-select-selection__choice > div`)
-      let number_phone = document.getElementById(`number_phone${i}`).value
-      let addres =  document.getElementById(`adress${i}`).value
-      let region = document.getElementById(`region${i}`)
-      if(branch_officeGeoHTML != null  && sityHTML != null ){
-        structuresDOMfabric.push([
-          
-          ObjHelperShape(name,"name"),
-          ObjHelperShape(branch_officeGeoHTML.innerText,"region"),
-          ObjHelperShape(sityHTML.innerText,"sity"),
-          ObjHelperShape(number_phone,"number_phone"),
-          ObjHelperShape(addres,"adress"),
-        ])
-      } 
+
+    let structuresDOMfabric = []
+    if (GeoOficeHelper.length != 0) {
+      for (let i = 0; GeoOficeHelper.length > i; i++) {
+        let name = document.getElementById(`branch_office${i}`).value
+        let branch_officeGeoHTML = document.querySelector(`#branch_officeGeo${i} > div > div > ul > li.ant-select-selection__choice > div`)
+        let sityHTML = document.querySelector(`#branch_office_sity0 > div > div > ul > li.ant-select-selection__choice > div`)
+        let number_phone = document.getElementById(`number_phone${i}`).value
+        let addres = document.getElementById(`adress${i}`).value
+        let region = document.getElementById(`region${i}`)
+        if (branch_officeGeoHTML != null && sityHTML != null) {
+          structuresDOMfabric.push([
+
+            ObjHelperShape(name, "name"),
+            ObjHelperShape(branch_officeGeoHTML.innerText, "region"),
+            ObjHelperShape(sityHTML.innerText, "sity"),
+            ObjHelperShape(number_phone, "number_phone"),
+            ObjHelperShape(addres, "adress"),
+          ])
+        }
       }
-      structuresDOMfabric.lenght === 0 ? (this.setState({currentStep:currentStep+1})):(this.setState({AgentOfficeFabrics:structuresDOMfabric,currentStep:currentStep+1}))
-   
-  }
-  this.nextStep()
+      structuresDOMfabric.lenght === 0 ? (this.setState({ currentStep: currentStep + 1 })) : (this.setState({ AgentOfficeFabrics: structuresDOMfabric, currentStep: currentStep + 1 }))
+
+    }
+    this.nextStep()
 
   }
-  nextStepfour = () =>{
-    let { peopelResults,currentStep  } = this.state
+  nextStepfour = () => {
+    let { peopelResults, currentStep } = this.state
     /*@FABRIC
       ------------------ Human -------------------
       @HumanPhone {id}
@@ -275,32 +281,32 @@ export default class NewAgent extends Component {
     */
     let structuresDOMfabric = []
 
-    if(peopelResults.length != 0){
-      for(let i = 0;peopelResults.length > i; i++){
+    if (peopelResults.length != 0) {
+      for (let i = 0; peopelResults.length > i; i++) {
         let phoneAt_peopel = document.getElementById(`HumanPhone${i}`).value
         let bio = document.getElementById(`Humanbio${i}`).value
         let mail_at_peopel = document.getElementById(`HumanEmail${i}`).value
         let common = document.getElementById(`HumanCommon${i}`).value
         let position = document.getElementById(`HumanPosition${i}`).value
-        let features_job =  document.getElementById(`HumanFeatures_job${i}`).value
-        if(bio.length != 0){
+        let features_job = document.getElementById(`HumanFeatures_job${i}`).value
+        if (bio.length != 0) {
           structuresDOMfabric.push([
-            ObjHelperShape(phoneAt_peopel,"phoneAt_peopel"),
-            ObjHelperShape(bio,"bio"),
-            ObjHelperShape(mail_at_peopel,"mail_at_peopel"),
-            ObjHelperShape(common,"common"),
-            ObjHelperShape(position,"position"),
-            ObjHelperShape(features_job,"features_job")
-            ])
+            ObjHelperShape(phoneAt_peopel, "phoneAt_peopel"),
+            ObjHelperShape(bio, "bio"),
+            ObjHelperShape(mail_at_peopel, "mail_at_peopel"),
+            ObjHelperShape(common, "common"),
+            ObjHelperShape(position, "position"),
+            ObjHelperShape(features_job, "features_job")
+          ])
         }
       }
-      structuresDOMfabric.lenght === 0 ? (this.setState({currentStep:currentStep+1})):(this.setState({AgentPeopelFabrics:structuresDOMfabric,currentStep:currentStep+1}))
+      structuresDOMfabric.lenght === 0 ? (this.setState({ currentStep: currentStep + 1 })) : (this.setState({ AgentPeopelFabrics: structuresDOMfabric, currentStep: currentStep + 1 }))
 
     }
     this.nextStep()
   }
   newAgentClick = () => {
-    let whoAdd;  
+    let whoAdd;
     let role = isAuthenticated().direct.role;
     let resultValid = ["Директор", "Управляющий"].includes(role);
 
@@ -342,7 +348,12 @@ export default class NewAgent extends Component {
         AgentPeopelFabrics,
         partners,
         Customer_Submitted,
-        TechAgent
+        TechAgent,
+        Notes,
+        booker_phone,
+        booker_email,
+        post_address,
+        notes
       } = this.state;
       let FilteredOfice;
       let FilteredGeo = [];
@@ -407,9 +418,14 @@ export default class NewAgent extends Component {
         work_begin_with_him,
         individual_conditions_job,
         pay_character,
-        hill:agentHill,
+        hill: agentHill,
         partners,
-        Customer_Submitted
+        Customer_Submitted,
+        Notes,
+        booker_phone,
+        booker_email,
+        post_address,
+        notes
       };
       let AgentFeatus;
       FilteredGeo.push(branch_officeGeo);
@@ -426,37 +442,37 @@ export default class NewAgent extends Component {
       let AgentBranch
       let AgentPeopel
       // РАБОТАЕТ НЕ ТРОЖЬ БЛЯТЬ!!!111
-      if(AgentOfficeFabrics.length != 0){
+      if (AgentOfficeFabrics.length != 0) {
         let normaliz = []
         let newItem
-        
-        for(let el of AgentOfficeFabrics){
+
+        for (let el of AgentOfficeFabrics) {
           newItem = {}
-          for(let i of el)
-           if(i != null){
-             
-             for (let [key, value] of Object.entries(i)) {
-               newItem[key] = value
-             }
-          }
-           normaliz.push(newItem)
+          for (let i of el)
+            if (i != null) {
+
+              for (let [key, value] of Object.entries(i)) {
+                newItem[key] = value
+              }
+            }
+          normaliz.push(newItem)
         }
         AgentBranch = normaliz
       }
-      if(AgentPeopelFabrics.length != 0){
+      if (AgentPeopelFabrics.length != 0) {
         let normaliz = []
         let newItem
-        
-        for(let el of AgentPeopelFabrics){
+
+        for (let el of AgentPeopelFabrics) {
           newItem = {}
-          for(let i of el)
-           if(i != null){
-             
-             for (let [key, value] of Object.entries(i)) {
-               newItem[key] = value
-             }
-          }
-           normaliz.push(newItem)
+          for (let i of el)
+            if (i != null) {
+
+              for (let [key, value] of Object.entries(i)) {
+                newItem[key] = value
+              }
+            }
+          normaliz.push(newItem)
         }
         AgentPeopel = normaliz
       }
@@ -511,12 +527,12 @@ export default class NewAgent extends Component {
           oblastAgent: undefined,
           branch_officeGeo: undefined,
           number_phone: undefined,
-          AgentPeopelFabrics:[],
-          AgentOfficeFabrics:[],
-          peopelResults:[],
-          GeoOficeHelper:[],
-          partners:undefined,
-          Customer_Submitted:undefined
+          AgentPeopelFabrics: [],
+          AgentOfficeFabrics: [],
+          peopelResults: [],
+          GeoOficeHelper: [],
+          partners: undefined,
+          Customer_Submitted: undefined
         });
       });
     } else {
@@ -623,37 +639,37 @@ export default class NewAgent extends Component {
       };
       let AgentBranch;
       let AgentPeopel;
-      if(AgentOfficeFabrics.length != 0){
+      if (AgentOfficeFabrics.length != 0) {
         let normaliz = []
         let newItem
-        
-        for(let el of AgentOfficeFabrics){
+
+        for (let el of AgentOfficeFabrics) {
           newItem = {}
-          for(let i of el)
-           if(i != null){
-             
-             for (let [key, value] of Object.entries(i)) {
-               newItem[key] = value
-             }
-          }
-           normaliz.push(newItem)
+          for (let i of el)
+            if (i != null) {
+
+              for (let [key, value] of Object.entries(i)) {
+                newItem[key] = value
+              }
+            }
+          normaliz.push(newItem)
         }
         AgentBranch = normaliz
       }
-      if(AgentPeopelFabrics.length != 0){
+      if (AgentPeopelFabrics.length != 0) {
         let normaliz = []
         let newItem
-        
-        for(let el of AgentPeopelFabrics){
+
+        for (let el of AgentPeopelFabrics) {
           newItem = {}
-          for(let i of el)
-           if(i != null){
-             
-             for (let [key, value] of Object.entries(i)) {
-               newItem[key] = value
-             }
-          }
-           normaliz.push(newItem)
+          for (let i of el)
+            if (i != null) {
+
+              for (let [key, value] of Object.entries(i)) {
+                newItem[key] = value
+              }
+            }
+          normaliz.push(newItem)
         }
         AgentPeopel = normaliz
       }
@@ -725,10 +741,10 @@ export default class NewAgent extends Component {
           oblastAgent: undefined,
           branch_officeGeo: undefined,
           number_phone: undefined,
-          peopelResults:[],
-          GeoOficeHelper:[],
-          partners:undefined,
-          Customer_Submitted:undefined
+          peopelResults: [],
+          GeoOficeHelper: [],
+          partners: undefined,
+          Customer_Submitted: undefined
         });
       });
     }
@@ -1073,7 +1089,7 @@ export default class NewAgent extends Component {
     const TechAgent = this.state.TechAgent.filter(tech => tech !== techRemove);
     this.setState({ TechAgent });
   };
-  handleSelectOblastbranch_officeGeo = (branch_officeGeo,activeState) => {
+  handleSelectOblastbranch_officeGeo = (branch_officeGeo, activeState) => {
     this.setState({ [activeState]: branch_officeGeo });
   };
   TechMap = tech => {
@@ -1095,24 +1111,24 @@ export default class NewAgent extends Component {
       </span>
     );
   };
-  addPeopel = () =>{
+  addPeopel = () => {
     let { peopelResults } = this.state
     peopelResults.push({})
-    this.setState({peopelResults})
+    this.setState({ peopelResults })
   }
-  deleteInputNewPeopel = (elInc) =>{
+  deleteInputNewPeopel = (elInc) => {
     let newSect = [];
     let { peopelResults } = this.state;
     peopelResults.map((serct, i) => (i === elInc ? null : newSect.push(serct)));
     this.setState({ peopelResults: newSect });
 
   }
-  addbranch_office = () =>{
-    let {GeoOficeHelper} = this.state
+  addbranch_office = () => {
+    let { GeoOficeHelper } = this.state
     GeoOficeHelper.push({})
-    this.setState({GeoOficeHelper})
+    this.setState({ GeoOficeHelper })
   }
-  deletebranch_office = (elInc) =>{
+  deletebranch_office = (elInc) => {
     let newSect = [];
     let { GeoOficeHelper } = this.state;
     GeoOficeHelper.map((serct, i) => (i === elInc ? null : newSect.push(serct)));
@@ -1143,119 +1159,119 @@ export default class NewAgent extends Component {
         title: "Компания",
         content: (
           <div className="">
-            <div  className="row boootstrap_helperColumn justify-content-between">
-           
+            <div className="row boootstrap_helperColumn justify-content-between">
+
               <h1 className="input_new_agent agentnew_front">
-              Компания
+                Компания
                     </h1>
-                <p className="input_new_agent agentnew_front">Короткое имя</p>
-                <Input
-                  addonBefore={<div className="required-start">*</div>}
-                  size="large"
-                  className="input_new_agent requre_input"
-                  placeholder="Короткое имя"
-                  value={this.state.name}
-                  onChange={this.handleChange("name")}
-                />
-                <p className="input_new_agent agentnew_front">Полное имя</p>
-                <Input
-                  addonBefore={<div className="required-start">*</div>}
-                  size="large"
-                  className="input_new_agent requre_input"
-                  placeholder="Полное имя"
-                  value={this.state.full_name}
-                  onChange={this.handleChange("full_name")}
-                />
-                <p className="input_new_agent agentnew_front">Область</p>
-                <Select
-                  style={{ width: "250px" }}
-                  className="input_new_agent"
-                  mode="multiple"
-                  // size="large"
-                  // dropdownClassName=""
-                  notFoundContent="Введите название области"
-                  placeholder="Выберите область котрагента"
-                  dropdownClassName="SelectHelper"
-                  value={this.state.agentGeo}
-                  onChange={this.handleSelectOblastChange}
-                  onSearch={debounce(this.RussiaOblastHelper, 450)}
-                >
+              <p className="input_new_agent agentnew_front">Короткое имя</p>
+              <Input
+                addonBefore={<div className="required-start">*</div>}
+                size="large"
+                className="input_new_agent requre_input"
+                placeholder="Короткое имя"
+                value={this.state.name}
+                onChange={this.handleChange("name")}
+              />
+              <p className="input_new_agent agentnew_front">Полное имя</p>
+              <Input
+                addonBefore={<div className="required-start">*</div>}
+                size="large"
+                className="input_new_agent requre_input"
+                placeholder="Полное имя"
+                value={this.state.full_name}
+                onChange={this.handleChange("full_name")}
+              />
+              <p className="input_new_agent agentnew_front">Область</p>
+              <Select
+                style={{ width: "250px" }}
+                className="input_new_agent"
+                mode="multiple"
+                // size="large"
+                // dropdownClassName=""
+                notFoundContent="Введите название области"
+                placeholder="Выберите область котрагента"
+                dropdownClassName="SelectHelper"
+                value={this.state.agentGeo}
+                onChange={this.handleSelectOblastChange}
+                onSearch={debounce(this.RussiaOblastHelper, 450)}
+              >
 
-                  {this.state.oblast.map(map => (
-                    <Select.Option key={map.oblast} value={map.oblast}>
-                      {map.oblast}
-                    </Select.Option>
-                  ))}
-                </Select>
-                <p className="input_new_agent  agentnew_front">Город</p>
-                <Select
-                 style={{ width: "250px" }}
-                  className="input_new_agent select_helper_render"
-                  dropdownClassName="select_helper_render"
-                  mode="multiple"
-                  size="large"
-                  dropdownStyle={true}
-                  placeholder="Выберите город  котрагента"
-                  notFoundContent="Введите название города"
-                  value={this.state.agentHill}
-                  onChange={this.handelChangeAgentHill}
-                  onSearch={debounce(this.RussiaSityHelper, 700)}
-                >
-                  {this.state.russiaCity.map(map => (
-                    <Select.Option key={map.city} value={map.city}>
-                      {map.city}
-                    </Select.Option>
-                  ))}
-                </Select>
-                <p className="input_new_agent agentnew_front">ИНН/КПП</p>
-                <Input
-                  className="input_new_agent"
-                  addonBefore={<div className="required-start">*</div>}
-                  size="large"
-                  placeholder="ИНН/КПП"
-                  value={this.state.INN}
-                  onChange={this.handleChange("INN")}
-                />{" "}
-                <p className="input_new_agent agentnew_front">ОГРН</p>
-                <Input
-                  className="input_new_agent"
-                  size="large"
-                  placeholder="ОГРН"
-                  value={this.state.OGRN}
-                  onChange={this.handleChange("OGRN")}
-                />
-                <p className="input_new_agent agentnew_front">Партнеры</p>
-                <Input 
-                    onChange={this.handleChange("partners")}
-                    value={this.state.partners}
-                    className="input_new_agent"
-                    size="large" 
-                    placeholder="Партнеры"
-                />
-                <hr className="input_new_agent" />
-                <div className="input_helper">
+                {this.state.oblast.map(map => (
+                  <Select.Option key={map.oblast} value={map.oblast}>
+                    {map.oblast}
+                  </Select.Option>
+                ))}
+              </Select>
+              <p className="input_new_agent  agentnew_front">Город</p>
+              <Select
+                style={{ width: "250px" }}
+                className="input_new_agent select_helper_render"
+                dropdownClassName="select_helper_render"
+                mode="multiple"
+                size="large"
+                dropdownStyle={true}
+                placeholder="Выберите город  котрагента"
+                notFoundContent="Введите название города"
+                value={this.state.agentHill}
+                onChange={this.handelChangeAgentHill}
+                onSearch={debounce(this.RussiaSityHelper, 700)}
+              >
+                {this.state.russiaCity.map(map => (
+                  <Select.Option key={map.city} value={map.city}>
+                    {map.city}
+                  </Select.Option>
+                ))}
+              </Select>
+              <p className="input_new_agent agentnew_front">ИНН/КПП</p>
+              <Input
+                className="input_new_agent"
+                addonBefore={<div className="required-start">*</div>}
+                size="large"
+                placeholder="ИНН/КПП"
+                value={this.state.INN}
+                onChange={this.handleChange("INN")}
+              />{" "}
+              <p className="input_new_agent agentnew_front">ОГРН</p>
+              <Input
+                className="input_new_agent"
+                size="large"
+                placeholder="ОГРН"
+                value={this.state.OGRN}
+                onChange={this.handleChange("OGRN")}
+              />
+              <p className="input_new_agent agentnew_front">Партнеры</p>
+              <Input
+                onChange={this.handleChange("partners")}
+                value={this.state.partners}
+                className="input_new_agent"
+                size="large"
+                placeholder="Партнеры"
+              />
+              <hr className="input_new_agent" />
+              <div className="input_helper">
                 <h1 className="input_new_agent agentnew_front">
-                      Подразделения
+                  Подразделения
                     </h1>
-                <PlusCircleOutlined className="input_new_agent" onClick={() =>this.addbranch_office()} style={{fontSize:"32px",color:"#2196F3",marginTop:"5px",marginBottom:"5px"}} />
+                <PlusCircleOutlined className="input_new_agent" onClick={() => this.addbranch_office()} style={{ fontSize: "32px", color: "#2196F3", marginTop: "5px", marginBottom: "5px" }} />
 
-                    {this.state.GeoOficeHelper.lenght === 0 ?(null):(
+                {this.state.GeoOficeHelper.lenght === 0 ? (null) : (
+                  <span>
+                    {this.state.GeoOficeHelper.map((item, i) => (
                       <span>
-                      {this.state.GeoOficeHelper.map((item,i) => (
-                        <span>
                         <div>
-                         
-                  <NewAgentBracnchOfice CommonProps={this.state.AgentOfficeFabrics[i]}   fabricState={`${i}`}/>
-                  <DeleteOutlined className="input_new_agent" onClick={() =>this.deletebranch_office(i)} style={{fontSize:"25px",color:"#e91e63c4"}}/>
 
-                  </div> 
-                        </span>
-                      ))}
+                          <NewAgentBracnchOfice CommonProps={this.state.AgentOfficeFabrics[i]} fabricState={`${i}`} />
+                          <DeleteOutlined className="input_new_agent" onClick={() => this.deletebranch_office(i)} style={{ fontSize: "25px", color: "#e91e63c4" }} />
+
+                        </div>
                       </span>
-                    )} 
-                </div>
+                    ))}
+                  </span>
+                )}
               </div>
-            
+            </div>
+
           </div>
         )
       },
@@ -1264,40 +1280,40 @@ export default class NewAgent extends Component {
         content: (
           <div className="">
             <div className="row boootstrap_helperColumn justify-content-between">
-              
+
               <h1 className="input_new_agent agentnew_front">
-              Комментарии
+                Комментарии
                     </h1>
-                <p className="input_new_agent agentnew_front">Описание</p>
-                <TextArea
-                  size="large"
-                  value={this.state.company_desription}
-                  onChange={this.handleChange("company_desription")}
-                  className="input_new_agent"
-                  addonBefore={<div className="required-start">*</div>}
-                  placeholder=" Описание компании:"
-                />
-                <div className="input_helper">
-                  <div>
-                    <Button
-                      onClick={this.showDrawerTechDriwer}
-                      className="input_new_agent "
-                      size="large"
-                    >
-                      техника
+              <p className="input_new_agent agentnew_front">Описание</p>
+              <TextArea
+                size="large"
+                value={this.state.company_desription}
+                onChange={this.handleChange("company_desription")}
+                className="input_new_agent"
+                addonBefore={<div className="required-start">*</div>}
+                placeholder=" Описание компании:"
+              />
+              <div className="input_helper">
+                <div>
+                  <Button
+                    onClick={this.showDrawerTechDriwer}
+                    className="input_new_agent "
+                    size="large"
+                  >
+                    техника
                     </Button>
-                    <Button
-                      onClick={this.showDrawerSpecDriwer}
-                      className="input_new_agent "
-                      size="large"
-                    >
-                      Специализация
+                  <Button
+                    onClick={this.showDrawerSpecDriwer}
+                    className="input_new_agent "
+                    size="large"
+                  >
+                    Специализация
                     </Button>
-                    <div className="proizvostvo_pos"></div>
-                  </div>
+                  <div className="proizvostvo_pos"></div>
                 </div>
               </div>
-     
+            </div>
+
           </div>
         )
       },
@@ -1306,64 +1322,92 @@ export default class NewAgent extends Component {
         content: (
           <>
             <div className="row boootstrap_helperColumn justify-content-between">
-            
+
               <h1 className="input_new_agent agentnew_front">
-              Адрес/контакты
+                Адрес/контакты
                     </h1>
-                <p className="input_new_agent agentnew_front">
-                  Юридический адрес
+              <p className="input_new_agent agentnew_front">
+                Юридический адрес
                 </p>
-                <Input
-                  size="large"
-                  value={this.state.legal_address}
-                  onChange={this.handleChange("legal_address")}
-                  className="input_new_agent "
-                  placeholder=" Юридический адрес:"
-                />
-                <p className="input_new_agent agentnew_front">
-                  Фактический адрес
+              <Input
+                size="large"
+                value={this.state.legal_address}
+                onChange={this.handleChange("legal_address")}
+                className="input_new_agent "
+                placeholder=" Юридический адрес:"
+              />
+              <p className="input_new_agent agentnew_front">
+                Фактический адрес
                 </p>
-                <Input
-                  size="large"
-                  value={this.state.actual_address}
-                  onChange={this.handleChange("actual_address")}
-                  className="input_new_agent "
-                  placeholder="Фактический адрес:"
-                />
-                <p className="input_new_agent agentnew_front">Email</p>
-                <Input
-                  size="large"
-                  value={this.state.email}
-                  onChange={this.handleChange("email")}
-                  className="input_new_agent "
-                  placeholder="Email:"
-                />
-                <p className="input_new_agent agentnew_front">Сайт</p>
-                <Input
-                  size="large"
-                  value={this.state.site}
-                  onChange={this.handleChange("site")}
-                  className="input_new_agent "
-                  placeholder="Сайт:"
-                />
-                <p className="input_new_agent agentnew_front">Инстаграм</p>
-                <Input
-                  size="large"
-                  value={this.state.instagram}
-                  onChange={this.handleChange("instagram")}
-                  className="input_new_agent "
-                  placeholder="Инстаграм:"
-                />{" "}
-                <p className="input_new_agent agentnew_front">Общий телефон</p>
-                <Input
-                  size="large"
-                  value={this.state.phone}
-                  onChange={this.handleChange("phone")}
-                  className="input_new_agent"
-                  placeholder="Общий тел:"
-                /> 
-              </div>
-            
+              <Input
+                size="large"
+                value={this.state.actual_address}
+                onChange={this.handleChange("actual_address")}
+                className="input_new_agent "
+                placeholder="Фактический адрес:"
+              />
+              <p className="input_new_agent agentnew_front">
+                Почтовый адрес
+                </p>
+              <Input
+                size="large"
+                value={this.state.post_address}
+                onChange={this.handleChange("post_address")}
+                className="input_new_agent "
+                placeholder="Почтовый адрес:"
+              />
+              <p className="input_new_agent agentnew_front">Email</p>
+              <Input
+                size="large"
+                value={this.state.email}
+                onChange={this.handleChange("email")}
+                className="input_new_agent "
+                placeholder="Email:"
+              />
+              <p className="input_new_agent agentnew_front">Сайт</p>
+              <Input
+                size="large"
+                value={this.state.site}
+                onChange={this.handleChange("site")}
+                className="input_new_agent "
+                placeholder="Сайт:"
+              />
+              <p className="input_new_agent agentnew_front">Инстаграм</p>
+              <Input
+                size="large"
+                value={this.state.instagram}
+                onChange={this.handleChange("instagram")}
+                className="input_new_agent "
+                placeholder="Инстаграм:"
+              />{" "}
+              <p className="input_new_agent agentnew_front">Общий телефон</p>
+              <Input
+                size="large"
+                value={this.state.phone}
+                onChange={this.handleChange("phone")}
+                className="input_new_agent"
+                placeholder="Общий тел:"
+              />
+              <p className="input_new_agent agentnew_front">Телефон бухгалтерии</p>
+              <Input
+                size="large"
+                value={this.state.booker_phone}
+                onChange={this.handleChange("booker_phone")}
+                className="input_new_agent"
+                placeholder="Тел. бухгалтерии"
+
+              />
+              <p className="input_new_agent agentnew_front">Почта бухгалтерии</p>
+              <Input
+                size="large"
+                value={this.state.booker_email}
+                onChange={this.handleChange("booker_email")}
+                className="input_new_agent"
+                placeholder="Почта бухгалтерии"
+
+              />
+            </div>
+
           </>
         )
       },
@@ -1372,22 +1416,22 @@ export default class NewAgent extends Component {
         content: (
           <>
             <div className="row boootstrap_helperColumn justify-content-between">
-           
 
-                <h1 className="input_new_agent agentnew_front">Контактные Лица</h1>
-                {this.state.peopelResults.length === 0 ? (<>  <div><PlusCircleOutlined onClick={() =>this.addPeopel()} style={{fontSize:"32px",color:"#2196F3",marginTop:"5px",marginBottom:"5px"}} /></div>    
-        </>):(<div>{this.state.peopelResults.map((el,i) =>( 
-          <div>
-              <div>
-             <NewAgentPeopel CommonProps={this.state.AgentPeopelFabrics[i]} fabricState={i}/>
-             <DeleteOutlined className="input_new_agent" onClick={() =>this.deleteInputNewPeopel(i)} style={{fontSize:"25px",color:"#e91e63c4",marginTop:"5px",marginBottom:"5px"}}/>
-        </div>
 
-    </div>
-      ))}
-      <PlusCircleOutlined onClick={() =>this.addPeopel()} style={{fontSize:"32px",color:"#2196F3"}} />
-      </div>) }
-              </div>
+              <h1 className="input_new_agent agentnew_front">Контактные Лица</h1>
+              {this.state.peopelResults.length === 0 ? (<>  <div><PlusCircleOutlined onClick={() => this.addPeopel()} style={{ fontSize: "32px", color: "#2196F3", marginTop: "5px", marginBottom: "5px" }} /></div>
+              </>) : (<div>{this.state.peopelResults.map((el, i) => (
+                <div>
+                  <div>
+                    <NewAgentPeopel CommonProps={this.state.AgentPeopelFabrics[i]} fabricState={i} />
+                    <DeleteOutlined className="input_new_agent" onClick={() => this.deleteInputNewPeopel(i)} style={{ fontSize: "25px", color: "#e91e63c4", marginTop: "5px", marginBottom: "5px" }} />
+                  </div>
+
+                </div>
+              ))}
+                <PlusCircleOutlined onClick={() => this.addPeopel()} style={{ fontSize: "32px", color: "#2196F3" }} />
+              </div>)}
+            </div>
           </>
         )
       },
@@ -1397,87 +1441,87 @@ export default class NewAgent extends Component {
         content: (
           <>
             <div className="row boootstrap_helperColumn justify-content-between">
-           
+
               <h1 className="input_new_agent agentnew_front">
-              Начало работы
+                Начало работы
                     </h1>
-                <p className="input_new_agent agentnew_front">
-                  Откуда пришел клиент  <span className="requre_input">*</span>
-                </p>
-                <TextArea
-                  size="large"
-                  onChange={this.handleChange("WhereFromClient")}
-                  value={this.state.WhereFromClient}
-                  className="input_new_agent"
-                  addonBefore={<div className="required-start">*</div>}
-                  placeholder="Откуда пришел клиент :"
-                />
-                <p className="input_new_agent agentnew_front">
-                  Как начиналась с ним работа <span className="requre_input">*</span>
-                </p>
-                
-                <TextArea
-                  size="large"
-                  className="input_new_agent"
-                  onChange={this.handleChange("work_begin_with_him")}
-                  value={this.state.work_begin_with_him}
-                  addonBefore={<div className="required-start">*</div>}
-                  placeholder=" Как начиналась с ним работа:"
-                />
-                <p className="input_new_agent agentnew_front">
+              <p className="input_new_agent agentnew_front">
+                Откуда пришел клиент  <span className="requre_input">*</span>
+              </p>
+              <TextArea
+                size="large"
+                onChange={this.handleChange("WhereFromClient")}
+                value={this.state.WhereFromClient}
+                className="input_new_agent"
+                addonBefore={<div className="required-start">*</div>}
+                placeholder="Откуда пришел клиент :"
+              />
+              <p className="input_new_agent agentnew_front">
+                Как начиналась с ним работа <span className="requre_input">*</span>
+              </p>
+
+              <TextArea
+                size="large"
+                className="input_new_agent"
+                onChange={this.handleChange("work_begin_with_him")}
+                value={this.state.work_begin_with_him}
+                addonBefore={<div className="required-start">*</div>}
+                placeholder=" Как начиналась с ним работа:"
+              />
+              <p className="input_new_agent agentnew_front">
                 Это переданный (от кого передан) <span className="requre_input">*</span>
-</p>
-                <TextArea
+              </p>
+              <TextArea
                 size="large"
                 className="input_new_agent"
                 onChange={this.handleChange("Customer_Submitted")}
                 value={this.state.Customer_Submitted}
                 addonBefore={<div className="required-start">*</div>}
                 placeholder="Это переданный (от кого передан)работа:"
-                />
-                {["Менеджер"].includes(userRole) ? (
-                  <>
-                    <div className="input_new_agent site-calendar-demo-card">
-                      <p className="input_new_agent agentnew_front">
-                        Начать работу с ним с числа
+              />
+              {["Менеджер"].includes(userRole) ? (
+                <>
+                  <div className="input_new_agent site-calendar-demo-card">
+                    <p className="input_new_agent agentnew_front">
+                      Начать работу с ним с числа
                       </p>
-                      <Calendar
-                        mode="mounth"
-                        locale={Localisation}
-                        validRange={[
-                          moment(Date.now()),
-                          moment(Date.now()).add("days", 10)
-                        ]}
-                        locate={{}}
-                        fullscreen={false}
-                        onSelect={this.onPanelChange}
-                      />
-                    </div>
-                  </>
-                ) : null}
+                    <Calendar
+                      mode="mounth"
+                      locale={Localisation}
+                      validRange={[
+                        moment(Date.now()),
+                        moment(Date.now()).add("days", 10)
+                      ]}
+                      locate={{}}
+                      fullscreen={false}
+                      onSelect={this.onPanelChange}
+                    />
+                  </div>
+                </>
+              ) : null}
 
-                {["Директор", "Управляющий"].includes(userRole) ? (
-                  <>
-                    <Select
-                      style={{ width: "auto" }}
-                      className="input_new_agent"
-                      mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="Назначить менеджера"
-                      value={this.state.manageAdd}
-                      onChange={this.handelAddingToMager}
-                      size="large"
-                    >
-                      {this.state.manageList.map(map => (
-                        <Select.Option key={map.name} value={map.name}>
-                          {map.name}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </>
-                ) : null}
-              </div>
-    
+              {["Директор", "Управляющий"].includes(userRole) ? (
+                <>
+                  <Select
+                    style={{ width: "auto" }}
+                    className="input_new_agent"
+                    mode="multiple"
+                    style={{ width: "100%" }}
+                    placeholder="Назначить менеджера"
+                    value={this.state.manageAdd}
+                    onChange={this.handelAddingToMager}
+                    size="large"
+                  >
+                    {this.state.manageList.map(map => (
+                      <Select.Option key={map.name} value={map.name}>
+                        {map.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </>
+              ) : null}
+            </div>
+
           </>
         )
       },
@@ -1486,26 +1530,34 @@ export default class NewAgent extends Component {
         content: (
           <>
             <div className="row boootstrap_helperColumn justify-content-between">
-         
+
               <h1 className="input_new_agent agentnew_front">
-              Особые пометки
+                Особые пометки
                     </h1>
-                <TextArea
-                  style={{ width: "100%" }}
-                  className="input_new_agent_helper"
-                  value={this.state.individual_conditions_job}
-                  onChange={this.handleChange("individual_conditions_job")}
-                  placeholder=" Индивидуальные условия работы с клиентом:"
-                  allowClear
-                />
-                <TextArea
-                  size="large"
-                  className="input_new_agent_helper"
-                  value={this.state.pay_character}
-                  onChange={this.handleChange("pay_character")}
-                  placeholder="Характер предлагаемой цены для клиента:"
-                />
-              
+                    <TextArea
+                style={{ width: "100%" }}
+                className="input_new_agent_helper"
+                value={this.state.notes}
+                onChange={this.handleChange("notes")}
+                placeholder="Заметки:"
+                allowClear
+              />
+              <TextArea
+                style={{ width: "100%" }}
+                className="input_new_agent_helper"
+                value={this.state.individual_conditions_job}
+                onChange={this.handleChange("individual_conditions_job")}
+                placeholder=" Индивидуальные условия работы с клиентом:"
+                allowClear
+              />
+              <TextArea
+                size="large"
+                className="input_new_agent_helper"
+                value={this.state.pay_character}
+                onChange={this.handleChange("pay_character")}
+                placeholder="Характер предлагаемой цены для клиента:"
+              />
+
             </div>
           </>
         )
@@ -1527,29 +1579,29 @@ export default class NewAgent extends Component {
           <div className="steps-action">
             {this.state.currentStep < steps.length - 1 && (
               <>
-              {this.state.currentStep === 0 ? (<Button type="primary" onClick={() => this.nextStepOne()}>
-                Следующий шаг
-              </Button>):(null)}
-              {this.state.currentStep === 3 ? (<Button type="primary" onClick={() => this.nextStepfour()}>
-                Следующий шаг
-              </Button>):(null)}
-              {this.state.currentStep === 1 ? (<Button type="primary" onClick={() => this.nextStep()}>
-                Следующий шаг
-              </Button>):(null)}
-              {this.state.currentStep === 2 ? (<Button type="primary" onClick={() => this.nextStep()}>
-                Следующий шаг
-              </Button>):(null)}
-              {this.state.currentStep === 4 ? (<Button type="primary" onClick={() => this.nextStep()}>
-                Следующий шаг
-              </Button>):(null)}
-              {this.state.currentStep === 5 ? (<Button type="primary" onClick={() => this.nextStep()}>
-                Следующий шаг
-              </Button>):(null)}
-              {this.state.currentStep === 6 ? (<Button type="primary" onClick={() => this.nextStep()}>
-                Следующий шаг
-              </Button>):(null)}
+                {this.state.currentStep === 0 ? (<Button type="primary" onClick={() => this.nextStepOne()}>
+                  Следующий шаг
+                </Button>) : (null)}
+                {this.state.currentStep === 3 ? (<Button type="primary" onClick={() => this.nextStepfour()}>
+                  Следующий шаг
+                </Button>) : (null)}
+                {this.state.currentStep === 1 ? (<Button type="primary" onClick={() => this.nextStep()}>
+                  Следующий шаг
+                </Button>) : (null)}
+                {this.state.currentStep === 2 ? (<Button type="primary" onClick={() => this.nextStep()}>
+                  Следующий шаг
+                </Button>) : (null)}
+                {this.state.currentStep === 4 ? (<Button type="primary" onClick={() => this.nextStep()}>
+                  Следующий шаг
+                </Button>) : (null)}
+                {this.state.currentStep === 5 ? (<Button type="primary" onClick={() => this.nextStep()}>
+                  Следующий шаг
+                </Button>) : (null)}
+                {this.state.currentStep === 6 ? (<Button type="primary" onClick={() => this.nextStep()}>
+                  Следующий шаг
+                </Button>) : (null)}
               </>
-          
+
             )}
             {this.state.currentStep === steps.length - 1 && (
               <Button type="primary" onClick={this.newAgentClick}>
@@ -1717,61 +1769,61 @@ export default class NewAgent extends Component {
         >
           <div className="specListsEditor">
             <div className="drawer_flex">
-            <Select
-              // className="col-xs-12"
-              mode="multiple"
-              style={{ width: "100%" }}
-              placeholder="Выберите специализацию"
-              notFoundContent="Не найдено специализаций"
-              value={this.state.specialications}
-              onChange={this.handelChangeSpec}
-            >
-              {this.state.specialicationsToBase.map(map => (
-                <Select.Option key={map} value={map}>
-                  {map}
-                </Select.Option>
-              ))}
-            </Select>
-            <div>
-            <Button
-              onClick={regim =>
-                this.editorRegimSwitcher(this.state.editorRegim, regim)
-              }
-              style={
-                this.state.editorRegim ? { color: "red" } : { color: "blue" }
-              }
-            >
-              Редактировать
+              <Select
+                // className="col-xs-12"
+                mode="multiple"
+                style={{ width: "100%" }}
+                placeholder="Выберите специализацию"
+                notFoundContent="Не найдено специализаций"
+                value={this.state.specialications}
+                onChange={this.handelChangeSpec}
+              >
+                {this.state.specialicationsToBase.map(map => (
+                  <Select.Option key={map} value={map}>
+                    {map}
+                  </Select.Option>
+                ))}
+              </Select>
+              <div>
+                <Button
+                  onClick={regim =>
+                    this.editorRegimSwitcher(this.state.editorRegim, regim)
+                  }
+                  style={
+                    this.state.editorRegim ? { color: "red" } : { color: "blue" }
+                  }
+                >
+                  Редактировать
               <EditOutlined />
-            </Button>
-            </div>
+                </Button>
+              </div>
             </div>
             <div></div>
           </div>
           <div className="editor_regim">
             <div className="row boootstrap_helperColumn">
-             
-                {editorRegim ? (
-                  <>
-                    {this.state.specialicationsToBaseEditors.map(
-                      (editors, i) => (
-                        <>
-                          <div className="editor_list">
-                            <div>{editors.data}</div>
-                            <Icon
-                              onClick={() => this.deleteSpec(editors._id)}
-                              className="delete_ant_icon"
-                              style={{ color: "red" }}
-                              type="delete"
-                            />
-                          </div>
-                        </>
-                      )
-                    )}
-                  </>
-                ) : null}
-              </div>
-            
+
+              {editorRegim ? (
+                <>
+                  {this.state.specialicationsToBaseEditors.map(
+                    (editors, i) => (
+                      <>
+                        <div className="editor_list">
+                          <div>{editors.data}</div>
+                          <Icon
+                            onClick={() => this.deleteSpec(editors._id)}
+                            className="delete_ant_icon"
+                            style={{ color: "red" }}
+                            type="delete"
+                          />
+                        </div>
+                      </>
+                    )
+                  )}
+                </>
+              ) : null}
+            </div>
+
           </div>
         </Drawer>
         <Modal

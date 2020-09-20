@@ -1705,3 +1705,15 @@ export const GetCompanySturctures = () => {
 		})
 		.catch((err) => console.log(err));
 };
+
+export const EditFuckingAgent = (payload) => {
+	return fetch(`${process.env.REACT_APP_API_URL}/edit/agent/manager`, {
+		method: 'POST',
+		headers: myHeaders,
+		body: JSON.stringify(payload)
+	})
+		.then((responce) => {
+			return responce.json();
+		})
+		.catch((err) => console.log(err));
+};
